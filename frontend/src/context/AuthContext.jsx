@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import api from '../api/axios';
 
-const AuthContext = createContext();
+export const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
@@ -17,7 +17,7 @@ export function AuthProvider({ children }) {
           try {
             const { data } = await api.post('/auth/refresh');
             sessionStorage.setItem('accessToken', data.accessToken);
-          } catch (e) {
+          } catch {
             // Nu e ok, nu sunt logat
             setUser(null);
             setLoading(false);
@@ -61,10 +61,4 @@ export function AuthProvider({ children }) {
   );
 }
 
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within AuthProvider');
-  }
-  return context;
-};
+export { useAuth } from '../hooks/useAuth';
