@@ -1,11 +1,6 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 export default function InventoryPage() {
-  const [search, setSearch] = useState('');
-  const [filters, setFilters] = useState({});
-  const [page, setPage] = useState(1);
-
   return (
     <div className="min-h-screen bg-gray-950 text-gray-100 p-8">
       <div className="max-w-7xl mx-auto">
