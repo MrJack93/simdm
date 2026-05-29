@@ -1,0 +1,17 @@
+{
+  "name": "simdm",
+  "version": "1.0.0",
+  "description": "Sistem Informational de Management al Dispozitivelor Medicale",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm run dev\"",
+    "db:up": "docker compose up -d",
+    "db:down": "docker compose down",
+    "db:migrate": "cd backend && npx prisma migrate dev",
+    "db:seed": "cd backend && npm run db:seed",
+    "db:studio": "cd backend && npm run db:studio"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  }
+}

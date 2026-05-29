@@ -1,0 +1,73 @@
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: simdm_user
+      POSTGRES_PASSWORD: simdm_secure_2024
+      POSTGRES_DB: simdm_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U simdm_user -d simdm_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - simdm_network
+
+  # Backend — Express.js
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    environment:
+      DATABASE_URL: "postgresql://simdm_user:simdm_secure_2024@db:5432/simdm_db"
+      JWT_SECRET: ${JWT_SECRET:-9a7b3c5f8e2d1b4a6c9f0e3d8b1a5c7f9e2d4b6a8c0f1e3d5b7a9c1e3f5a}
+      JWT_EXPIRES_IN: "30d"
+      PORT: 3001
+      NODE_ENV: "development"
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-inginer}
+      ADMIN_PASSWORD_HASH: ${ADMIN_PASSWORD_HASH:-$2b$12$X1/Jfvtk/uu2epEbYMCZXe828HAKyZ9JG65Nvo04ZAUPuIuVKTosa}
+      ACCESS_TOKEN_TTL: "15m"
+      REFRESH_TOKEN_TTL_DAYS: "30"
+      COOKIE_SECURE: "false"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - simdm_network
+    volumes:
+      - ./backend:/app/backend
+      - /app/backend/node_modules
+
+  # Frontend — Vite + React
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    restart: unless-stopped
+    ports:
+      - "5173:5173"
+    environment:
+      VITE_API_BASE_URL: "http://localhost:3001"
+    depends_on:
+      - backend
+    networks:
+      - simdm_network
+    volumes:
+      - ./frontend:/app/frontend
+      - /app/frontend/node_modules
+
+volumes:
+  postgres_data:
+
+networks:
+  simdm_network:
+    driver: bridge

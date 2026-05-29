@@ -1,0 +1,69 @@
+model MaintenanceRecord {
+  id              Int             @id @default(autoincrement())
+  deviceId        Int
+  device          Device          @relation(fields: [deviceId], references: [id])
+
+  type            MaintenanceType
+  scheduledDate   DateTime?        @db.Timestamptz(3)
+  executedDate    DateTime         @db.Timestamptz(3)
+  duration        Decimal?
+
+  description     String
+  partsReplaced   String?
+  consumablesUsed String?
+  result          String?
+
+  cost            Decimal?
+  externalService Boolean         @default(false)
+  serviceProvider String?
+
+  reportUrl       String?
+
+  performedById   Int?
+  performedBy     User?           @relation("MaintenanceBy", fields: [performedById], references: [id])
+  notes           String?
+  createdAt       DateTime        @default(now()) @db.Timestamptz(3)
+  updatedAt       DateTime        @updatedAt @db.Timestamptz(3)
+
+  @@index([deviceId])
+  @@index([executedDate])
+  @@index([type])
+  @@map("maintenance_records")
+}
+
+model Incident {
+  id              Int               @id @default(autoincrement())
+  deviceId        Int
+  device          Device            @relation(fields: [deviceId], references: [id])
+  sectionId       Int?
+  section         Section?          @relation(fields: [sectionId], references: [id])
+
+  occurredAt      DateTime         @db.Timestamptz(3)
+  reportedAt      DateTime         @default(now()) @db.Timestamptz(3)
+  description     String
+  severity        IncidentSeverity
+  status          IncidentStatus    @default(DESCHIS)
+
+  patientAffected Boolean           @default(false)
+  patientHarm     String?
+
+  rootCause       String?
+  correctiveAction String?
+  preventiveAction String?
+  resolvedAt      DateTime?       @db.Timestamptz(3)
+
+  reportedToAmdm  Boolean           @default(false)
+  amdmReportDate  DateTime?        @db.Timestamptz(3)
+  amdmReportRef   String?
+
+  reportedById    Int?
+  reportedBy      User?             @relation("IncidentReportedBy", fields: [reportedById], references: [id])
+  createdAt       DateTime          @default(now()) @db.Timestamptz(3)
+  updatedAt       DateTime          @updatedAt @db.Timestamptz(3)
+
+  @@index([deviceId])
+  @@index([status])
+  @@index([severity])
+  @@index([occurredAt])
+  @@map("incidents")
+}

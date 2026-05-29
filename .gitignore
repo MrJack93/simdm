@@ -1,20 +1,28 @@
 # Dependencies
 node_modules/
+*/node_modules/
 package-lock.json
 yarn.lock
 
-# Environment variables
+# Environment
 .env
 .env.local
 .env.*.local
+*.env
 
-# Build outputs
+# Build
 dist/
 build/
-*.log
+*.tsbuildinfo
 
-# IDE
-.vscode/
+# Logs
+*.log
+logs/
+npm-debug.log*
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
 .idea/
 *.swp
 *.swo
@@ -23,5 +31,18 @@ build/
 .DS_Store
 Thumbs.db
 
-# Prisma
-prisma/dev.db
+# Docker
+docker-compose.override.yml
+
+# Database
+*.sql.gz
+backups/*.sql
+backups/*.dump
+
+# Uploads
+uploads/
+public/uploads/
+
+# Prisma generated
+prisma/generated/
+.prisma/
