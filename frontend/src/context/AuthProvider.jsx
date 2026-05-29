@@ -1,7 +1,6 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import api from '../api/axios';
-
-export const AuthContext = createContext();
+import { AuthContext } from './auth.context';
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
@@ -60,5 +59,3 @@ export function AuthProvider({ children }) {
     </AuthContext.Provider>
   );
 }
-
-export { useAuth } from '../hooks/useAuth';
