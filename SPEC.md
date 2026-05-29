@@ -1,4 +1,4 @@
-# SPEC: SIMDM — Faza 1: Fundație & Infrastructură
+# SPEC — SIMDM: Faza 1 — Fundație și Infrastructură
 
 ## Obiectiv
 
@@ -320,4 +320,4 @@ Faza 1 nu trebuie să-și asumească construcția ulterioară — fiecare fază 
 
 ---
 
-**Ești de acord cu acest spec? Sunt corecte asumțiile? Sau trebuie să modific ceva?**
+**Ești de acord cu acest spec? Sunt corecte asumpțiile? Dacă nu, specifică ce trebuie modificat.**

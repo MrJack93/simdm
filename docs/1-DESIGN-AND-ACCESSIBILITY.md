@@ -1,53 +1,53 @@
-# Design System & Accessibility — SIMDM
+# Sistem de Design și Accesibilitate — SIMDM
 
-**Version:** 1.0  
-**Status:** Phase 1 Foundation (Faza 1)  
-**Last Updated:** 2026-05-29  
-**Audience:** Frontend Developers + Designers
+**Versiune:** 1.0
+**Status:** Fundație Faza 1
+**Actualizat:** 2026-05-29
+**Audiență:** Developeri frontend + designeri
 
-> This document consolidates design tokens, component patterns, and WCAG 2.1 AA accessibility guidelines. **Single source of truth** for all visual & accessibility standards.
-
----
-
-## 📑 Table of Contents
-
-1. [Design Tokens](#design-tokens)
-2. [Accessibility — WCAG 2.1 AA](#accessibility--wcag-21-aa)
-3. [Component Patterns](#component-patterns)
-4. [Accessibility Checklist per Component](#accessibility-checklist-per-component)
+> Acest document consolidează token-urile de design, tiparele pentru componente și regulile de accesibilitate WCAG 2.1 AA. **Sursa unică de adevăr** pentru toate standardele vizuale și de accesibilitate.
 
 ---
 
-## Design Tokens
+## Cuprins
 
-### 1. Color Palette
+1. [Token-uri de design](#token-uri-de-design)
+2. [Accesibilitate — WCAG 2.1 AA](#accesibilitate--wcag-21-aa)
+3. [Tipare de componente](#tipare-de-componente)
+4. [Checklist accesibilitate per componentă](#checklist-accesibilitate-per-component%C4%83)
 
-**Primary Brand Colors**
+---
 
-| Rol | Tailwind | Hex | WCAG AA Contrast | Usage |
-|-----|----------|-----|-----------------|-------|
-| **Primary** | `cyan-400` | #22d3ee | 9.8:1 ✅ | Headings, buttons, accent icons |
-| **Primary Hover** | `cyan-500` | #06b6d4 | 8.9:1 ✅ | Hover state buttons |
-| **Background** | `gray-950` | #030712 | — | Page background |
-| **Surface Primary** | `gray-900` | #111827 | — | Cards, main surfaces |
-| **Surface Secondary** | `gray-800` | #1f2937 | — | Input fields, secondary surfaces |
-| **Border** | `gray-600` | #4b5563 | 3:1 ✅ | Borders, dividers |
-| **Text Primary** | `white` | #ffffff | 17.7:1 ✅ | Main text |
-| **Text Secondary** | `gray-400` | #9ca3af | 6.8:1 ✅ | Labels, helper text |
-| **Text Muted** | `gray-500` | #6b7280 | 3.7:1 ❌ | Avoid for main content |
-| **Error** | `red-400` | #f87171 | 5.6:1 ✅ | Error messages, validation |
-| **Success** | `green-400` | #4ade80 | — | Success messages, checkmarks |
-| **Warning** | `amber-400` | #fbbf24 | — | Warnings |
-| **Info** | `blue-400` | #60a5fa | — | Info messages |
+## Token-uri de design
 
-**Guidance:**
-- ✅ `cyan-400` + `gray-900` = 9.8:1 (excellent)
-- ✅ `white` + `gray-800` = 13.6:1 (excellent)
-- ✅ `gray-400` + `gray-900` = 6.8:1 (very good)
-- ❌ `gray-600` on `gray-800` = 1.5:1 (fail — use gray-600 on gray-900)
-- ❌ `gray-500` = 3.7:1 (avoid for text, use for placeholder only)
+### 1. Paleta de culori
 
-### 2. Typography
+**Culori principale**
+
+| Rol | Tailwind | Hex | Contrast WCAG AA | Utilizare |
+|-----|----------|-----|-----------------|-----------|
+| **Principal** | `cyan-400` | #22d3ee | 9.8:1 | Heading-uri, butoane, icoane accent |
+| **Principal Hover** | `cyan-500` | #06b6d4 | 8.9:1 | Stare hover butoane |
+| **Fundal pagină** | `gray-950` | #030712 | — | Fundal pagină |
+| **Suprafață primară** | `gray-900` | #111827 | — | Card-uri, suprafețe principale |
+| **Suprafață secundară** | `gray-800` | #1f2937 | — | Câmpuri input, suprafețe secundare |
+| **Border** | `gray-600` | #4b5563 | 3:1 | Borduri, separatoare |
+| **Text principal** | `white` | #ffffff | 17.7:1 | Text normal |
+| **Text secundar** | `gray-400` | #9ca3af | 6.8:1 | Label-uri, text ajutător |
+| **Text estompat** | `gray-500` | #6b7280 | 3.7:1 | Evită pentru conținut principal |
+| **Eroare** | `red-400` | #f87171 | 5.6:1 | Mesaje eroare, validare |
+| **Succes** | `green-400` | #4ade80 | — | Mesaje succes, bifă |
+| **Avertisment** | `amber-400` | #fbbf24 | — | Avertismente |
+| **Informații** | `blue-400` | #60a5fa | — | Mesaje informative |
+
+**Ghid contrast:**
+- `cyan-400` pe `gray-900` = 9.8:1 (excelent)
+- `white` pe `gray-800` = 13.6:1 (excelent)
+- `gray-400` pe `gray-900` = 6.8:1 (foarte bun)
+- `gray-600` pe `gray-800` = 1.5:1 (fail — folosește gray-600 pe gray-900)
+- `gray-500` = 3.7:1 (evită pentru text, folosit doar pentru placeholder)
+
+### 2. Tipografie
 
 ```css
 /* Heading 1 (h1) */
@@ -69,7 +69,7 @@ font-weight: 700;
 color: white;
 margin-bottom: 1rem;
 
-/* Body Text */
+/* Text body */
 font-size: 16px;
 font-weight: 400;
 line-height: 1.5;
@@ -81,65 +81,65 @@ font-weight: 500;
 color: gray-400;
 ```
 
-**Font Stack:**
+**Font stack:**
 ```css
-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, 
+font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
              "Helvetica Neue", Arial, sans-serif;
 ```
 
-### 3. Spacing Scale (8px base)
+### 3. Scară de spațiere (bază 8px)
 
-| Alias | Value | Usage |
-|-------|-------|-------|
-| `xs` | 2px | Fine borders, small details |
-| `sm` | 4px | Inline gaps |
-| `md` | 8px | Default padding, normal gap |
-| `lg` | 16px | Card padding, component gap |
-| `xl` | 24px | Section spacing |
-| `2xl` | 32px | Large block spacing |
-| `3xl` | 48px | Hero/page level |
+| Alias | Valoare | Utilizare |
+|-------|---------|-----------|
+| `xs` | 2px | Borduri fine, detalii mici |
+| `sm` | 4px | Spații mici în linie |
+| `md` | 8px | Padding implicit, gap normal |
+| `lg` | 16px | Padding card, gap componente |
+| `xl` | 24px | Spațiere secțiuni |
+| `2xl` | 32px | Blocuri mari |
+| `3xl` | 48px | Nivel hero / pagină |
 
-**Apply via Tailwind:** `p-4`, `gap-6`, `mb-8`, etc.
+**Aplicare prin Tailwind:** `p-4`, `gap-6`, `mb-8` etc.
 
-### 4. Border & Radius
+### 4. Borduri și rotunjire
 
 | Element | Radius | Border |
 |---------|--------|--------|
 | Input | `rounded-lg` (8px) | 1px solid `gray-600` |
-| Button | `rounded-lg` (8px) | None |
-| Card | `rounded-lg` (8px) | 1px solid `gray-700` (decorative) |
-| Modal | `rounded-xl` (12px) | None |
+| Buton | `rounded-lg` (8px) | Niciuna |
+| Card | `rounded-lg` (8px) | 1px solid `gray-700` (decorativ) |
+| Modal | `rounded-xl` (12px) | Niciuna |
 
-### 5. Sizing
+### 5. Dimensionare
 
-| Element | Size | Note |
-|---------|------|------|
-| **Input Height** | 44px min (`py-3`) | WCAG 2.5.5 Operable |
-| **Button Height** | 44px min | Touch target |
-| **Button Width** | fit-content / full-width | Context-dependent |
-| **Focus Ring** | 2px, cyan-400 | Offset 2px from element |
+| Element | Dimensiune | Notă |
+|---------|------------|------|
+| **Înălțime input** | min 44px (`py-3`) | WCAG 2.5.5 |
+| **Înălțime buton** | min 44px | Țintă de atingere |
+| **Lățime buton** | fit-content / full-width | Depinde de context |
+| **Focus ring** | 2px, cyan-400 | Offset 2px față de element |
 
 ---
 
-## Accessibility — WCAG 2.1 AA
+## Accesibilitate — WCAG 2.1 AA
 
-### Mandatory Rules (Every Component)
+### Reguli obligatorii (pentru orice componentă)
 
-1. **Labels Associated**
+1. **Label-uri asociate**
    ```jsx
-   <label htmlFor="username">Username</label>
+   <label htmlFor="username">Utilizator</label>
    <input id="username" ... />
    ```
-   - ✅ NEVER input without associated label
-   - ✅ Use `htmlFor`/`id` matching
-   - ✅ Labels visible (not placeholder-only)
+   - Niciun input fără label asociat
+   - Folosește `htmlFor`/`id` cu valori identice
+   - Label-urile trebuie vizibile (nu doar placeholder)
 
-2. **Focus Ring Visible**
+2. **Focus ring vizibil**
    ```jsx
-   // Use utility class
+   // Folosește clasa utilitară
    className="... focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 ..."
-   
-   // OR preset in CSS
+
+   // SAU definit în CSS global
    @layer components {
      .focusable {
        @apply focus-visible:outline-none focus-visible:ring-2
@@ -148,20 +148,20 @@ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
      }
    }
    ```
-   - ✅ 2px ring, visible contrast
-   - ✅ Offset 2px from element
-   - ✅ NO `outline: none` without replacement
+   - Ring de 2px, contrast vizibil
+   - Offset 2px față de element
+   - NU `outline: none` fără înlocuitor
 
-3. **Touch Targets 44x44px**
+3. **Ținte de atingere 44x44px**
    ```jsx
    <button className="... min-h-[44px] px-4 py-3 ...">
    <input className="... min-h-[44px] ..."/>
    ```
-   - ✅ Buttons: `min-h-[44px]`
-   - ✅ Inputs: `py-3` or `min-h-[44px]`
-   - ✅ Gap between clickables ≥8px
+   - Butoane: `min-h-[44px]`
+   - Inputuri: `py-3` sau `min-h-[44px]`
+   - Spațiu de minimum 8px între elemente clicabile
 
-4. **Errors Announced**
+4. **Erori anunțate**
    ```jsx
    {error && (
      <p id="username-error" role="alert" aria-live="assertive" className="text-red-400">
@@ -170,20 +170,20 @@ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
    )}
    <input aria-describedby="username-error" aria-invalid={!!error} />
    ```
-   - ✅ `role="alert"` for errors
-   - ✅ `aria-live="assertive"` (immediate announce)
-   - ✅ Link input to error via `aria-describedby`
+   - `role="alert"` pentru erori
+   - `aria-live="assertive"` (anunțare imediată)
+   - Leagă input-ul de eroare prin `aria-describedby`
 
-5. **Status Messages Announced**
+5. **Mesaje de stare anunțate**
    ```jsx
    <div role="status" aria-live="polite">
-     ✓ Dispozitiv salvat!
+     Dispozitiv salvat cu succes!
    </div>
    ```
-   - ✅ Loading: `aria-live="polite"` + `aria-busy="true"`
-   - ✅ Success/Info: `role="status"`
+   - Încărcare: `aria-live="polite"` + `aria-busy="true"`
+   - Succes / Informații: `role="status"`
 
-6. **Semantic HTML**
+6. **HTML semantic**
    ```jsx
    <header>...</header>
    <main id="main">...</main>
@@ -191,48 +191,46 @@ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
      <thead><tr><th scope="col">...</th></tr></thead>
    </table>
    ```
-   - ✅ `<header>`, `<main id="main">`, `<footer>`
-   - ✅ `<th scope="col">` / `<th scope="row">`
-   - ✅ Use `<button>` not `<div onClick>`
+   - `<header>`, `<main id="main">`, `<footer>`
+   - `<th scope="col">` / `<th scope="row">`
+   - Folosește `<button>` nu `<div onClick>`
 
-7. **Color is Not Only Source**
+7. **Culoarea nu e singura sursă de informație**
    ```jsx
-   // ❌ WRONG: Color alone
+   // Greșit: culoare singură
    <span className="text-red-400">Defect</span>
-   
-   // ✅ RIGHT: Text + Icon + Color
+
+   // Corect: text + icoană + culoare
    <span className="flex items-center gap-2 text-red-400">
      ✗ Defect
    </span>
    ```
-   - ✅ Use text + icon + color together
-   - ✅ Decorative SVGs: `aria-hidden="true"`
-   - ✅ Functional icons: `aria-label="..."`
+   - SVG-uri decorative: `aria-hidden="true"`
+   - Icoane funcționale: `aria-label="..."`
 
-8. **Contrast ≥ 4.5:1 (Text) / 3:1 (UI)**
-   - ✅ Check with [WebAIM Contrast Checker](https://webaim.org/resources/contrastchecker/)
-   - ✅ Dark on light / light on dark
-   - ✅ Large text (18pt+): 3:1 OK
+8. **Contrast ≥ 4.5:1 (text) / 3:1 (UI)**
+   - Verifică cu [WebAIM Contrast Checker](https://webaim.org/resources/contrastchecker/)
+   - Text mare (18pt+): 3:1 este suficient
 
-### Testing Manually
+### Testare manuală
 
-| Test | How | Target |
-|------|-----|--------|
-| **Keyboard** | Tab only, no mouse | Focus visible everywhere, logical order, no traps |
-| **Screen Reader** | NVDA / Narrator | Errors announced, labels read, buttons labeled |
-| **Zoom 200%** | Chrome Ctrl+Shift++ | No horizontal scroll, text readable |
-| **Lighthouse** | DevTools → Lighthouse | Accessibility score ≥95 |
-| **axe DevTools** | Chrome extension | 0 critical/serious errors |
+| Test | Metodă | Țintă |
+|------|--------|-------|
+| **Tastatură** | Tab singur, fără mouse | Focus vizibil, ordine logică, niciun trap |
+| **Screen reader** | NVDA / Narrator | Erori anunțate, label-uri citite, butoane etichetate |
+| **Zoom 200%** | Chrome Ctrl+Shift+= | Fără scroll orizontal, text lizibil |
+| **Lighthouse** | DevTools → Lighthouse | Scor accesibilitate ≥ 95 |
+| **axe DevTools** | Extensie Chrome | 0 erori critice/serioase |
 
 ---
 
-## Component Patterns
+## Tipare de componente
 
-### Button (4 Variants)
+### Buton (4 variante)
 
 ```jsx
 // Primary
-<button className="px-4 py-3 min-h-[44px] bg-cyan-500 hover:bg-cyan-400 
+<button className="px-4 py-3 min-h-[44px] bg-cyan-500 hover:bg-cyan-400
                    text-black font-bold rounded-lg focusable
                    disabled:bg-cyan-500/50 disabled:cursor-not-allowed">
   Conectare
@@ -250,12 +248,12 @@ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
   Ștergere
 </button>
 
-// Ghost (link-like)
+// Ghost (asemănător link)
 <button className="px-4 py-3 text-cyan-400 hover:text-cyan-300 font-semibold focusable">
-  Link-button
+  Link-buton
 </button>
 
-// Loading state
+// Stare de încărcare
 <button disabled aria-busy={loading} className="btn-primary">
   {loading ? <span className="flex items-center gap-2"><Spinner /> Se conectează…</span> : "Conectare"}
 </button>
@@ -275,7 +273,7 @@ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     autoFocus
     aria-invalid={error ? "true" : "false"}
     aria-describedby={error ? "email-error" : undefined}
-    placeholder="example@example.com"
+    placeholder="exemplu@exemplu.com"
     className="w-full px-4 py-3 min-h-[44px] bg-gray-800 border border-gray-600
                text-white rounded-lg focusable placeholder:text-gray-500
                disabled:opacity-50"
@@ -297,33 +295,33 @@ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
 </div>
 ```
 
-### Alert (Feedback Messages)
+### Alert (mesaje de feedback)
 
 ```jsx
-// Error
+// Eroare
 {error && (
   <div role="alert" aria-live="assertive" className="bg-red-950/30 border border-red-600
        px-4 py-3 rounded-lg text-red-400 text-sm">
-    ❌ Eroare: {error}
+    Eroare: {error}
   </div>
 )}
 
-// Success
+// Succes
 {success && (
   <div role="status" aria-live="polite" className="bg-green-950/30 border border-green-600
        px-4 py-3 rounded-lg text-green-400 text-sm">
-    ✓ {success}
+    {success}
   </div>
 )}
 
-// Info
+// Informații
 <div role="status" aria-live="polite" className="bg-blue-950/30 border border-blue-600
      px-4 py-3 rounded-lg text-blue-400 text-sm">
-  ℹ️ Informație
+  Informație
 </div>
 ```
 
-### Table (Accessible)
+### Tabel (accesibil)
 
 ```jsx
 <div className="overflow-x-auto">
@@ -355,30 +353,30 @@ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
 </div>
 ```
 
-**StatusBadge Component:**
+**Componenta StatusBadge:**
 ```jsx
 function StatusBadge({ status }) {
-  const styles = {
+  const stiluri = {
     FUNCTIONAL: 'bg-green-950/30 border border-green-600 text-green-400',
     DEFECT: 'bg-red-950/30 border border-red-600 text-red-400',
     IN_REPARATIE: 'bg-amber-950/30 border border-amber-600 text-amber-400',
     CASAT: 'bg-gray-700 border border-gray-600 text-gray-400',
   };
-  const labels = {
+  const etichete = {
     FUNCTIONAL: '✓ Funcțional',
     DEFECT: '✗ Defect',
     IN_REPARATIE: '⟳ În Reparație',
     CASAT: '− Casat',
   };
   return (
-    <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold ${styles[status]}`}>
-      {labels[status]}
+    <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold ${stiluri[status]}`}>
+      {etichete[status]}
     </span>
   );
 }
 ```
 
-### Modal (Accessible Dialog)
+### Modal (dialog accesibil)
 
 ```jsx
 {showModal && (
@@ -406,55 +404,53 @@ function StatusBadge({ status }) {
 
 ---
 
-## Accessibility Checklist per Component
+## Checklist accesibilitate per componentă
 
-Before merging ANY component:
+Înainte de a face merge la orice componentă:
 
-- [ ] **Labels & Inputs**
-  - [ ] All inputs have `id` + label with `htmlFor`
-  - [ ] `autoComplete` set correctly
-  - [ ] `autoFocus` on first field if form
+- [ ] **Label-uri și inputuri**
+  - [ ] Toate inputurile au `id` + label cu `htmlFor` identic
+  - [ ] `autoComplete` setat corect
+  - [ ] `autoFocus` pe primul câmp dacă e formular
 
-- [ ] **Focus Management**
-  - [ ] Focus ring visible on all interactive elements
-  - [ ] Tab order is logical (top-left → bottom-right)
-  - [ ] No keyboard traps
+- [ ] **Gestionarea focus-ului**
+  - [ ] Focus ring vizibil pe toate elementele interactive
+  - [ ] Ordinea Tab logică (sus-stânga → jos-dreapta)
+  - [ ] Niciun keyboard trap
 
-- [ ] **Error Handling**
-  - [ ] Errors have `role="alert" aria-live="assertive"`
-  - [ ] Input has `aria-describedby` linking to error
-  - [ ] Input has `aria-invalid="true"` when error
+- [ ] **Gestionarea erorilor**
+  - [ ] Erorile au `role="alert" aria-live="assertive"`
+  - [ ] Input-ul are `aria-describedby` legat de eroare
+  - [ ] Input-ul are `aria-invalid="true"` când există eroare
 
-- [ ] **Button & Touch Targets**
-  - [ ] `min-h-[44px]` or `py-3` (44px height)
-  - [ ] `.focusable` class or manual focus ring
-  - [ ] Gap between buttons ≥8px
+- [ ] **Butoane și ținte de atingere**
+  - [ ] `min-h-[44px]` sau `py-3` (înălțime 44px)
+  - [ ] Clasa `.focusable` sau focus ring manual
+  - [ ] Spațiu de min 8px între butoane
 
-- [ ] **Colors & Contrast**
-  - [ ] Text contrast ≥ 4.5:1 (checked with WebAIM)
-  - [ ] Color is NOT only source of info
-  - [ ] Icons + text + color together
+- [ ] **Culori și contrast**
+  - [ ] Contrast text ≥ 4.5:1 (verificat cu WebAIM)
+  - [ ] Culoarea NU e singura sursă de informație
+  - [ ] Icoane + text + culoare împreună
 
-- [ ] **Tables** (if applicable)
-  - [ ] `<th scope="col">` for headers
-  - [ ] `aria-sort="ascending|descending|none"` if sortable
-  - [ ] Proper `<thead>`, `<tbody>`
+- [ ] **Tabele** (dacă e cazul)
+  - [ ] `<th scope="col">` pentru antete
+  - [ ] `aria-sort="ascending|descending|none"` dacă e sortabil
+  - [ ] `<thead>`, `<tbody>` prezente
 
-- [ ] **SVG Icons**
+- [ ] **Icoane SVG**
   - [ ] Decorative: `aria-hidden="true"`
-  - [ ] Functional: `aria-label="Description"`
+  - [ ] Funcționale: `aria-label="Descriere"`
 
-- [ ] **Testing**
-  - [ ] Keyboard-only navigation (Tab/Enter/Escape)
-  - [ ] Screen reader test (NVDA/Narrator — errors announced)
-  - [ ] Lighthouse Accessibility ≥95
-  - [ ] axe DevTools: 0 critical errors
+- [ ] **Testare**
+  - [ ] Navigare cu tastatură (Tab/Enter/Escape)
+  - [ ] Test screen reader (NVDA/Narrator — erori anunțate)
+  - [ ] Lighthouse Accessibility ≥ 95
+  - [ ] axe DevTools: 0 erori critice
 
 ---
 
-## Implementation Checklist
-
-### Setup Tailwind with Design Tokens
+## Configurare Tailwind cu token-uri de design
 
 `tailwind.config.js`:
 ```javascript
@@ -463,9 +459,8 @@ export default {
   theme: {
     extend: {
       colors: {
-        // SIMDM Brand
+        // Culorile brandului SIMDM
         cyan: { 400: '#22d3ee', 500: '#06b6d4' },
-        // Use standard gray but verify contrast
       },
     },
   },
@@ -480,7 +475,7 @@ export default {
            focus-visible:ring-cyan-400 focus-visible:ring-offset-2
            focus-visible:ring-offset-gray-950 transition-all;
   }
-  
+
   .focusable-danger {
     @apply focus-visible:ring-red-400 focus-visible:ring-offset-gray-950;
   }
@@ -534,7 +529,7 @@ export default {
 
 ---
 
-## External Resources
+## Resurse externe
 
 - [WCAG 2.1 Quick Reference](https://www.w3.org/WAI/WCAG21/quickref/)
 - [ARIA Authoring Practices](https://www.w3.org/WAI/ARIA/apg/)
@@ -545,7 +540,7 @@ export default {
 
 ---
 
-**Version History:**
-- v1.0 — 2026-05-29: Consolidation of Phase 1 design + audit
+**Istoric versiuni:**
+- v1.0 — 2026-05-29: Consolidare design Faza 1 + audit
 
-**Questions?** Refer to [CLAUDE.md](../CLAUDE.md) or [2-DEVELOPER-GUIDE.md](./2-DEVELOPER-GUIDE.md)
+**Întrebări?** Vezi [CLAUDE.md](../CLAUDE.md) sau [2-DEVELOPER-GUIDE.md](./2-DEVELOPER-GUIDE.md)

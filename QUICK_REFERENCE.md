@@ -1,25 +1,25 @@
-# ⚡ Quick Reference — SIMDM Frontend
+# Referință Rapidă — SIMDM Frontend
 
-**Print this.** Keep it next to your desk during development.
-
----
-
-## 🎨 Colors (Copy-Paste Tailwind Classes)
-
-| Utilizare | Tailwind | Hex | Contrast Check |
-|-----------|----------|-----|--------|
-| Heading/Accent | `text-cyan-400` | #22d3ee | 9.8:1 ✅ |
-| Label/Helper | `text-gray-400` | #9ca3af | 6.8:1 ✅ |
-| Input Background | `bg-gray-800` | #1f2937 | — |
-| Input Border | `border-gray-600` | #4b5563 | 3:1 ✅ |
-| Border (evita) | `border-gray-700` | #374151 | 1.5:1 ❌ |
-| Page Background | `bg-gray-950` | #030712 | — |
-| Error | `text-red-400` | #f87171 | 5.6:1 ✅ |
-| Success | `text-green-400` | #4ade80 | — |
+Imprimă și ține lângă monitor în timpul dezvoltării.
 
 ---
 
-## 🧩 Components — Copy-Paste
+## Culori (clase Tailwind — copiază direct)
+
+| Utilizare | Tailwind | Hex | Contrast |
+|-----------|----------|-----|----------|
+| Heading / Accent | `text-cyan-400` | #22d3ee | 9.8:1 |
+| Label / Text ajutător | `text-gray-400` | #9ca3af | 6.8:1 |
+| Fundal input | `bg-gray-800` | #1f2937 | — |
+| Border input | `border-gray-600` | #4b5563 | 3:1 |
+| Border decorativ (evită) | `border-gray-700` | #374151 | 1.5:1 |
+| Fundal pagină | `bg-gray-950` | #030712 | — |
+| Eroare | `text-red-400` | #f87171 | 5.6:1 |
+| Succes | `text-green-400` | #4ade80 | — |
+
+---
+
+## Componente — copiază direct
 
 ### Input + Label
 ```jsx
@@ -66,105 +66,107 @@
 </div>
 ```
 
-### Alert Error
+### Alert Eroare
 ```jsx
 <div role="alert" className="alert-error">
-  ❌ Eroare: Parolă incorectă
+  Eroare: Parolă incorectă
 </div>
 ```
 
-### Alert Success
+### Alert Succes
 ```jsx
 <div role="status" className="alert-success">
-  ✓ Succes: Salvat
+  Salvat cu succes
 </div>
 ```
 
 ---
 
-## ♿ Accessibility Checklist
+## Checklist accesibilitate
 
-### Înainte de git commit:
+Înainte de `git commit`:
 
 - [ ] **Input labels:**
   - [ ] Input are `id="field"`
   - [ ] Label are `htmlFor="field"`
-  - [ ] `autoComplete` setat corect (`username`, `current-password`, etc.)
+  - [ ] `autoComplete` setat corect (`username`, `current-password` etc.)
 
-- [ ] **Errors:**
-  - [ ] Eroare are `role="alert" aria-live="assertive"`
+- [ ] **Erori:**
+  - [ ] Eroarea are `role="alert" aria-live="assertive"`
   - [ ] Input are `aria-describedby="field-error"`
 
-- [ ] **Button:**
+- [ ] **Butoane:**
   - [ ] Are `min-h-[44px]` sau `py-3`
-  - [ ] Are `.focusable` class (sau focus ring manual)
+  - [ ] Are clasa `.focusable` (sau focus ring manual)
 
 - [ ] **Focus:**
-  - [ ] Tab pe orice element interactive = focus vizibil
-  - [ ] Ordinea Tab logică (top-left → bottom-right)
+  - [ ] Tab pe orice element interactiv = focus vizibil
+  - [ ] Ordinea Tab logică (sus-stânga → jos-dreapta)
   - [ ] Niciun keyboard trap
 
-- [ ] **Colors:**
-  - [ ] Text contrast ≥ 4.5:1
+- [ ] **Culori:**
+  - [ ] Contrast text ≥ 4.5:1
   - [ ] Status "defect" = text roșu + icoană + text descriptiv (NU doar culoare)
 
 ---
 
-## 🧪 Quick Testing
+## Testare rapidă
 
-### Keyboard-Only (30 sec)
-```bash
-# Deactivează mouse
-# Tab/Shift+Tab - navighează
-# Enter - click button
-# Space - toggle
-# Esc - cancel
+### Tastatură (30 secunde)
+```
+Dezactivează mouse-ul
+Tab / Shift+Tab — navighează
+Enter — activează buton
+Space — toggle checkbox
+Escape — anulare / închidere modal
 
-✓ Focus vizibil la fiecare oprire
-✓ Tab order logic
-✓ Niciun trap
+Verifică:
+  Focus vizibil la fiecare element
+  Ordinea Tab logică
+  Niciun trap
 ```
 
 ### Lighthouse (Chrome DevTools)
-```bash
+```
 F12 → Lighthouse → Accessibility → Analyze page load
-✓ Target: ≥95 points
+Țintă: ≥ 95 puncte
 ```
 
-### axe DevTools (Chrome Extension)
-```bash
-Click axe icon → Scan → Automated Checks
-✓ Target: 0 errors, 0 warnings
+### axe DevTools (extensie Chrome)
+```
+Click iconiță axe → Scan → Automated Checks
+Țintă: 0 erori, 0 avertismente critice
 ```
 
 ### Screen Reader (NVDA)
-```bash
-Windows: Download NVDA https://www.nvaccess.org
-Win + Ctrl + Enter: Start NVDA
-Arrow keys: Navigate
-✓ Errors announced
-✓ Buttons have labels in Romanian
+```
+Descarcă NVDA: https://www.nvaccess.org
+Start: Win + Ctrl + Enter
+Taste săgeți: navigare
+Verifică:
+  Erorile sunt anunțate
+  Butoanele au etichete în română
 ```
 
 ---
 
-## 📐 Sizing
+## Dimensiuni
 
-| Element | Size | Class |
-|---------|------|-------|
-| Button/Input | 44px min | `min-h-[44px]` |
-| Padding Default | 16px | `px-4 py-3` |
-| Padding Card | 24px | `px-6 py-6` |
-| Gap | 8px | `gap-2` |
+| Element | Dimensiune | Clasă |
+|---------|------------|-------|
+| Buton / Input | min 44px | `min-h-[44px]` |
+| Padding implicit | 16px | `px-4 py-3` |
+| Padding card | 24px | `px-6 py-6` |
+| Spațiere elemente | 8px | `gap-2` |
 | Border | 1px | `border` |
-| Border Radius | 8px | `rounded-lg` |
+| Border radius | 8px | `rounded-lg` |
 
 ---
 
-## 🔤 Typography
+## Tipografie
 
-| Level | Size | Class | Color |
-|-------|------|-------|-------|
+| Nivel | Mărime | Clasă | Culoare |
+|-------|--------|-------|---------|
 | h1 | 48px | `text-4xl font-bold` | `text-cyan-400` |
 | h2 | 32px | `text-2xl font-bold` | `text-cyan-400` |
 | h3 | 24px | `text-xl font-bold` | `text-white` |
@@ -174,9 +176,9 @@ Arrow keys: Navigate
 
 ---
 
-## 🚀 Common Patterns
+## Tipare frecvente
 
-### Form with Validation
+### Formular cu validare
 ```jsx
 const [username, setUsername] = useState('');
 const [error, setError] = useState('');
@@ -185,9 +187,9 @@ const handleSubmit = async (e) => {
   e.preventDefault();
   try {
     const res = await api.post('/auth/login', { username, password });
-    // success
+    // succes
   } catch (err) {
-    setError(err.response.data.error || 'Eroare necunoscută');
+    setError(err.response?.data?.error || 'Eroare necunoscută');
   }
 };
 
@@ -203,14 +205,14 @@ const handleSubmit = async (e) => {
 </form>
 ```
 
-### Loading State
+### Stare de încărcare
 ```jsx
 <button disabled={loading} aria-busy={loading} className="btn-primary">
   {loading ? "Se conectează…" : "Conectare"}
 </button>
 ```
 
-### Table with Sort
+### Tabel cu sortare
 ```jsx
 <table>
   <thead>
@@ -227,43 +229,45 @@ const handleSubmit = async (e) => {
 
 ---
 
-## 🎯 Top 3 A11y Rules
+## Top 3 reguli accesibilitate
 
-1. **LABEL + INPUT**
+1. **LABEL + INPUT asociate**
    ```jsx
-   <label htmlFor="field">Label</label>
+   <label htmlFor="field">Etichetă</label>
    <input id="field" ... />
    ```
 
-2. **ERROR ANNOUNCED**
+2. **EROAREA ANUNȚATĂ**
    ```jsx
    {error && <p role="alert" aria-live="assertive">{error}</p>}
    ```
 
-3. **FOCUS RING**
+3. **FOCUS RING VIZIBIL**
    ```jsx
    className="... focus-visible:ring-2 focus-visible:ring-cyan-400 ..."
    ```
 
 ---
 
-## 📚 Documentation
+## Documentație
 
-- `AUDIT_ACCESIBILITATE.md` — WCAG 2.1 AA audit complet
-- `DESIGN_SYSTEM.md` — Design tokens, componente, culori
-- `IMPLEMENTATION_GUIDE.md` — Cod JSX detaliat, checklist-uri
+| Document | Conținut |
+|----------|----------|
+| [docs/1-DESIGN-AND-ACCESSIBILITY.md](./docs/1-DESIGN-AND-ACCESSIBILITY.md) | Design tokens, culori, componente, reguli WCAG |
+| [docs/2-DEVELOPER-GUIDE.md](./docs/2-DEVELOPER-GUIDE.md) | Implementare practică, tipare JSX, depanare |
+| [docs/3-AUDIT-LOG.md](./docs/3-AUDIT-LOG.md) | Jurnal audit accesibilitate Faza 1 |
+| [docs/CONTRIBUTING.md](./docs/CONTRIBUTING.md) | Flux de lucru, PR template, checklist |
 
 ---
 
-## 🔗 Links
+## Resurse externe
 
 - [Tailwind CSS](https://tailwindcss.com)
-- [WCAG 2.1 Quick Ref](https://www.w3.org/WAI/WCAG21/quickref/)
-- [ARIA Authoring](https://www.w3.org/WAI/ARIA/apg/)
-- [WebAIM Contrast](https://webaim.org/resources/contrastchecker/)
-- [NVDA](https://www.nvaccess.org)
+- [WCAG 2.1 Quick Reference](https://www.w3.org/WAI/WCAG21/quickref/)
+- [ARIA Authoring Practices](https://www.w3.org/WAI/ARIA/apg/)
+- [WebAIM Contrast Checker](https://webaim.org/resources/contrastchecker/)
+- [NVDA Screen Reader](https://www.nvaccess.org)
 
 ---
 
-**Updated:** 2026-05-28 | **Fase:** 1  
-**Print & keep at desk** ✌️
+**Actualizat:** 2026-05-29 | **Fază curentă:** 1

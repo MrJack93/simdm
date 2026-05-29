@@ -1,26 +1,26 @@
-# Developer Guide — SIMDM Frontend
+# Ghid Dezvoltator — SIMDM Frontend
 
-**Version:** 1.0  
-**Status:** Phase 1 (Framework ready for Phase 2+)  
-**Last Updated:** 2026-05-29  
-**Audience:** Frontend Developers
-
----
-
-## 📑 Quick Navigation
-
-- [Tailwind Setup](#tailwind-setup)
-- [Component Implementation](#component-implementation)
-- [Common Patterns](#common-patterns)
-- [Testing & Validation](#testing--validation)
-- [Accessibility Checklist](#accessibility-checklist)
-- [Troubleshooting](#troubleshooting)
+**Versiune:** 1.0
+**Status:** Faza 1 (infrastructura pregătită pentru Faza 2+)
+**Actualizat:** 2026-05-29
+**Audiență:** Developeri frontend
 
 ---
 
-## Tailwind Setup
+## Navigare rapidă
 
-### Configuration
+- [Configurare Tailwind](#configurare-tailwind)
+- [Implementare componente](#implementare-componente)
+- [Tipare frecvente](#tipare-frecvente)
+- [Testare și validare](#testare-și-validare)
+- [Checklist accesibilitate](#checklist-accesibilitate)
+- [Depanare](#depanare)
+
+---
+
+## Configurare Tailwind
+
+### Configurare `tailwind.config.js`
 
 `frontend/tailwind.config.js`:
 ```javascript
@@ -30,21 +30,21 @@ export default {
   theme: {
     extend: {
       colors: {
-        // SIMDM Brand Colors
+        // Culorile brandului SIMDM
         cyan: {
-          400: '#22d3ee',  // Primary accent
-          500: '#06b6d4',  // Hover state
+          400: '#22d3ee',  // Accent principal
+          500: '#06b6d4',  // Hover
         },
         gray: {
-          400: '#9ca3af',  // Secondary text
-          500: '#6b7280',  // Muted (avoid main content)
-          600: '#4b5563',  // Border (use this, not gray-700)
-          700: '#374151',  // Border decorative (low contrast)
-          800: '#1f2937',  // Card/input background
-          900: '#111827',  // Surface primary
-          950: '#030712',  // Page background
+          400: '#9ca3af',  // Text secundar
+          500: '#6b7280',  // Estompat (evită pentru conținut principal)
+          600: '#4b5563',  // Border (folosește asta, nu gray-700)
+          700: '#374151',  // Border decorativ (contrast scăzut)
+          800: '#1f2937',  // Fundal card/input
+          900: '#111827',  // Suprafață primară
+          950: '#030712',  // Fundal pagină
         },
-        // Semantic colors
+        // Culori semantice
         error: '#f87171',    // red-400
         success: '#4ade80',  // green-400
         warning: '#fbbf24',  // amber-400
@@ -65,7 +65,7 @@ export default {
 };
 ```
 
-### Global Styles
+### Stiluri globale
 
 `frontend/src/index.css`:
 ```css
@@ -73,7 +73,7 @@ export default {
 @tailwind components;
 @tailwind utilities;
 
-/* Focus Ring — Universal utility */
+/* Focus Ring — utilitar universal */
 @layer components {
   .focusable {
     @apply focus-visible:outline-none focus-visible:ring-2
@@ -85,7 +85,7 @@ export default {
     @apply focus-visible:ring-red-400 focus-visible:ring-offset-gray-950;
   }
 
-  /* Buttons */
+  /* Butoane */
   .btn-primary {
     @apply px-4 py-3 min-h-[44px] bg-cyan-500 hover:bg-cyan-400
            text-black font-bold rounded-lg focusable
@@ -102,7 +102,7 @@ export default {
            text-white font-bold rounded-lg focusable-danger;
   }
 
-  /* Form Elements */
+  /* Elemente de formular */
   .input-base {
     @apply w-full px-4 py-3 min-h-[44px] bg-gray-800 border border-gray-600
            text-white text-base rounded-lg focusable
@@ -119,7 +119,7 @@ export default {
            px-6 py-6 transition-all;
   }
 
-  /* Alerts */
+  /* Alerte */
   .alert-error {
     @apply bg-red-950/30 border border-red-600 px-4 py-3 rounded-lg
            text-red-400 text-sm;
@@ -136,7 +136,7 @@ export default {
   }
 }
 
-/* Typography */
+/* Tipografie */
 h1 {
   @apply text-4xl font-bold text-cyan-400 mb-6 leading-tight;
 }
@@ -160,11 +160,11 @@ small {
 
 ---
 
-## Component Implementation
+## Implementare componente
 
-### FormInput Component
+### Componenta FormInput
 
-**Use:** Any text/email/password input with label and error handling.
+**Utilizare:** Orice input de tip text/email/parolă cu label și tratarea erorilor.
 
 `src/components/FormInput.jsx`:
 ```jsx
@@ -189,7 +189,7 @@ export default function FormInput({
       {label && (
         <label htmlFor={id} className="label-base">
           {label}
-          {required && <span className="text-red-400">*</span>}
+          {required && <span className="text-red-400 ml-1">*</span>}
         </label>
       )}
       <input
@@ -222,7 +222,7 @@ export default function FormInput({
 }
 ```
 
-**Usage:**
+**Utilizare:**
 ```jsx
 <FormInput
   id="username"
@@ -238,7 +238,7 @@ export default function FormInput({
 />
 ```
 
-### Button Component
+### Componenta Button
 
 `src/components/Button.jsx`:
 ```jsx
@@ -252,13 +252,13 @@ export default function Button({
   children,
   ...props
 }) {
-  const variants = {
+  const variante = {
     primary: 'btn-primary',
     secondary: 'btn-secondary',
     danger: 'btn-danger',
   };
 
-  const sizes = {
+  const dimensiuni = {
     sm: 'px-3 py-2 text-sm',
     md: 'px-4 py-3',
     lg: 'px-6 py-4',
@@ -268,7 +268,7 @@ export default function Button({
     <button
       disabled={disabled || loading}
       aria-busy={loading}
-      className={`font-semibold transition-all min-h-[44px] ${variants[variant]} ${sizes[size]}`}
+      className={`font-semibold transition-all min-h-[44px] ${variante[variant]} ${dimensiuni[size]}`}
       {...props}
     >
       {loading ? (
@@ -293,7 +293,7 @@ export default function Button({
 }
 ```
 
-**Usage:**
+**Utilizare:**
 ```jsx
 <Button variant="primary" onClick={handleSubmit}>
   Conectare
@@ -304,7 +304,7 @@ export default function Button({
 </Button>
 ```
 
-### Card Component
+### Componenta Card
 
 `src/components/Card.jsx`:
 ```jsx
@@ -334,11 +334,11 @@ export default function Card({
 }
 ```
 
-**Usage:**
+**Utilizare:**
 ```jsx
 <Card
   title="DM-001"
-  subtitle="Electrocardio"
+  subtitle="Electrocardiograf"
   action={<Button variant="secondary" size="sm">Editare</Button>}
 >
   Status: <strong className="text-green-400">Funcțional</strong>
@@ -347,9 +347,9 @@ export default function Card({
 
 ---
 
-## Common Patterns
+## Tipare frecvente
 
-### Form with Validation
+### Formular cu validare
 
 ```jsx
 import { useState } from 'react';
@@ -357,7 +357,7 @@ import api from '../api/axios';
 import FormInput from '../components/FormInput';
 import Button from '../components/Button';
 
-export default function LoginForm() {
+export default function FormularLogin() {
   const [formData, setFormData] = useState({ username: '', password: '' });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
@@ -366,15 +366,15 @@ export default function LoginForm() {
   const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData(prev => ({ ...prev, [id]: value }));
-    if (errors[id]) setErrors(prev => ({ ...prev, [id]: '' })); // Clear error on change
+    if (errors[id]) setErrors(prev => ({ ...prev, [id]: '' }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = {};
 
-    if (!formData.username.trim()) newErrors.username = 'Username obligatoriu';
-    if (!formData.password) newErrors.password = 'Parolă obligatorie';
+    if (!formData.username.trim()) newErrors.username = 'Utilizatorul este obligatoriu';
+    if (!formData.password) newErrors.password = 'Parola este obligatorie';
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -385,7 +385,7 @@ export default function LoginForm() {
       setLoading(true);
       const res = await api.post('/auth/login', formData);
       localStorage.setItem('simdm_token', res.data.token);
-      // Redirect or callback
+      // Redirect sau callback
     } catch (err) {
       setGlobalError(err.response?.data?.error || 'Eroare necunoscută');
     } finally {
@@ -397,7 +397,7 @@ export default function LoginForm() {
     <form onSubmit={handleSubmit} className="space-y-6">
       {globalError && (
         <div role="alert" className="alert-error">
-          ❌ {globalError}
+          {globalError}
         </div>
       )}
 
@@ -429,13 +429,13 @@ export default function LoginForm() {
 }
 ```
 
-### Loading Data with react-query
+### Încărcare date cu react-query
 
 ```jsx
 import { useQuery } from '@tanstack/react-query';
 import api from '../api/axios';
 
-function DeviceList() {
+function ListaDispozitive() {
   const { data: devices, isLoading, error } = useQuery({
     queryKey: ['devices'],
     queryFn: () => api.get('/api/devices').then(res => res.data),
@@ -452,7 +452,7 @@ function DeviceList() {
   if (error) {
     return (
       <div role="alert" className="alert-error">
-        ❌ Eroare la încărcarea dispozitivelor: {error.message}
+        Eroare la încărcarea dispozitivelor: {error.message}
       </div>
     );
   }
@@ -477,16 +477,16 @@ function DeviceList() {
 }
 ```
 
-### Table with Sorting & Pagination
+### Tabel cu sortare și paginare
 
 ```jsx
 import { useState } from 'react';
 import Button from '../components/Button';
 
-function DeviceTable({ data, onSort, sortKey, sortOrder }) {
-  const columns = [
-    { key: 'inventoryNumber', label: 'Nr. Inventar', sortable: true },
-    { key: 'name', label: 'Denumire', sortable: true },
+function TabelDispozitive({ data, onSort, sortKey, sortOrder }) {
+  const coloane = [
+    { key: 'inventoryNumber', label: 'Nr. Inventar', sortabil: true },
+    { key: 'name', label: 'Denumire', sortabil: true },
     { key: 'status', label: 'Status' },
   ];
 
@@ -495,20 +495,18 @@ function DeviceTable({ data, onSort, sortKey, sortOrder }) {
       <table className="w-full border-collapse">
         <thead>
           <tr className="border-b border-gray-600">
-            {columns.map(col => (
+            {coloane.map(col => (
               <th
                 key={col.key}
                 scope="col"
                 className="px-4 py-3 text-left text-sm font-bold text-cyan-400"
                 aria-sort={
                   sortKey === col.key
-                    ? sortOrder === 'asc'
-                      ? 'ascending'
-                      : 'descending'
+                    ? sortOrder === 'asc' ? 'ascending' : 'descending'
                     : 'none'
                 }
               >
-                {col.sortable ? (
+                {col.sortabil ? (
                   <button
                     onClick={() => onSort(col.key)}
                     className="focusable hover:text-cyan-300"
@@ -538,18 +536,17 @@ function DeviceTable({ data, onSort, sortKey, sortOrder }) {
   );
 }
 
-// StatusBadge helper
 function StatusBadge({ status }) {
   const config = {
-    FUNCTIONAL: { styles: 'bg-green-950/30 border border-green-600 text-green-400', label: '✓ Funcțional' },
-    DEFECT: { styles: 'bg-red-950/30 border border-red-600 text-red-400', label: '✗ Defect' },
-    IN_REPARATIE: { styles: 'bg-amber-950/30 border border-amber-600 text-amber-400', label: '⟳ În Reparație' },
-    CASAT: { styles: 'bg-gray-700 border border-gray-600 text-gray-400', label: '− Casat' },
+    FUNCTIONAL: { stiluri: 'bg-green-950/30 border border-green-600 text-green-400', eticheta: '✓ Funcțional' },
+    DEFECT: { stiluri: 'bg-red-950/30 border border-red-600 text-red-400', eticheta: '✗ Defect' },
+    IN_REPARATIE: { stiluri: 'bg-amber-950/30 border border-amber-600 text-amber-400', eticheta: '⟳ În Reparație' },
+    CASAT: { stiluri: 'bg-gray-700 border border-gray-600 text-gray-400', eticheta: '− Casat' },
   };
-  const { styles, label } = config[status] || {};
+  const { stiluri, eticheta } = config[status] || {};
   return (
-    <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold ${styles}`}>
-      {label}
+    <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold ${stiluri}`}>
+      {eticheta}
     </span>
   );
 }
@@ -557,159 +554,154 @@ function StatusBadge({ status }) {
 
 ---
 
-## Testing & Validation
+## Testare și validare
 
-### Pre-Commit Checklist
+### Checklist pre-commit
 
-Before `git commit`:
+Înainte de `git commit`:
 
-```markdown
-## Code Quality
-- [ ] No `console.log()` left in code
-- [ ] No unused imports
-- [ ] Variables are meaningful (not `a`, `b`, `x`)
-- [ ] Function names are descriptive
+```
+Calitate cod
+- [ ] Niciun console.log() rămas în cod
+- [ ] Niciun import nefolosit
+- [ ] Variabile cu nume descriptive (nu a, b, x)
+- [ ] Funcțiile au nume descriptive
 
-## Accessibility (WCAG 2.1 AA)
-- [ ] All inputs have `id` + associated `<label htmlFor>`
-- [ ] All form inputs have `autoComplete` (username, email, current-password, etc.)
-- [ ] Error messages have `role="alert" aria-live="assertive"`
-- [ ] Buttons/inputs have `min-h-[44px]` or `py-3`
-- [ ] Focus ring visible (`focus-visible:ring-...`)
-- [ ] No `outline:none` without replacement
-- [ ] Tab order is logical
+Accesibilitate (WCAG 2.1 AA)
+- [ ] Toate inputurile au id + <label htmlFor> asociat
+- [ ] Toate câmpurile de formular au autoComplete setat
+- [ ] Mesajele de eroare au role="alert" aria-live="assertive"
+- [ ] Butoane/inputuri au min-h-[44px] sau py-3
+- [ ] Focus ring vizibil (focus-visible:ring-...)
+- [ ] Niciun outline:none fără înlocuitor
+- [ ] Ordinea Tab logică
 
-## Testing
-- [ ] Form validates input (no empty fields)
-- [ ] Error messages appear and are cleared on change
-- [ ] Loading state works (button disabled, spinner visible)
-- [ ] Success/failure messages appear
-- [ ] Works without mouse (keyboard only)
+Testare
+- [ ] Formularul validează (câmpuri goale blocate)
+- [ ] Mesajele de eroare apar și se șterg la modificare
+- [ ] Starea de încărcare funcționează (buton dezactivat, spinner vizibil)
+- [ ] Mesajele de succes/eroare apar corect
+- [ ] Funcționează fără mouse (tastatură singură)
 
-## Colors & Contrast
-- [ ] Text contrast ≥ 4.5:1 (check with WebAIM)
-- [ ] No color-only status indicators (text + icon + color)
+Culori și contrast
+- [ ] Contrast text ≥ 4.5:1 (verificat cu WebAIM)
+- [ ] Status-urile nu sunt indicate doar prin culoare (text + icoană + culoare)
 ```
 
-### Keyboard Testing
+### Testare cu tastatură
 
-```bash
-# Test keyboard navigation (30 sec per page)
-1. Disconnect mouse or disable in settings
-2. Press Tab to navigate (Shift+Tab backwards)
-3. Press Enter to click buttons
-4. Press Space to toggle checkboxes
-5. Press Escape to close modals
+```
+Testare navigare cu tastatură (30 secunde per pagină)
+1. Deconectează mouse-ul
+2. Apasă Tab pentru a naviga (Shift+Tab înapoi)
+3. Apasă Enter pentru a activa butoane
+4. Apasă Space pentru a bifa checkbox-uri
+5. Apasă Escape pentru a închide modale
 
-✓ Focus should be visible everywhere
-✓ Focus should move logically
-✓ No keyboard traps (Tab cycling trapped somewhere)
+Verifică:
+  Focus vizibil la fiecare oprire
+  Ordinea Tab logică
+  Niciun keyboard trap
 ```
 
-### Screen Reader Testing (NVDA — Free)
+### Testare cu screen reader (NVDA — gratuit)
 
-```bash
-# Download NVDA: https://www.nvaccess.org
-# Start NVDA: Win + Ctrl + Enter
+```
+Descarcă NVDA: https://www.nvaccess.org
+Start NVDA: Win + Ctrl + Enter
 
-1. Navigate form with NVDA
-2. Verify labels are announced for inputs
-3. Verify errors are announced with alert role
-4. Verify button labels in Romanian
-5. Verify no "click me" or unlabeled buttons
+1. Navighează formularul cu NVDA
+2. Verifică că label-urile sunt anunțate pentru inputuri
+3. Verifică că erorile sunt anunțate cu role alert
+4. Verifică că butoanele au etichete în română
+5. Verifică că nu există butoane fără etichetă
 ```
 
 ### Lighthouse (Chrome DevTools)
 
-```bash
-1. Open DevTools (F12)
-2. Go to Lighthouse tab
+```
+1. Deschide DevTools (F12)
+2. Mergi la tab-ul Lighthouse
 3. Click "Analyze page load"
-4. Check Accessibility score
-5. Target: ≥95 points
+4. Verifică scorul Accessibility
+5. Țintă: ≥ 95 puncte
 ```
 
-### axe DevTools (Chrome Extension)
+### axe DevTools (extensie Chrome)
 
-```bash
-1. Install from Chrome Web Store
-2. Click axe icon
+```
+1. Instalează din Chrome Web Store
+2. Click pe iconița axe
 3. Click "Scan this page"
-4. Review "Violations"
-5. Target: 0 critical + serious errors
+4. Vizualizează "Violations"
+5. Țintă: 0 erori critice + serioase
 ```
 
 ---
 
-## Accessibility Checklist
+## Checklist accesibilitate
 
-### REQUIRED for Every Component
+### Obligatoriu pentru orice componentă
 
-- [ ] **Label Association:** `<label htmlFor="id">` + `<input id="id">`
-- [ ] **Focus Ring:** `.focusable` class or manual `focus-visible:ring-...`
-- [ ] **Minimum Size:** `min-h-[44px]` or `py-3` (44px height)
-- [ ] **Error Messaging:** `role="alert" aria-live="assertive"`
-- [ ] **Color + Text:** Status is NOT color-only (text + icon + color)
+- [ ] **Asociere Label:** `<label htmlFor="id">` + `<input id="id">`
+- [ ] **Focus Ring:** clasa `.focusable` sau `focus-visible:ring-...` manual
+- [ ] **Dimensiune minimă:** `min-h-[44px]` sau `py-3` (înălțime 44px)
+- [ ] **Mesaj eroare:** `role="alert" aria-live="assertive"`
+- [ ] **Culoare + Text:** Status-ul NU e doar culoare (text + icoană + culoare)
 
-### Before Merging PR
+### Înainte de merge PR
 
-**Accessibility Review:**
+```
+Accesibilitate:
+  - [ ] Toate inputurile au id și <label htmlFor> asociat
+  - [ ] autoComplete setat corect
+  - [ ] autoFocus pe primul input din formular
 
-```markdown
-- [ ] Labels & Inputs
-  - [ ] All inputs have `id` and associated `<label htmlFor>`
-  - [ ] `autoComplete` is set correctly
-  - [ ] `autoFocus` on first input if form
+  - [ ] Focus ring vizibil pe toate elementele interactive
+  - [ ] Ordinea Tab logică
+  - [ ] Niciun keyboard trap
 
-- [ ] Focus Management
-  - [ ] Focus ring visible on all interactive elements
-  - [ ] Tab order is logical
-  - [ ] No keyboard traps
+  - [ ] Erori cu role="alert" aria-live="assertive"
+  - [ ] Legate la input prin aria-describedby
+  - [ ] Input cu aria-invalid="true" când e eroare
 
-- [ ] Errors & Messages
-  - [ ] Errors have `role="alert" aria-live="assertive"`
-  - [ ] Linked to input via `aria-describedby`
-  - [ ] Input has `aria-invalid="true"` when error
+  - [ ] min-h-[44px] sau py-3
+  - [ ] Clasa .focusable prezentă
+  - [ ] Spațiu de 8px între butoane
 
-- [ ] Buttons & Touch Targets
-  - [ ] `min-h-[44px]` or `py-3`
-  - [ ] Has `.focusable` class
-  - [ ] 8px gap between buttons
+  - [ ] Text contrast ≥ 4.5:1 (WCAG AA)
+  - [ ] Status nu e indicat doar prin culoare
 
-- [ ] Contrast & Colors
-  - [ ] Text ≥ 4.5:1 contrast (WCAG AA)
-  - [ ] No color-only status (uses text + icon)
-
-- [ ] Testing
-  - [ ] Tab-only navigation works
-  - [ ] NVDA/Narrator announces errors
-  - [ ] Lighthouse ≥95
-  - [ ] axe DevTools: 0 critical
+Testare:
+  - [ ] Navigare cu tastatură funcționează
+  - [ ] NVDA/Narrator anunță erorile
+  - [ ] Lighthouse ≥ 95
+  - [ ] axe DevTools: 0 erori critice
 ```
 
 ---
 
-## Troubleshooting
+## Depanare
 
-### Common Issues
+### Probleme frecvente
 
-#### "Focus ring not visible"
+#### "Focus ring nu e vizibil"
 ```jsx
-// ❌ WRONG
+// Greșit
 className="... focus:outline-none focus:border-cyan-500 ..."
 
-// ✅ CORRECT
+// Corect
 className="... focusable ..."
-// OR manually:
+// SAU manual:
 className="... focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950 ..."
 ```
 
-#### "Error message not announced"
+#### "Mesajul de eroare nu e anunțat"
 ```jsx
-// ❌ WRONG
+// Greșit
 {error && <p>{error}</p>}
 
-// ✅ CORRECT
+// Corect
 {error && (
   <p role="alert" aria-live="assertive">
     {error}
@@ -717,52 +709,52 @@ className="... focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ri
 )}
 ```
 
-#### "Button too small"
+#### "Butonul e prea mic"
 ```jsx
-// ❌ WRONG
-<button className="px-2 py-1">Click me</button>
+// Greșit
+<button className="px-2 py-1">Acțiune</button>
 
-// ✅ CORRECT
-<button className="px-4 py-3 min-h-[44px]">Click me</button>
+// Corect
+<button className="px-4 py-3 min-h-[44px]">Acțiune</button>
 ```
 
-#### "Input not focusable"
+#### "Elementul nu e focusabil"
 ```jsx
-// ❌ WRONG
-<div onClick={handleClick}>Not focusable</div>
+// Greșit
+<div onClick={handleClick}>Nu e focusabil</div>
 
-// ✅ CORRECT
-<button onClick={handleClick}>Focusable button</button>
-// OR semantic input:
-<input id="username" />
+// Corect
+<button onClick={handleClick}>Focusabil</button>
+// SAU input semantic:
+<input id="camp" />
 ```
 
-#### "Tab order jumps around"
+#### "Ordinea Tab sare aleator"
 ```jsx
-// ❌ WRONG: z-index breaks tab order
+// Greșit: z-index rupe ordinea Tab
 <input style={{ position: 'absolute', zIndex: 1000 }} />
 
-// ✅ CORRECT: Use flex/grid for logical flow
+// Corect: folosești flex/grid pentru flux logic
 <div className="flex flex-col gap-4">
-  <input /> {/* Tab 1 */}
+  <input />  {/* Tab 1 */}
   <button /> {/* Tab 2 */}
 </div>
 ```
 
 ---
 
-## Resources & Reference
+## Resurse și referințe
 
-- **[WCAG 2.1 Quick Reference](https://www.w3.org/WAI/WCAG21/quickref/)**
-- **[ARIA Authoring Practices](https://www.w3.org/WAI/ARIA/apg/)**
-- **[WebAIM Contrast Checker](https://webaim.org/resources/contrastchecker/)**
-- **[Tailwind CSS Docs](https://tailwindcss.com)**
-- **[NVDA Screen Reader](https://www.nvaccess.org)**
-- **[Design System →](./1-DESIGN-AND-ACCESSIBILITY.md)**
+- [WCAG 2.1 Quick Reference](https://www.w3.org/WAI/WCAG21/quickref/)
+- [ARIA Authoring Practices](https://www.w3.org/WAI/ARIA/apg/)
+- [WebAIM Contrast Checker](https://webaim.org/resources/contrastchecker/)
+- [Tailwind CSS Docs](https://tailwindcss.com)
+- [NVDA Screen Reader](https://www.nvaccess.org)
+- [Sistem de Design](./1-DESIGN-AND-ACCESSIBILITY.md)
 
 ---
 
-**Version History:**
-- v1.0 — 2026-05-29: Phase 1 developer guide (consolidation + practical examples)
+**Istoric versiuni:**
+- v1.0 — 2026-05-29: Ghid developer Faza 1 (consolidare + exemple practice)
 
-**Questions?** Check [CLAUDE.md](../CLAUDE.md) or [1-DESIGN-AND-ACCESSIBILITY.md](./1-DESIGN-AND-ACCESSIBILITY.md)
+**Întrebări?** Vezi [CLAUDE.md](../CLAUDE.md) sau [1-DESIGN-AND-ACCESSIBILITY.md](./1-DESIGN-AND-ACCESSIBILITY.md)

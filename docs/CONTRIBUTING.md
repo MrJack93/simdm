@@ -1,135 +1,128 @@
-# Contributing Guide — SIMDM Development
+# Ghid de Contribuție — Dezvoltare SIMDM
 
-**Version:** 1.0  
-**Target Audience:** Phase 2+ Developers  
-**Last Updated:** 2026-05-29
-
----
-
-## 🎯 How to Contribute
-
-**SIMDM** is built incrementally in phases. Each phase follows a strict workflow to maintain code quality, accessibility, and documentation standards.
+**Versiune:** 1.0
+**Audiență:** Developeri Faza 2+
+**Actualizat:** 2026-05-29
 
 ---
 
-## 📋 Workflow: Feature → PR → Merge
+## Cum contribui
 
-### 1. Before You Start
-
-**Read These First:**
-- ✅ [CLAUDE.md](../CLAUDE.md) — Project context & rules
-- ✅ [SPEC.md](../SPEC.md) — Current phase spec
-- ✅ [docs/1-DESIGN-AND-ACCESSIBILITY.md](./1-DESIGN-AND-ACCESSIBILITY.md) — Design tokens & WCAG rules
-- ✅ [docs/2-DEVELOPER-GUIDE.md](./2-DEVELOPER-GUIDE.md) — Implementation patterns
-
-**Understand:**
-- Single-user application (no RBAC)
-- Dark theme (cyan accent, gray surface)
-- WCAG 2.1 AA accessibility **mandatory**
-- Romanian UI text + English code
-- LocalHost/LAN only (no cloud deploy)
+**SIMDM** se construiește incremental în faze. Fiecare fază urmează un flux de lucru strict pentru a menține calitatea codului, accesibilitatea și standardele de documentare.
 
 ---
 
-### 2. Create Feature Branch
+## Fluxul de lucru: Feature → PR → Merge
+
+### 1. Înainte de a începe
+
+**Citește mai întâi:**
+- [CLAUDE.md](../CLAUDE.md) — Context proiect și reguli
+- [SPEC.md](../SPEC.md) — Specificația fazei curente
+- [docs/1-DESIGN-AND-ACCESSIBILITY.md](./1-DESIGN-AND-ACCESSIBILITY.md) — Design tokens și reguli WCAG
+- [docs/2-DEVELOPER-GUIDE.md](./2-DEVELOPER-GUIDE.md) — Tipare de implementare
+
+**Înțelege:**
+- Aplicație cu un singur utilizator (fără RBAC)
+- Temă închisă (accent cyan, suprafațe gri)
+- Accesibilitate WCAG 2.1 AA **obligatorie**
+- Text UI în română + cod în engleză
+- Funcționează doar pe Localhost/LAN (fără cloud)
+
+---
+
+### 2. Creează branch de feature
 
 ```bash
-# Always branch from main
+# Întotdeauna branchez din main
 git checkout main
 git pull origin main
 
-# Create feature branch (descriptive name)
+# Creează branch de feature (nume descriptiv)
 git checkout -b feature/inventar-devices
-# or
+# sau
 git checkout -b fix/login-contrast-issue
-# or
+# sau
 git checkout -b docs/update-accessibility-guide
 ```
 
-**Branch Naming:**
-- `feature/module-description` — New feature (Faza 2 devices list)
-- `fix/bug-description` — Bug fix (missing focus ring)
-- `docs/description` — Documentation
-- `refactor/description` — Code refactor (no behavior change)
-- `test/description` — Test additions
+**Convenție de denumire branch-uri:**
+- `feature/modul-descriere` — Funcționalitate nouă (lista dispozitive Faza 2)
+- `fix/descriere-bug` — Rezolvare bug (focus ring lipsă)
+- `docs/descriere` — Documentație
+- `refactor/descriere` — Refactorizare cod (fără schimbare de comportament)
+- `test/descriere` — Adăugare teste
 
 ---
 
-### 3. Implement Feature
+### 3. Implementează funcționalitatea
 
-**Backend (if needed):**
+**Backend (dacă e necesar):**
 ```bash
 cd backend
 
-# Install new dependencies ONLY if necessary
-npm install some-package
+# Instalează dependențe DOAR dacă e necesar
+npm install pachet-nou
 
-# Make changes
-# Edit schema.prisma? → Always:
-npx prisma migrate dev --name descriptive_change_name
+# Fă modificările
+# Ai editat schema.prisma? Rulează întotdeauna:
+npx prisma migrate dev --name descriere_modificare
 npx prisma generate
 
-# Test endpoint in Postman/Thunder Client
+# Testează endpoint-ul în Postman/Thunder Client
 npm run dev  # Port 3001
 ```
 
-**Frontend (most work):**
+**Frontend (majoritatea lucrului):**
 ```bash
 cd frontend
 
-# Make changes to components/pages
+# Fă modificările în componente/pagini
 npm run dev  # Port 5173
 
-# Test in browser at localhost:5173
-```
-
-**Code Quality Checks:**
-```bash
-# From root or respective folder
-npm run lint        # If configured
-npm run format      # If configured
+# Testează în browser la localhost:5173
 ```
 
 ---
 
-### 4. Accessibility & Testing Checklist
+### 4. Checklist accesibilitate și testare
 
-**BEFORE committing:**
+**ÎNAINTE de commit:**
 
-```markdown
-## Code Quality
-- [ ] No `console.log()` in production code
-- [ ] No unused imports
-- [ ] Meaningful variable names
-- [ ] Functions are documented (if complex)
+```
+Calitate cod
+- [ ] Niciun console.log() în codul de producție
+- [ ] Niciun import nefolosit
+- [ ] Nume de variabile descriptive
+- [ ] Funcțiile sunt documentate (dacă sunt complexe)
 
-## Accessibility (WCAG 2.1 AA)
-- [ ] All `<input>` have associated `<label htmlFor>`
-- [ ] All `<label>` have matching `htmlFor` + input `id`
-- [ ] Focus ring visible (`.focusable` class)
-- [ ] Buttons/inputs ≥44px height (`py-3` or `min-h-[44px]`)
-- [ ] Error messages: `role="alert" aria-live="assertive"`
-- [ ] No unlabeled buttons (use `aria-label` if needed)
-- [ ] Color is not only source of info (text + icon + color)
+Accesibilitate (WCAG 2.1 AA)
+- [ ] Toate <input> au <label htmlFor> asociat
+- [ ] Toate <label> au htmlFor + id pe input identic
+- [ ] Focus ring vizibil (clasa .focusable)
+- [ ] Butoane/inputuri ≥ 44px înălțime (py-3 sau min-h-[44px])
+- [ ] Mesaje eroare: role="alert" aria-live="assertive"
+- [ ] Niciun buton fără etichetă (folosește aria-label dacă e nevoie)
+- [ ] Culoarea nu e singura sursă de informație (text + icoană + culoare)
 
-## Testing
-- [ ] Keyboard navigation works (Tab/Shift+Tab/Enter)
-- [ ] Forms validate on submit
-- [ ] Error messages appear and clear on change
-- [ ] Loading states work (spinner + disabled)
-- [ ] No broken links
-- [ ] Responsive to 1024px (at minimum)
+Testare
+- [ ] Navigare cu tastatură funcționează (Tab/Shift+Tab/Enter)
+- [ ] Formularele validează la submit
+- [ ] Mesajele de eroare apar și se șterg la modificare
+- [ ] Stările de încărcare funcționează (spinner + dezactivat)
+- [ ] Niciun link rupt
+- [ ] Responsiv la 1024px (minimum)
 
-## Styling
-- [ ] Only Tailwind classes (no separate CSS files)
-- [ ] Uses design tokens from `1-DESIGN-AND-ACCESSIBILITY.md`
-- [ ] Consistent spacing/sizing
-- [ ] Dark theme (gray-950 background, cyan-400 accent)
+Stilizare
+- [ ] Doar clase Tailwind (fără fișiere CSS separate)
+- [ ] Folosește token-urile de design din docs/1-DESIGN-AND-ACCESSIBILITY.md
+- [ ] Spațiere/dimensionare consistentă
+- [ ] Temă închisă (fundal gray-950, accent cyan-400)
 ```
 
 ---
 
-### 5. Commit Message Format
+### 5. Formatul mesajelor de commit
 
 ```bash
 git commit -m "feat: add device list with filtering and sorting
@@ -144,20 +137,20 @@ Fixes #42"
 
 **Format:**
 ```
-<type>(<scope>): <subject>
+<tip>(<domeniu>): <subiect>
 
-<body>
+<corp>
 
 <footer>
 ```
 
-- **Type:** `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`
-- **Scope:** `backend`, `frontend`, `docs`, or specific module
-- **Subject:** ~50 chars, imperative mood ("add" not "added")
-- **Body:** What, why, how (multiple lines OK)
-- **Footer:** `Fixes #123` if closes an issue
+- **Tip:** `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`
+- **Domeniu:** `backend`, `frontend`, `docs`, sau modul specific
+- **Subiect:** ~50 caractere, mod imperativ ("add" nu "added")
+- **Corp:** Ce, de ce, cum (mai multe rânduri OK)
+- **Footer:** `Fixes #123` dacă închide un issue
 
-**Examples:**
+**Exemple:**
 ```
 feat(frontend): add device card component with accessibility
 
@@ -167,189 +160,173 @@ feat(frontend): add device card component with accessibility
 - Used in inventar list and detail pages
 
 Fixes #18
+```
 
----
-
+```
 fix(frontend): improve input contrast from gray-500 to gray-400
 
 WCAG AA minimum is 4.5:1. Gray-500 was 3.7:1 on gray-900.
-
 Fixes accessibility issue found in audit.
+```
 
----
-
+```
 docs: consolidate .md files, remove redundancy
 
-- Merge AUDIT + DESIGN + COMPONENT docs
-- Create docs/ folder structure
+- Merge AUDIT + DESIGN + COMPONENT docs into docs/ folder
+- Translate all documentation to Romanian
 - Remove 400 lines of duplicate code examples
 ```
 
 ---
 
-### 6. Push & Create Pull Request
+### 6. Push și creare Pull Request
 
 ```bash
-# Push feature branch
+# Push branch de feature
 git push origin feature/inventar-devices
 
-# GitHub: Create PR with template below
+# GitHub: Crează PR cu template-ul de mai jos
 ```
 
-**PR Template** (create in `.github/pull_request_template.md`):
+**Template PR** (creează în `.github/pull_request_template.md`):
 
 ```markdown
-## Description
-Brief description of what this PR does.
+## Descriere
+Scurtă descriere a ce face acest PR.
 
-## Type of Change
-- [ ] New feature (Faza 2+)
-- [ ] Bug fix
-- [ ] Documentation
-- [ ] Refactor (no behavior change)
-- [ ] Performance improvement
+## Tip de modificare
+- [ ] Funcționalitate nouă (Faza 2+)
+- [ ] Rezolvare bug
+- [ ] Documentație
+- [ ] Refactorizare (fără schimbare de comportament)
+- [ ] Îmbunătățire performanță
 
-## Related Issue
-Fixes #[issue number]
+## Issue asociat
+Fixes #[număr issue]
 
-## Testing
-- [ ] Tested on localhost:5173
-- [ ] No console errors
-- [ ] Keyboard navigation works
-- [ ] Responsive (1024px+)
-- [ ] Accessibility (Lighthouse ≥95)
+## Testare
+- [ ] Testat pe localhost:5173
+- [ ] Fără erori în consolă
+- [ ] Navigare cu tastatură funcționează
+- [ ] Responsiv (1024px+)
+- [ ] Accesibilitate (Lighthouse ≥ 95)
 
-## Accessibility Checklist
-- [ ] All inputs have labels + htmlFor
-- [ ] Focus ring visible
-- [ ] Touch targets ≥44px
-- [ ] Errors announced (role="alert")
-- [ ] No color-only status indicators
-- [ ] Tested with NVDA/Narrator
+## Checklist accesibilitate
+- [ ] Toate inputurile au label-uri + htmlFor
+- [ ] Focus ring vizibil
+- [ ] Ținte de atingere ≥ 44px
+- [ ] Erori anunțate (role="alert")
+- [ ] Niciun status indicat doar prin culoare
+- [ ] Testat cu NVDA/Narrator
 
-## Design & Code Quality
-- [ ] Follows SIMDM design system (colors, spacing)
-- [ ] Uses `.focusable` for interactive elements
-- [ ] Tailwind classes only (no separate CSS)
-- [ ] Meaningful function/variable names
-- [ ] No console.log() left
+## Design și calitate cod
+- [ ] Respectă sistemul de design SIMDM (culori, spațiere)
+- [ ] Folosește .focusable pentru elemente interactive
+- [ ] Doar clase Tailwind (fără CSS separat)
+- [ ] Nume descriptive funcții/variabile
+- [ ] Niciun console.log() rămas
 
-## Database Changes (if any)
-- [ ] Schema updated in `schema.prisma`
-- [ ] Migration created: `npx prisma migrate dev`
-- [ ] Seed data updated if needed
-- [ ] Tested with fresh DB
+## Modificări bază de date (dacă e cazul)
+- [ ] Schema actualizată în schema.prisma
+- [ ] Migrație creată: npx prisma migrate dev
+- [ ] Date seed actualizate dacă e necesar
+- [ ] Testat cu bază de date proaspătă
 
-## Screenshots (if UI change)
-[Paste screenshots of new feature]
+## Screenshot-uri (dacă e modificare UI)
+[Adaugă screenshot-uri]
 
-## Notes for Reviewer
-[Any gotchas, decisions, or helpful context]
-
----
-
-Generated with SIMDM Contributing Guide
+## Note pentru reviewer
+[Context, decizii, lucruri de știut]
 ```
 
-**PR Title:** Same as commit subject
+**Titlu PR:** Identic cu subiectul commit-ului
 ```
 feat(frontend): add device list with filtering and sorting
 ```
 
 ---
 
-### 7. Code Review & Feedback
+### 7. Code review și feedback
 
-**Your PR will be reviewed for:**
+**PR-ul tău va fi revizuit pentru:**
 
-1. **Correctness**
-   - Does it work as intended?
-   - Are there edge cases missed?
-   - Will it break existing features?
+1. **Corectitudine**
+   - Funcționează conform intenției?
+   - Sunt edge case-uri ratate?
+   - Poate strica funcționalitățile existente?
 
-2. **Accessibility (WCAG 2.1 AA)**
-   - Are all interactive elements keyboard-accessible?
-   - Do errors get announced to screen readers?
-   - Are touch targets 44x44px minimum?
+2. **Accesibilitate (WCAG 2.1 AA)**
+   - Toate elementele interactive sunt accesibile cu tastatură?
+   - Erorile sunt anunțate screen reader-urilor?
+   - Țintele de atingere sunt de minimum 44x44px?
 
-3. **Code Quality**
-   - Is code readable? (meaningful names, no nested functions)
-   - Any performance issues?
-   - Follow project conventions?
+3. **Calitate cod**
+   - Codul e lizibil? (nume descriptive, fără funcții imbricate inutil)
+   - Probleme de performanță?
+   - Respectă convențiile proiectului?
 
-4. **Consistency**
-   - Matches design system (colors, spacing)?
-   - Uses established patterns?
+4. **Consistență**
+   - Respectă sistemul de design (culori, spațiere)?
+   - Folosește tiparele stabilite?
 
 ---
 
-### 8. Address Feedback
+### 8. Adresează feedback-ul
 
-**When reviewer requests changes:**
+**Când reviewer-ul cere modificări:**
 
 ```bash
-# Make changes locally
-# Commit with reference to feedback
+# Fă modificările local
+# Commit cu referință la feedback
 git commit -m "refactor: improve focus ring visibility per review
 
 Feedback: Ring was too subtle on dark backgrounds.
 Changed ring-offset from gray-950 to more visible offset."
 
-# Push again (no force push to shared branch)
+# Push din nou (fără force push pe branch-uri partajate)
 git push origin feature/inventar-devices
 ```
 
-**Note:** Don't force push to shared branches. Simply push new commits.
+**Important:** Nu face force push pe branch-uri partajate. Adaugă pur și simplu commit-uri noi.
 
 ---
 
-### 9. Merge to Main
+### 9. Merge în main
 
-Once approved:
+După aprobare:
 
 ```bash
-# GitHub: Squash & merge (preferred for clean history)
-# Or: Rebase & merge (keeps all commits)
-# Avoid: Create merge commit (clutters history)
+# GitHub: Squash & merge (preferat pentru istoric curat)
+# SAU: Rebase & merge (păstrează toate commit-urile)
+# Evită: Create merge commit (înfundă istoricul)
 ```
 
-**After merge:**
+**După merge:**
 ```bash
-# Update your local main
+# Actualizează main local
 git checkout main
 git pull origin main
 
-# Delete feature branch locally
+# Șterge branch-ul local
 git branch -d feature/inventar-devices
 
-# Delete on remote (GitHub auto-deletes after merge)
+# Șterge pe remote (GitHub șterge automat după merge)
 git push origin --delete feature/inventar-devices
 ```
 
 ---
 
-## 📋 Common Workflows
+## Fluxuri frecvente
 
-### Adding a New Component
+### Adăugarea unei componente noi
 
-**Location:** `frontend/src/components/ComponentName.jsx`
+**Locație:** `frontend/src/components/NumeComponenta.jsx`
 
 **Template:**
 ```jsx
-// Component with accessibility built in
 import React from 'react';
 
-/**
- * ComponentName - Brief description
- * 
- * Accessibility:
- * - Keyboard navigable (Tab, Enter)
- * - Focus ring visible
- * - Labels associated with inputs
- * - Errors announced with role="alert"
- */
-export default function ComponentName({
-  // Props with defaults
+export default function NumeComponenta({
   id,
   label,
   error,
@@ -359,37 +336,38 @@ export default function ComponentName({
 }) {
   return (
     <div className="...">
-      {/* Semantic HTML */}
-      {/* WCAG 2.1 AA compliant */}
-      {/* Dark theme (gray-950 bg, cyan-400 accent) */}
+      {/* HTML semantic */}
+      {/* Conformitate WCAG 2.1 AA */}
+      {/* Temă închisă (gray-950 fundal, cyan-400 accent) */}
     </div>
   );
 }
 ```
 
-**Then:**
-1. Add component to `src/components/`
-2. Document in [1-DESIGN-AND-ACCESSIBILITY.md](./1-DESIGN-AND-ACCESSIBILITY.md)
-3. Include examples in PR description
-4. Test accessibility before submitting PR
+**Pași:**
+1. Adaugă componenta în `src/components/`
+2. Documentează în [1-DESIGN-AND-ACCESSIBILITY.md](./1-DESIGN-AND-ACCESSIBILITY.md)
+3. Include exemple în descrierea PR-ului
+4. Testează accesibilitatea înainte de a trimite PR
 
-### Adding a New Page
+### Adăugarea unei pagini noi
 
-**Location:** `frontend/src/pages/PageName.jsx`
+**Locație:** `frontend/src/pages/NumePagina.jsx`
 
 **Template:**
 ```jsx
+import { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import api from '../api/axios';
 
-export default function PageName() {
+export default function NumePagina() {
   const { data, isLoading, error } = useQuery({
-    queryKey: ['resource'],
-    queryFn: () => api.get('/api/resource').then(r => r.data),
+    queryKey: ['resursa'],
+    queryFn: () => api.get('/api/resursa').then(r => r.data),
   });
 
   useEffect(() => {
-    document.title = 'SIMDM — Page Name';
+    document.title = 'SIMDM — Nume Pagină';
   }, []);
 
   if (isLoading) return <div role="status">Se încarcă…</div>;
@@ -397,139 +375,123 @@ export default function PageName() {
 
   return (
     <main className="...">
-      {/* Content */}
+      {/* Conținut */}
     </main>
   );
 }
 ```
 
-### Modifying Database Schema
+### Modificarea schemei bazei de date
 
-**CRITICAL:** Always coordinate schema changes.
+**CRITIC:** Coordonează întotdeauna modificările de schemă.
 
-1. **Edit** `backend/prisma/schema.prisma`
-2. **Run:** `npx prisma migrate dev --name descriptive_name`
-3. **Check:** Migration file created in `backend/prisma/migrations/`
-4. **Update:** `backend/prisma/seed.js` if data needs changes
-5. **Test:** `npx prisma db push` on fresh database
-6. **Include:** Migration file in git commit
+1. **Editează** `backend/prisma/schema.prisma`
+2. **Rulează:** `npx prisma migrate dev --name descriere_modificare`
+3. **Verifică:** Fișierul de migrație creat în `backend/prisma/migrations/`
+4. **Actualizează:** `backend/prisma/seed.js` dacă datele trebuie modificate
+5. **Testează:** `npx prisma db push` pe baza de date proaspătă
+6. **Include:** Fișierul de migrație în commit
 
 ---
 
-## 🧪 Testing Before PR
+## Testare înainte de PR
 
-### Frontend Testing
+### Testare frontend
 
 ```bash
-# Run dev server
 cd frontend
 npm run dev
 
-# Check each component/page:
-1. Visual appearance (matches design)
-2. Keyboard navigation (Tab, Enter, Escape)
-3. Form validation (errors appear/clear)
-4. Loading states (spinner, disabled buttons)
-5. Responsive (resize to 1024px, mobile)
+# Verifică fiecare componentă/pagină:
+1. Aspect vizual (respectă design-ul)
+2. Navigare cu tastatură (Tab, Enter, Escape)
+3. Validare formular (erori apar/dispar)
+4. Stări de încărcare (spinner, butoane dezactivate)
+5. Responsiv (redimensionare la 1024px, mobil)
 ```
 
-### Accessibility Testing
+### Testare accesibilitate
 
 ```bash
 # Lighthouse (Chrome DevTools)
 F12 → Lighthouse → Accessibility → Analyze
-Target: ≥95 points
+Țintă: ≥ 95 puncte
 
-# axe DevTools (Chrome Extension)
-1. Install from Chrome Web Store
-2. Click axe icon
-3. Scan page
-4. Check: 0 critical + serious errors
+# axe DevTools (extensie Chrome)
+1. Instalează din Chrome Web Store
+2. Click iconița axe
+3. Scanează pagina
+4. Verifică: 0 erori critice + serioase
 
-# Keyboard-only
-1. Disconnect mouse
-2. Tab through all interactive elements
-3. Enter/Space on buttons
-4. Escape to close modals
-5. Verify focus always visible
+# Tastatură singură
+1. Deconectează mouse-ul
+2. Tab prin toate elementele interactive
+3. Enter/Space pe butoane
+4. Escape pentru a închide modale
+5. Verifică focus mereu vizibil
 
-# Screen Reader (NVDA — Free)
-1. Download: https://www.nvaccess.org
+# Screen Reader (NVDA — gratuit)
+1. Descarcă: https://www.nvaccess.org
 2. Start: Win + Ctrl + Enter
-3. Navigate form
-4. Verify: Errors announced, labels read, buttons named
+3. Navighează formularul
+4. Verifică: Erori anunțate, label-uri citite, butoane etichetate
 ```
 
-### Backend Testing (if applicable)
+### Testare backend (dacă e cazul)
 
 ```bash
-# API Testing (Postman / Thunder Client)
+# Testare API (Postman / Thunder Client)
 1. GET /api/health → { "status": "ok" }
-2. POST /api/resource → Verify response
-3. Error cases → 400, 401, 404, 500 responses
-4. Auth required? → Verify jwt check
+2. POST /api/resursa → Verifică răspunsul
+3. Cazuri de eroare → răspunsuri 400, 401, 404, 500
+4. Necesită auth? → Verifică jwt check
 
-# Database
-pgAdmin or Prisma Studio:
+# Baza de date
+pgAdmin sau Prisma Studio:
 npx prisma studio
-→ Verify data was inserted/updated correctly
+→ Verifică că datele au fost inserate/actualizate corect
 ```
 
 ---
 
-## 🚫 Dos & Don'ts
+## Ce să faci și ce să nu faci
 
-### ✅ DO
+### Fă
 
-- ✅ Branch from `main`
-- ✅ Write descriptive commit messages
-- ✅ Test accessibility before PR
-- ✅ Use design tokens (colors, spacing)
-- ✅ Follow naming conventions (camelCase JS, PascalCase React)
-- ✅ Validate input server-side
-- ✅ Handle errors gracefully
-- ✅ Update documentation if needed
+- Branchez din `main`
+- Scrie mesaje de commit descriptive
+- Testează accesibilitatea înainte de PR
+- Folosește token-urile de design (culori, spațiere)
+- Respectă convențiile de denumire (camelCase JS, PascalCase React)
+- Validează input-ul server-side
+- Tratează erorile elegant
+- Actualizează documentația dacă e nevoie
 
-### ❌ DON'T
+### Nu face
 
-- ❌ Commit `.env` files
-- ❌ Use `console.log()` in production code
-- ❌ Hardcode colors (use Tailwind tokens)
-- ❌ Force push to shared branches
-- ❌ Skip accessibility testing
-- ❌ Add RBAC or multi-user logic (single-user app)
-- ❌ Use external UI frameworks (only Tailwind)
-- ❌ Deploy to cloud (localhost/LAN only)
-
----
-
-## 🆘 Need Help?
-
-**Question:** What file defines design tokens?  
-**Answer:** [docs/1-DESIGN-AND-ACCESSIBILITY.md](./1-DESIGN-AND-ACCESSIBILITY.md) — Design Tokens section
-
-**Question:** How do I add a reusable component?  
-**Answer:** [docs/2-DEVELOPER-GUIDE.md](./2-DEVELOPER-GUIDE.md) — Component Implementation
-
-**Question:** What are project rules?  
-**Answer:** [CLAUDE.md](../CLAUDE.md) — Read "Reguli importante pentru Claude Code"
-
-**Question:** What's the current phase spec?  
-**Answer:** [SPEC.md](../SPEC.md) — Check phase boundaries
+- Nu commit-a fișiere `.env`
+- Nu folosi `console.log()` în codul de producție
+- Nu hardcoda culori (folosește token-uri Tailwind)
+- Nu face force push pe branch-uri partajate
+- Nu sări peste testarea accesibilității
+- Nu adăuga logică RBAC sau multi-user (aplicație cu un singur utilizator)
+- Nu folosi framework-uri UI externe (doar Tailwind)
+- Nu deploya în cloud (localhost/LAN)
 
 ---
 
-## 📞 Questions About This Guide?
+## Ajutor
 
-- **Documentation unclear?** Open an issue with "[docs]" label
-- **Workflow confusing?** Ask in PR comment or team chat
-- **Example needed?** Reference similar recent PR
+| Întrebare | Răspuns |
+|-----------|---------|
+| Unde găsesc token-urile de design? | [docs/1-DESIGN-AND-ACCESSIBILITY.md](./1-DESIGN-AND-ACCESSIBILITY.md) — secțiunea Token-uri de design |
+| Cum adaug o componentă reutilizabilă? | [docs/2-DEVELOPER-GUIDE.md](./2-DEVELOPER-GUIDE.md) — Implementare componente |
+| Care sunt regulile proiectului? | [CLAUDE.md](../CLAUDE.md) — secțiunea Reguli importante |
+| Care e specificația fazei curente? | [SPEC.md](../SPEC.md) — verifică limitele fazei |
 
 ---
 
-**Version History:**
-- v1.0 — 2026-05-29: Initial contributing guide (Phase 2+ framework)
+**Istoric versiuni:**
+- v1.0 — 2026-05-29: Ghid contribuție inițial (framework Faza 2+)
 
-**Next Step:** Phase 2 (Faza 2) will start with Inventar DM module. Read [SPEC.md](../SPEC.md) for details.
-
-Good luck! 🚀
+**Pasul următor:** Faza 2 începe cu modulul Inventar DM. Citește [SPEC.md](../SPEC.md) pentru detalii.
