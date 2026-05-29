@@ -19,12 +19,14 @@ class AuthService {
 
   // Generează Refresh Token (opac, 7 zile, salvat în DB)
   static async generateRefreshToken(userId, req) {
+    const crypto = require('crypto');
     const token = crypto.randomBytes(64).toString('hex');
     const expiresAt = new Date();
     expiresAt.setDate(expiresAt.getDate() + 7);
 
-    const refreshToken = await prisma.refreshToken.create({
+    const refreshToken = await prisma.refresh_tokens.create({
       data: {
+        id: crypto.randomUUID(),
         tokenHash: this.hashToken(token),
         userId,
         expiresAt,
@@ -34,7 +36,7 @@ class AuthService {
     });
 
     console.log(`[AuthService] Refresh token generated for user ${userId}`);
-    return token;
+    return { token, id: refreshToken.id };
   }
 
   // Hash token cu SHA256
@@ -47,7 +49,7 @@ class AuthService {
     console.log(`[AuthService] Login attempt: ${username}`);
 
     // Cauta utilizator (username sau email)
-    const user = await prisma.user.findFirst({
+    const user = await prisma.users.findFirst({
       where: {
         OR: [{ username }, { email: username }],
         isActive: true,
@@ -81,13 +83,13 @@ class AuthService {
         console.log(`[AuthService] Account locked for ${username} until ${lockUntil}`);
       }
 
-      await prisma.user.update({ where: { id: user.id }, data: updates });
+      await prisma.users.update({ where: { id: user.id }, data: updates });
       await this.logFailedLogin(username, req, 'WRONG_PASSWORD');
       throw new Error('Credentiale incorecte');
     }
 
     // Login reușit — resetează failed attempts
-    await prisma.user.update({
+    await prisma.users.update({
       where: { id: user.id },
       data: {
         failedLoginAttempts: 0,
@@ -98,12 +100,12 @@ class AuthService {
 
     // Generează tokens
     const accessToken = this.generateAccessToken(user);
-    const refreshToken = await this.generateRefreshToken(user.id, req);
+    const { token: refreshToken } = await this.generateRefreshToken(user.id, req);
 
     // Audit log
-    await prisma.auditLog.create({
+    await prisma.audit_logs.create({
       data: {
-        user: { connect: { id: user.id } },
+        users: { connect: { id: user.id } },
         action: 'LOGIN_SUCCESS',
         entity: 'User',
         entityId: user.id.toString(),
@@ -132,9 +134,9 @@ class AuthService {
     console.log(`[AuthService] Refresh token attempt`);
 
     const tokenHash = this.hashToken(oldRefreshToken);
-    const tokenRecord = await prisma.refreshToken.findUnique({
+    const tokenRecord = await prisma.refresh_tokens.findUnique({
       where: { tokenHash },
-      include: { user: true },
+      include: { users: true },
     });
 
     if (!tokenRecord) {
@@ -145,7 +147,7 @@ class AuthService {
     if (tokenRecord.revokedAt) {
       console.log(`[AuthService] Token revoked - possible compromise!`);
       // Token revocat — posibil compromis! Revocă toate token-urile user-ului
-      await prisma.refreshToken.updateMany({
+      await prisma.refresh_tokens.updateMany({
         where: { userId: tokenRecord.userId, revokedAt: null },
         data: { revokedAt: new Date() },
       });
@@ -158,15 +160,15 @@ class AuthService {
     }
 
     // Generează tokens noi (rotation)
-    const newAccessToken = this.generateAccessToken(tokenRecord.user);
-    const newRefreshToken = await this.generateRefreshToken(tokenRecord.user.id, req);
+    const newAccessToken = this.generateAccessToken(tokenRecord.users);
+    const { token: newRefreshToken, id: newRefreshTokenId } = await this.generateRefreshToken(tokenRecord.user.id, req);
 
     // Marcheaza vechiul ca revocat si inlocuit
-    await prisma.refreshToken.update({
+    await prisma.refresh_tokens.update({
       where: { id: tokenRecord.id },
       data: {
         revokedAt: new Date(),
-        replacedBy: newRefreshToken,
+        replacedBy: newRefreshTokenId,
       },
     });
 
@@ -184,15 +186,15 @@ class AuthService {
 
     if (refreshToken) {
       const tokenHash = this.hashToken(refreshToken);
-      await prisma.refreshToken.updateMany({
+      await prisma.refresh_tokens.updateMany({
         where: { tokenHash, revokedAt: null },
         data: { revokedAt: new Date() },
       });
     }
 
-    await prisma.auditLog.create({
+    await prisma.audit_logs.create({
       data: {
-        user: { connect: { id: userId } },
+        users: { connect: { id: userId } },
         action: 'LOGOUT',
         entity: 'User',
         entityId: userId.toString(),
@@ -204,7 +206,7 @@ class AuthService {
 
   // Log failed login
   static async logFailedLogin(username, req, reason) {
-    await prisma.auditLog.create({
+    await prisma.audit_logs.create({
       data: {
         action: 'LOGIN_FAILED',
         entity: 'User',

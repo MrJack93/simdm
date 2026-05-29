@@ -5,3 +5,289 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model audit_logs {
+  id        Int      @id @default(autoincrement())
+  userId    Int?
+  action    String
+  entity    String
+  entityId  String?
+  changes   Json?
+  ipAddress String?
+  userAgent String?
+  timestamp DateTime @default(now())
+  users     users?   @relation(fields: [userId], references: [id])
+
+  @@index([entity, entityId])
+  @@index([timestamp])
+  @@index([userId])
+}
+
+model consumables {
+  id                 Int                  @id @default(autoincrement())
+  name               String
+  model              String?
+  manufacturer       String?
+  unitOfMeasure      String               @default("buc")
+  quantity           Int                  @default(0)
+  minQuantity        Int                  @default(0)
+  expiryDate         DateTime?
+  location           String?
+  notes              String?
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime
+  device_consumables device_consumables[]
+
+  @@index([name])
+  @@index([quantity])
+}
+
+model device_consumables {
+  deviceId     Int
+  consumableId Int
+  createdAt    DateTime    @default(now())
+  consumables  consumables @relation(fields: [consumableId], references: [id], onDelete: Cascade)
+  devices      devices     @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+
+  @@id([deviceId, consumableId])
+}
+
+model devices {
+  id                  Int                   @id @default(autoincrement())
+  inventoryNumber     String                @unique
+  serialNumber        String?
+  name                String
+  model               String?
+  manufacturer        String?
+  countryOfOrigin     String?
+  yearMade            Int?
+  riskClass           RiskClass?
+  ceMarking           String?
+  cndCode             String?
+  status              DeviceStatus          @default(FUNCTIONAL)
+  acquisitionDate     DateTime?
+  warrantyEndDate     DateTime?
+  decommissionDate    DateTime?
+  acquisitionValue    Decimal?
+  residualValue       Decimal?
+  currency            String                @default("MDL")
+  voltage             String?
+  frequency           String?
+  power               String?
+  accessories         String?
+  maintenanceFreq     Int?
+  nextMaintenanceAt   DateTime?
+  lastMaintenanceAt   DateTime?
+  sectionId           Int?
+  room                String?
+  manualUrl           String?
+  certificateUrl      String?
+  invoiceUrl          String?
+  passportUrl         String?
+  notes               String?
+  createdById         Int?
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime
+  device_consumables  device_consumables[]
+  users               users?                @relation(fields: [createdById], references: [id])
+  sections            sections?             @relation(fields: [sectionId], references: [id])
+  incidents           incidents[]
+  maintenance_records maintenance_records[]
+
+  @@index([inventoryNumber])
+  @@index([nextMaintenanceAt])
+  @@index([sectionId])
+  @@index([status])
+}
+
+model documents {
+  id                Int              @id @default(autoincrement())
+  title             String
+  category          DocumentCategory
+  fileUrl           String
+  fileSize          Int?
+  mimeType          String?
+  version           String           @default("1.0")
+  isCurrent         Boolean          @default(true)
+  previousVersionId Int?
+  description       String?
+  tags              String[]
+  uploadedAt        DateTime         @default(now())
+  updatedAt         DateTime
+  documents         documents?       @relation("documentsTodocuments", fields: [previousVersionId], references: [id])
+  other_documents   documents[]      @relation("documentsTodocuments")
+
+  @@index([category])
+  @@index([title])
+}
+
+model incidents {
+  id               Int              @id @default(autoincrement())
+  deviceId         Int
+  sectionId        Int?
+  occurredAt       DateTime
+  reportedAt       DateTime         @default(now())
+  description      String
+  severity         IncidentSeverity
+  status           IncidentStatus   @default(DESCHIS)
+  patientAffected  Boolean          @default(false)
+  patientHarm      String?
+  rootCause        String?
+  correctiveAction String?
+  preventiveAction String?
+  resolvedAt       DateTime?
+  reportedToAmdm   Boolean          @default(false)
+  amdmReportDate   DateTime?
+  amdmReportRef    String?
+  reportedById     Int?
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime
+  devices          devices          @relation(fields: [deviceId], references: [id])
+  users            users?           @relation(fields: [reportedById], references: [id])
+  sections         sections?        @relation(fields: [sectionId], references: [id])
+
+  @@index([deviceId])
+  @@index([occurredAt])
+  @@index([severity])
+  @@index([status])
+}
+
+model maintenance_records {
+  id              Int             @id @default(autoincrement())
+  deviceId        Int
+  type            MaintenanceType
+  scheduledDate   DateTime?
+  executedDate    DateTime
+  duration        Decimal?
+  description     String
+  partsReplaced   String?
+  consumablesUsed String?
+  result          String?
+  cost            Decimal?
+  externalService Boolean         @default(false)
+  serviceProvider String?
+  reportUrl       String?
+  performedById   Int?
+  notes           String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime
+  devices         devices         @relation(fields: [deviceId], references: [id])
+  users           users?          @relation(fields: [performedById], references: [id])
+
+  @@index([deviceId])
+  @@index([executedDate])
+  @@index([type])
+}
+
+model refresh_tokens {
+  id         String    @id
+  tokenHash  String    @unique
+  userId     Int
+  expiresAt  DateTime
+  revokedAt  DateTime?
+  replacedBy String?
+  userAgent  String?
+  ipAddress  String?
+  createdAt  DateTime  @default(now())
+  users      users     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([tokenHash])
+  @@index([userId])
+}
+
+model sections {
+  id          Int         @id @default(autoincrement())
+  name        String      @unique
+  code        String?     @unique
+  floor       String?
+  description String?
+  isActive    Boolean     @default(true)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime
+  devices     devices[]
+  incidents   incidents[]
+  users       users[]
+}
+
+model users {
+  id                  Int                   @id @default(autoincrement())
+  email               String                @unique
+  username            String                @unique
+  passwordHash        String
+  fullName            String?
+  role                UserRole              @default(BIOINGINER)
+  isActive            Boolean               @default(true)
+  lastLoginAt         DateTime?
+  failedLoginAttempts Int                   @default(0)
+  lockedUntil         DateTime?
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime
+  sectionId           Int?
+  audit_logs          audit_logs[]
+  devices             devices[]
+  incidents           incidents[]
+  maintenance_records maintenance_records[]
+  refresh_tokens      refresh_tokens[]
+  sections            sections?             @relation(fields: [sectionId], references: [id])
+
+  @@index([email])
+  @@index([username])
+}
+
+enum DeviceStatus {
+  FUNCTIONAL
+  IN_REPARATIE
+  DEFECT
+  CASAT
+  IMPRUMUTAT
+  REZERVA
+}
+
+enum DocumentCategory {
+  PROCEDURA_MDM
+  FORMULAR
+  LEGISLATIE
+  MANUAL_TEHNIC
+  CERTIFICAT
+  CONTRACT
+  RAPORT
+  ALTUL
+}
+
+enum IncidentSeverity {
+  NEAR_MISS
+  MINOR
+  MODERAT
+  GRAV
+  CRITIC
+}
+
+enum IncidentStatus {
+  DESCHIS
+  IN_LUCRU
+  REZOLVAT
+  INCHIS
+  ESCALADAT_AMDM
+}
+
+enum MaintenanceType {
+  PREVENTIVA
+  CORECTIVA
+  VERIFICARE
+  CALIBRARE
+}
+
+enum RiskClass {
+  I
+  IIa
+  IIb
+  III
+}
+
+enum UserRole {
+  ADMIN
+  BIOINGINER
+  MANAGER
+  MEDIC
+  VIEWER
+}

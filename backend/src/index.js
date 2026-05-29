@@ -14,12 +14,16 @@ function log(msg) {
   fs.appendFileSync(LOG_FILE, line, { flag: 'a' });
 }
 
-let authRoutes;
+const authMiddleware = require('./middleware/auth');
+
+let authRoutes, sectionsRoutes;
 try {
   authRoutes = require('./routes/auth');
   console.log('✅ Auth routes loaded');
+  sectionsRoutes = require('./routes/sections');
+  console.log('✅ Sections routes loaded');
 } catch (e) {
-  console.error('❌ Error loading auth routes:', e.message);
+  console.error('❌ Error loading routes:', e.message);
   process.exit(1);
 }
 
@@ -61,13 +65,13 @@ app.get('/api/health', async (req, res) => {
 });
 
 app.use('/api/auth', authRoutes);
+app.use('/api/sections', authMiddleware, sectionsRoutes);
 
 // Viitoarele rute se adaugă în fazele 2-8:
 // app.use('/api/devices',     authMiddleware, deviceRoutes);
 // app.use('/api/maintenance', authMiddleware, maintenanceRoutes);
 // app.use('/api/incidents',   authMiddleware, incidentRoutes);
 // app.use('/api/documents',   authMiddleware, documentRoutes);
-// app.use('/api/sections',    authMiddleware, sectionRoutes);
 
 app.use((err, req, res, next) => {
   log('ERROR HANDLER: ' + err.message);

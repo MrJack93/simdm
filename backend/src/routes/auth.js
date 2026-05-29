@@ -93,7 +93,7 @@ router.post('/logout', authMiddleware, async (req, res) => {
 // GET /api/auth/me — info utilizator curent
 router.get('/me', authMiddleware, async (req, res) => {
   try {
-    const user = await prisma.user.findUnique({
+    const user = await prisma.users.findUnique({
       where: { id: req.user.sub },
       select: {
         id: true,

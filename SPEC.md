@@ -1,323 +1,371 @@
-# SPEC — SIMDM: Faza 1 — Fundație și Infrastructură
+# SPEC — SIMDM: Faze de Dezvoltare
+
+> **Sistem Informațional de Management al Dispozitivelor Medicale**  
+> Bioinginer medical · Spital privat · Single-user · Localhost / LAN  
+> Ghid de referință: Ordinul MS nr. 889/2024
+
+---
 
 ## Obiectiv
 
-**Ce construim:** Fundația tehnică completă a SIMDM (Sistem Informațional de Management al Dispozitivelor Medicale).
+**Ce construim:** Aplicație web care înlocuiește evidența pe hârtie/Excel cu o bază de date centralizată pentru gestionarea dispozitivelor medicale conform Ghidului Bioinginerului.
 
-**Pentru cine:** Bioinginer medical (utilizatorul unic) dintr-un spital privat.
+**Pentru cine:** Un singur utilizator — bioinginerul medical al spitalului.
 
-**De ce:** Înlocuire a evidenței pe hârtie/Excel cu o aplicație centralizată care respectă Ghidul Bioinginerului (Ordinul MS nr. 889/2024) pentru gestionarea dispozitivelor medicale.
-
-**Succes = când:**
-- Frontend și backend pornesc simultan fără erori
-- Login end-to-end funcțional (React → Express → PostgreSQL)
-- Baza de date conține 5 tabele și date seed inițiale
-- Toate endpoint-urile de autentificare testate și funcționale
-- Proiectul este gata pentru Faza 2 (Modul Inventar DM)
+**NU implementăm:** RBAC, multi-user, înregistrare, cloud deploy, OAuth.
 
 ---
 
 ## Stiva Tehnologică (Locked)
 
-| Strat | Tehnologie | Versiune |
-|-------|-----------|----------|
-| **Frontend** | React + Vite + TailwindCSS | React 18, Vite, latest |
-| **Backend** | Node.js + Express.js | v22 LTS, latest Express |
-| **Baza de date** | PostgreSQL | v16 |
-| **ORM** | Prisma | latest |
-| **Autentificare** | JWT + bcryptjs | jsonwebtoken, bcryptjs |
-| **HTTP Client** | Axios | latest |
-| **Routing** | react-router-dom | latest |
-| **State/Fetching** | react-query (TanStack Query) | latest |
+| Strat | Tehnologie | Versiune reală |
+|-------|-----------|----------------|
+| **Frontend** | React + Vite + TailwindCSS | React 19, Vite 8, Tailwind v4 |
+| **Backend** | Node.js + Express.js | Node v22 LTS, Express 5 |
+| **Baza de date** | PostgreSQL 16 în Docker | postgres:16 |
+| **ORM** | Prisma | v7.8 (schema multi-fișier) |
+| **Auth** | JWT + bcryptjs | access token 15min + refresh httpOnly cookie |
+| **HTTP Client** | Axios | v1 — withCredentials, auto-refresh-on-401 |
+| **Routing frontend** | react-router-dom | v7 |
+| **State/Fetching** | TanStack Query | v5 |
 
-**NU adaugi alte framework-uri sau librării fără cerere explicită.**
+**NU adăuga alte framework-uri sau librării fără cerere explicită.**
 
 ---
 
 ## Comenzi Principale
 
 ```bash
+# DOCKER (necesar înainte de backend)
+docker compose up -d          # Pornește PostgreSQL 16
+
 # RĂDĂCINA (simdm/)
-npm run dev              # Pornește backend + frontend simultan (concurrently)
+npm run dev                   # Pornește backend + frontend simultan (concurrently)
 
 # BACKEND (simdm/backend/)
-npm run dev              # Pornește serverul cu nodemon (port 3001, watch mode)
-npm start                # Pornește serverul fără watch
-npm run db:migrate       # Crează/aplică migrații Prisma
-npm run db:studio        # Deschide Prisma Studio GUI (port 5555)
-npm run db:seed          # Populează date inițiale
+npm run dev                   # Serverul cu nodemon (port 3001)
+npm start                     # Serverul fără watch
+npm run db:migrate            # npx prisma migrate dev
+npm run db:studio             # Prisma Studio GUI (port 5555)
+npm run db:seed               # node prisma/seed.js
 
 # FRONTEND (simdm/frontend/)
-npm run dev              # Pornește Vite dev server (port 5173)
-npm run build            # Build pentru producție
+npm run dev                   # Vite dev server (port 5173)
+npm run build                 # Build producție
 
 # UTILITĂȚI
-node scripts/generateHash.js  # Generează hash bcrypt pentru parola admin
+node backend/scripts/generateHash.js   # Hash bcrypt pentru parolă admin
+
+# DUPĂ MODIFICAREA SCHEMEI PRISMA — întotdeauna ambele:
+npx prisma migrate dev --name descriere
+npx prisma generate
 ```
 
 ---
 
-## Structura Proiectului
+## Structura Proiectului (stare reală)
 
 ```
-simdm/                           # Rădăcina proiectului
+simdm/
 ├── backend/
 │   ├── prisma/
-│   │   ├── schema.prisma        # Definiția bazei de date (SURSA DE ADEVĂR)
-│   │   ├── migrations/          # Istoric migrații
-│   │   └── seed.js              # Date inițiale (secții spital, dispozitiv test)
+│   │   ├── schema/              # Schema multi-fișier (SURSA DE ADEVĂR)
+│   │   │   ├── schema.prisma    # generator + datasource
+│   │   │   ├── user.prisma      # User, RefreshToken, Section
+│   │   │   ├── device.prisma    # Device, Consumable, DeviceConsumable
+│   │   │   ├── maintenance.prisma # MaintenanceRecord, Incident
+│   │   │   ├── document.prisma  # Document, AuditLog
+│   │   │   └── enums.prisma     # toate enum-urile
+│   │   ├── migrations/          # migrații aplicate (nu șterge!)
+│   │   └── seed.js              # admin user + 8 secții + DM test
 │   ├── src/
 │   │   ├── routes/
-│   │   │   └── auth.js          # POST /api/auth/login, POST /api/auth/verify
+│   │   │   ├── auth.js          # login / refresh / logout / me
+│   │   │   └── devices.js       # (Faza 2) CRUD dispozitive
 │   │   ├── middleware/
-│   │   │   └── auth.js          # authMiddleware (verifică JWT)
-│   │   ├── controllers/         # (Gol în Faza 1, completat în Faza 2+)
+│   │   │   └── auth.js          # authMiddleware + requireRole
+│   │   ├── services/
+│   │   │   └── authService.js   # login, refresh, logout logic
+│   │   ├── lib/
+│   │   │   └── tokens.js        # signAccessToken, issueRefreshToken, rotate
+│   │   ├── db.js                # PrismaClient unic cu PrismaPg adapter
 │   │   └── index.js             # Entry point server Express
 │   ├── scripts/
-│   │   └── generateHash.js      # Utilitate generare hash bcrypt
-│   ├── .env                      # Variabile mediu (NU în Git!)
+│   │   └── generateHash.js
+│   ├── uploads/                 # (Faza 2) fișiere uploadate — în .gitignore
+│   ├── .env                     # NU în Git!
 │   └── package.json
 │
 ├── frontend/
 │   ├── src/
-│   │   ├── components/          # (Gol în Faza 1, componente reutilizabile în Faza 2+)
-│   │   ├── pages/
-│   │   │   └── Login.jsx        # Pagina de login (Faza 1)
-│   │   ├── hooks/               # (Gol în Faza 1)
 │   │   ├── api/
-│   │   │   └── axios.js         # Axios instance cu JWT interceptor
+│   │   │   └── axios.js         # Axios cu withCredentials + auto-refresh-on-401
+│   │   ├── components/
+│   │   │   └── ProtectedRoute.jsx  # (Faza 2)
+│   │   ├── hooks/
+│   │   │   └── useAuth.js       # login / logout / user / loading
+│   │   ├── pages/
+│   │   │   ├── Login.jsx        # ✅ Faza 1
+│   │   │   ├── InventoryPage.jsx   # (Faza 2)
+│   │   │   └── DeviceForm.jsx   # (Faza 2)
+│   │   ├── schemas/
+│   │   │   └── deviceSchema.js  # (Faza 2) Zod schema
 │   │   ├── App.jsx              # Router principal
 │   │   ├── main.jsx             # Entry point React
-│   │   └── index.css            # Tailwind CSS imports
+│   │   └── index.css            # Tailwind CSS + utility classes
 │   ├── vite.config.js           # Proxy /api → localhost:3001
-│   ├── tailwind.config.js       # Konfigurare Tailwind
 │   └── package.json
 │
-├── .gitignore                   # Node modules, .env, dist/, etc.
-├── CLAUDE.md                    # Context proiect
+├── faze/                        # Documente de specificație pe faze
+│   ├── SIMDM-Faza2-Plan.md
+│   └── SIMDM-Faza2-Complet.md
+├── tasks/                       # Plan și checklist curent de lucru
+│   ├── plan.md                  # Context, decizii, dependency graph
+│   └── todo.md                  # Checklist detaliat
+├── docs/                        # Documente tehnice
+│   ├── 1-DESIGN-AND-ACCESSIBILITY.md
+│   ├── 2-DEVELOPER-GUIDE.md
+│   ├── 3-AUDIT-LOG.md
+│   └── CONTRIBUTING.md
+├── docker-compose.yml           # PostgreSQL 16
+├── .gitignore
+├── CLAUDE.md                    # Context permanent pentru Claude Code
 ├── SPEC.md                      # Acest fișier
-├── README.md                    # Documentație publică
-└── package.json                 # Scripts concurrently (root-level)
+└── package.json                 # Scripts concurrently (root)
+```
+
+---
+
+## Modelul de Date (10 modele — stare reală Faza 1)
+
+| Model | Tabel | Scopul |
+|-------|-------|--------|
+| `User` | users | utilizatorul unic (admin) |
+| `RefreshToken` | refresh_tokens | refresh tokens rotative |
+| `Section` | sections | secțiile spitalului |
+| `Device` | devices | dispozitivele medicale (central) |
+| `Consumable` | consumables | consumabile & piese schimb |
+| `DeviceConsumable` | device_consumables | relație many-to-many Device↔Consumable |
+| `MaintenanceRecord` | maintenance_records | intervenții MP și MC |
+| `Incident` | incidents | incidente și defecțiuni |
+| `Document` | documents | documente atașate |
+| `AuditLog` | audit_logs | log complet modificări |
+
+**Enum-uri reale (sursa de adevăr — nu le inventa):**
+- `DeviceStatus`: `FUNCTIONAL`, `IN_REPARATIE`, `DEFECT`, `CASAT`, `IMPRUMUTAT`, `REZERVA`
+- `RiskClass`: `I`, `IIa`, `IIb`, `III`
+- `MaintenanceType`: `PREVENTIVA`, `CORECTIVA`, `VERIFICARE`, `CALIBRARE`
+- `IncidentSeverity`: `NEAR_MISS`, `MINOR`, `MODERAT`, `GRAV`, `CRITIC`
+- `IncidentStatus`: `DESCHIS`, `IN_LUCRU`, `REZOLVAT`, `INCHIS`, `ESCALADAT_AMDM`
+- `DocumentCategory`: `PROCEDURA_MDM`, `FORMULAR`, `LEGISLATIE`, `MANUAL_TEHNIC`, `CERTIFICAT`, `CONTRACT`, `RAPORT`, `ALTUL`
+
+---
+
+## Autentificare (implementare reală)
+
+| Aspect | Implementare |
+|--------|-------------|
+| Access token | JWT semnat cu `JWT_ACCESS_SECRET`, TTL 15min, payload `{ sub: userId, username, role }` |
+| Refresh token | opac `crypto.randomBytes`, stocat **hash sha256** în DB, livrat ca **cookie httpOnly** `refreshToken` |
+| Token frontend | `sessionStorage['accessToken']` (NU localStorage) |
+| Auto-refresh | axios interceptor: 401 TOKEN_EXPIRED → POST /auth/refresh → reia requestul |
+| Rotație refresh | fiecare /refresh revocă tokenul vechi și emite unul nou |
+
+**Endpoint-uri auth (existente):**
+```
+POST /api/auth/login    → { accessToken, user } + Set-Cookie: refreshToken
+POST /api/auth/refresh  → { accessToken } + nou cookie refreshToken
+POST /api/auth/logout   → revocă cookie + AuditLog
+GET  /api/auth/me       → { user } (necesită Bearer token)
+GET  /api/health        → { status, database, uptime }
 ```
 
 ---
 
 ## Stil Cod
 
-### Convenții Generale
-- **Variabile, funcții, fișiere:** English (camelCase pentru JS, PascalCase pentru React)
-- **Texte utilizator, UI, erori:** Română
-- **Async/await:** preferință asupra `.then()` lanțuri
-- **Fără comentarii** decât pentru logică non-evidentă
+### Convenții
+- Cod și variabile în **engleză** (camelCase JS, PascalCase React)
+- Texte utilizator, erori, UI în **română cu diacritice**
+- `async/await` — nu `.then()` lanțuri
+- Fără comentarii decât pentru logică non-evidentă
 
-### Backend
-```javascript
-// ✅ BUN: Const, async/await, validare input
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+### Reguli backend critice
+- `const prisma = require('../db')` — **niciodată** `new PrismaClient()` în routes
+- Toate rutele (exceptând `/api/auth/login` și `/api/health`) → `authMiddleware`
+- Răspunsuri eroare: `res.status(cod).json({ error: 'mesaj în română' })`
+- Validare server-side pe orice input, indiferent de validarea frontend
 
-router.post('/login', async (req, res) => {
-  try {
-    const { username, password } = req.body;
-    
-    if (!username || !password) {
-      return res.status(400).json({ error: 'Username și parola sunt obligatorii' });
-    }
-    
-    const isValid = await bcrypt.compare(password, hashStored);
-    if (!isValid) return res.status(401).json({ error: 'Credentiale incorecte' });
-    
-    const token = jwt.sign({ username }, process.env.JWT_SECRET);
-    res.json({ token, user: { username } });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Eroare server' });
-  }
-});
-```
+### Reguli frontend critice
+- `import api from '../api/axios'` — **niciodată** `http://localhost:3001` direct
+- `sessionStorage['accessToken']` pentru token (nu localStorage)
+- Stilizare exclusiv cu clase Tailwind; zero CSS inline sau fișiere separate
+- Folosește utilitățile din `src/index.css`: `.btn-primary`, `.input-base`, `.label-base`, `.alert-error` etc.
 
-### Frontend
-```jsx
-// ✅ BUN: Hooks, Tailwind classes, handleSubmit pattern
-import { useState } from 'react';
-import api from '../api/axios';
-
-export default function Login({ onLogin }) {
-  const [username, setUsername] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
-    try {
-      const res = await api.post('/auth/login', { username, password });
-      localStorage.setItem('simdm_token', res.data.token);
-      onLogin(res.data.user);
-    } catch (err) {
-      setError('Credentiale incorecte');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return (
-    <div className="min-h-screen bg-gray-950 flex items-center justify-center">
-      <div className="bg-gray-900 p-8 rounded-2xl border border-gray-800 w-full max-w-sm">
-        <h1 className="text-2xl font-bold text-cyan-400 text-center mb-8">SIMDM</h1>
-        {/* form... */}
-      </div>
-    </div>
-  );
-}
-```
-
-**Tema:** Fundal închis (gray-950/900), accent cyan-400/500, text gray-100/400. Toate stilurile via Tailwind, zero CSS separate.
-
----
-
-## Strategie de Testare
-
-### Testare Manuală (Faza 1 nu are unit tests automatizate)
-
-| Step | Endpoint | Metoda | Body | Expected | Status |
-|------|----------|--------|------|----------|--------|
-| 1.4 | `/api/health` | GET | — | `{"status":"ok"}` | ✓ |
-| 1.5 | `/api/auth/login` | POST | `{username, password}` | `{token, user}` + 200 | ✓ |
-| 1.5 | `/api/auth/login` (bad pass) | POST | `{username, wrongPass}` | `{error: "..."}` + 401 | ✓ |
-| 1.5 | `/api/auth/verify` | POST | `{token}` | `{valid: true, user}` + 200 | ✓ |
-| 1.6 | Login page React | UI | navigare → Login | Form afișat, login funcțional | ✓ |
-| 1.6 | Token storage | DevTools localStorage | după login | `simdm_token` prezent cu valoare JWT | ✓ |
-| 1.5 | Seed data | pgAdmin | query DB | 8 secții + 1 dispozitiv test | ✓ |
-
-**Instrumente:** Postman / Thunder Client (pentru API), pgAdmin (pentru DB), Browser DevTools (pentru localStorage/Network).
-
-### Checklist Validare Completă (Faza 1 100%)
-- [ ] Frontend pe `http://localhost:5173` — pagina Login vizibilă
-- [ ] Backend pe `http://localhost:3001` — `/api/health` funcționează
-- [ ] Login end-to-end: introduc credențiale → token salvat → redirecționare
-- [ ] pgAdmin conectat → baza `simdm_db` cu 5 tabele și date seed
-- [ ] `npm run dev` din rădăcină pornește ambele procese simultan
-- [ ] `.env` NU este în Git (verifică `.gitignore`)
+### Accesibilitate (obligatoriu)
+- `htmlFor`/`id` pe toate labelurile
+- `focus-visible:ring-2 focus-visible:ring-cyan-400` pe orice element interactiv
+- `min-h-[44px]` pe butoane și inputuri
+- `role="alert"` pe erori, `role="status"` pe succes/loading
+- Text cu diacritice consistente: "Se încarcă", "Parolă", "Deconectare"
 
 ---
 
 ## Graniță (Boundaries)
 
-### ✅ **ÎNTOTDEAUNA fă:**
-- Citește `schema.prisma` înainte de orice operație cu date — e sursa de adevăr
-- Rulează `npx prisma migrate dev` + `npx prisma generate` după orice schimbare schema
-- Salvează token JWT în `localStorage` cu cheia `simdm_token`
-- Folosește instanța axios din `src/api/axios.js` pentru orice apel — are JWT interceptor
-- Validează input-uri server-side (nu te baza pe validare frontend)
-- Parolele se compară cu `bcrypt.compare()`, NU în clar
-- Mesajele pentru utilizator în ROMÂNĂ, cod în ENGLISH
-- Confirmi inainte de comenzi distructive (migrations, resets, deletes)
+### ✅ ÎNTOTDEAUNA fă:
+- Citește schema Prisma înainte de orice operație cu date — e sursa de adevăr
+- Rulează `prisma migrate dev` + `prisma generate` după orice schimbare schema
+- Folosește `require('../db')` pentru Prisma — instanță unică
+- Validează input-uri server-side
+- Compară parole cu `bcrypt.compare()`, nu în clar
+- Mesaje utilizator în română, cod în engleză
+- Confirmă înainte de comenzi distructive
 
-### ❓ **ÎNTREABĂ ÎNAINTE:**
-- Orice schimbare în `schema.prisma` (noi tabele, coloane, relații)
-- Adăugarea altor framework-uri / librării (menține stiva simplă)
-- Migrații de date sau importuri în BD
-- Modificări în CORS, autentificare, JWT strategy
-- Orice schimbare în `.env` (variabile noi)
+### ❓ ÎNTREABĂ ÎNAINTE:
+- Orice modificare în schema Prisma (noi modele, coloane, relații)
+- Adăugare librării noi
+- Migrații de date sau importuri
+- Modificări CORS, strategie JWT, cookie settings
+- Variabile `.env` noi
 
-### ❌ **NICIODATĂ:**
-- Commit `.env` în Git — e în `.gitignore`
-- Loga parole, hash-uri, JWT tokens în console / logs
+### ❌ NICIODATĂ:
+- Commit `.env` în Git
+- Loga parole, hash-uri sau tokenuri JWT
 - Șterge migrații Prisma existente fără confirmare
-- Folosești `prisma migrate reset` fără backup și confirmare user
-- Editezi fișierele `vendor/` sau `node_modules/`
-- Schimbi hosting-ul / deployment strategy fără discuție (rămâne localhost / LAN)
-- Adaugi roluri RBAC / gestionare multi-user — proiect single-user
+- `prisma migrate reset` fără backup + confirmare
+- Adăuga roluri RBAC sau gestionare multi-user
 
 ---
 
-## Criteriile de Succes (Acceptare Faza 1)
+## Faze de Dezvoltare
 
-**Faza 1 este 100% COMPLETĂ când:**
+### ✅ FAZA 1 — Fundație & Infrastructură (COMPLETĂ)
 
-### Infrastructură ✓
-- [ ] Node.js v22 LTS, PostgreSQL v16, pgAdmin, Git, VS Code instalate
-- [ ] Structura folder `simdm/backend/` + `simdm/frontend/` creată
-- [ ] Git repository inițializat cu `.gitignore` corect (NU `.env`, NU `node_modules`)
+**Ce s-a construit:**
+- Docker Compose cu PostgreSQL 16
+- Schema Prisma 7 multi-fișier, 10 modele + enums, 4 migrații aplicate
+- Backend Express 5: health, auth DB-backed (login/refresh/logout/me), rate limiting, helmet
+- Auth: access JWT 15min + refresh cookie httpOnly rotativ + AuditLog
+- Frontend React 19 + Vite 8 + Tailwind v4: Login accesibil, useAuth hook, axios auto-refresh
+- Seed: admin user + 8 secții + DM test
 
-### Baza de Date ✓
-- [ ] Baza `simdm_db` creată în PostgreSQL
-- [ ] Schema Prisma definită complet (5 tabele: Device, Section, MaintenanceRecord, Incident, Document)
-- [ ] Prima migrație rulată: `npx prisma migrate dev --name init`
-- [ ] Date seed: 8 secții spital + 1 dispozitiv test, vizibile în pgAdmin
-
-### Backend ✓
-- [ ] Server Express pornit pe `http://localhost:3001` fără erori
-- [ ] `/api/health` returnează `{"status":"ok"}`
-- [ ] `/api/auth/login` returnează JWT token la credențiale corecte
-- [ ] `/api/auth/login` returnează eroare 401 la credențiale greșite
-- [ ] `/api/auth/verify` verifică validitatea token-ului
-- [ ] `authMiddleware` creat și gata pentru Faza 2
-- [ ] CORS configurat corect: frontend (5173) ↔ backend (3001)
-
-### Frontend ✓
-- [ ] React + Vite pornit pe `http://localhost:5173` fără erori
-- [ ] TailwindCSS configurat și funcțional (stiluri vizibile)
-- [ ] Pagina Login afișată corect (dark theme: gray-950, cyan accent)
-- [ ] Axios instance cu JWT interceptor creat în `src/api/axios.js`
-- [ ] Proxy Vite configurat (`/api` → `localhost:3001`)
-- [ ] Token JWT salvat în `localStorage['simdm_token']` după login
-
-### Integrare & Testare ✓
-- [ ] Frontend + Backend pornesc simultan: `npm run dev` din rădăcină
-- [ ] Login end-to-end funcțional: React → Express → PostgreSQL
-- [ ] Toate endpoint-urile testate în Postman / Thunder Client
-- [ ] Database query-uri executate cu succes în pgAdmin
-- [ ] Zero fisiere `.env` sau secrete în Git history
+**Testare Faza 1 — confirmată:**
+| Endpoint | Metodă | Rezultat |
+|----------|--------|----------|
+| `/api/health` | GET | `{status:"ok", database:"connected"}` ✓ |
+| `/api/auth/login` | POST | `{accessToken, user}` + cookie ✓ |
+| `/api/auth/login` (parolă greșită) | POST | 401 ✓ |
+| `/api/auth/refresh` | POST (cookie) | `{accessToken}` nou + cookie rotit ✓ |
+| `/api/auth/logout` | POST | cookie golit + AuditLog ✓ |
+| `/api/auth/me` | GET (Bearer) | `{user}` ✓ |
+| Login UI React | Browser | Form accesibil, login → dashboard ✓ |
+| Reload browser | Browser | Sesiune păstrată via refresh cookie ✓ |
 
 ---
 
-## Întrebări Deschise / Asumții
+### 🔄 FAZA 2 — Modul Inventar DM (în lucru)
 
-### Asumții Curente (Correct-mă dacă greșesc):
-1. ✅ Utilizatorul e singurul, NU trebuie RBAC / multi-user
-2. ✅ Hosting: localhost / LAN spital, NU cloud / deploy extern
-3. ✅ Autentificare: simple JWT, NU OAuth / SAML / SSO
-4. ✅ Database: PostgreSQL 16, NU alte BD
-5. ✅ ORM: Prisma, NU Sequelize / TypeORM / raw SQL
-6. ✅ Frontend: React 18 + Vite, NU Next.js / Remix
-7. ✅ Stiluri: TailwindCSS, NU Bootstrap / Material UI / CSS-in-JS
+**Scope:**
+- CRUD complet Device (formular add/edit cu React Hook Form + Zod)
+- Tabel inventar cu filtre avansate + paginare server-side
+- Export Excel (.xlsx) și CSV
+- PDF Fișă DM — Formular Nr.8 (PDFKit)
+- Upload documente (manual, certificat CE, factură, pașaport)
+- Audit log la fiecare operație
 
-### Întrebări pentru Tine (Înainte de Implementare):
-1. **Datele existente:** Ai o bază de date Excel / CSV existentă cu dispozitive? (Relevant pentru seeding Faza 2)
-2. **Securitate locală:** Este LAN-ul spitalului separatist / closed network, sau conectat la internet?
-3. **Backup & Recovery:** Cine administrează backup-urile PostgreSQL? Sunt scripturile nece în repo?
-4. **Browser support:** Doar Chrome/Firefox modern, sau trebuie IE11 / Safari vechi?
+**Dependențe noi necesare:**
+
+| Pachet | Loc |
+|--------|-----|
+| react-hook-form, @hookform/resolvers, zod | frontend |
+| react-select, react-datepicker, react-toastify, lucide-react | frontend |
+| multer, pdfkit, exceljs | backend |
+
+**Endpoint-uri Faza 2:**
+```
+GET    /api/sections                     → secții active (dropdown)
+GET    /api/devices                      → lista DM (filtre + paginare)
+POST   /api/devices                      → creare DM + AuditLog
+GET    /api/devices/:id                  → detalii + relatii
+PUT    /api/devices/:id                  → actualizare + AuditLog
+DELETE /api/devices/:id                  → soft delete (CASAT) + AuditLog
+POST   /api/devices/:id/upload           → upload fișier (multer)
+GET    /api/devices/:id/fisa-pdf         → PDF Fișă DM
+GET    /api/devices/export/xlsx          → export Excel (static route, before /:id)
+GET    /api/devices/export/csv           → export CSV (static route, before /:id)
+GET    /api/devices/dropdown/sections    → secții pentru formular (static route, before /:id)
+```
+
+**Checklist Faza 2:**
+- [ ] Dependențe instalate frontend + backend
+- [ ] BrowserRouter + Routes + ProtectedRoute în App.jsx / main.jsx
+- [ ] `GET /api/sections` endpoint funcțional
+- [ ] `deviceSchema.js` (Zod, JavaScript pur — fără TypeScript)
+- [ ] `DeviceForm.jsx` — mode add și edit funcționale
+- [ ] `routes/devices.js` — CRUD complet (rute statice ÎNAINTE de `/:id`)
+- [ ] Multer upload + `uploads/devices/` autocreate
+- [ ] PDF Fișă DM descărcabil (diacritice ok)
+- [ ] `InventoryPage.jsx` — tabel, filtre, paginare
+- [ ] Export Excel + CSV (cu filtrele active)
+- [ ] Soft delete cu confirmare
+- [ ] AuditLog la fiecare mutație Device
+- [ ] Verificare end-to-end completă
+- [ ] `uploads/` în `.gitignore`
+
+**Detalii implementare:** `tasks/plan.md` + `tasks/todo.md`
 
 ---
 
-## Următoarele Faze (Context Planning)
+### ⬜ FAZA 3 — Modul Mentenanță (urmează)
 
-După Faza 1 completă, urmează:
-
-- **Faza 2:** Modul Inventar DM (CRUD, tabel cu filtre, fișă detale)
-- **Faza 3:** Modul Mentenanță (Plan preventiv, corectiv, ticketing)
-- **Faza 4:** Documente & Proceduri (DMS, formularePDF)
-- **Faza 5:** Vigilență & Incidente (Raportare, notificări)
-- **Faza 6:** Procurare (Planificare, PIF)
-- **Faza 7:** Dashboard & Raportare (KPI, export)
-- **Faza 8:** QA & Launch
-
-Faza 1 nu trebuie să-și asumească construcția ulterioară — fiecare fază adaugă propria schema, endpoint-uri, UI.
+- Plan mentenanță preventivă (MPP) conform `MaintenanceType.PREVENTIVA`
+- Înregistrare intervenții corective (`MaintenanceType.CORECTIVA`)
+- Calendar mentenanță + alerte scadente (`nextMaintenanceAt` din Device)
+- Ticketing mentenanță corectivă
 
 ---
 
-## Cum Procedez?
-
-1. **Aprobă** acest SPEC (sau corectează-mi asumțiile)
-2. **Implementez** pas cu pas după document (1.1 → 1.2 → ... → 1.6)
-3. **Verific** fiecare checkpoint din checklist-ul final
-4. **Testez** manual endpoint-urile și UI
-5. **Commit** la Git după fiecare pas major
-6. **Raportez** progresul și blocaje
+### ⬜ FAZA 4 — Documente & Proceduri
+- DMS (Document Management System) utilizând modelul `Document`
+- Generare formulare PDF din Ghid
+- Versionare documente (câmpul `previousVersionId` deja în schema)
 
 ---
 
-**Ești de acord cu acest spec? Sunt corecte asumpțiile? Dacă nu, specifică ce trebuie modificat.**
+### ⬜ FAZA 5 — Vigilență & Incidente
+- Raportare incidente (`Incident`) cu severitate și status
+- Notificări și escaladare AMDM (`reportedToAmdm`, `amdmReportDate`)
+- Casare DM (`decommissionDate`)
+
+---
+
+### ⬜ FAZA 6 — Procurare
+- Planificare achiziții
+- PIF (Punere În Funcțiune)
+
+---
+
+### ⬜ FAZA 7 — Dashboard & Raportare
+- KPI: dispozitive per status, mentenanță restantă, incidente deschise
+- Rapoarte lunare + export
+
+---
+
+### ⬜ FAZA 8 — QA & Launch
+- Testare completă, import date reale, go-live pe LAN spital
+
+---
+
+## Referințe Domeniu
+
+| Abreviere | Înțeles |
+|-----------|---------|
+| DM | Dispozitiv Medical |
+| MP | Mentenanță Preventivă |
+| MC | Mentenanță Corectivă |
+| PIF | Punere În Funcțiune (dare în exploatare) |
+| MDM | Managementul Dispozitivelor Medicale |
+| AMDM | Agenția Medicamentului și Dispozitivelor Medicale (RM) |
+| SIMDM | Sistemul național; aplicația trebuie compatibilă la export |
+| Ghidul | Ghidul Bioinginerului, Ordinul MS nr. 889/2024 |
