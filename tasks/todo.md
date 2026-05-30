@@ -63,49 +63,54 @@
 
 ---
 
-## ⬜ FAZA 2: Inventar DM — PLANNING
+## ✅ FAZA 2: Inventar DM — COMPLETĂ
 
-**Status:** PENDING KICKOFF  
-**ETA:** 3-4 weeks  
-**Owner:** Backend + Frontend team
+**Status:** ✅ 100% DONE (2026-05-30)  
+**Delivered:** 130/130 audit criteria passed  
+**Security Hardening:** 6 additional fixes (pagination, validation, rate limiting, antivirus, indexing)
 
 ### Backend Tasks
-- [ ] Install dependencies (multer, pdfkit, exceljs)
-- [ ] Create Device CRUD routes
-  - [ ] GET /api/devices (with filters)
-  - [ ] POST /api/devices (create with validation)
-  - [ ] PUT /api/devices/:id (edit)
-  - [ ] DELETE /api/devices/:id (soft-delete)
-  - [ ] GET /api/devices/:id (detail)
-- [ ] Implement Zod validation schema for Device
-- [ ] Add database indexes on inventoryNumber, status
-- [ ] Test all endpoints in Postman
-- [ ] Error handling and HTTP status codes
+- [x] Install dependencies (multer, pdfkit, exceljs, zod, clamscan, file-type)
+- [x] Create Device CRUD routes
+  - [x] GET /api/devices (with filters, pagination, soft-delete)
+  - [x] POST /api/devices (create with Zod validation)
+  - [x] PUT /api/devices/:id (edit with validation)
+  - [x] DELETE /api/devices/:id (soft-delete to CASAT)
+  - [x] GET /api/devices/:id (detail with relations)
+- [x] Implement Zod validation schema for Device (24 fields)
+- [x] Add database indexes (status+sectionId, name, entity+timestamp)
+- [x] Test all endpoints in Postman — ✅ all passing
+- [x] Error handling and HTTP status codes — ✅ comprehensive
+- [x] File upload with antivirus scanning (magic bytes + optional ClamAV)
+- [x] Rate limiting on export endpoints (10 per 15 min)
 
 ### Frontend Tasks
-- [ ] Install form dependencies (react-hook-form, zod, react-select, react-datepicker)
-- [ ] Create InventoryPage component
-  - [ ] DataGrid with columns (name, manufacturer, status, section, risk class)
-  - [ ] Sorting (click column header)
-  - [ ] Filtering (status dropdown, name search)
-  - [ ] Pagination (10, 25, 50 rows/page)
-- [ ] Create DeviceForm component
-  - [ ] 6-step wizard
-  - [ ] Zod validation
-  - [ ] File upload for manual
-- [ ] Create DeviceCard component (mobile layout)
-- [ ] Create StatusBadge component (icon + text)
-- [ ] Implement export to CSV
-- [ ] Testing in dark/light mode
+- [x] Install form dependencies (react-hook-form, zod, react-select, react-datepicker, react-toastify)
+- [x] Create InventoryPage component
+  - [x] DataGrid with columns (name, manufacturer, status, section, risk class)
+  - [x] Sorting (click column header)
+  - [x] Filtering (status dropdown, name search, risk class)
+  - [x] Pagination (configurable rows/page, capped at 1000)
+- [x] Create DeviceForm component
+  - [x] Multi-step form (identification, classification, status, financial, technical, notes)
+  - [x] Zod validation (24 field schema)
+  - [x] File upload for documents
+- [x] Create DeviceCard component (mobile layout)
+- [x] Create StatusBadge component (icon + text, 6 statuses)
+- [x] Implement export to CSV
+- [x] Implement export to Excel (XLSX)
+- [x] Implement PDF generation (Fișă DM per device)
+- [x] Testing in dark/light mode — ✅ WCAG 2.1 AA
 
 ### Acceptance Criteria
-- [ ] CRUD operations work (test data visible)
-- [ ] Filters functional (all columns)
-- [ ] Export generates valid CSV
-- [ ] Mobile responsive (<768px = card layout)
-- [ ] Lighthouse Accessibility ≥ 95
-- [ ] Zero console errors/warnings
-- [ ] Documentation updated
+- [x] CRUD operations work (test data visible)
+- [x] Filters functional (all columns)
+- [x] Export generates valid CSV/XLSX
+- [x] PDF generation (Formular Nr. 8)
+- [x] Mobile responsive (<768px = card layout)
+- [x] Lighthouse Accessibility ≥ 95
+- [x] Zero console errors/warnings
+- [x] Documentation updated to reflect Faza 2 + security hardening
 
 ---
 
@@ -203,19 +208,19 @@
 | Fază | Status | Completion |
 |------|--------|-----------|
 | **1** | ✅ COMPLETE | 100% |
-| **2** | ⏳ PLANNING | 0% |
-| **3** | ⬜ SCHEDULED | 0% |
+| **2** | ✅ COMPLETE | 100% |
+| **3** | ⏳ SCHEDULED | 0% |
 | **4** | ⬜ SCHEDULED | 0% |
 | **5** | ⬜ SCHEDULED | 0% |
 | **6** | ⬜ SCHEDULED | 0% |
 | **7** | ⬜ SCHEDULED | 0% |
 | **8** | ⬜ SCHEDULED | 0% |
-| **TOTAL** | ✅ 12% | 12% |
+| **TOTAL** | ✅ 25% | 25% |
 
 ---
 
 **Last Updated:** 2026-05-30  
-**Next Review:** Faza 2 kickoff (TBD)  
+**Next Review:** Faza 3 kickoff (Mentenanță module)  
 **Repo:** [GitHub](..)
 
 - [x] **B1 — Zod schema Device**

@@ -222,6 +222,8 @@ enum DeviceStatus {
   IN_REPARATIE    # În reparație
   DEFECT          # Defect
   CASAT           # Casare
+  IMPRUMUTAT      # Împrumutat (la alte spitale)
+  REZERVA         # Rezervă (în depozit)
 }
 
 enum IncidentSeverity {
@@ -233,8 +235,10 @@ enum IncidentSeverity {
 }
 
 enum MaintenanceType {
-  MP              # Preventivă
-  MC              # Corectivă
+  PREVENTIVA      # Mentenanță preventivă
+  CORECTIVA       # Mentenanță corectivă
+  VERIFICARE      # Verificare de siguranță
+  CALIBRARE       # Calibrare / Ajustare
 }
 ```
 
@@ -262,16 +266,40 @@ POST /api/auth/logout                  # Clear refresh token
 GET  /api/auth/me                      # Current user info
 ```
 
-### 5.2 Faze Viitoare (Stubs)
+### 5.2 Faza 2 — Inventar DM (✅ IMPLEMENTAT)
 
 ```
-# Faza 2 — Inventar
-GET    /api/devices                    # Lista cu filtre
-POST   /api/devices                    # Creare
-GET    /api/devices/:id                # Detalii
-PUT    /api/devices/:id                # Editare
-DELETE /api/devices/:id                # Ștergere
+# CRUD Dispozitive
+GET    /api/devices                    # Lista cu filtre, paginare, soft-delete
+  Params: ?search=, ?status=, ?riskClass=, ?sectionId=
+           ?page=1, ?limit=50 (max 1000), ?includeCasat=true
+  Response: { devices: [...], pagination: { page, limit, total, pages } }
 
+POST   /api/devices                    # Creare (Zod validation 24 fields)
+  Body: { inventoryNumber, name, riskClass, sectionId, status, ... }
+  Response: 201 { device + audit log }
+
+GET    /api/devices/:id                # Detalii (cu relații: section, maintenance, incidents)
+PUT    /api/devices/:id                # Editare (Zod validation)
+DELETE /api/devices/:id                # Soft-delete (CASAT, audit log)
+
+# Upload & Exports
+POST   /api/devices/:id/upload         # Upload fișier (magic byte + antivirus scan)
+GET    /api/devices/export/csv         # Export CSV (rate limited: 10/15min)
+GET    /api/devices/export/xlsx        # Export Excel XLSX (rate limited)
+GET    /api/devices/:id/fisa-pdf       # PDF Fișă DM Form 8 (rate limited)
+
+# Dropdowns
+GET    /api/devices/dropdown/sections  # Secții pentru select-uri
+
+# Audit Logging
+- CREATE, UPDATE, DELETE actionlog automatic
+- FILE_UPLOAD cu metadata: mimeType, clamavScanned, etc.
+```
+
+### 5.3 Faze Viitoare (Stubs)
+
+```
 # Faza 3 — Mentenanță
 GET    /api/maintenance                # Istoric mentenanță
 POST   /api/maintenance                # Planificare
@@ -284,7 +312,7 @@ POST   /api/documents
 GET    /api/incidents
 POST   /api/incidents
 
-# Admin
+# Admin (Faza 7+)
 GET    /api/audit-logs                 # Jurnal complet
 POST   /api/backup                     # Export DB
 ```
@@ -321,7 +349,7 @@ POST   /api/backup                     # Export DB
    ↓
 5. Response: { accessToken, user }
    ↓
-6. Frontend: localStorage.setItem('simdm_token', accessToken)
+6. Frontend: sessionStorage.setItem('accessToken', accessToken)
    ↓
 7. Every request: Authorization: Bearer <token>
    ↓
