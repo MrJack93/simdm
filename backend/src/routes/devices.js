@@ -66,11 +66,27 @@ router.get('/dropdown/sections', async (req, res) => {
   }
 });
 
-// ENDPOINT 2: GET /export/xlsx — export Excel
+// ENDPOINT 2: GET /export/xlsx — export Excel (cu filtre)
 router.get('/export/xlsx', async (req, res) => {
   try {
+    const { search, status, riskClass, sectionId } = req.query;
+    const where = {};
+    if (search) {
+      where.OR = [
+        { inventoryNumber: { contains: search, mode: 'insensitive' } },
+        { name: { contains: search, mode: 'insensitive' } },
+        { model: { contains: search, mode: 'insensitive' } },
+        { manufacturer: { contains: search, mode: 'insensitive' } },
+      ];
+    }
+    if (status) where.status = status;
+    if (riskClass) where.riskClass = riskClass;
+    if (sectionId) where.sectionId = parseInt(sectionId);
+
     const devices = await prisma.devices.findMany({
+      where,
       include: { sections: { select: { name: true } } },
+      orderBy: { createdAt: 'desc' },
     });
 
     const data = devices.map(d => ({
@@ -87,7 +103,7 @@ router.get('/export/xlsx', async (req, res) => {
 
     const ws = XLSX.utils.json_to_sheet(data);
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Dispozitive');
+    XLSX.utils.book_append_sheet(wb, ws, 'Inventar DM');
 
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     res.setHeader('Content-Disposition', 'attachment; filename="Dispozitive_DM.xlsx"');
@@ -100,21 +116,41 @@ router.get('/export/xlsx', async (req, res) => {
   }
 });
 
-// ENDPOINT 3: GET /export/csv — export CSV
+// ENDPOINT 3: GET /export/csv — export CSV (cu filtre)
 router.get('/export/csv', async (req, res) => {
   try {
-    const devices = await prisma.devices.findMany({
-      include: { sections: { select: { name: true } } },
-    });
+    const { search, status, riskClass, sectionId } = req.query;
+    const where = {};
+    if (search) {
+      where.OR = [
+        { inventoryNumber: { contains: search, mode: 'insensitive' } },
+        { name: { contains: search, mode: 'insensitive' } },
+        { model: { contains: search, mode: 'insensitive' } },
+        { manufacturer: { contains: search, mode: 'insensitive' } },
+      ];
+    }
+    if (status) where.status = status;
+    if (riskClass) where.riskClass = riskClass;
+    if (sectionId) where.sectionId = parseInt(sectionId);
 
-    let csv = 'Inv. Nr.,Denumire,Model,Producător,Clasa Risc,Status,Secție,Data Achiziție,Valoare\n';
-    devices.forEach(d => {
-      csv += `"${d.inventoryNumber}","${d.name}","${d.model || ''}","${d.manufacturer || ''}","${d.riskClass || ''}","${d.status}","${d.sections?.name || ''}","${d.acquisitionDate ? d.acquisitionDate.toISOString().split('T')[0] : ''}","${d.acquisitionValue || ''}"\n`;
+    const devices = await prisma.devices.findMany({
+      where,
+      include: { sections: { select: { name: true } } },
+      orderBy: { createdAt: 'desc' },
     });
 
     res.setHeader('Content-Type', 'text/csv; charset=utf-8');
     res.setHeader('Content-Disposition', 'attachment; filename="Dispozitive_DM.csv"');
-    res.send(csv);
+
+    // BOM UTF-8 pentru diacritice în Excel
+    res.write('﻿');
+    res.write('Inv. Nr.,Denumire,Model,Producător,Clasa Risc,Status,Secție,Data Achiziție,Valoare\n');
+
+    devices.forEach(d => {
+      res.write(`"${d.inventoryNumber}","${d.name}","${d.model || ''}","${d.manufacturer || ''}","${d.riskClass || ''}","${d.status}","${d.sections?.name || ''}","${d.acquisitionDate ? d.acquisitionDate.toISOString().split('T')[0] : ''}","${d.acquisitionValue || ''}"\n`);
+    });
+
+    res.end();
   } catch (error) {
     console.error('Error exporting CSV:', error);
     res.status(500).json({ error: 'Eroare la export CSV' });
@@ -191,13 +227,14 @@ router.post('/', async (req, res) => {
         sectionId: parseInt(sectionId),
         status,
         createdById: req.user.sub,
+        updatedAt: new Date(),
         ...rest,
       },
       include: { sections: { select: { name: true } } },
     });
 
     // Audit log
-    await prisma.auditLog.create({
+    await prisma.audit_logs.create({
       data: {
         userId: req.user.sub,
         action: 'CREATE',
@@ -256,7 +293,7 @@ router.put('/:id', async (req, res) => {
     });
 
     // Audit log
-    await prisma.auditLog.create({
+    await prisma.audit_logs.create({
       data: {
         userId: req.user.sub,
         action: 'UPDATE',
@@ -291,7 +328,7 @@ router.delete('/:id', async (req, res) => {
     });
 
     // Audit log
-    await prisma.auditLog.create({
+    await prisma.audit_logs.create({
       data: {
         userId: req.user.sub,
         action: 'DELETE',
