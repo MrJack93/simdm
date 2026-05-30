@@ -280,6 +280,7 @@ router.post('/', async (req, res) => {
       data: {
         ...data,
         createdById: req.user.sub,
+        updatedAt: new Date(),
       },
       include: { sections: { select: { name: true } } },
     });
