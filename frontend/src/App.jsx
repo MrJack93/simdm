@@ -3,6 +3,8 @@ import { Routes, Route } from 'react-router-dom';
 import { useAuth } from './hooks/useAuth';
 import Login from './pages/Login';
 import InventoryPage from './pages/InventoryPage';
+import ConsumablesPage from './pages/ConsumablesPage';
+import AnnualInventoryPage from './pages/AnnualInventoryPage';
 import DeviceForm from './pages/DeviceForm';
 import ProtectedRoute from './components/ProtectedRoute';
 
@@ -17,6 +19,12 @@ function Dashboard({ isDarkMode, setIsDarkMode }) {
           <nav className="hidden md:flex gap-6">
             <a href="/inventory" className="text-sm font-medium hover:opacity-70 transition-opacity">
               Inventar
+            </a>
+            <a href="/inventory/annual" className="text-sm font-medium hover:opacity-70 transition-opacity">
+              Inventariere
+            </a>
+            <a href="/consumables" className="text-sm font-medium hover:opacity-70 transition-opacity">
+              Consumabile
             </a>
           </nav>
         </div>
@@ -39,6 +47,8 @@ function Dashboard({ isDarkMode, setIsDarkMode }) {
       <main id="main">
         <Routes>
           <Route path="/inventory" element={<ProtectedRoute><InventoryPage /></ProtectedRoute>} />
+          <Route path="/inventory/annual" element={<ProtectedRoute><AnnualInventoryPage /></ProtectedRoute>} />
+          <Route path="/consumables" element={<ProtectedRoute><ConsumablesPage /></ProtectedRoute>} />
           <Route path="/devices/new" element={<ProtectedRoute><DeviceForm /></ProtectedRoute>} />
           <Route path="/devices/:id/edit" element={<ProtectedRoute><DeviceForm /></ProtectedRoute>} />
           <Route path="/" element={

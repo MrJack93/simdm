@@ -17,7 +17,7 @@ function log(msg) {
 
 const authMiddleware = require('./middleware/auth');
 
-let authRoutes, sectionsRoutes, deviceRoutes;
+let authRoutes, sectionsRoutes, deviceRoutes, consumableRoutes, annualInventoryRoutes;
 try {
   authRoutes = require('./routes/auth');
   console.log('✅ Auth routes loaded');
@@ -25,6 +25,10 @@ try {
   console.log('✅ Sections routes loaded');
   deviceRoutes = require('./routes/devices');
   console.log('✅ Device routes loaded');
+  consumableRoutes = require('./routes/consumables');
+  console.log('✅ Consumables routes loaded');
+  annualInventoryRoutes = require('./routes/annualInventory');
+  console.log('✅ Annual inventory routes loaded');
 } catch (e) {
   console.error('❌ Error loading routes:', e.message);
   process.exit(1);
@@ -74,6 +78,8 @@ app.get('/api/health', async (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/sections', authMiddleware, sectionsRoutes);
 app.use('/api/devices', deviceRoutes);
+app.use('/api/consumables', consumableRoutes);
+app.use('/api/annual-inventory', annualInventoryRoutes);
 
 // Viitoarele rute se adaugă în fazele 2-8:
 // app.use('/api/maintenance', authMiddleware, maintenanceRoutes);

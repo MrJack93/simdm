@@ -6,6 +6,37 @@ datasource db {
   provider = "postgresql"
 }
 
+model annual_inventories {
+  id           Int                      @id @default(autoincrement())
+  year         Int
+  sectionId    Int
+  section      sections                 @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  status       String                   @default("NOT_STARTED")
+  completedAt  DateTime?
+  items        inventory_check_items[]
+  createdAt    DateTime                 @default(now())
+  updatedAt    DateTime
+
+  @@index([year, sectionId])
+  @@index([status])
+}
+
+model inventory_check_items {
+  id            Int                  @id @default(autoincrement())
+  inventoryId   Int
+  inventory     annual_inventories   @relation(fields: [inventoryId], references: [id], onDelete: Cascade)
+  deviceId      Int
+  device        devices              @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+  found         Boolean              @default(false)
+  locationFound String?
+  status        String               @default("PENDING_VERIFICATION")
+  createdAt     DateTime             @default(now())
+
+  @@index([inventoryId])
+  @@index([deviceId])
+  @@index([status])
+}
+
 model audit_logs {
   id        Int      @id @default(autoincrement())
   userId    Int?
@@ -34,12 +65,14 @@ model consumables {
   expiryDate         DateTime?
   location           String?
   notes              String?
+  isDeleted          Boolean              @default(false)
   createdAt          DateTime             @default(now())
   updatedAt          DateTime
   device_consumables device_consumables[]
 
   @@index([name])
   @@index([quantity])
+  @@index([isDeleted])
 }
 
 model device_consumables {
@@ -53,46 +86,47 @@ model device_consumables {
 }
 
 model devices {
-  id                  Int                   @id @default(autoincrement())
-  inventoryNumber     String                @unique
-  serialNumber        String?
-  name                String
-  model               String?
-  manufacturer        String?
-  countryOfOrigin     String?
-  yearMade            Int?
-  riskClass           RiskClass?
-  ceMarking           String?
-  cndCode             String?
-  status              DeviceStatus          @default(FUNCTIONAL)
-  acquisitionDate     DateTime?
-  warrantyEndDate     DateTime?
-  decommissionDate    DateTime?
-  acquisitionValue    Decimal?
-  residualValue       Decimal?
-  currency            String                @default("MDL")
-  voltage             String?
-  frequency           String?
-  power               String?
-  accessories         String?
-  maintenanceFreq     Int?
-  nextMaintenanceAt   DateTime?
-  lastMaintenanceAt   DateTime?
-  sectionId           Int?
-  room                String?
-  manualUrl           String?
-  certificateUrl      String?
-  invoiceUrl          String?
-  passportUrl         String?
-  notes               String?
-  createdById         Int?
-  createdAt           DateTime              @default(now())
-  updatedAt           DateTime
-  device_consumables  device_consumables[]
-  users               users?                @relation(fields: [createdById], references: [id])
-  sections            sections?             @relation(fields: [sectionId], references: [id])
-  incidents           incidents[]
-  maintenance_records maintenance_records[]
+  id                     Int                   @id @default(autoincrement())
+  inventoryNumber        String                @unique
+  serialNumber           String?
+  name                   String
+  model                  String?
+  manufacturer           String?
+  countryOfOrigin        String?
+  yearMade               Int?
+  riskClass              RiskClass?
+  ceMarking              String?
+  cndCode                String?
+  status                 DeviceStatus          @default(FUNCTIONAL)
+  acquisitionDate        DateTime?
+  warrantyEndDate        DateTime?
+  decommissionDate       DateTime?
+  acquisitionValue       Decimal?
+  residualValue          Decimal?
+  currency               String                @default("MDL")
+  voltage                String?
+  frequency              String?
+  power                  String?
+  accessories            String?
+  maintenanceFreq        Int?
+  nextMaintenanceAt      DateTime?
+  lastMaintenanceAt      DateTime?
+  sectionId              Int?
+  room                   String?
+  manualUrl              String?
+  certificateUrl         String?
+  invoiceUrl             String?
+  passportUrl            String?
+  notes                  String?
+  createdById            Int?
+  createdAt              DateTime              @default(now())
+  updatedAt              DateTime
+  device_consumables     device_consumables[]
+  inventory_check_items  inventory_check_items[]
+  users                  users?                @relation(fields: [createdById], references: [id])
+  sections               sections?             @relation(fields: [sectionId], references: [id])
+  incidents              incidents[]
+  maintenance_records    maintenance_records[]
 
   @@index([inventoryNumber])
   @@index([nextMaintenanceAt])
@@ -196,17 +230,18 @@ model refresh_tokens {
 }
 
 model sections {
-  id          Int         @id @default(autoincrement())
-  name        String      @unique
-  code        String?     @unique
-  floor       String?
-  description String?
-  isActive    Boolean     @default(true)
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime
-  devices     devices[]
-  incidents   incidents[]
-  users       users[]
+  id                    Int                  @id @default(autoincrement())
+  name                  String               @unique
+  code                  String?              @unique
+  floor                 String?
+  description           String?
+  isActive              Boolean              @default(true)
+  createdAt             DateTime             @default(now())
+  updatedAt             DateTime
+  devices               devices[]
+  incidents             incidents[]
+  users                 users[]
+  annual_inventories    annual_inventories[]
 }
 
 model users {

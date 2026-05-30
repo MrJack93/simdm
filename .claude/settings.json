@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/janea/Downloads/**)",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\janea\\\\simdm\" -Directory)",
+      "Bash(Select-Object Name)"
+    ]
+  }
+}

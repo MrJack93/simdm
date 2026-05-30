@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import api from '../api/axios';
+import AlertsWidget from '../components/AlertsWidget';
 
 const STATUS_ICONS = {
   FUNCTIONAL: '✓',
@@ -208,6 +209,9 @@ export default function InventoryPage() {
             + Adaugă DM
           </Link>
         </div>
+
+        {/* Alerts Widget */}
+        <AlertsWidget />
 
         {/* Filters Section */}
         <div className="card-base mb-6 p-4 space-y-4">
