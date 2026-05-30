@@ -1,10 +1,10 @@
-# 🚀 Getting Started — SIMDM
+# 🚀 Pornire Rapidă — SIMDM
 
 Ghid rapid pentru a porni aplicația SIMDM pe calculatorul tău în **5-10 minute**.
 
 ---
 
-## ✅ Prerequisite
+## ✅ Condiții Preliminare
 
 Înainte de a începe, asigură-te că ai instalat:
 
@@ -128,7 +128,7 @@ Odată ce serverele sunt pornite:
 
 ---
 
-## 📚 Următoarei Pași
+## 📚 Următorii Pași
 
 | Sarcină | Fișier |
 |---------|--------|
@@ -139,7 +139,7 @@ Odată ce serverele sunt pornite:
 
 ---
 
-## 🐛 Probleme frecvente
+## 🐛 Probleme Frecvente
 
 ### ❌ Eroare: `connection refused on port 5432`
 **Cauză:** PostgreSQL nu e pornit.
@@ -180,8 +180,8 @@ Acum poți:
 - 📊 Raporta incidente
 - 📄 Gestiona documente
 
-Plesioar! Dacă ai întrebări, citește [CONTRIBUTING.md](docs/CONTRIBUTING.md).
+Plăcere! Dacă ai întrebări, citește [CONTRIBUTING.md](docs/CONTRIBUTING.md).
 
 ---
 
-**Versiunea:** v1.0 · **Data:** 2026-05-30 · **Status:** Phase 1 Complete ✅
+**Versiunea:** v1.0 · **Data:** 2026-05-30 · **Status:** Faza 1 Completă ✅

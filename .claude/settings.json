@@ -18,7 +18,9 @@
       "PowerShell(netstat -ano)",
       "PowerShell(grep \":3001\")",
       "PowerShell(Stop-Process -Force -Confirm:$false)",
-      "Bash(TOKEN=\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJuYW1lIjoiaW5naW5lciIsInJvbGUiOiJCSU9JTkdJTkVSIiwiaWF0IjoxNzgwMTM4MzY5LCJleHAiOjE3ODAxMzkyNjl9.SXl1T-MTBW9YlDFw1GLMIqGfZfkZ95-9k_GB5LLrhGs\" *)"
+      "Bash(TOKEN=\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJuYW1lIjoiaW5naW5lciIsInJvbGUiOiJCSU9JTkdJTkVSIiwiaWF0IjoxNzgwMTM4MzY5LCJleHAiOjE3ODAxMzkyNjl9.SXl1T-MTBW9YlDFw1GLMIqGfZfkZ95-9k_GB5LLrhGs\" *)",
+      "Bash(grep -n \"Backend\" /c/Users/janea\\\\simdm\\\\docs\\\\2-DEVELOPER-GUIDE.md | tail -5)",
+      "Read(//c/Users/**)"
     ],
     "additionalDirectories": [
       "\\tmp"

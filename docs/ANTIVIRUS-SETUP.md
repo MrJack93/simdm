@@ -8,52 +8,52 @@
 
 ---
 
-## 📋 Overview
+## 📋 Prezentare generală
 
-SIMDM implements **multi-layer file security** for medical documents:
+SIMDM implementează **siguritate multi-strat pentru documentele medicale**:
 
-1. **File Type Validation** — Magic byte detection (not just MIME type)
-2. **Size Limits** — Max 10MB per file
-3. **Optional ClamAV Scanning** — Real-time malware detection (production)
-4. **Audit Logging** — All uploads logged with scan results
-
----
-
-## 🏗️ Architecture
-
-### Development Environment
-- ✅ File type validation (magic bytes)
-- ✅ Size validation
-- ⚠️ ClamAV optional (disabled by default)
-
-### Production Environment
-- ✅ File type validation (magic bytes)
-- ✅ Size validation
-- ✅ ClamAV scanning (REQUIRED)
+1. **Validarea tipului de fișier** — Detectare magic bytes (nu doar MIME type)
+2. **Limite de dimensiune** — Maximum 10MB per fișier
+3. **Scanare ClamAV opțională** — Detectare malware în timp real (producție)
+4. **Logging în jurnal de audit** — Toate încărcările sunt loggate cu rezultate scanare
 
 ---
 
-## 🚀 Installation & Setup
+## 🏗️ Arhitectură
 
-### Step 1: Install Packages (Already Done)
+### Mediul de dezvoltare
+- ✅ Validarea tipului de fișier (magic bytes)
+- ✅ Validarea dimensiunii
+- ⚠️ ClamAV opțional (dezactivat implicit)
+
+### Mediul de producție
+- ✅ Validarea tipului de fișier (magic bytes)
+- ✅ Validarea dimensiunii
+- ✅ Scanare ClamAV (OBLIGATORIE)
+
+---
+
+## 🚀 Instalare și configurare
+
+### Pasul 1: Instalare pachete (deja efectuată)
 ```bash
 cd backend
 npm install clamscan file-type
 ```
 
-### Step 2: Development (No ClamAV Needed)
-Works out-of-the-box. ClamAV is disabled by default.
+### Pasul 2: Dezvoltare (ClamAV nu este necesar)
+Funcționează din start. ClamAV este dezactivat implicit.
 
 ```bash
 npm run dev
-# Upload files → Type validation only
+# Încarcă fișiere → Doar validare tip
 ```
 
-### Step 3: Production Setup with ClamAV
+### Pasul 3: Configurare producție cu ClamAV
 
-#### Option A: Docker (Recommended)
+#### Opțiunea A: Docker (Recomandat)
 
-Add to `docker-compose.yml`:
+Adaugă la `docker-compose.yml`:
 
 ```yaml
 clamav:
@@ -75,33 +75,33 @@ volumes:
   clamav-data:
 ```
 
-#### Option B: Linux (ClamAV Daemon)
+#### Opțiunea B: Linux (ClamAV Daemon)
 
 ```bash
 # Ubuntu/Debian
 sudo apt-get install clamav clamav-daemon
 
-# Start daemon on port 3310
+# Pornire daemon pe portul 3310
 sudo systemctl start clamav-daemon
 sudo systemctl enable clamav-daemon
 
-# Verify
+# Verificare
 sudo systemctl status clamav-daemon
 ```
 
-#### Option C: Windows
+#### Opțiunea C: Windows
 
 ```powershell
-# Install ClamAV using chocolatey
+# Instalare ClamAV cu chocolatey
 choco install clamav
 
-# Start clamd service
+# Pornire serviciu clamd
 net start clamd
 ```
 
-### Step 4: Enable in Production
+### Pasul 4: Activare în producție
 
-Set environment variables in `.env.production`:
+Setează variabilele de mediu în `.env.production`:
 
 ```env
 # ClamAV Configuration
@@ -110,7 +110,7 @@ CLAMAV_HOST=localhost
 CLAMAV_PORT=3310
 ```
 
-Or via environment:
+Sau via mediu:
 ```bash
 export CLAMAV_ENABLED=true
 export CLAMAV_HOST=clamav-service
@@ -120,56 +120,56 @@ npm start
 
 ---
 
-## 📝 File Type Support
+## 📝 Suport tipuri de fișiere
 
-### Allowed MIME Types
+### MIME type-uri permise
 
-| Category | Types | Extensions |
-|----------|-------|-----------|
-| **Documents** | application/pdf | .pdf |
+| Categorie | Tipuri | Extensii |
+|----------|--------|----------|
+| **Documente** | application/pdf | .pdf |
 | **Word** | application/msword | .doc |
 | **Word** | application/vnd.openxmlformats-officedocument.wordprocessingml.document | .docx |
 | **Spreadsheet** | application/vnd.ms-excel | .xls |
 | **Spreadsheet** | application/vnd.openxmlformats-officedocument.spreadsheetml.sheet | .xlsx |
-| **Images** | image/jpeg | .jpg, .jpeg |
-| **Images** | image/png | .png |
-| **Images** | image/tiff | .tif, .tiff |
+| **Imagini** | image/jpeg | .jpg, .jpeg |
+| **Imagini** | image/png | .png |
+| **Imagini** | image/tiff | .tif, .tiff |
 | **Text** | text/plain | .txt |
 
-### File Size Limits
+### Limite dimensiune fișiere
 
-- **Maximum:** 10 MB per file
-- **Rationale:** Medical device manuals, certificates, invoices
+- **Maximum:** 10 MB per fișier
+- **Justificare:** Manuale dispozitive medicale, certificate, facturi
 
-### Security Features
+### Caracteristici de siguritate
 
-1. **Magic Byte Detection** — Verifies actual file content, not extension
-   - Prevents `malware.exe` renamed to `malware.pdf`
-   - Detects file type mismatches
+1. **Detectare Magic Bytes** — Verifică conținutul real al fișierului, nu doar extensia
+   - Previne `malware.exe` redenumit în `malware.pdf`
+   - Detectează nepotriviri tip fișier
 
-2. **MIME Type Mismatch Logging** — Flags suspicious uploads
-   - Original MIME vs. Detected MIME logged to audit trail
+2. **Logging Nepotrivire MIME Type** — Semnalizează încărcări suspecte
+   - MIME original versus MIME detectat sunt loggate în jurnal audit
 
-3. **ClamAV Scanning** — Real-time antivirus
-   - Detects trojans, viruses, worms, spyware
-   - Virus definitions updated 24x daily (FRESHCLAM_CHECKS=24)
+3. **Scanare ClamAV** — Antivirus în timp real
+   - Detectează troieni, viruși, wormuri, spyware
+   - Definiții virale actualizate de 24 de ori pe zi (FRESHCLAM_CHECKS=24)
 
 ---
 
-## 🧪 Testing
+## 🧪 Testare
 
-### Development (No ClamAV)
+### Dezvoltare (fără ClamAV)
 
 ```bash
-# Start server
+# Pornire server
 npm run dev
 
-# Test valid PDF upload
+# Test încărcare PDF valid
 curl -X POST http://localhost:3001/api/devices/1/upload \
   -H "Authorization: Bearer $TOKEN" \
   -F "file=@document.pdf"
 
-# Response (ClamAV disabled):
+# Răspuns (ClamAV dezactivat):
 # {
 #   "message": "Fișier încărcat cu succes [Scanned: application/pdf]",
 #   "device": {...},
@@ -183,19 +183,19 @@ curl -X POST http://localhost:3001/api/devices/1/upload \
 # }
 ```
 
-### Production (With ClamAV)
+### Producție (cu ClamAV)
 
 ```bash
-# After starting ClamAV service
+# După pornirea serviciu ClamAV
 export CLAMAV_ENABLED=true
 npm start
 
-# Test upload
+# Test încărcare
 curl -X POST http://localhost:3001/api/devices/1/upload \
   -H "Authorization: Bearer $TOKEN" \
   -F "file=@document.pdf"
 
-# Response (ClamAV enabled):
+# Răspuns (ClamAV activat):
 # {
 #   "message": "Fișier încărcat cu succes [Scanned: application/pdf]",
 #   "scan": {
@@ -206,12 +206,12 @@ curl -X POST http://localhost:3001/api/devices/1/upload \
 # }
 ```
 
-### Error Cases
+### Cazuri de eroare
 
-**Invalid file type:**
+**Tip fișier nevalid:**
 ```
 POST /api/devices/1/upload
-Body: executable.exe disguised as .pdf
+Body: executable.exe mascat ca .pdf
 
 Response (400):
 {
@@ -219,7 +219,7 @@ Response (400):
 }
 ```
 
-**File too large:**
+**Fișier prea mare:**
 ```
 POST /api/devices/1/upload
 Body: 50MB_file.pdf
@@ -230,7 +230,7 @@ Response (400):
 }
 ```
 
-**Infected file (ClamAV enabled):**
+**Fișier infectat (ClamAV activat):**
 ```
 POST /api/devices/1/upload
 Body: eicar.com (EICAR test virus)
@@ -243,9 +243,9 @@ Response (400):
 
 ---
 
-## 📊 Audit Logging
+## 📊 Logging în jurnal de audit
 
-Every file upload is logged:
+Fiecare încărcare de fișier este logată:
 
 ```sql
 SELECT * FROM audit_logs 
@@ -253,7 +253,7 @@ WHERE action = 'FILE_UPLOAD'
 ORDER BY timestamp DESC;
 ```
 
-Example audit record:
+Exemplu înregistrare audit:
 ```json
 {
   "userId": 1,
@@ -273,40 +273,40 @@ Example audit record:
 
 ---
 
-## 🔍 Troubleshooting
+## 🔍 Depanare
 
-### ClamAV Not Connecting
+### ClamAV nu se conectează
 
 ```
 ⚠️ ClamAV scan unavailable: connect ECONNREFUSED 127.0.0.1:3310
 ```
 
-**Fix:**
-1. Verify ClamAV is running: `sudo systemctl status clamav-daemon`
-2. Check port: `netstat -tuln | grep 3310`
-3. Restart daemon: `sudo systemctl restart clamav-daemon`
+**Soluție:**
+1. Verifică dacă ClamAV rulează: `sudo systemctl status clamav-daemon`
+2. Verifică portul: `netstat -tuln | grep 3310`
+3. Repornește daemon-ul: `sudo systemctl restart clamav-daemon`
 
-### File Type Not Detected
+### Tip fișier nu este detectat
 
 ```
 Tip fișier nesuportat (nu s-a putut detecta)
 ```
 
-**Cause:** File has no magic bytes (corrupted or wrapped in container)
+**Cauză:** Fișierul nu are magic bytes (corupt sau încapsulat într-un container)
 
-**Fix:** Validate source file, ensure it's not password-protected or encrypted
+**Soluție:** Validează fișierul sursă, asigură-te că nu este protejat cu parolă sau criptat
 
-### MIME Type Mismatch Logged
+### Nepotrivire MIME Type logată
 
 ```
 ⚠️ MIME mismatch: original=application/pdf, detected=application/zip
 ```
 
-**Action:** File was uploaded with wrong extension. Investigate source.
+**Acțiune:** Fișierul a fost încărcat cu extensie greșită. Investighează sursa.
 
 ---
 
-## 📚 References
+## 📚 Referințe
 
 - **ClamAV Docs:** https://www.clamav.net/documents
 - **file-type NPM:** https://www.npmjs.com/package/file-type
@@ -314,9 +314,9 @@ Tip fișier nesuportat (nu s-a putut detecta)
 
 ---
 
-## ✅ Compliance
+## ✅ Conformitate
 
-This implementation meets:
+Această implementare satisface:
 - ✅ OWASP File Upload Security
 - ✅ ISO 27001 Malware Protection
 - ✅ Medical Device Data Integrity Standards

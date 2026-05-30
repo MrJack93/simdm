@@ -1,6 +1,6 @@
 # SPEC — Specificație Tehnică SIMDM
 
-**Versiune:** 1.0 (Faza 1 Complete)  
+**Versiune:** 1.0 (Faza 1 Completă)  
 **Actualizat:** 2026-05-30  
 **Audiență:** Developeri, Arhitecți, PM  
 **Status:** ✅ Aprobat pentru Faza 2
@@ -12,18 +12,18 @@
 ### 1.1 Ce Construim
 
 **SIMDM** = Sistem Informațional de Management al Dispozitivelor Medicale  
-**Scop:** Înlocuiește evid eviden ența pe hârtie/Excel cu bază de date centralizată conform **Ghidului Bioinginerului — Ordinul MS nr. 889/2024** (Republica Moldova).
+**Scop:** Înlocuiește evidența pe hârtie/Excel cu bază de date centralizată conform **Ghidului Bioinginerului — Ordinul MS nr. 889/2024** (Republica Moldova).
 
 ### 1.2 Utilizator & Hosting
 
 - **Utilizator:** 1 bioinginer medical (utilizator **UNIC**)
 - **Hosting:** localhost / rețea locală spital (fără cloud)
-- **Deploy:** Docker container-uri pe server spital sau mașina bioinginerului
+- **Deploy:** Containere Docker pe server spital sau mașina bioinginerului
 - **Legea:** GDPR (date medicale locale, nu cloud)
 
 ### 1.3 NU Implementăm
 
-❌ Multi-user, RBAC, roluri multiple  
+❌ Multi-utilizator, RBAC, roluri multiple  
 ❌ Înregistrare de utilizatori noi  
 ❌ Cloud deploy (AWS, Azure, etc.)  
 ❌ OAuth / SSO  
@@ -34,60 +34,60 @@
 
 ## 2. Stivă Tehnologică (LOCKED)
 
-Această stivă a fost aleasă strategically și **NU se schimbă fără meeting explicit cu PM**.
+Această stivă a fost aleasă strategic și **NU se schimbă fără meeting explicit cu PM**.
 
 | Strat | Tehnologie | Version | Rol | Notă |
 |-------|-----------|---------|-----|------|
-| **Frontend** | React | 19.2 | UI, routing | Vite dev server |
-| **Frontend Bundler** | Vite | 8.0 | Build, dev | Fast refresh |
+| **Frontend** | React | 19.2 | UI, routing | Dev server Vite |
+| **Frontend Bundler** | Vite | 8.0 | Build, dev | Refresh rapid |
 | **Styling** | Tailwind CSS | 4.3 | Utility-first CSS | @tailwindcss/vite |
-| **Forms** | React Hook Form | 7.7 | Form state | Performance |
-| **Validation** | Zod | 4.4 | Type-safe schemas | Frontend + backend |
-| **HTTP Client** | Axios | 1.16 | API calls | Interceptors JWT |
+| **Forme** | React Hook Form | 7.7 | Stare formular | Performanță |
+| **Validare** | Zod | 4.4 | Scheme type-safe | Frontend + backend |
+| **HTTP Client** | Axios | 1.16 | Apeluri API | Interceptors JWT |
 | **State/Fetching** | TanStack Query | 5.1 | Caching, refetch | Auto-sync |
-| **Routing** | react-router-dom | 7.1 | Navigation | Nested routes |
-| **UI Components** | Tailwind + custom | — | Design system | No Shadcn/Material/etc |
-| **Backend** | Node.js | 22 LTS | API server | Production-ready |
-| **API Framework** | Express.js | 5.2 | HTTP handlers | REST endpoints |
-| **Database** | PostgreSQL | 16 | Data persistence | Docker image |
-| **ORM** | Prisma | 7.8 | Query builder | Multi-file schema |
+| **Routing** | react-router-dom | 7.1 | Navigare | Rute imbricate |
+| **Componente UI** | Tailwind + custom | — | Design system | Fără Shadcn/Material/etc |
+| **Backend** | Node.js | 22 LTS | Server API | Production-ready |
+| **API Framework** | Express.js | 5.2 | Handlers HTTP | REST endpoints |
+| **Bază de date** | PostgreSQL | 16 | Persistență date | Imagine Docker |
+| **ORM** | Prisma | 7.8 | Query builder | Schema multi-fișier |
 | **Auth** | JWT | 9.0 | Token-based | +bcryptjs hashing |
-| **Hashing** | bcryptjs | 3.0 | Password hashing | 12 rounds |
+| **Hashing** | bcryptjs | 3.0 | Hashing parole | 12 runde |
 | **Containerization** | Docker | Compose | Dev + Prod | PostgreSQL, backend, frontend |
-| **Environment** | dotenv | 17.4 | Secrets management | .env (NU în Git) |
-| **Rate Limiting** | express-rate-limit | 8.5 | Brute-force protection | Login limit 5/15min |
-| **Security** | helmet.js | 8.2 | HTTP headers | CSP, HSTS, etc. |
+| **Environment** | dotenv | 17.4 | Gestiune secrete | .env (NU în Git) |
+| **Rate Limiting** | express-rate-limit | 8.5 | Protecție brute-force | Login limit 5/15min |
+| **Securitate** | helmet.js | 8.2 | HTTP headers | CSP, HSTS, etc. |
 
 ### 2.1 De Ce Această Stivă?
 
 ✅ **Frontend:**
-- React = standard industry, component-based, reusable
+- React = standard industrie, component-based, reutilizabil
 - Vite = build ultra-rapid (150ms), HMR out-of-box
-- Tailwind = utility-first, responsive, accessible defaults
-- TanStack Query = de-facto standard state management (2025)
+- Tailwind = utility-first, responsive, accesibil implicit
+- TanStack Query = standard de facto state management (2025)
 
 ✅ **Backend:**
 - Node.js = JavaScript full-stack, npm ecosystem
-- Express = minimal, stable, widely-used
-- Prisma = type-safe ORM, migrations, seed, GUI (Studio)
+- Express = minimal, stabil, larg utilizat
+- Prisma = ORM type-safe, migrații, seed, GUI (Studio)
 
-✅ **Database:**
-- PostgreSQL = robust, ACID, open-source, containers
-- Docker = reproducible dev environment
+✅ **Bază de date:**
+- PostgreSQL = robust, ACID, open-source, containerizabil
+- Docker = mediu dev reproducibil
 
 ### 2.2 Restricții & Reguli
 
 ```
-🚫 NO: Next.js, Nuxt, Remix, SvelteKit
-🚫 NO: GraphQL, tRPC, gRPC
-🚫 NO: Styled-components, Emotion, CSS-in-JS
-🚫 NO: Zustand, Redux, Recoil (TanStack Query e destul)
-🚫 NO: MongoDB, MySQL, SQLite (PostgreSQL only)
-🚫 NO: S3, Cloudinary, external storage (local uploads only)
+🚫 NU: Next.js, Nuxt, Remix, SvelteKit
+🚫 NU: GraphQL, tRPC, gRPC
+🚫 NU: Styled-components, Emotion, CSS-in-JS
+🚫 NU: Zustand, Redux, Recoil (TanStack Query e destul)
+🚫 NU: MongoDB, MySQL, SQLite (doar PostgreSQL)
+🚫 NU: S3, Cloudinary, stocare externă (doar uploaduri locale)
 
 ✅ OK (dacă cerere explicită + PM aprobă):
-   - Testing frameworks (Jest, Vitest, Playwright)
-   - Build optimization (vite plugins)
+   - Framework-uri testing (Jest, Vitest, Playwright)
+   - Optimizare build (vite plugins)
    - UI kit minimal (dacă Tailwind nu ajunge)
 ```
 
@@ -112,7 +112,7 @@ npx prisma migrate dev         # Creare + aplică migrație
 npx prisma db seed             # Rulează seed.js
 npm run db:studio              # GUI bază de date (port 5555)
 npx prisma validate            # Validare schema.prisma
-npx prisma generate             # Regenerează @prisma/client
+npx prisma generate            # Regenerează @prisma/client
 
 # FRONTEND (simdm/frontend/)
 npm install                    # Instalare dependențe
@@ -134,7 +134,7 @@ pg_dump -U simdm_user -d simdm_db > backup.sql
 psql -U simdm_user -d simdm_db < backup.sql
 
 # Reset (NUMAI în dev!)
-npm run db:reset --force  # DISTRUGE datele — cerere user consent
+npm run db:reset --force  # Cere consent! DISTRUGE datele!
 ```
 
 ---
@@ -254,16 +254,16 @@ devices (M) ──↔ (N) consumables        [device_consumables join]
 
 ---
 
-## 5. API Endpoints (Faza 1)
+## 5. Endpoint-uri API (Faza 1)
 
-### 5.1 Health & Auth
+### 5.1 Sănătate & Autentificare
 
 ```
 GET  /api/health                       # Status server + DB
 POST /api/auth/login                   # { username, password } → token
 POST /api/auth/refresh                 # Refresh access token
 POST /api/auth/logout                  # Clear refresh token
-GET  /api/auth/me                      # Current user info
+GET  /api/auth/me                      # Info utilizator actual
 ```
 
 ### 5.2 Faza 2 — Inventar DM (✅ IMPLEMENTAT)
@@ -275,7 +275,7 @@ GET    /api/devices                    # Lista cu filtre, paginare, soft-delete
            ?page=1, ?limit=50 (max 1000), ?includeCasat=true
   Response: { devices: [...], pagination: { page, limit, total, pages } }
 
-POST   /api/devices                    # Creare (Zod validation 24 fields)
+POST   /api/devices                    # Creare (Zod validation 24 câmpuri)
   Body: { inventoryNumber, name, riskClass, sectionId, status, ... }
   Response: 201 { device + audit log }
 
@@ -283,17 +283,17 @@ GET    /api/devices/:id                # Detalii (cu relații: section, maintena
 PUT    /api/devices/:id                # Editare (Zod validation)
 DELETE /api/devices/:id                # Soft-delete (CASAT, audit log)
 
-# Upload & Exports
+# Upload & Exporuri
 POST   /api/devices/:id/upload         # Upload fișier (magic byte + antivirus scan)
 GET    /api/devices/export/csv         # Export CSV (rate limited: 10/15min)
 GET    /api/devices/export/xlsx        # Export Excel XLSX (rate limited)
 GET    /api/devices/:id/fisa-pdf       # PDF Fișă DM Form 8 (rate limited)
 
-# Dropdowns
+# Dropdown-uri
 GET    /api/devices/dropdown/sections  # Secții pentru select-uri
 
-# Audit Logging
-- CREATE, UPDATE, DELETE actionlog automatic
+# Logging Audit
+- CREATE, UPDATE, DELETE actionlog automat
 - FILE_UPLOAD cu metadata: mimeType, clamavScanned, etc.
 ```
 
@@ -319,7 +319,7 @@ POST   /api/backup                     # Export DB
 
 ---
 
-## 6. Frontend Routes (Faza 1)
+## 6. Rute Frontend (Faza 1)
 
 ```
 /              # Redirect → /login sau /dashboard
@@ -334,9 +334,9 @@ POST   /api/backup                     # Export DB
 
 ---
 
-## 7. Autentificare & Sigurență
+## 7. Autentificare & Securitate
 
-### 7.1 Flow Auth
+### 7.1 Flux Autentificare
 
 ```
 1. POST /login { username, password }
@@ -351,15 +351,15 @@ POST   /api/backup                     # Export DB
    ↓
 6. Frontend: sessionStorage.setItem('accessToken', accessToken)
    ↓
-7. Every request: Authorization: Bearer <token>
+7. Fiecare request: Authorization: Bearer <token>
    ↓
 8. Token expira → auto-refresh via interceptor
 ```
 
-### 7.2 Secrets & .env
+### 7.2 Secrete & .env
 
 ```env
-# Database
+# Bază de date
 DATABASE_URL="postgresql://simdm_user:simdm_secure_2024@localhost:5432/simdm_db"
 
 # JWT
@@ -376,12 +376,12 @@ NODE_ENV="development"
 ADMIN_USERNAME="inginer"
 ADMIN_PASSWORD_HASH="$2b$12$..."                   # bcrypt hash
 
-# Security
+# Securitate
 BCRYPT_ROUNDS=12
 RATE_LIMIT_WINDOW_MS=900000                       # 15 min
-RATE_LIMIT_MAX_REQUESTS=5                         # 5 tries
+RATE_LIMIT_MAX_REQUESTS=5                         # 5 încercări
 
-# Cookies
+# Cookie-uri
 COOKIE_SECURE="false"                             # Dev: false, Prod: true
 COOKIE_DOMAIN="localhost"                         # Dev: localhost
 ```
@@ -390,7 +390,7 @@ COOKIE_DOMAIN="localhost"                         # Dev: localhost
 
 ---
 
-## 8. Data Seeding (Faza 1)
+## 8. Seed-ing Date (Faza 1)
 
 După `npm run db:seed`, baza de date conține:
 
@@ -403,20 +403,20 @@ După `npm run db:seed`, baza de date conține:
 | Incidents | 2 | MODERAT (pompă), GRAV (ventilator) |
 | Maintenance | 0 | (Testing, adăugate manual în Faza 2+) |
 
-Fisier: [`backend/prisma/seed.js`](backend/prisma/seed.js)
+Fișier: [`backend/prisma/seed.js`](backend/prisma/seed.js)
 
 ---
 
 ## 9. Depanare & Repornire
 
-### 9.1 Reset Database (NUMAI DEV)
+### 9.1 Reset Bază de Date (NUMAI DEV)
 
 ```bash
 cd backend
 npm run db:reset --force   # Cere consent! DISTRUGE datele!
 ```
 
-### 9.2 Prisma Issues
+### 9.2 Probleme Prisma
 
 ```bash
 # Regenerează client
@@ -428,11 +428,11 @@ npx prisma validate
 # Inspecționează migrații
 ls prisma/migrations/
 
-# View live data
+# Vizualizează date live
 npm run db:studio  # http://localhost:5555
 ```
 
-### 9.3 Port Conflicts
+### 9.3 Conflicte Porturi
 
 ```bash
 # Windows PowerShell
@@ -446,57 +446,57 @@ kill -9 <PID>
 
 ---
 
-## 10. Performanță & Limezări
+## 10. Performanță & Limitări
 
 ### 10.1 Limitări Cunoscute (Faza 1)
 
 - ✅ Suportă **1 utilizator concurrent** (arhitectură single-user)
-- ✅ Bază de date poate crești la **10K+ dispozitive** fără probleme
+- ✅ Bază de date poate crește la **10K+ dispozitive** fără probleme
 - ✅ Queries sunt indexate pe `inventoryNumber`, `status`, `createdAt`
 - ⚠️ File uploads pentru documente (Faza 4) — limit 50MB per fișier
 
-### 10.2 Optimization Future
+### 10.2 Optimizare Viitoare
 
-| Fază | Optimizare | Priority |
-|------|-----------|----------|
-| 2 | Pagination tabel (100 rows/page) | Medium |
-| 3 | Caching Redis pentru KPI | Low |
-| 5 | Full-text search pe incidente | Medium |
-| 7 | PDF generation server-side | Medium |
-| 8 | Database replication backup | High |
+| Fază | Optimizare | Prioritate |
+|------|-----------|-----------|
+| 2 | Paginare tabel (100 rânduri/pagină) | Medie |
+| 3 | Caching Redis pentru KPI | Joasă |
+| 5 | Full-text search pe incidente | Medie |
+| 7 | Generare PDF server-side | Medie |
+| 8 | Database replication backup | Înaltă |
 
 ---
 
-## 11. Compliance & Standarde
+## 11. Conformitate & Standarde
 
-### 11.1 Ghid Bioinginerului (Ordinul MS 889/2024)
+### 11.1 Ghidul Bioinginerului (Ordinul MS 889/2024)
 
 Aplicația conformează următoarelor cerințe:
 
 - ✅ Jurnal audit complet (audit_logs)
-- ✅ Raportare incidente (severity-based)
+- ✅ Raportare incidente (bazată pe severitate)
 - ✅ Mentenanță preventivă planificată (Faza 3)
 - ✅ Documente & proceduri (Faza 4)
 - ✅ Accesibilitate WCAG 2.1 AA (Faza 1+)
-- ✅ Sigurență criptare (bcrypt, JWT, HTTPS prod)
-- ✅ Backup & recovery procedures (TBD Faza 8)
+- ✅ Securitate criptare (bcrypt, JWT, HTTPS prod)
+- ✅ Proceduri backup & recovery (TBD Faza 8)
 
 ### 11.2 Standardul WCAG 2.1 AA
 
 Frontend-ul este **100% accesibil:**
-- ✅ Semantic HTML, ARIA labels
-- ✅ Focus rings vizibile, keyboard navigation
+- ✅ HTML semantic, ARIA labels
+- ✅ Focus rings vizibile, navigare tastatură
 - ✅ Contrast ≥ 4.5:1 (AAA text, AA UI)
-- ✅ Hit targets ≥ 44px
+- ✅ Ținte atingere ≥ 44px
 - ✅ Dark + Light mode suportate
 
 ---
 
 ## 12. Faze de Dezvoltare (8 Total)
 
-| Fază | Modul | Estimate | Status |
+| Fază | Modul | Estimare | Status |
 |------|-------|----------|--------|
-| **1** | Fundație (Auth, DB, Login) | ✅ Done | **COMPLETĂ** |
+| **1** | Fundație (Auth, DB, Login) | ✅ Gata | **COMPLETĂ** |
 | **2** | Inventar DM (CRUD, tabel, export) | 3-4 săptămâni | Planning |
 | **3** | Mentenanță (MP/MC, plan preventiv) | 3-4 săptămâni | Planning |
 | **4** | Documente & Proceduri (DMS, PDF) | 2-3 săptămâni | Planning |
@@ -505,7 +505,7 @@ Frontend-ul este **100% accesibil:**
 | **7** | Dashboard & Raportare (KPI, export) | 2-3 săptămâni | Planning |
 | **8** | QA & Go-Live (testare, import real) | 1-2 săptămâni | Planning |
 
-**Total estimate:** 16-22 săptămâni (4-5 luni dev time)
+**Total estimare:** 16-22 săptămâni (4-5 luni timp dev)
 
 ---
 
@@ -513,11 +513,11 @@ Frontend-ul este **100% accesibil:**
 
 | Document | Audiență | Link |
 |----------|----------|------|
-| **GETTING-STARTED.md** | Bioinginer, dev new | [Link](GETTING-STARTED.md) |
+| **GETTING-STARTED.md** | Bioinginer, dev nou | [Link](GETTING-STARTED.md) |
 | **CLAUDE.md** | AI + backend dev | [Link](CLAUDE.md) |
 | **Design System** | Frontend dev | [docs/1-DESIGN-AND-ACCESSIBILITY.md](docs/1-DESIGN-AND-ACCESSIBILITY.md) |
 | **Developer Guide** | Frontend dev | [docs/2-DEVELOPER-GUIDE.md](docs/2-DEVELOPER-GUIDE.md) |
-| **Contributing** | All | [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) |
+| **Contributing** | Toți | [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) |
 | **Project Plan** | PM | [tasks/plan.md](tasks/plan.md) |
 | **API Docs** | Backend dev | *(generat swagger — Faza 3+)* |
 

@@ -2,7 +2,7 @@
 
 **Versiune:** 1.0 (Faza 1 Complete)  
 **Actualizat:** 2026-05-30  
-**Audiență:** Frontend & backend developers  
+**Audiență:** Dezvoltatori frontend și backend  
 **Limbă:** Engleză (cod), Română (comentarii)
 
 ---
@@ -11,8 +11,8 @@
 
 1. [Frontend — React + Vite + Tailwind](#frontend)
 2. [Backend — Express + Prisma](#backend)
-3. [API Integration & Axios](#api-integration)
-4. [Tipare Frecvente (Patterns)](#tipare-frecvente)
+3. [Integrare API & Axios](#api-integration)
+4. [Tipare Frecvente](#tipare-frecvente)
 5. [Checklist Calitate](#checklist-calitate)
 6. [Debugging & Performance](#debugging)
 
@@ -20,7 +20,7 @@
 
 ## 🎨 Frontend — React + Vite + Tailwind
 
-### Setup Proiect
+### Configurare Proiect
 
 ```bash
 cd frontend
@@ -28,23 +28,23 @@ npm install
 npm run dev  # Vite server — http://localhost:5173
 ```
 
-### Structura Foldere Frontend
+### Structura Directoare Frontend
 
 ```
 frontend/src/
 ├── pages/              # Pagini principale (ex: Login.jsx)
 ├── components/         # Componente reutilizabile
 ├── hooks/             # Custom React hooks
-├── api/               # API calls (axios.js, services)
-├── schemas/           # Zod validation schemas
-├── context/           # React Context (theme, auth)
-├── assets/            # Imagini, icoane, fonts
-├── App.jsx            # Root component + Router
-├── index.css          # Global styles (Tailwind directives)
-└── main.jsx           # Entry point
+├── api/               # Apeluri API (axios.js, services)
+├── schemas/           # Scheme validare Zod
+├── context/           # React Context (temă, autentificare)
+├── assets/            # Imagini, icoane, fonturi
+├── App.jsx            # Componentă rădăcină + Router
+├── index.css          # Stiluri globale (directive Tailwind)
+└── main.jsx           # Punct de intrare
 ```
 
-### Creiere Componentă (React 19)
+### Crearea unei Componente (React 19)
 
 ```jsx
 // components/DeviceCard.jsx
@@ -91,10 +91,10 @@ export function DeviceCard({ device, onEdit }) {
 }
 ```
 
-### Tailwind CSS — Utility Classes
+### Tailwind CSS — Clase Utility
 
 ```jsx
-// ✅ BUNĂ — Tailwind utilities
+// ✅ BUN — Utilities Tailwind
 <div className="flex gap-4 p-6 bg-gray-900 rounded-lg border border-gray-700">
   <h2 className="text-2xl font-bold text-accent">Titlu</h2>
   <button className="px-4 py-2 min-h-[44px] bg-accent rounded-lg focusable">
@@ -102,12 +102,12 @@ export function DeviceCard({ device, onEdit }) {
   </button>
 </div>
 
-// ❌ PROASTĂ — custom CSS
+// ❌ RĂU — CSS custom
 <div style={{ display: 'flex', gap: '16px', backgroundColor: '#111827' }}>
   <h2>Titlu</h2>
 </div>
 
-// ❌ PROASTĂ — random class names
+// ❌ RĂU — nume clase aleatorii
 <div className="my-custom-box">...</div>
 ```
 
@@ -115,14 +115,14 @@ export function DeviceCard({ device, onEdit }) {
 
 | Scop | Clase | Exemplu |
 |------|-------|---------|
-| **Padding** | `p-4`, `px-6`, `py-3` | Spațiere interne |
-| **Margin** | `m-4`, `mb-2`, `mt-6` | Spațiere externe |
+| **Padding** | `p-4`, `px-6`, `py-3` | Spațiere internă |
+| **Margin** | `m-4`, `mb-2`, `mt-6` | Spațiere externă |
 | **Text** | `text-lg`, `text-center`, `font-bold` | Tipografie |
-| **Culori** | `text-accent`, `bg-gray-900`, `border-gray-700` | Colors |
+| **Culori** | `text-accent`, `bg-gray-900`, `border-gray-700` | Culori |
 | **Grid** | `grid`, `grid-cols-3`, `gap-4` | Layout |
-| **Responsive** | `md:text-2xl`, `lg:grid-cols-4` | Breakpoints |
+| **Responsive** | `md:text-2xl`, `lg:grid-cols-4` | Puncte de rupere |
 | **Focus** | `focusable` | Focus ring WCAG |
-| **Dimensiuni** | `w-full`, `h-screen`, `min-h-[44px]` | Size |
+| **Dimensiuni** | `w-full`, `h-screen`, `min-h-[44px]` | Dimensiuni |
 
 ### React Hooks Frecvente
 
@@ -130,12 +130,12 @@ export function DeviceCard({ device, onEdit }) {
 // useState — stare locală
 const [isOpen, setIsOpen] = useState(false);
 
-// useEffect — side effects
+// useEffect — efecte laterale
 useEffect(() => {
   fetchDevices();
-}, [deviceId]); // Dependency array
+}, [deviceId]); // Matrice de dependențe
 
-// useContext — context API
+// useContext — API Context
 const { theme, toggleTheme } = useContext(ThemeContext);
 
 // useCallback — memoizare funcții
@@ -149,21 +149,21 @@ const filteredDevices = useMemo(() => {
 }, [devices, filter]);
 ```
 
-### Form Validation cu React Hook Form + Zod
+### Validare Formular cu React Hook Form + Zod
 
 ```jsx
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
-// 1. Definire schema (Zod)
+// 1. Definire schemă (Zod)
 const deviceSchema = z.object({
   inventoryNumber: z.string().min(1, 'Obligatoriu'),
   name: z.string().min(3, 'Minim 3 caractere'),
   status: z.enum(['FUNCTIONAL', 'IN_REPARATIE', 'DEFECT']),
 });
 
-// 2. Component cu form
+// 2. Componentă cu formular
 export function DeviceForm({ onSubmit }) {
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: zodResolver(deviceSchema),
@@ -199,37 +199,37 @@ export function DeviceForm({ onSubmit }) {
 
 ## 🔧 Backend — Express + Prisma
 
-### Setup Proiect
+### Configurare Proiect
 
 ```bash
 cd backend
 npm install
-npm run dev  # Express server — http://localhost:3001
+npm run dev  # Server Express — http://localhost:3001
 ```
 
-### Structura Foldere Backend
+### Structura Directoare Backend
 
 ```
 backend/
 ├── prisma/
-│   ├── schema/            # Multi-file schema
-│   ├── migrations/        # Versionized migrations
-│   └── seed.js            # Auto-populate data
+│   ├── schema/            # Schemă multi-fișier
+│   ├── migrations/        # Migrații versionizate
+│   └── seed.js            # Pre-populate date
 ├── src/
-│   ├── routes/            # API routes (auth.js, devices.js)
-│   ├── controllers/       # Business logic
-│   ├── middleware/        # Auth, errors, validation
-│   ├── services/          # External calls, complex logic
-│   ├── lib/              # Utilities (tokens, crypto)
-│   ├── db.js             # Prisma client
-│   └── index.js          # Express server
-├── scripts/              # One-off tools
-├── uploads/              # User-uploaded files
-├── .env                  # Secrets (NU în Git)
+│   ├── routes/            # Rute API (auth.js, devices.js)
+│   ├── controllers/       # Logică de business
+│   ├── middleware/        # Autentificare, erori, validare
+│   ├── services/          # Apeluri externe, logică complexă
+│   ├── lib/              # Utilitare (tokenuri, crypto)
+│   ├── db.js             # Client Prisma
+│   └── index.js          # Server Express
+├── scripts/              # Instrumente unice
+├── uploads/              # Fișiere încărcate de utilizator
+├── .env                  # Secrete (NU în Git)
 └── package.json
 ```
 
-### Creiere Endpoint Express
+### Crearea unui Endpoint Express
 
 ```javascript
 // routes/devices.js
@@ -239,7 +239,7 @@ const { listDevices, createDevice } = require('../controllers/deviceController')
 
 const router = express.Router();
 
-// GET /api/devices — lista cu filtru
+// GET /api/devices — listare cu filtru
 router.get('/', authMiddleware, listDevices);
 
 // POST /api/devices — creare
@@ -253,10 +253,10 @@ module.exports = router;
 const prisma = require('../db');
 
 async function listDevices(req, res) {
-  const { status, section } = req.query; // Query params
+  const { status, section } = req.query; // Parametri query
 
   try {
-    // Build where clause dinamically
+    // Construire clauză where dinamic
     const where = {};
     if (status) where.status = status;
     if (section) where.sectionId = parseInt(section);
@@ -291,16 +291,16 @@ async function createDevice(req, res) {
         name,
         status: status || 'FUNCTIONAL',
         sectionId: sectionId ? parseInt(sectionId) : null,
-        createdById: req.user.id, // De la JWT middleware
+        createdById: req.user.id, // Din middleware JWT
       },
     });
 
     res.status(201).json({ data: device });
   } catch (error) {
     if (error.code === 'P2002') {
-      // Unique constraint violation
+      // Încălcare constrângere unicitate
       return res.status(409).json({
-        error: `inventoryNumber "${inventoryNumber}" deja exista`,
+        error: `inventoryNumber "${inventoryNumber}" deja există`,
       });
     }
 
@@ -312,7 +312,7 @@ async function createDevice(req, res) {
 module.exports = { listDevices, createDevice };
 ```
 
-### Middleware — Auth
+### Middleware — Autentificare
 
 ```javascript
 // middleware/auth.js
@@ -330,7 +330,7 @@ function authMiddleware(req, res, next) {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
-    req.user = decoded; // Attach user to request
+    req.user = decoded; // Atașare utilizator la cerere
     next();
   } catch (error) {
     res.status(403).json({ error: 'Token invalid' });
@@ -340,7 +340,7 @@ function authMiddleware(req, res, next) {
 module.exports = authMiddleware;
 ```
 
-### Prisma — Queries Frecvente
+### Prisma — Interogări Frecvente
 
 ```javascript
 // SELECT
@@ -380,7 +380,7 @@ const total = await prisma.devices.count({
   where: { status: 'FUNCTIONAL' },
 });
 
-// Aggregate
+// Agregate
 const stats = await prisma.devices.aggregate({
   _count: true,
   _max: { acquisitionValue: true },
@@ -390,9 +390,9 @@ const stats = await prisma.devices.aggregate({
 
 ---
 
-## 🔗 API Integration & Axios
+## 🔗 Integrare API & Axios
 
-### Setup Axios Client
+### Configurare Client Axios
 
 ```javascript
 // frontend/src/api/axios.js
@@ -400,10 +400,10 @@ import axios from 'axios';
 
 const api = axios.create({
   baseURL: '/api', // Proxy Vite: /api → http://localhost:3001
-  withCredentials: true, // Include cookies
+  withCredentials: true, // Includere cookies
 });
 
-// Request interceptor — attach JWT token
+// Request interceptor — atașare token JWT
 api.interceptors.request.use((config) => {
   const token = sessionStorage.getItem('accessToken');
   if (token) {
@@ -412,7 +412,7 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Response interceptor — refresh token on 401
+// Response interceptor — refresh token la 401
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -423,10 +423,10 @@ api.interceptors.response.use(
           withCredentials: true,
         });
         sessionStorage.setItem('accessToken', data.accessToken);
-        // Retry original request
+        // Reîncercați cererea inițială
         return api.request(error.config);
       } catch {
-        // Refresh failed — logout
+        // Refresh eșuat — deconectare
         sessionStorage.removeItem('accessToken');
         window.location.href = '/login';
       }
@@ -438,7 +438,7 @@ api.interceptors.response.use(
 export default api;
 ```
 
-### Apeluri API în Component
+### Apeluri API în Componentă
 
 ```javascript
 // pages/Inventory.jsx
@@ -475,7 +475,7 @@ export function CreateDevice({ onSuccess }) {
   const mutation = useMutation({
     mutationFn: (newDevice) => api.post('/devices', newDevice),
     onSuccess: () => {
-      // Refetch devices list
+      // Refetch lista dispozitive
       queryClient.invalidateQueries(['devices']);
       onSuccess?.();
     },
@@ -501,7 +501,7 @@ export function CreateDevice({ onSuccess }) {
 
 ## 📌 Tipare Frecvente
 
-### Pattern 1: Dark/Light Mode
+### Tipar 1: Dark/Light Mode
 
 ```javascript
 // context/ThemeContext.jsx
@@ -532,7 +532,7 @@ export function ThemeProvider({ children }) {
 }
 ```
 
-### Pattern 2: Protected Route
+### Tipar 2: Rută Protejată
 
 ```javascript
 // components/ProtectedRoute.jsx
@@ -549,7 +549,7 @@ export function ProtectedRoute({ children }) {
 }
 ```
 
-### Pattern 3: Error Boundary
+### Tipar 3: Error Boundary
 
 ```javascript
 // components/ErrorBoundary.jsx
@@ -581,7 +581,7 @@ export class ErrorBoundary extends Component {
 }
 ```
 
-### Pattern 4: Backend Zod Validation (Faza 2)
+### Tipar 4: Validare Backend cu Zod (Faza 2)
 
 ```javascript
 // backend/src/routes/devices.js
@@ -595,10 +595,10 @@ const deviceCreateSchema = z.object({
   status: z.enum(['FUNCTIONAL', 'IN_REPARATIE', 'DEFECT', 'CASAT', 'IMPRUMUTAT', 'REZERVA']).default('FUNCTIONAL'),
   acquisitionDate: z.coerce.date().optional().nullable(),
   acquisitionValue: z.coerce.number().min(0).optional().nullable(),
-  // ... 18 more fields validated
+  // ... 18 câmpuri suplimentare validate
 });
 
-// In POST handler:
+// În handler POST:
 router.post('/', (req, res) => {
   const parsed = deviceCreateSchema.safeParse(req.body);
   if (!parsed.success) {
@@ -607,13 +607,13 @@ router.post('/', (req, res) => {
       fields: parsed.error.flatten().fieldErrors,
     });
   }
-  // Create device with validated data
+  // Creare dispozitiv cu date validate
   const device = await prisma.devices.create({ data: parsed.data });
   res.status(201).json(device);
 });
 ```
 
-### Pattern 5: Pagination with Validation (Faza 2)
+### Tipar 5: Paginare cu Validare (Faza 2)
 
 ```javascript
 // backend/src/routes/devices.js
@@ -639,7 +639,7 @@ router.get('/', async (req, res) => {
 });
 ```
 
-### Pattern 6: File Upload with Antivirus (Faza 2)
+### Tipar 6: Încărcare Fișier cu Antivirus (Faza 2)
 
 ```javascript
 // backend/src/routes/devices.js
@@ -651,7 +651,7 @@ router.post('/:id/upload', upload.single('file'), antivirusMiddleware, async (re
     data: { manualUrl: `/uploads/devices/${req.file.filename}` },
   });
 
-  // Log file upload with scan result
+  // Jurnal încărcare fișier cu rezultat scan
   await prisma.audit_logs.create({
     data: {
       userId: req.user.sub,
@@ -670,7 +670,7 @@ router.post('/:id/upload', upload.single('file'), antivirusMiddleware, async (re
 });
 ```
 
-### Pattern 7: Soft-Delete Filtering (Faza 2)
+### Tipar 7: Filtrare Ștergere Soft (Faza 2)
 
 ```javascript
 // backend/src/routes/devices.js
@@ -678,12 +678,12 @@ router.get('/', async (req, res) => {
   const { includeCasat } = req.query;
   const where = {};
 
-  // Default: exclude CASAT devices unless explicitly requested
+  // Implicit: exclud dispozitive CASAT decât dacă explicit cerut
   if (includeCasat !== 'true') {
     where.status = { not: 'CASAT' };
   }
 
-  // Apply explicit filters (override default)
+  // Aplică filtre explicite (suprascriere implicit)
   if (req.query.status) where.status = req.query.status;
 
   const devices = await prisma.devices.findMany({ where });
@@ -698,55 +698,55 @@ router.get('/', async (req, res) => {
 ### Frontend
 
 - [ ] **Accesibilitate:**
-  - [ ] Labels pe TOATE input-urile (`htmlFor` + `id`)
+  - [ ] Etichetele pe TOATE input-urile (`htmlFor` + `id`)
   - [ ] Focus ring pe orice element interactiv (`.focusable`)
   - [ ] Erori anunțate cu `role="alert"`
-  - [ ] Status badges cu text + icoană (nu doar culoare)
+  - [ ] Badge-uri status cu text + icoană (nu doar culoare)
 
 - [ ] **Responsive:**
-  - [ ] Testat mobile (DevTools F12)
-  - [ ] Testat tablet
-  - [ ] Testat desktop 1920px
+  - [ ] Testat pe mobil (DevTools F12)
+  - [ ] Testat pe tablet
+  - [ ] Testat pe desktop 1920px
 
 - [ ] **Dark Mode:**
-  - [ ] Toggle switch funcționează
-  - [ ] Culori folosesc CSS variables
+  - [ ] Comutatorul funcționează
+  - [ ] Culori folosesc variabile CSS
   - [ ] Contrast ≥ 4.5:1 (dark + light)
 
 - [ ] **Performance:**
-  - [ ] Niciun console error
+  - [ ] Nicio eroare în consolă
   - [ ] Lighthouse Accessibility ≥ 95
   - [ ] Lighthouse Performance ≥ 80
 
 ### Backend
 
 - [ ] **Validare (Faza 2):**
-  - [ ] **Zod schema validation** on POST/PUT (24 fields)
-  - [ ] Structured error responses (400 + fieldErrors)
-  - [ ] Auth check (token valid, not expired)
-  - [ ] Error messages în română
-  - [ ] Query params validated (page ≥ 1, limit ≤ 1000)
+  - [ ] **Validare schemă Zod** pe POST/PUT (24 câmpuri)
+  - [ ] Răspunsuri eroare structurate (400 + fieldErrors)
+  - [ ] Verificare auth (token valid, neexpirati)
+  - [ ] Mesaje eroare în limba română
+  - [ ] Parametri query validați (page ≥ 1, limit ≤ 1000)
 
-- [ ] **Database (Faza 2):**
-  - [ ] Queries are indexed (7+ migrations applied)
-  - [ ] Soft-delete filter working (status != 'CASAT')
-  - [ ] Audit log recorded (CREATE, UPDATE, DELETE, FILE_UPLOAD)
-  - [ ] Relații sunt populate dacă necesar
-  - [ ] Tranzacții pentru operații multi-step
+- [ ] **Bază de Date (Faza 2):**
+  - [ ] Interogările sunt indexate (7+ migrații aplicate)
+  - [ ] Filtrare ștergere soft funcționează (status != 'CASAT')
+  - [ ] Jurnal audit înregistrat (CREATE, UPDATE, DELETE, FILE_UPLOAD)
+  - [ ] Relații populate dacă necesar
+  - [ ] Tranzacții pentru operații multi-etapă
 
-- [ ] **Security (Faza 2):**
-  - [ ] Rate limiting on exports (10/15min)
-  - [ ] File upload antivirus scanning (magic bytes)
-  - [ ] Niciun secret în logs
-  - [ ] SQL injection protected (Prisma)
-  - [ ] CORS configured
-  - [ ] Rate limiting pe login (5/15min)
+- [ ] **Securitate (Faza 2):**
+  - [ ] Rate limiting la exporturi (10/15min)
+  - [ ] Scan antivirus încărcare fișier (magic bytes)
+  - [ ] Niciun secret în jurnale
+  - [ ] Protejat împotriva injecție SQL (Prisma)
+  - [ ] CORS configurat
+  - [ ] Rate limiting la login (5/15min)
 
 ---
 
 ## 🐛 Debugging & Performance
 
-### Frontend Debugging
+### Debugging Frontend
 
 ```javascript
 // DevTools — Console
@@ -754,17 +754,17 @@ console.log('Device:', device);
 console.warn('Unexpected state:', state);
 console.error('API failed:', error);
 
-// React DevTools extension
-// Inspect component props, state, re-renders
+// Extensie React DevTools
+// Inspectare props componentă, stare, re-randări
 
-// Network tab
-// Check API requests, status codes, response times
+// Tabul Network
+// Verificare cereri API, coduri stare, timpuri răspuns
 
 // Lighthouse
-// DevTools → Lighthouse → Generate report
+// DevTools → Lighthouse → Generare raport
 ```
 
-### Backend Debugging
+### Debugging Backend
 
 ```javascript
 // Logging
@@ -772,23 +772,23 @@ console.log('[DeviceController] Creating device:', req.body);
 console.error('[ERROR] Database:', error.message);
 
 // Postman / Thunder Client
-// Test endpoints manually
-// Check request/response headers
+// Test endpoint-uri manual
+// Verificare anteturi cerere/răspuns
 
 // Prisma Studio
-npm run db:studio  # Visual DB explorer
+npm run db:studio  # Explorer vizual bază de date
 ```
 
-### Performance Tips
+### Sfaturi Performance
 
-- Use React.memo for heavy components
-- Use useCallback for event handlers
-- Use useMemo for expensive calculations
-- Use TanStack Query for caching
-- Pagination for large lists
-- Lazy load images
-- Code splitting (dynamic imports)
+- Utilizare React.memo pentru componente grele
+- Utilizare useCallback pentru handler-e eveniment
+- Utilizare useMemo pentru calcule costisitoare
+- Utilizare TanStack Query pentru caching
+- Paginare pentru liste lungi
+- Lazy load imagini
+- Code splitting (import-uri dinamice)
 
 ---
 
-**Gata cu development? Consultă [CONTRIBUTING.md](./CONTRIBUTING.md) pentru PR flow.**
+**Gata cu development? Consultă [CONTRIBUTING.md](./CONTRIBUTING.md) pentru fluxul de PR.**

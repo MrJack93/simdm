@@ -1,7 +1,7 @@
 # SIMDM — Sistem Informațional de Management al Dispozitivelor Medicale
 
-**Versiune:** 2.0 Faza 1-2 (Inventory Complete + Security Hardening)  
-**Status:** ✅ **Faza 1 & 2 COMPLETĂ 100%** (130/130 + 6 security fixes)  
+**Versiune:** 2.0 Faza 1-2 (Inventar Complet + Hardening de Securitate)  
+**Status:** ✅ **Faza 1 & 2 COMPLETĂ 100%** (130/130 + 6 reparații de securitate)  
 **Actualizat:** 2026-05-30  
 **Licență:** Privat (Spital privat Moldova)
 
@@ -11,7 +11,7 @@
 
 **SIMDM** este o aplicație web modernă pentru gestionarea centralizată a dispozitivelor medicale (DM), concepută special pentru bioinginerul medical al unui spital privat din Moldova.
 
-Înlocuiește evid **evidența pe hârtie și foile Excel** cu o bază de date securizată, conform standardelor din **Ghidul Bioinginerului — Ordinul MS nr. 889/2024** (Republica Moldova).
+Înlocuiește evidența pe hârtie și foile Excel cu o bază de date securizată, conform standardelor din **Ghidul Bioinginerului — Ordinul MS nr. 889/2024** (Republica Moldova).
 
 ### Caracteristici Principale (Faza 1+2)
 
@@ -35,7 +35,7 @@
 - ✅ **WCAG 2.1 AA Certified** — Keyboard navigation, focus rings, semantic HTML
 - ✅ **Component Library** — StatusBadge (6 statuses), DataGrid, Forms, Modals, Toasts
 
-**Security Hardening**
+**Hardening de Securitate**
 - ✅ **Antivirus Scanning** — Magic byte detection + optional ClamAV (ClamAV-ready for production)
 - ✅ **Soft-Delete Pattern** — CASAT status (default excluded from queries)
 - ✅ **Jwt + bcrypt** — Industry-standard authentication
@@ -343,7 +343,7 @@ După `npm run db:seed`, baza de date conține:
 - ✅ Audit 104/104 (100%)
 - ✅ GETTING-STARTED.md creat
 - ✅ seed.js complet (8 dispozitive, 4 consumabile, 2 incidente)
-- ✅ Documentație renovată (profesionistă, română)
+- ✅ Documentație renovată (profesionistă, limba română)
 - ✅ Gata pentru Faza 2
 
 ---
