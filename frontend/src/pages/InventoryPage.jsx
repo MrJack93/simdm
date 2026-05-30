@@ -1,16 +1,16 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import api from '../api/axios';
 
-const STATUS_COLORS = {
-  FUNCTIONAL: 'bg-green-900 text-green-300',
-  IN_REPARATIE: 'bg-yellow-900 text-yellow-300',
-  DEFECT: 'bg-red-900 text-red-300',
-  CASAT: 'bg-gray-700 text-gray-300',
-  IMPRUMUTAT: 'bg-blue-900 text-blue-300',
-  REZERVA: 'bg-purple-900 text-purple-300',
+const STATUS_ICONS = {
+  FUNCTIONAL: '✓',
+  IN_REPARATIE: '⟳',
+  DEFECT: '✗',
+  CASAT: '−',
+  IMPRUMUTAT: '→',
+  REZERVA: '◻',
 };
 
 const STATUS_LABELS = {
@@ -22,8 +22,79 @@ const STATUS_LABELS = {
   REZERVA: 'Rezervă',
 };
 
+const getStatusStyle = (status) => {
+  const styles = {
+    FUNCTIONAL: { bg: '#4ade80', text: '#1a1a1a' },
+    IN_REPARATIE: { bg: '#fbbf24', text: '#1a1a1a' },
+    DEFECT: { bg: '#ffb4ab', text: '#1a1a1a' },
+    CASAT: { bg: '#6b7280', text: '#ffffff' },
+    IMPRUMUTAT: { bg: '#60a5fa', text: '#1a1a1a' },
+    REZERVA: { bg: '#a78bfa', text: '#1a1a1a' },
+  };
+  return styles[status] || { bg: '#gray', text: '#ffffff' };
+};
+
+function EditModal({ device, onClose, onSave }) {
+  const [formData, setFormData] = useState(device || {});
+  const [loading, setLoading] = useState(false);
+
+  const handleSave = async () => {
+    setLoading(true);
+    try {
+      await api.put(`/devices/${device.id}`, formData);
+      toast.success('Dispozitiv actualizat');
+      onSave();
+    } catch (err) {
+      toast.error('Eroare la actualizare');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div
+      className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 animate-fade-in"
+      onClick={onClose}
+    >
+      <div
+        className="rounded-xl max-w-lg w-full p-6 animate-slide-up"
+        style={{ backgroundColor: 'var(--color-bg-secondary)' }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <h2 className="text-xl font-bold mb-4">Editare Dispozitiv</h2>
+        <div className="space-y-4 mb-6">
+          <div>
+            <label className="label-base">Status</label>
+            <select
+              value={formData.status || ''}
+              onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+              className="input-base"
+            >
+              {Object.entries(STATUS_LABELS).map(([key, label]) => (
+                <option key={key} value={key}>{label}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+        <div className="flex gap-2">
+          <button onClick={onClose} className="btn-secondary flex-1" disabled={loading}>
+            Anulare
+          </button>
+          <button onClick={handleSave} className="btn-primary flex-1" disabled={loading}>
+            {loading ? 'Se salvează...' : 'Salvare'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function InventoryPage() {
   const queryClient = useQueryClient();
+  const [showModal, setShowModal] = useState(false);
+  const [editingDevice, setEditingDevice] = useState(null);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const searchInputRef = useRef(null);
 
   // State for filters, search, and pagination
   const [search, setSearch] = useState('');
@@ -110,12 +181,29 @@ export default function InventoryPage() {
   const pagination = devicesData?.pagination || {};
   const totalPages = pagination.pages || 1;
 
+  // Autocomplete suggestions
+  const suggestions = useMemo(() => {
+    if (!search || search.length < 2) return [];
+    return devices
+      .filter(
+        (d) =>
+          d.inventoryNumber.toLowerCase().includes(search.toLowerCase()) ||
+          d.name.toLowerCase().includes(search.toLowerCase())
+      )
+      .slice(0, 5);
+  }, [search, devices]);
+
+  const handleEditClick = (device) => {
+    setEditingDevice(device);
+    setShowModal(true);
+  };
+
   return (
-    <main id="main" className="p-6 bg-gray-950 min-h-screen">
+    <main id="main" className="p-6 min-h-screen" style={{ backgroundColor: 'var(--color-bg-primary)' }}>
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold text-cyan-400">Inventar Dispozitive Medicale</h1>
+          <h1 className="text-3xl font-bold">Inventar Dispozitive Medicale</h1>
           <Link to="/devices/new" className="btn-primary">
             + Adaugă DM
           </Link>
@@ -123,25 +211,63 @@ export default function InventoryPage() {
 
         {/* Filters Section */}
         <div className="card-base mb-6 p-4 space-y-4">
-          <h2 className="text-lg font-semibold text-cyan-400">Filtrare și Căutare</h2>
+          <h2 className="text-lg font-semibold">Filtrare și Căutare</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-            {/* Search */}
-            <div>
+            {/* Search with Autocomplete */}
+            <div className="relative">
               <label htmlFor="search" className="label-base">
                 Căutare
               </label>
               <input
+                ref={searchInputRef}
                 id="search"
                 type="text"
-                placeholder="Nr. Inv., Denumire, Model..."
+                placeholder="Nr. Inv., Denumire..."
                 value={search}
                 onChange={(e) => {
                   setSearch(e.target.value);
                   setPage(1);
+                  setShowSuggestions(true);
                 }}
+                onFocus={() => setShowSuggestions(true)}
+                onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
                 className="input-base w-full"
+                role="combobox"
+                aria-expanded={showSuggestions && suggestions.length > 0}
+                aria-controls="search-suggestions"
               />
+              {showSuggestions && suggestions.length > 0 && (
+                <div
+                  id="search-suggestions"
+                  className="absolute top-full left-0 right-0 mt-1 rounded-lg border z-10 animate-slide-down"
+                  style={{
+                    backgroundColor: 'var(--color-bg-secondary)',
+                    borderColor: 'var(--color-border)',
+                  }}
+                  role="listbox"
+                >
+                  {suggestions.map((suggestion) => (
+                    <button
+                      key={suggestion.id}
+                      onClick={() => {
+                        setSearch(suggestion.inventoryNumber);
+                        setShowSuggestions(false);
+                      }}
+                      className="w-full text-left px-4 py-2 hover:opacity-70 transition border-b last:border-b-0"
+                      style={{ borderColor: 'var(--color-border)' }}
+                      role="option"
+                    >
+                      <div className="font-mono text-sm" style={{ color: 'var(--color-accent)' }}>
+                        {suggestion.inventoryNumber}
+                      </div>
+                      <div className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+                        {suggestion.name}
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Status Filter */}
@@ -246,80 +372,117 @@ export default function InventoryPage() {
           </div>
         )}
 
+        {/* Error Message */}
+        {devicesError && (
+          <div className="alert-error mb-6" role="alert">
+            Eroare la încărcarea dispozitivelor: {devicesError.message}
+          </div>
+        )}
+
         {/* Table */}
-        <div className="card-base overflow-x-auto">
+        <div className="card-base overflow-x-auto mb-6">
           {devicesLoading ? (
-            <div className="p-6 text-center text-gray-400">Se încarcă...</div>
+            <div className="p-6 text-center">Se încarcă...</div>
           ) : devices.length === 0 ? (
-            <div className="p-6 text-center text-gray-400">Nu sunt dispozitive în baza de date.</div>
+            <div className="p-6 text-center">Nu sunt dispozitive în baza de date.</div>
           ) : (
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-gray-700 bg-gray-900">
-                  <th scope="col" className="px-4 py-3 text-left text-cyan-400 font-semibold">
+                <tr className="border-b" style={{ borderColor: 'var(--color-border)' }}>
+                  <th scope="col" className="px-4 py-3 text-left font-semibold" style={{ color: 'var(--color-accent)' }}>
                     Nr. Inventar
                   </th>
-                  <th scope="col" className="px-4 py-3 text-left text-cyan-400 font-semibold">
+                  <th scope="col" className="px-4 py-3 text-left font-semibold" style={{ color: 'var(--color-accent)' }}>
                     Denumire / Model
                   </th>
-                  <th scope="col" className="px-4 py-3 text-left text-cyan-400 font-semibold">
+                  <th scope="col" className="px-4 py-3 text-left font-semibold" style={{ color: 'var(--color-accent)' }}>
                     Producător
                   </th>
-                  <th scope="col" className="px-4 py-3 text-left text-cyan-400 font-semibold">
+                  <th scope="col" className="px-4 py-3 text-left font-semibold" style={{ color: 'var(--color-accent)' }}>
                     Clasa
                   </th>
-                  <th scope="col" className="px-4 py-3 text-left text-cyan-400 font-semibold">
+                  <th scope="col" className="px-4 py-3 text-left font-semibold" style={{ color: 'var(--color-accent)' }}>
                     Status
                   </th>
-                  <th scope="col" className="px-4 py-3 text-left text-cyan-400 font-semibold">
+                  <th scope="col" className="px-4 py-3 text-left font-semibold" style={{ color: 'var(--color-accent)' }}>
                     Secție
                   </th>
-                  <th scope="col" className="px-4 py-3 text-left text-cyan-400 font-semibold">
-                    Data PIF
-                  </th>
-                  <th scope="col" className="px-4 py-3 text-center text-cyan-400 font-semibold">
+                  <th scope="col" className="px-4 py-3 text-center font-semibold" style={{ color: 'var(--color-accent)' }}>
                     Acțiuni
                   </th>
                 </tr>
               </thead>
               <tbody>
-                {devices.map((device) => (
-                  <tr key={device.id} className="border-b border-gray-800 hover:bg-gray-900 transition">
-                    <td className="px-4 py-3 font-mono text-white">{device.inventoryNumber}</td>
-                    <td className="px-4 py-3">
-                      <div className="text-white font-medium">{device.name}</div>
-                      <div className="text-gray-400 text-xs">{device.model || '—'}</div>
-                    </td>
-                    <td className="px-4 py-3 text-gray-300">{device.manufacturer || '—'}</td>
-                    <td className="px-4 py-3 text-gray-300">{device.riskClass}</td>
-                    <td className="px-4 py-3">
-                      <span className={`px-2 py-1 rounded text-xs font-semibold ${STATUS_COLORS[device.status]}`}>
-                        {STATUS_LABELS[device.status]}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3 text-gray-300">{device.sections?.name || '—'}</td>
-                    <td className="px-4 py-3 text-gray-300">
-                      {device.acquisitionDate
-                        ? new Date(device.acquisitionDate).toLocaleDateString('ro-RO')
-                        : '—'}
-                    </td>
-                    <td className="px-4 py-3 text-center space-x-2 flex justify-center">
-                      <Link
-                        to={`/devices/${device.id}/edit`}
-                        className="px-3 py-1 bg-cyan-900 text-cyan-300 rounded text-xs font-semibold focusable hover:bg-cyan-800 transition"
-                      >
-                        Editare
-                      </Link>
-                      <button
-                        onClick={() => handleDelete(device.id, device.name)}
-                        disabled={deleteMutation.isPending}
-                        className="px-3 py-1 bg-red-900 text-red-300 rounded text-xs font-semibold focusable-danger hover:bg-red-800 transition disabled:opacity-50"
-                      >
-                        {deleteMutation.isPending ? '...' : 'Șterge'}
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                {devices.map((device) => {
+                  const statusStyle = getStatusStyle(device.status);
+                  return (
+                    <tr
+                      key={device.id}
+                      className="border-b hover:opacity-70 transition"
+                      style={{ borderColor: 'var(--color-border)' }}
+                    >
+                      <td className="px-4 py-3 font-mono" style={{ color: 'var(--color-accent)' }}>
+                        {device.inventoryNumber}
+                      </td>
+                      <td className="px-4 py-3">
+                        <div className="font-medium">{device.name}</div>
+                        <div className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+                          {device.model || '—'}
+                        </div>
+                      </td>
+                      <td className="px-4 py-3">{device.manufacturer || '—'}</td>
+                      <td className="px-4 py-3">{device.riskClass}</td>
+                      <td className="px-4 py-3">
+                        <span
+                          className="px-3 py-1 rounded text-xs font-semibold inline-flex items-center gap-1"
+                          style={{
+                            backgroundColor: statusStyle.bg,
+                            color: statusStyle.text,
+                            border: '1px solid currentColor',
+                          }}
+                        >
+                          {STATUS_ICONS[device.status]} {STATUS_LABELS[device.status]}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3">{device.sections?.name || '—'}</td>
+                      <td className="px-4 py-3 text-center space-x-2 flex justify-center gap-2">
+                        <button
+                          onClick={() => handleEditClick(device)}
+                          className="px-3 py-1 rounded text-xs font-semibold focusable hover:opacity-70 transition"
+                          style={{
+                            backgroundColor: 'var(--color-accent)',
+                            color: '#1a1a1a',
+                          }}
+                        >
+                          ✎ Editare
+                        </button>
+                        <Link
+                          to={`/devices/${device.id}/edit`}
+                          className="px-3 py-1 rounded text-xs font-semibold focusable hover:opacity-70 transition"
+                          style={{
+                            backgroundColor: 'var(--color-bg-tertiary)',
+                            color: 'var(--color-text-primary)',
+                            border: '1px solid',
+                            borderColor: 'var(--color-border)',
+                          }}
+                        >
+                          📝 Detalii
+                        </Link>
+                        <button
+                          onClick={() => handleDelete(device.id, device.name)}
+                          disabled={deleteMutation.isPending}
+                          className="px-3 py-1 rounded text-xs font-semibold focusable-danger hover:opacity-70 transition disabled:opacity-50"
+                          style={{
+                            backgroundColor: '#dc2626',
+                            color: 'white',
+                          }}
+                        >
+                          {deleteMutation.isPending ? '...' : '✕'}
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           )}
@@ -327,7 +490,7 @@ export default function InventoryPage() {
 
         {/* Pagination */}
         {devices.length > 0 && (
-          <div className="mt-6 flex justify-between items-center">
+          <div className="flex justify-between items-center" style={{ color: 'var(--color-text-primary)' }}>
             <button
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page === 1}
@@ -336,10 +499,10 @@ export default function InventoryPage() {
               ← Înapoi
             </button>
 
-            <span className="text-gray-300">
-              Pagina <span className="font-bold text-cyan-400">{page}</span> din{' '}
-              <span className="font-bold text-cyan-400">{totalPages}</span> •{' '}
-              <span className="font-bold text-cyan-400">{pagination.total || 0}</span> total
+            <span>
+              Pagina <span className="font-bold" style={{ color: 'var(--color-accent)' }}>{page}</span> din{' '}
+              <span className="font-bold" style={{ color: 'var(--color-accent)' }}>{totalPages}</span> •{' '}
+              <span className="font-bold" style={{ color: 'var(--color-accent)' }}>{pagination.total || 0}</span> total
             </span>
 
             <button
@@ -350,6 +513,22 @@ export default function InventoryPage() {
               Înainte →
             </button>
           </div>
+        )}
+
+        {/* Edit Modal */}
+        {showModal && editingDevice && (
+          <EditModal
+            device={editingDevice}
+            onClose={() => {
+              setShowModal(false);
+              setEditingDevice(null);
+            }}
+            onSave={() => {
+              queryClient.invalidateQueries({ queryKey: ['devices'] });
+              setShowModal(false);
+              setEditingDevice(null);
+            }}
+          />
         )}
       </div>
     </main>

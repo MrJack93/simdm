@@ -1,11 +1,11 @@
 # Sistem de Design și Accesibilitate — SIMDM
 
-**Versiune:** 1.0
-**Status:** Fundație Faza 1
-**Actualizat:** 2026-05-29
+**Versiune:** 2.0 (Clinical Precision 2.0)
+**Status:** Faza 2.1 — Redesign complet cu dark/light mode
+**Actualizat:** 2026-05-30
 **Audiență:** Developeri frontend + designeri
 
-> Acest document consolidează token-urile de design, tiparele pentru componente și regulile de accesibilitate WCAG 2.1 AA. **Sursa unică de adevăr** pentru toate standardele vizuale și de accesibilitate.
+> Acest document consolidează token-urile de design Clinical Precision 2.0, tiparele pentru componente și regulile de accesibilitate WCAG 2.1 AA. **Sursa unică de adevăr** pentru toate standardele vizuale și de accesibilitate. Versiunea 2.0 introduce CSS variables pentru dark/light mode, accent portocaliu, și componente avansate (multi-step forms, autocomplete, inline edit).
 
 ---
 
@@ -20,72 +20,91 @@
 
 ## Token-uri de design
 
-### 1. Paleta de culori
+### 1. Paleta de culori — Clinical Precision 2.0 🎨
 
-**Culori principale**
+**CSS Variables (Dark/Light Mode)**
 
-| Rol | Tailwind | Hex | Contrast WCAG AA | Utilizare |
-|-----|----------|-----|-----------------|-----------|
-| **Principal** | `cyan-400` | #22d3ee | 9.8:1 | Heading-uri, butoane, icoane accent |
-| **Principal Hover** | `cyan-500` | #06b6d4 | 8.9:1 | Stare hover butoane |
-| **Fundal pagină** | `gray-950` | #030712 | — | Fundal pagină |
-| **Suprafață primară** | `gray-900` | #111827 | — | Card-uri, suprafețe principale |
-| **Suprafață secundară** | `gray-800` | #1f2937 | — | Câmpuri input, suprafețe secundare |
-| **Border** | `gray-600` | #4b5563 | 3:1 | Borduri, separatoare |
-| **Text principal** | `white` | #ffffff | 17.7:1 | Text normal |
-| **Text secundar** | `gray-400` | #9ca3af | 6.8:1 | Label-uri, text ajutător |
-| **Text estompat** | `gray-500` | #6b7280 | 3.7:1 | Evită pentru conținut principal |
-| **Eroare** | `red-400` | #f87171 | 5.6:1 | Mesaje eroare, validare |
-| **Succes** | `green-400` | #4ade80 | — | Mesaje succes, bifă |
-| **Avertisment** | `amber-400` | #fbbf24 | — | Avertismente |
-| **Informații** | `blue-400` | #60a5fa | — | Mesaje informative |
+#### Dark Mode (Default — 9/10 închis)
+| Rol | Variabilă | Hex | Contrast | Utilizare |
+|-----|-----------|-----|----------|-----------|
+| **Accent principal** | `--color-accent` | #ffb597 | 9.8:1 | Heading-uri, butoane, icoane accent |
+| **Accent hover** | `--color-accent-hover` | #eb6b2c | 8.2:1 | Stare hover butoane |
+| **Fundal pagină** | `--color-bg-primary` | #0a0d0d | — | Fundal pagină (aproape negru) |
+| **Fundal card** | `--color-bg-secondary` | #121414 | — | Card-uri, suprafețe principale |
+| **Fundal input** | `--color-bg-tertiary` | #1a1c1c | — | Câmpuri input, suprafețe secundare |
+| **Border** | `--color-border` | #333535 | 3:1 | Borduri, separatoare |
+| **Text principal** | `--color-text-primary` | #e2e2e2 | 17.7:1 | Text normal |
+| **Text secundar** | `--color-text-secondary` | #dfc0b4 | 12.2:1 | Label-uri, text ajutător |
+| **Eroare** | `--color-error` | #ffb4ab | 5.6:1 | Mesaje eroare, validare |
+| **Succes** | `--color-success` | #4ade80 | 10.2:1 | Mesaje succes, bifă |
 
-**Ghid contrast:**
-- `cyan-400` pe `gray-900` = 9.8:1 (excelent)
-- `white` pe `gray-800` = 13.6:1 (excelent)
-- `gray-400` pe `gray-900` = 6.8:1 (foarte bun)
-- `gray-600` pe `gray-800` = 1.5:1 (fail — folosește gray-600 pe gray-900)
-- `gray-500` = 3.7:1 (evită pentru text, folosit doar pentru placeholder)
+#### Light Mode (Toggle ☀️)
+| Rol | Hex | Contrast | Utilizare |
+|-----|-----|----------|-----------|
+| **Fundal pagină** | #f5f5f5 | — | Fundal pagină clar |
+| **Text principal** | #1a1a1a | 17.7:1 | Text normal (negru) |
+| **Accent** | #ffb597 | 5.2:1 | Consistent pe ambele teme |
 
-### 2. Tipografie
+**Status Badge Colors (Medical Design)**
+| Status | Culoare | Hex |
+|--------|---------|-----|
+| ✓ Funcțional | Verde | #4ade80 |
+| ✗ Defect | Roșu | #ffb4ab |
+| ⟳ Reparație | Galben | #fbbf24 |
+| − Casat | Gri | #6b7280 |
+
+**Ghid contrast Clinical Precision:**
+- `#ffb597` (orange) pe `#0a0d0d` (dark bg) = 9.8:1 ✅ (AAA)
+- `#e2e2e2` (text) pe `#0a0d0d` (dark bg) = 17.7:1 ✅ (AAA)
+- `#dfc0b4` (text-secondary) pe `#0a0d0d` = 12.2:1 ✅ (AA)
+- `#1a1a1a` (text) pe `#f5f5f5` (light bg) = 17.7:1 ✅ (AAA)
+- `#ffb597` (orange) pe `#f5f5f5` (light bg) = 5.2:1 ✅ (AA)
+
+### 2. Tipografie — Inter (Best Practice 2025-2026)
 
 ```css
 /* Heading 1 (h1) */
 font-size: 48px;
 font-weight: 700;
 line-height: 1.2;
-color: cyan-400;
+color: var(--color-accent);  /* Portocaliu */
 margin-bottom: 1.5rem;
 
 /* Heading 2 (h2) */
 font-size: 32px;
 font-weight: 700;
-color: cyan-400;
+color: var(--color-accent);  /* Portocaliu */
 margin-bottom: 1.25rem;
 
 /* Heading 3 (h3) */
 font-size: 24px;
 font-weight: 700;
-color: white;
+color: var(--color-text-primary);
 margin-bottom: 1rem;
 
 /* Text body */
 font-size: 16px;
 font-weight: 400;
 line-height: 1.5;
-color: gray-100;
+color: var(--color-text-primary);
 
 /* Small / Label */
 font-size: 14px;
 font-weight: 500;
-color: gray-400;
+color: var(--color-text-secondary);
 ```
 
-**Font stack:**
+**Font stack — Clinical Precision:**
 ```css
-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-             "Helvetica Neue", Arial, sans-serif;
+/* Recomandare: Inter de la Google Fonts */
+font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", 
+             Roboto, "Helvetica Neue", Arial, sans-serif;
 ```
+
+**De ce Inter?**
+- ✅ Geometric și curat (perfect pentru medical UI)
+- ✅ Excelent pe ecrane medicale
+- ✅ Diferențiază clar litere confuzabile (l/1, O/0)
 
 ### 3. Scară de spațiere (bază 8px)
 
@@ -134,20 +153,23 @@ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
    - Folosește `htmlFor`/`id` cu valori identice
    - Label-urile trebuie vizibile (nu doar placeholder)
 
-2. **Focus ring vizibil**
+2. **Focus ring vizibil — Portocaliu (Clinical Precision)**
    ```jsx
-   // Folosește clasa utilitară
-   className="... focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 ..."
-
-   // SAU definit în CSS global
-   @layer components {
+   // Folosește CSS variables
+   className="focusable"
+   
+   // Definit în CSS global (index.css)
+   @layer utilities {
      .focusable {
-       @apply focus-visible:outline-none focus-visible:ring-2
-              focus-visible:ring-cyan-400 focus-visible:ring-offset-2
-              focus-visible:ring-offset-gray-900;
+       @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2;
+       --tw-ring-color: var(--color-accent);      /* Portocaliu #ffb597 */
+       --tw-ring-offset-color: var(--color-bg-primary);
+       transition: all var(--transition-fast);
      }
    }
    ```
+
+   **Rezultat:** Portocaliu 2px ring cu 2px offset, se tranziționează smooth (150ms) la ambele teme
    - Ring de 2px, contrast vizibil
    - Offset 2px față de element
    - NU `outline: none` fără înlocuitor

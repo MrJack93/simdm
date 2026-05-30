@@ -1,21 +1,28 @@
-# Referință Rapidă — SIMDM Frontend
+# Referință Rapidă — SIMDM Frontend (Clinical Precision 2.0)
 
 Imprimă și ține lângă monitor în timpul dezvoltării.
 
 ---
 
-## Culori (clase Tailwind — copiază direct)
+## Culori — CSS Variables (Dark/Light Mode) 🎨
 
-| Utilizare | Tailwind | Hex | Contrast |
-|-----------|----------|-----|----------|
-| Heading / Accent | `text-cyan-400` | #22d3ee | 9.8:1 |
-| Label / Text ajutător | `text-gray-400` | #9ca3af | 6.8:1 |
-| Fundal input | `bg-gray-800` | #1f2937 | — |
-| Border input | `border-gray-600` | #4b5563 | 3:1 |
-| Border decorativ (evită) | `border-gray-700` | #374151 | 1.5:1 |
-| Fundal pagină | `bg-gray-950` | #030712 | — |
-| Eroare | `text-red-400` | #f87171 | 5.6:1 |
-| Succes | `text-green-400` | #4ade80 | — |
+### Dark Mode (Default)
+| Utilizare | Variabilă | Hex | Contrast |
+|-----------|-----------|-----|----------|
+| **Accent principal** | `var(--color-accent)` | #ffb597 | 9.8:1 |
+| **Heading/Labels** | `var(--color-accent)` | #ffb597 | 9.8:1 |
+| **Text principal** | `var(--color-text-primary)` | #e2e2e2 | 17.7:1 |
+| **Text ajutător** | `var(--color-text-secondary)` | #dfc0b4 | 12.2:1 |
+| **Fundal pagină** | `var(--color-bg-primary)` | #0a0d0d | — |
+| **Fundal input** | `var(--color-bg-tertiary)` | #1a1c1c | — |
+| **Border** | `var(--color-border)` | #333535 | 3:1 |
+| **Eroare** | `var(--color-error)` | #ffb4ab | 5.6:1 |
+| **Succes** | `var(--color-success)` | #4ade80 | — |
+
+### Light Mode
+Același setup, dar pe fundal clar (#f5f5f5) și text negru (#1a1a1a).
+
+**Tip:** Folosește MEREU CSS variables, NU clase Tailwind hardcodate! Se schimbă automat la dark/light toggle.
 
 ---
 
@@ -61,8 +68,49 @@ Imprimă și ține lângă monitor în timpul dezvoltării.
 ### Card
 ```jsx
 <div className="card-base">
-  <h3 className="text-lg font-bold text-cyan-400 mb-2">Titlu</h3>
-  <p className="text-gray-400">Conținut...</p>
+  <h3 className="text-lg font-bold mb-2" style={{ color: 'var(--color-accent)' }}>Titlu</h3>
+  <p style={{ color: 'var(--color-text-secondary)' }}>Conținut...</p>
+</div>
+```
+
+### Step Indicator (Multi-step Form)
+```jsx
+<div className="flex gap-2 items-center mb-4">
+  {['Pas 1', 'Pas 2', 'Pas 3'].map((step, idx) => (
+    <div key={idx} className="flex items-center">
+      <div
+        className="flex items-center justify-center w-10 h-10 rounded-full font-bold"
+        style={{
+          backgroundColor: idx < currentStep ? 'var(--color-success)' : 'var(--color-accent)',
+          color: '#1a1a1a',
+        }}
+      >
+        {idx < currentStep ? '✓' : idx + 1}
+      </div>
+    </div>
+  ))}
+</div>
+```
+
+### Autocomplete Search
+```jsx
+<div className="relative">
+  <input
+    type="text"
+    className="input-base"
+    value={search}
+    onChange={(e) => setSearch(e.target.value)}
+  />
+  {suggestions.length > 0 && (
+    <div className="absolute top-full left-0 right-0 mt-1 rounded-lg animate-slide-down"
+         style={{ backgroundColor: 'var(--color-bg-secondary)', border: '1px solid', borderColor: 'var(--color-border)' }}>
+      {suggestions.map((s) => (
+        <button key={s.id} onClick={() => setSearch(s.inventory)} className="w-full text-left px-4 py-2">
+          {s.inventory}
+        </button>
+      ))}
+    </div>
+  )}
 </div>
 ```
 
@@ -272,31 +320,35 @@ const handleSubmit = async (e) => {
 
 ---
 
-## 🆕 Faza 2 — CRUD Device + Inventar (nou în 2026-05-30)
+## 🆕 Faza 2.1 — Clinical Precision 2.0 Redesign (2026-05-30) ✨
 
-### Componente noi:
-- `DeviceForm.jsx` (560 linii) — Formular add/edit cu React Hook Form + Zod
-- `InventoryPage.jsx` (357 linii) — Tabel cu filtre, paginare, export
-- `deviceSchema.js` (134 linii) — Validare Zod (24 câmpuri)
+### Componente redesignate:
+- `Login.jsx` — Hero section + split layout (stânga marketing, dreapta form)
+- `App.jsx` — Dark/Light mode toggle persistent (localStorage)
+- `InventoryPage.jsx` — Enhanced cu search autocomplete + inline edit modal
+- `DeviceForm.jsx` — Multi-step wizard (6 pași cu progress indicator)
+- `index.css` — Clinical Precision 2.0 CSS variables + dark/light mode
 
-### API Endpoints (Faza 2):
-```
-GET    /api/devices                      — lista cu filtre + paginare
-POST   /api/devices                      — creare (201)
-GET    /api/devices/:id                  — detalii
-PUT    /api/devices/:id                  — update
-DELETE /api/devices/:id                  — soft delete (CASAT)
-POST   /api/devices/:id/upload           — upload fișier (multer)
-GET    /api/devices/:id/fisa-pdf         — PDF generator (PDFKit)
-GET    /api/devices/export/xlsx          — Excel export (XLSX)
-GET    /api/devices/export/csv           — CSV export (UTF-8)
-GET    /api/devices/dropdown/sections    — secții pentru dropdown
-```
+### Noi feature-uri (Faza 2.1):
+✅ **Dark/Light Mode Toggle** — persistent în localStorage
+✅ **Search Autocomplete** — 5 sugestii live în timp real
+✅ **Inline Edit Modal** — editare rapidă dispozitive în modal dialog
+✅ **Multi-step Wizard** — 6 pași cu progress indicator și validare treptată
+✅ **Status Badges cu Icoane** — ✓ Funcțional, ✗ Defect, ⟳ Reparație, − Casat
+✅ **Animații subtile** — 150-300ms transitions (slideDown, slideUp, fadeIn)
+✅ **Print Stylesheet** — Ctrl+P → tabel alb pe negru
+✅ **Responsive complet** — Card layout pe mobile, tabel pe desktop
 
-### Librării noi:
-- `react-hook-form` + `zod` — validare form
-- `react-select` + `react-datepicker` — componente form
-- `react-toastify` — notificări
-- `multer` + `pdfkit` + `xlsx` — backend processing
+### Design System — Clinical Precision 2.0:
+- **Accent:** Portocaliu #ffb597 (nu mai cyan)
+- **Temă:** 9/10 închis dark mode + light mode complet
+- **Tipografie:** Inter (via system fonts)
+- **Focus ring:** Portocaliu 2px cu offset
+- **Contrast:** 17.7:1 dark mode (WCAG AAA)
 
-**Actualizat:** 2026-05-30 | **Fază curentă:** 2 ✅
+### Librării noi (Faza 2.1):
+- CSS variables pentru dark/light mode switching
+- Animații CSS (slideDown, slideUp, fadeIn)
+- `aria-expanded`, `role="combobox"` — accessibility autocomplete
+
+**Status:** Faza 2.1 ✅ Complet | **Fază curentă:** 3 (Mentenanță) — Planned

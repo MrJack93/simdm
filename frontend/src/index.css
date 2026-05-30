@@ -1,87 +1,251 @@
 @import "tailwindcss";
 
+/* Clinical Precision 2.0 — CSS Variables untuk Dark/Light Toggle */
+:root {
+  --color-bg-primary: #0a0d0d;
+  --color-bg-secondary: #121414;
+  --color-bg-tertiary: #1a1c1c;
+  --color-accent: #ffb597;
+  --color-accent-hover: #eb6b2c;
+  --color-text-primary: #e2e2e2;
+  --color-text-secondary: #dfc0b4;
+  --color-border: #333535;
+  --color-success: #4ade80;
+  --color-error: #ffb4ab;
+  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html.light-mode {
+  --color-bg-primary: #f5f5f5;
+  --color-bg-secondary: #ffffff;
+  --color-bg-tertiary: #f0f0f0;
+  --color-accent: #ffb597;
+  --color-accent-hover: #eb6b2c;
+  --color-text-primary: #1a1a1a;
+  --color-text-secondary: #5a5a5a;
+  --color-border: #e0e0e0;
+}
+
 @layer base {
   body {
-    @apply bg-gray-950 text-gray-100;
+    @apply transition-colors;
+    background-color: var(--color-bg-primary);
+    color: var(--color-text-primary);
   }
 
   h1 {
-    @apply text-4xl font-bold text-cyan-400 mb-6 leading-tight;
+    @apply text-4xl font-bold mb-6 leading-tight;
+    color: var(--color-accent);
   }
 
   h2 {
-    @apply text-2xl font-bold text-cyan-400 mb-4 leading-tight;
+    @apply text-2xl font-bold mb-4 leading-tight;
+    color: var(--color-accent);
   }
 
   h3 {
-    @apply text-xl font-bold text-white mb-3;
+    @apply text-xl font-bold mb-3;
+    color: var(--color-text-primary);
   }
 
   p {
-    @apply text-gray-100 leading-relaxed;
+    @apply leading-relaxed;
+    color: var(--color-text-primary);
   }
 }
 
 @layer utilities {
   .focusable {
-    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400
-           focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950 transition-all;
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2;
+    --tw-ring-color: var(--color-accent);
+    --tw-ring-offset-color: var(--color-bg-primary);
+    transition: all var(--transition-fast);
   }
 
   .focusable-danger {
-    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400
-           focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950 transition-all;
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2;
+    --tw-ring-offset-color: var(--color-bg-primary);
+    transition: all var(--transition-fast);
   }
 
   .btn-primary {
     @apply inline-flex items-center justify-center px-4 py-3 min-h-[44px]
-           bg-cyan-500 hover:bg-cyan-400 text-black font-bold rounded-lg
-           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400
-           focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950
-           disabled:bg-cyan-500/50 disabled:cursor-not-allowed transition-colors;
+           text-white font-bold rounded-lg
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
+           disabled:opacity-50 disabled:cursor-not-allowed
+           hover:shadow-lg hover:translate-y-[-2px];
+    background-color: var(--color-accent);
+    color: #1a1a1a;
+    --tw-ring-color: var(--color-accent);
+    --tw-ring-offset-color: var(--color-bg-primary);
+    transition: all var(--transition-fast);
+  }
+
+  .btn-primary:hover {
+    background-color: var(--color-accent-hover);
   }
 
   .btn-secondary {
     @apply inline-flex items-center justify-center px-4 py-3 min-h-[44px]
-           bg-gray-700 hover:bg-gray-600 text-gray-100 font-semibold rounded-lg
-           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400
-           focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950
-           transition-colors;
+           font-semibold rounded-lg
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
+           hover:shadow-md;
+    background-color: var(--color-bg-tertiary);
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-border);
+    --tw-ring-color: var(--color-accent);
+    --tw-ring-offset-color: var(--color-bg-primary);
+    transition: all var(--transition-fast);
+  }
+
+  .btn-secondary:hover {
+    background-color: var(--color-bg-secondary);
   }
 
   .btn-danger {
     @apply inline-flex items-center justify-center px-4 py-3 min-h-[44px]
-           bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg
-           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400
-           focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950
-           transition-colors;
+           text-white font-bold rounded-lg
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2
+           hover:shadow-lg hover:translate-y-[-2px];
+    background-color: #dc2626;
+    --tw-ring-offset-color: var(--color-bg-primary);
+    transition: all var(--transition-fast);
+  }
+
+  .btn-danger:hover {
+    background-color: #991b1b;
   }
 
   .input-base {
-    @apply w-full px-4 py-3 min-h-[44px] bg-gray-800 border border-gray-600
-           text-white text-base rounded-lg
-           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400
-           focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950
-           placeholder:text-gray-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors;
+    @apply w-full px-4 py-3 min-h-[44px] border rounded-lg text-base
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
+           placeholder:opacity-50 disabled:opacity-50 disabled:cursor-not-allowed;
+    background-color: var(--color-bg-tertiary);
+    color: var(--color-text-primary);
+    border-color: var(--color-border);
+    --tw-ring-color: var(--color-accent);
+    --tw-ring-offset-color: var(--color-bg-primary);
+    transition: all var(--transition-fast);
+  }
+
+  .input-base:focus {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px rgba(255, 181, 151, 0.1);
   }
 
   .label-base {
-    @apply text-gray-400 text-sm mb-1 block font-medium;
+    @apply text-sm mb-2 block font-medium;
+    color: var(--color-text-secondary);
   }
 
   .card-base {
-    @apply bg-gray-900 border border-gray-700 rounded-lg px-6 py-6 transition-all;
+    @apply border rounded-lg px-6 py-6;
+    background-color: var(--color-bg-secondary);
+    border-color: var(--color-border);
+    transition: all var(--transition-normal);
+  }
+
+  .card-base:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   }
 
   .alert-error {
-    @apply bg-red-950/30 border border-red-600 px-4 py-3 rounded-lg text-red-400 text-sm;
+    @apply px-4 py-3 rounded-lg text-sm;
+    background-color: var(--color-error);
+    opacity: 0.15;
+    color: var(--color-error);
+    border: 1px solid var(--color-error);
+    role: alert;
   }
 
   .alert-success {
-    @apply bg-green-950/30 border border-green-600 px-4 py-3 rounded-lg text-green-400 text-sm;
+    @apply px-4 py-3 rounded-lg text-sm;
+    background-color: var(--color-success);
+    opacity: 0.15;
+    color: var(--color-success);
+    border: 1px solid var(--color-success);
   }
 
   .alert-info {
-    @apply bg-blue-950/30 border border-blue-600 px-4 py-3 rounded-lg text-blue-400 text-sm;
+    @apply px-4 py-3 rounded-lg text-sm;
+    background-color: #3b82f6;
+    opacity: 0.15;
+    color: #3b82f6;
+    border: 1px solid #3b82f6;
+  }
+
+  /* Animations */
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .animate-slide-down {
+    animation: slideDown 0.15s ease-out;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.15s ease-out;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  /* Print stylesheet */
+  @media print {
+    .no-print {
+      display: none !important;
+    }
+
+    body {
+      background: white;
+      color: black;
+    }
+
+    .btn-primary,
+    .btn-secondary,
+    .btn-danger {
+      display: none !important;
+    }
+
+    table {
+      font-size: 10pt;
+      border-collapse: collapse;
+      color: black;
+    }
+
+    td,
+    th {
+      border: 1px solid #ccc;
+      padding: 0.5rem;
+    }
   }
 }

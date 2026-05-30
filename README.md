@@ -1,7 +1,7 @@
 # SIMDM — Sistem Informațional de Management al Dispozitivelor Medicale
 
-**Versiune:** 2.0 (Faza 2 completă)
-**Status:** ✅ CRUD + Inventar funcțional · Gata pentru Faza 3 (Mentenanță)
+**Versiune:** 2.1 (Faza 2 completă + Redesign Clinical Precision 2.0)
+**Status:** ✅ CRUD + Inventar + Redesign UI · Gata pentru Faza 3 (Mentenanță)
 **Actualizat:** 2026-05-30
 
 | Faza | Modul | Status | Commits |
@@ -31,6 +31,19 @@
 - pgAdmin 4 (GUI bază de date)
 
 ### Instalare și configurare
+
+#### **Opțiunea 1: Docker Compose (Recomandată) 🐳**
+```bash
+cd simdm
+docker-compose up --build
+```
+
+Containerele se vor porni automat:
+- PostgreSQL: port 5432
+- Backend Express: port 3001
+- Frontend Vite: port 5173
+
+#### **Opțiunea 2: Local cu Node.js**
 ```bash
 # 1. Backend
 cd backend
@@ -38,22 +51,32 @@ npm install
 # Completează .env cu DATABASE_URL, JWT_SECRET, credențiale admin
 npx prisma migrate dev --name init
 npm run db:seed
-
-# 2. Frontend
-cd ../frontend
-npm install
-
-# 3. Pornire simultană (din rădăcina proiectului)
-cd ..
 npm run dev
+
+# 2. Frontend (alt terminal)
+cd frontend
+npm install
+npm run dev
+
+# 3. Prisma Studio (alt terminal) — GUI bază de date
+cd backend
+npm run db:studio
 ```
 
 **Rezultat:**
-- Frontend: http://localhost:5173 (React + Vite)
+- Frontend: http://localhost:5173 (React + Vite + Clinical Precision UI)
 - Backend: http://localhost:3001 (Express API)
 - Bază de date GUI: http://localhost:5555 (Prisma Studio)
 
-Login cu username-ul din `.env` (implicit: `bioinginer`).
+**Login:**
+- Utilizator: `bioinginer`
+- Parolă: `parola`
+
+**Testează:**
+- ☀️/🌙 Dark/Light mode toggle (header)
+- 🔍 Search cu autocomplete (Inventar)
+- ✏️ Inline edit modal (click "Editare")
+- 📝 Multi-step wizard (+ Adaugă DM)
 
 ---
 
@@ -75,12 +98,14 @@ Login cu username-ul din `.env` (implicit: `bioinginer`).
 
 | Strat | Tehnologie | Note |
 |-------|-----------|------|
-| Frontend | React 18 + Vite + TailwindCSS | Temă închisă, accent cyan |
-| Backend | Node.js + Express.js | Port 3001 |
-| Bază de date | PostgreSQL 16 | 5 tabele principale |
-| ORM | Prisma | Migrații versionizate |
-| Auth | JWT + bcryptjs | Un singur utilizator, login simplu |
+| Frontend | React 19 + Vite 8 + TailwindCSS v4 | Clinical Precision 2.0: temă (9/10 închis), accent portocaliu #ffb597, dark/light toggle, multi-step forms |
+| Backend | Node.js v22 + Express.js 5 | Port 3001 |
+| Bază de date | PostgreSQL 16 | 10+ tabele (Prisma 7 multi-file schema) |
+| ORM | Prisma 7 | Migrații versionizate, seed data |
+| Auth | JWT + bcryptjs | Un singur utilizator, login cu hero section |
 | HTTP | Axios | Interceptor JWT automat |
+| State Management | TanStack Query v5 | Caching, sincronizare real-time |
+| Forms | React Hook Form + Zod | Validare sigură tip-safe |
 
 ---
 
@@ -141,39 +166,55 @@ Fiecare fază construiește incremental. Start cu MVP (Fazele 1–3) înainte de
 
 ---
 
-## Sistem de design
+## Sistem de design — Clinical Precision 2.0 🎨
 
-SIMDM folosește o temă închisă cu accent cyan, optimizată pentru WCAG 2.1 AA.
+SIMDM folosește **Clinical Precision 2.0**, o temă modernă cu accente portocalii și dark/light mode, optimizată pentru WCAG 2.1 AA și best practices 2025-2026.
 
-### Culori principale (Tailwind)
-| Rol | Clasă | Hex |
-|-----|-------|-----|
-| Accent principal | `text-cyan-400` | #22d3ee |
-| Fundal pagină | `bg-gray-950` | #030712 |
-| Suprafețe (card) | `bg-gray-900` | #111827 |
-| Input | `bg-gray-800` | #1f2937 |
-| Eroare | `text-red-400` | #f87171 |
-| Succes | `text-green-400` | #4ade80 |
+### Culori principale — CSS Variables
+| Rol | Dark Mode | Light Mode | Hex |
+|-----|-----------|-----------|-----|
+| **Accent principal** | `--color-accent` | Portocaliu | #ffb597 |
+| **Fundal pagină** | `--color-bg-primary` | #0a0d0d | #f5f5f5 |
+| **Suprafețe (card)** | `--color-bg-secondary` | #121414 | #ffffff |
+| **Input** | `--color-bg-tertiary` | #1a1c1c | #f0f0f0 |
+| **Text principal** | `--color-text-primary` | #e2e2e2 | #1a1a1a |
+| **Text secundar** | `--color-text-secondary` | #dfc0b4 | #5a5a5a |
+| **Eroare** | `--color-error` | #ffb4ab | #ffb4ab |
+| **Succes** | `--color-success` | #4ade80 | #4ade80 |
+
+### Caracteristici noi — Faza 2.1
+✅ **Dark/Light mode toggle** — persistent în localStorage
+✅ **Search cu autocomplete** — 5 sugestii live, keyboard support
+✅ **Multi-step form wizard** — 6 pași pentru Device form
+✅ **Inline edit modal** — editare rapidă în tabel
+✅ **Status badges cu icoane** — accesibil pentru daltonici
+✅ **Animații subtile** — 150-300ms transitions
+✅ **Print stylesheet** — Ctrl+P → alb pe negru
+✅ **Responsive complet** — card layout pe mobile
 
 Detalii complete: [docs/1-DESIGN-AND-ACCESSIBILITY.md](./docs/1-DESIGN-AND-ACCESSIBILITY.md)
 
 ---
 
-## Accesibilitate (WCAG 2.1 AA)
+## Accesibilitate (WCAG 2.1 AA) ♿
 
-Obligatoriu pentru ORICE componentă nouă:
+**Clinical Precision 2.0** e complet accesibil. Obligatoriu pentru orice componentă nouă:
 
-1. Label-uri asociate cu `htmlFor`/`id`
-2. Focus ring vizibil (cyan, 2px, offset)
-3. Dimensiuni minimum 44px (butoane, inputuri)
-4. Erori anunțate cu `role="alert"`
-5. Contrast text ≥ 4.5:1
+1. ✅ Label-uri asociate cu `htmlFor`/`id` pe TOATE inputurile
+2. ✅ Focus ring vizibil (portocaliu, 2px, offset) pe orice element interactiv
+3. ✅ Dimensiuni minimum **44px** (butoane, inputuri, hit targets)
+4. ✅ Erori anunțate cu `role="alert"` + `aria-describedby`
+5. ✅ Contrast text **≥ 4.5:1** (AAA: 17.7:1 dark mode)
+6. ✅ Status badges cu text + icoană (nu doar culoare — accesibil daltonici)
+7. ✅ Semantic HTML: `<header>`, `<main>`, `<table>`, `<th scope>`
+8. ✅ Keyboard navigation: Tab/Shift+Tab, Enter pe sugestii, Escape pe modal
 
-Cum să testezi:
-- **Tastatură:** Tab + Shift+Tab, fără trap
-- **Screen reader:** NVDA / Narrator — erori anunțate
+### Cum să testezi
+- **Tastatură:** Tab prin toți elementele interactive, fără trap-uri
+- **Screen reader:** NVDA / Narrator citesc labels și erori corect
 - **Lighthouse:** DevTools → Accessibility ≥ 95 puncte
 - **axe DevTools:** 0 erori critice
+- **Dark/Light mode:** Contrast ≥ 3:1 pe ambele teme
 
 Audit complet: [docs/3-AUDIT-LOG.md](./docs/3-AUDIT-LOG.md)
 

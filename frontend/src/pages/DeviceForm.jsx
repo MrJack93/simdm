@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -25,13 +26,56 @@ const STATUSES = [
   { value: 'REZERVA', label: 'Rezervă' },
 ];
 
+function StepIndicator({ currentStep, totalSteps, steps }) {
+  return (
+    <div className="mb-8">
+      <div className="flex gap-2 items-center">
+        {steps.map((step, idx) => (
+          <div key={idx} className="flex items-center flex-1">
+            <div
+              className="flex items-center justify-center w-10 h-10 rounded-full font-bold transition-all flex-shrink-0"
+              style={{
+                backgroundColor:
+                  idx < currentStep
+                    ? 'var(--color-success)'
+                    : idx === currentStep
+                    ? 'var(--color-accent)'
+                    : 'var(--color-bg-tertiary)',
+                color: idx < currentStep || idx === currentStep ? '#1a1a1a' : 'var(--color-text-secondary)',
+                border: '1px solid',
+                borderColor: idx <= currentStep ? 'transparent' : 'var(--color-border)',
+              }}
+            >
+              {idx < currentStep ? '✓' : idx + 1}
+            </div>
+            {idx < steps.length - 1 && (
+              <div
+                className="flex-1 h-1 mx-2"
+                style={{
+                  backgroundColor: idx < currentStep ? 'var(--color-success)' : 'var(--color-border)',
+                }}
+              />
+            )}
+          </div>
+        ))}
+      </div>
+      <div className="mt-4 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
+        Pasul {currentStep + 1} din {totalSteps}: <span style={{ color: 'var(--color-accent)' }} className="font-bold">{steps[currentStep]}</span>
+      </div>
+    </div>
+  );
+}
+
 export default function DeviceForm() {
   const { id } = useParams();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const isEditMode = !!id;
+  const [currentStep, setCurrentStep] = useState(0);
 
-  const { control, register, handleSubmit, reset, formState: { errors } } = useForm({
+  const steps = ['Identificare', 'Clasificare', 'Exploatare', 'Financiar', 'Tehnic', 'Confirmă'];
+
+  const { control, register, handleSubmit, reset, getValues, formState: { errors } } = useForm({
     resolver: zodResolver(deviceSchema),
     mode: 'onBlur',
     defaultValues: {
@@ -44,15 +88,15 @@ export default function DeviceForm() {
   // Query sections
   const { data: sectionsData = [] } = useQuery({
     queryKey: ['sections'],
-    queryFn: () => api.get('/sections').then(r => r.data),
+    queryFn: () => api.get('/sections').then((r) => r.data),
   });
 
-  const sectionOptions = sectionsData.map(s => ({ value: s.id, label: s.name }));
+  const sectionOptions = sectionsData.map((s) => ({ value: s.id, label: s.name }));
 
   // Query device in edit mode
   const { isLoading: deviceLoading } = useQuery({
     queryKey: ['device', id],
-    queryFn: () => api.get(`/devices/${id}`).then(r => r.data),
+    queryFn: () => api.get(`/devices/${id}`).then((r) => r.data),
     enabled: !!id,
     onSuccess: (data) => {
       reset({
@@ -60,6 +104,7 @@ export default function DeviceForm() {
         riskClass: data.riskClass || 'IIb',
         status: data.status || 'FUNCTIONAL',
         currency: data.currency || 'MDL',
+        sectionId: data.sectionId || '',
       });
     },
   });
@@ -106,6 +151,26 @@ export default function DeviceForm() {
     },
   });
 
+  if (deviceLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center" role="status" style={{ backgroundColor: 'var(--color-bg-primary)' }}>
+        <p style={{ color: 'var(--color-text-secondary)' }}>Se încarcă…</p>
+      </div>
+    );
+  }
+
+  const handleNext = () => {
+    if (currentStep < steps.length - 1) {
+      setCurrentStep(currentStep + 1);
+    }
+  };
+
+  const handlePrev = () => {
+    if (currentStep > 0) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
+
   const onSubmit = (data) => {
     if (isEditMode) {
       updateMutation.mutate(data);
@@ -114,26 +179,24 @@ export default function DeviceForm() {
     }
   };
 
-  if (deviceLoading) {
-    return (
-      <div className="min-h-screen bg-gray-950 flex items-center justify-center" role="status">
-        <p className="text-gray-400">Se încarcă…</p>
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen bg-gray-950 text-gray-100 p-8">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold text-cyan-400 mb-8">
-          {isEditMode ? 'Editare DM' : 'Adaugă Dispozitiv Medical'}
+    <div className="min-h-screen p-8" style={{ backgroundColor: 'var(--color-bg-primary)' }}>
+      <div className="max-w-2xl mx-auto">
+        <h1 className="text-3xl font-bold mb-2">
+          {isEditMode ? 'Editare Dispozitiv Medical' : 'Adaugă Dispozitiv Medical'}
         </h1>
+        <p style={{ color: 'var(--color-text-secondary)' }} className="mb-8 text-sm">
+          Completează formularul pas cu pas
+        </p>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-          {/* SECȚIUNEA 1: IDENTIFICARE */}
-          <div className="card-base p-6">
-            <h2 className="text-xl font-semibold text-cyan-400 mb-6">1. Identificare</h2>
-            <div className="grid grid-cols-2 gap-6">
+        <StepIndicator currentStep={currentStep} totalSteps={steps.length} steps={steps} />
+
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          {/* STEP 0: IDENTIFICARE */}
+          {currentStep === 0 && (
+            <div className="card-base p-6 animate-slide-up space-y-4">
+              <h2 className="text-xl font-semibold">Identificare Dispozitiv</h2>
+
               <div>
                 <label htmlFor="inventoryNumber" className="label-base">
                   Numărul inventarului *
@@ -145,112 +208,73 @@ export default function DeviceForm() {
                   className="input-base w-full"
                 />
                 {errors.inventoryNumber && (
-                  <p className="text-red-400 text-sm mt-1" role="alert">
+                  <p style={{ color: 'var(--color-error)' }} className="text-sm mt-1" role="alert">
                     {errors.inventoryNumber.message}
                   </p>
                 )}
               </div>
 
               <div>
-                <label htmlFor="serialNumber" className="label-base">
-                  Seria
-                </label>
-                <input
-                  {...register('serialNumber')}
-                  id="serialNumber"
-                  className="input-base w-full"
-                />
-              </div>
-
-              <div className="col-span-2">
                 <label htmlFor="name" className="label-base">
                   Denumire *
                 </label>
                 <input
                   {...register('name')}
                   id="name"
+                  placeholder="Nume dispozitiv"
                   className="input-base w-full"
                 />
                 {errors.name && (
-                  <p className="text-red-400 text-sm mt-1" role="alert">
+                  <p style={{ color: 'var(--color-error)' }} className="text-sm mt-1" role="alert">
                     {errors.name.message}
                   </p>
                 )}
               </div>
 
-              <div>
-                <label htmlFor="model" className="label-base">
-                  Model
-                </label>
-                <input
-                  {...register('model')}
-                  id="model"
-                  className="input-base w-full"
-                />
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="model" className="label-base">
+                    Model
+                  </label>
+                  <input {...register('model')} id="model" className="input-base w-full" />
+                </div>
+
+                <div>
+                  <label htmlFor="serialNumber" className="label-base">
+                    Seria
+                  </label>
+                  <input {...register('serialNumber')} id="serialNumber" className="input-base w-full" />
+                </div>
               </div>
 
-              <div>
-                <label htmlFor="manufacturer" className="label-base">
-                  Producător
-                </label>
-                <input
-                  {...register('manufacturer')}
-                  id="manufacturer"
-                  className="input-base w-full"
-                />
-              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="manufacturer" className="label-base">
+                    Producător
+                  </label>
+                  <input {...register('manufacturer')} id="manufacturer" className="input-base w-full" />
+                </div>
 
-              <div>
-                <label htmlFor="countryOfOrigin" className="label-base">
-                  Țara de origine
-                </label>
-                <input
-                  {...register('countryOfOrigin')}
-                  id="countryOfOrigin"
-                  className="input-base w-full"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="yearMade" className="label-base">
-                  Anul fabricării
-                </label>
-                <input
-                  {...register('yearMade')}
-                  id="yearMade"
-                  type="number"
-                  className="input-base w-full"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="ceMarking" className="label-base">
-                  Marcaj CE
-                </label>
-                <input
-                  {...register('ceMarking')}
-                  id="ceMarking"
-                  className="input-base w-full"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="cndCode" className="label-base">
-                  Cod CND
-                </label>
-                <input
-                  {...register('cndCode')}
-                  id="cndCode"
-                  className="input-base w-full"
-                />
+                <div>
+                  <label htmlFor="yearMade" className="label-base">
+                    Anul fabricării
+                  </label>
+                  <input
+                    {...register('yearMade')}
+                    id="yearMade"
+                    type="number"
+                    className="input-base w-full"
+                  />
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
-          {/* SECȚIUNEA 2: CLASIFICARE */}
-          <div className="card-base p-6">
-            <h2 className="text-xl font-semibold text-cyan-400 mb-6">2. Clasificare</h2>
-            <div className="grid grid-cols-2 gap-6">
+          {/* STEP 1: CLASIFICARE */}
+          {currentStep === 1 && (
+            <div className="card-base p-6 animate-slide-up space-y-4">
+              <h2 className="text-xl font-semibold">Clasificare Risc și Status</h2>
+
               <div>
                 <label htmlFor="riskClass" className="label-base">
                   Clasa de risc *
@@ -263,30 +287,32 @@ export default function DeviceForm() {
                       {...field}
                       id="riskClass"
                       options={RISK_CLASSES}
-                      value={RISK_CLASSES.find(r => r.value === field.value)}
-                      onChange={(option) => field.onChange(option?.value)}
-                      classNamePrefix="select"
-                      classNames={{
-                        control: () => 'bg-gray-800 border border-gray-600 rounded focus-within:ring-2 focus-within:ring-cyan-400',
-                        input: () => 'text-white',
-                        option: () => 'text-gray-900',
+                      value={RISK_CLASSES.find((r) => r.value === field.value)}
+                      onChange={(opt) => field.onChange(opt?.value)}
+                      isSearchable={false}
+                      styles={{
+                        control: (base) => ({
+                          ...base,
+                          backgroundColor: 'var(--color-bg-tertiary)',
+                          borderColor: 'var(--color-border)',
+                          color: 'var(--color-text-primary)',
+                        }),
+                        menu: (base) => ({
+                          ...base,
+                          backgroundColor: 'var(--color-bg-secondary)',
+                          color: 'var(--color-text-primary)',
+                        }),
+                        option: (base, state) => ({
+                          ...base,
+                          backgroundColor: state.isSelected ? 'var(--color-accent)' : 'transparent',
+                          color: state.isSelected ? '#1a1a1a' : 'var(--color-text-primary)',
+                        }),
                       }}
                     />
                   )}
                 />
-                {errors.riskClass && (
-                  <p className="text-red-400 text-sm mt-1" role="alert">
-                    {errors.riskClass.message}
-                  </p>
-                )}
               </div>
-            </div>
-          </div>
 
-          {/* SECȚIUNEA 3: STATUS & EXPLOATARE */}
-          <div className="card-base p-6">
-            <h2 className="text-xl font-semibold text-cyan-400 mb-6">3. Status & Exploatare</h2>
-            <div className="grid grid-cols-2 gap-6">
               <div>
                 <label htmlFor="status" className="label-base">
                   Status *
@@ -299,22 +325,30 @@ export default function DeviceForm() {
                       {...field}
                       id="status"
                       options={STATUSES}
-                      value={STATUSES.find(s => s.value === field.value)}
-                      onChange={(option) => field.onChange(option?.value)}
-                      classNamePrefix="select"
-                      classNames={{
-                        control: () => 'bg-gray-800 border border-gray-600 rounded focus-within:ring-2 focus-within:ring-cyan-400',
-                        input: () => 'text-white',
-                        option: () => 'text-gray-900',
+                      value={STATUSES.find((s) => s.value === field.value)}
+                      onChange={(opt) => field.onChange(opt?.value)}
+                      isSearchable={false}
+                      styles={{
+                        control: (base) => ({
+                          ...base,
+                          backgroundColor: 'var(--color-bg-tertiary)',
+                          borderColor: 'var(--color-border)',
+                          color: 'var(--color-text-primary)',
+                        }),
+                        menu: (base) => ({
+                          ...base,
+                          backgroundColor: 'var(--color-bg-secondary)',
+                          color: 'var(--color-text-primary)',
+                        }),
+                        option: (base, state) => ({
+                          ...base,
+                          backgroundColor: state.isSelected ? 'var(--color-accent)' : 'transparent',
+                          color: state.isSelected ? '#1a1a1a' : 'var(--color-text-primary)',
+                        }),
                       }}
                     />
                   )}
                 />
-                {errors.status && (
-                  <p className="text-red-400 text-sm mt-1" role="alert">
-                    {errors.status.message}
-                  </p>
-                )}
               </div>
 
               <div>
@@ -329,230 +363,265 @@ export default function DeviceForm() {
                       {...field}
                       id="sectionId"
                       options={sectionOptions}
-                      value={sectionOptions.find(s => s.value === parseInt(field.value))}
-                      onChange={(option) => field.onChange(option?.value)}
-                      classNamePrefix="select"
-                      classNames={{
-                        control: () => 'bg-gray-800 border border-gray-600 rounded focus-within:ring-2 focus-within:ring-cyan-400',
-                        input: () => 'text-white',
-                        option: () => 'text-gray-900',
+                      value={sectionOptions.find((s) => s.value === field.value)}
+                      onChange={(opt) => field.onChange(opt?.value)}
+                      placeholder="Selectează secție"
+                      styles={{
+                        control: (base) => ({
+                          ...base,
+                          backgroundColor: 'var(--color-bg-tertiary)',
+                          borderColor: 'var(--color-border)',
+                          color: 'var(--color-text-primary)',
+                        }),
+                        menu: (base) => ({
+                          ...base,
+                          backgroundColor: 'var(--color-bg-secondary)',
+                          color: 'var(--color-text-primary)',
+                        }),
+                        option: (base, state) => ({
+                          ...base,
+                          backgroundColor: state.isSelected ? 'var(--color-accent)' : 'transparent',
+                          color: state.isSelected ? '#1a1a1a' : 'var(--color-text-primary)',
+                        }),
                       }}
                     />
                   )}
                 />
                 {errors.sectionId && (
-                  <p className="text-red-400 text-sm mt-1" role="alert">
+                  <p style={{ color: 'var(--color-error)' }} className="text-sm mt-1" role="alert">
                     {errors.sectionId.message}
                   </p>
                 )}
               </div>
-
-              <div>
-                <label htmlFor="room" className="label-base">
-                  Cameră/Locație
-                </label>
-                <input
-                  {...register('room')}
-                  id="room"
-                  className="input-base w-full"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="maintenanceFreq" className="label-base">
-                  Frecvență mentenanță (zile)
-                </label>
-                <input
-                  {...register('maintenanceFreq')}
-                  id="maintenanceFreq"
-                  type="number"
-                  className="input-base w-full"
-                />
-              </div>
             </div>
-          </div>
+          )}
 
-          {/* SECȚIUNEA 4: DATE FINANCIARE */}
-          <div className="card-base p-6">
-            <h2 className="text-xl font-semibold text-cyan-400 mb-6">4. Date Financiare</h2>
-            <div className="grid grid-cols-2 gap-6">
+          {/* STEP 2: EXPLOATARE */}
+          {currentStep === 2 && (
+            <div className="card-base p-6 animate-slide-up space-y-4">
+              <h2 className="text-xl font-semibold">Date Exploatare</h2>
+
               <div>
                 <label htmlFor="acquisitionDate" className="label-base">
-                  Data achiziției
+                  Data achiziției / Punere în funcțiune
                 </label>
                 <Controller
                   control={control}
                   name="acquisitionDate"
                   render={({ field }) => (
                     <DatePicker
-                      {...field}
-                      id="acquisitionDate"
-                      selected={field.value instanceof Date ? field.value : null}
-                      onChange={(date) => field.onChange(date)}
-                      placeholderText="Selectează data"
-                      className="input-base w-full"
+                      selected={field.value ? new Date(field.value) : null}
+                      onChange={(date) => field.onChange(date?.toISOString())}
                       dateFormat="dd/MM/yyyy"
+                      className="input-base w-full"
+                      placeholderText="DD/MM/YYYY"
                     />
                   )}
                 />
               </div>
 
               <div>
-                <label htmlFor="warrantyEndDate" className="label-base">
-                  Garanție până la
+                <label htmlFor="location" className="label-base">
+                  Locație / Spațiu
                 </label>
-                <Controller
-                  control={control}
-                  name="warrantyEndDate"
-                  render={({ field }) => (
-                    <DatePicker
-                      {...field}
-                      id="warrantyEndDate"
-                      selected={field.value instanceof Date ? field.value : null}
-                      onChange={(date) => field.onChange(date)}
-                      placeholderText="Selectează data"
-                      className="input-base w-full"
-                      dateFormat="dd/MM/yyyy"
-                    />
-                  )}
-                />
+                <input {...register('location')} id="location" className="input-base w-full" />
               </div>
 
               <div>
-                <label htmlFor="acquisitionValue" className="label-base">
-                  Valoare achiziție
+                <label htmlFor="countryOfOrigin" className="label-base">
+                  Țara de origine
                 </label>
-                <div className="flex gap-2">
+                <input {...register('countryOfOrigin')} id="countryOfOrigin" className="input-base w-full" />
+              </div>
+            </div>
+          )}
+
+          {/* STEP 3: FINANCIAR */}
+          {currentStep === 3 && (
+            <div className="card-base p-6 animate-slide-up space-y-4">
+              <h2 className="text-xl font-semibold">Date Financiare</h2>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="purchasePrice" className="label-base">
+                    Preț achiziție
+                  </label>
                   <input
-                    {...register('acquisitionValue')}
-                    id="acquisitionValue"
+                    {...register('purchasePrice')}
+                    id="purchasePrice"
                     type="number"
                     step="0.01"
-                    className="input-base flex-1"
+                    className="input-base w-full"
                   />
-                  <input
-                    {...register('currency')}
-                    type="text"
-                    className="input-base w-20"
-                    readOnly
-                  />
+                </div>
+
+                <div>
+                  <label htmlFor="currency" className="label-base">
+                    Monedă
+                  </label>
+                  <select {...register('currency')} id="currency" className="input-base w-full">
+                    <option value="MDL">MDL</option>
+                    <option value="EUR">EUR</option>
+                    <option value="USD">USD</option>
+                  </select>
                 </div>
               </div>
 
               <div>
-                <label htmlFor="residualValue" className="label-base">
-                  Valoare reziduală
+                <label htmlFor="warrantyExpiry" className="label-base">
+                  Data expirării garanției
+                </label>
+                <Controller
+                  control={control}
+                  name="warrantyExpiry"
+                  render={({ field }) => (
+                    <DatePicker
+                      selected={field.value ? new Date(field.value) : null}
+                      onChange={(date) => field.onChange(date?.toISOString())}
+                      dateFormat="dd/MM/yyyy"
+                      className="input-base w-full"
+                      placeholderText="DD/MM/YYYY"
+                    />
+                  )}
+                />
+              </div>
+            </div>
+          )}
+
+          {/* STEP 4: TEHNIC */}
+          {currentStep === 4 && (
+            <div className="card-base p-6 animate-slide-up space-y-4">
+              <h2 className="text-xl font-semibold">Date Tehnice</h2>
+
+              <div>
+                <label htmlFor="ceMarking" className="label-base">
+                  Marcaj CE
+                </label>
+                <input {...register('ceMarking')} id="ceMarking" className="input-base w-full" />
+              </div>
+
+              <div>
+                <label htmlFor="cndCode" className="label-base">
+                  Cod CND
+                </label>
+                <input {...register('cndCode')} id="cndCode" className="input-base w-full" />
+              </div>
+
+              <div>
+                <label htmlFor="maintenanceSchedule" className="label-base">
+                  Schema mentenanță (luni)
                 </label>
                 <input
-                  {...register('residualValue')}
-                  id="residualValue"
+                  {...register('maintenanceSchedule')}
+                  id="maintenanceSchedule"
                   type="number"
-                  step="0.01"
                   className="input-base w-full"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* SECȚIUNEA 5: DATE TEHNICE */}
-          <div className="card-base p-6">
-            <h2 className="text-xl font-semibold text-cyan-400 mb-6">5. Date Tehnice</h2>
-            <div className="grid grid-cols-2 gap-6">
-              <div>
-                <label htmlFor="voltage" className="label-base">
-                  Tensiune (V)
-                </label>
-                <input
-                  {...register('voltage')}
-                  id="voltage"
-                  className="input-base w-full"
+                  placeholder="Ex: 12 (anual)"
                 />
               </div>
 
               <div>
-                <label htmlFor="frequency" className="label-base">
-                  Frecvență (Hz)
+                <label htmlFor="notes" className="label-base">
+                  Note / Observații
                 </label>
-                <input
-                  {...register('frequency')}
-                  id="frequency"
+                <textarea
+                  {...register('notes')}
+                  id="notes"
+                  rows="3"
                   className="input-base w-full"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="power" className="label-base">
-                  Putere (W)
-                </label>
-                <input
-                  {...register('power')}
-                  id="power"
-                  className="input-base w-full"
-                />
-              </div>
-
-              <div className="col-span-2">
-                <label htmlFor="accessories" className="label-base">
-                  Accesorii
-                </label>
-                <input
-                  {...register('accessories')}
-                  id="accessories"
-                  className="input-base w-full"
+                  placeholder="Informații suplimentare..."
                 />
               </div>
             </div>
-          </div>
+          )}
 
-          {/* SECȚIUNEA 6: OBSERVAȚII */}
-          <div className="card-base p-6">
-            <h2 className="text-xl font-semibold text-cyan-400 mb-6">6. Observații</h2>
-            <div>
-              <label htmlFor="notes" className="label-base">
-                Note
-              </label>
-              <textarea
-                {...register('notes')}
-                id="notes"
-                rows="4"
-                className="input-base w-full"
-              />
+          {/* STEP 5: CONFIRMĂ */}
+          {currentStep === 5 && (
+            <div className="card-base p-6 animate-slide-up space-y-4">
+              <h2 className="text-xl font-semibold">Confirmă Datele</h2>
+              <p style={{ color: 'var(--color-text-secondary)' }} className="text-sm">
+                Verifică datele înainte de a salva
+              </p>
+
+              <div
+                className="mt-4 p-4 rounded-lg space-y-2 text-sm"
+                style={{
+                  backgroundColor: 'var(--color-bg-tertiary)',
+                  color: 'var(--color-text-primary)',
+                }}
+              >
+                <div>
+                  <span style={{ color: 'var(--color-accent)' }} className="font-bold">
+                    Inventar:
+                  </span>{' '}
+                  {getValues('inventoryNumber')}
+                </div>
+                <div>
+                  <span style={{ color: 'var(--color-accent)' }} className="font-bold">
+                    Denumire:
+                  </span>{' '}
+                  {getValues('name')}
+                </div>
+                <div>
+                  <span style={{ color: 'var(--color-accent)' }} className="font-bold">
+                    Clasa risc:
+                  </span>{' '}
+                  {getValues('riskClass')}
+                </div>
+                <div>
+                  <span style={{ color: 'var(--color-accent)' }} className="font-bold">
+                    Status:
+                  </span>{' '}
+                  {STATUSES.find((s) => s.value === getValues('status'))?.label}
+                </div>
+              </div>
+
+              {isEditMode && (
+                <button
+                  type="button"
+                  onClick={() => downloadPdfMutation.mutate()}
+                  disabled={downloadPdfMutation.isPending}
+                  className="btn-secondary w-full"
+                >
+                  📄 Descarcă PDF
+                </button>
+              )}
             </div>
-          </div>
+          )}
 
-          {/* ACȚIUNI */}
-          <div className="flex gap-4 justify-between">
+          {/* Navigation Buttons */}
+          <div className="flex gap-3 pt-6">
             <button
               type="button"
-              onClick={() => navigate('/inventory')}
-              className="btn-secondary px-6 py-2"
+              onClick={handlePrev}
+              disabled={currentStep === 0}
+              className="btn-secondary flex-1 disabled:opacity-50"
             >
-              Anulare
+              ← Înapoi
             </button>
 
-            {isEditMode && (
+            {currentStep < steps.length - 1 ? (
+              <button type="button" onClick={handleNext} className="btn-primary flex-1">
+                Înainte →
+              </button>
+            ) : (
               <button
-                type="button"
-                onClick={() => downloadPdfMutation.mutate()}
-                disabled={downloadPdfMutation.isPending}
-                className="btn-primary px-6 py-2"
+                type="submit"
+                disabled={createMutation.isPending || updateMutation.isPending}
+                className="btn-primary flex-1"
               >
-                {downloadPdfMutation.isPending ? 'Se descarcă…' : '📄 Descarcă Fișă PDF'}
+                {createMutation.isPending || updateMutation.isPending ? 'Se salvează…' : '✓ Salvare'}
               </button>
             )}
-
-            <button
-              type="submit"
-              disabled={createMutation.isPending || updateMutation.isPending}
-              className="btn-primary px-6 py-2"
-            >
-              {createMutation.isPending || updateMutation.isPending
-                ? 'Se salvează…'
-                : isEditMode
-                ? 'Salvare modificări'
-                : 'Adaugă DM'}
-            </button>
           </div>
+
+          <button
+            type="button"
+            onClick={() => navigate('/inventory')}
+            className="btn-secondary w-full mt-2"
+          >
+            Anulare
+          </button>
         </form>
       </div>
     </div>
