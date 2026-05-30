@@ -5,7 +5,8 @@
       "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\janea\\\\simdm\" -Directory)",
       "Bash(Select-Object Name)",
       "Bash(curl -s \"http://localhost:3001/api/devices?page=1&limit=5\" -H \"Authorization: Bearer $\\(cat /tmp/test_token.txt 2>/dev/null || echo 'no-token'\\)\" 2>&1 | head -20)",
-      "Read(//tmp/**)"
+      "Read(//tmp/**)",
+      "PowerShell(gh --version)"
     ]
   }
 }
