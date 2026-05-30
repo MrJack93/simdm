@@ -6,7 +6,14 @@
       "Bash(Select-Object Name)",
       "Bash(curl -s \"http://localhost:3001/api/devices?page=1&limit=5\" -H \"Authorization: Bearer $\\(cat /tmp/test_token.txt 2>/dev/null || echo 'no-token'\\)\" 2>&1 | head -20)",
       "Read(//tmp/**)",
-      "PowerShell(gh --version)"
+      "PowerShell(gh --version)",
+      "Bash(npm --version)",
+      "Bash(git --version)",
+      "Bash(psql --version)",
+      "PowerShell(psql --version)",
+      "Bash(cd c:\\\\\\\\Users\\\\\\\\janea\\\\\\\\simdm)",
+      "PowerShell(Set-Location 'c:\\\\Users\\\\janea\\\\simdm\\\\backend'; $env:PRISMA_USER_CONSENT_FOR_DANGEROUS_AI_ACTION = 'da'; npx prisma migrate reset --force 2>&1)",
+      "PowerShell(Set-Location 'c:\\\\Users\\\\janea\\\\simdm\\\\backend'; $env:PRISMA_USER_CONSENT_FOR_DANGEROUS_AI_ACTION = 'da'; npx prisma migrate reset --force 2>&1 | Select-Object -Last 5)"
     ]
   }
 }
