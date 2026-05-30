@@ -13,7 +13,15 @@
       "PowerShell(psql --version)",
       "Bash(cd c:\\\\\\\\Users\\\\\\\\janea\\\\\\\\simdm)",
       "PowerShell(Set-Location 'c:\\\\Users\\\\janea\\\\simdm\\\\backend'; $env:PRISMA_USER_CONSENT_FOR_DANGEROUS_AI_ACTION = 'da'; npx prisma migrate reset --force 2>&1)",
-      "PowerShell(Set-Location 'c:\\\\Users\\\\janea\\\\simdm\\\\backend'; $env:PRISMA_USER_CONSENT_FOR_DANGEROUS_AI_ACTION = 'da'; npx prisma migrate reset --force 2>&1 | Select-Object -Last 5)"
+      "PowerShell(Set-Location 'c:\\\\Users\\\\janea\\\\simdm\\\\backend'; $env:PRISMA_USER_CONSENT_FOR_DANGEROUS_AI_ACTION = 'da'; npx prisma migrate reset --force 2>&1 | Select-Object -Last 5)",
+      "Bash(python3)",
+      "PowerShell(netstat -ano)",
+      "PowerShell(grep \":3001\")",
+      "PowerShell(Stop-Process -Force -Confirm:$false)",
+      "Bash(TOKEN=\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJuYW1lIjoiaW5naW5lciIsInJvbGUiOiJCSU9JTkdJTkVSIiwiaWF0IjoxNzgwMTM4MzY5LCJleHAiOjE3ODAxMzkyNjl9.SXl1T-MTBW9YlDFw1GLMIqGfZfkZ95-9k_GB5LLrhGs\" *)"
+    ],
+    "additionalDirectories": [
+      "\\tmp"
     ]
   }
 }

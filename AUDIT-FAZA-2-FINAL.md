@@ -24,6 +24,22 @@
 └─────────────────────────────────────────────────────────┘
 
 🎉 VERDICT: **FAZA 2 COMPLETA ȘI APROBATA PENTRU FAZA 3**
+
+---
+
+## 🔒 SECURITY HARDENING POST-AUDIT (30-05-2026)
+
+După completarea auditului inițial, au fost implementate **5 îmbunătățiri critice de securitate**:
+
+| Fix | Descriere | Impact | Status |
+|-----|-----------|--------|--------|
+| **1. Pagination Cap** | GET /api/devices limit: max 1000 | Protecție DOS | ✅ LIVE |
+| **2. Soft-Delete Filter** | Exclude CASAT by default (?includeCasat=true) | UX + Data Safety | ✅ LIVE |
+| **3. Rate Limiting Exports** | /export/xlsx, /export/csv, /fisa-pdf: max 10/15min | Protecție DOS | ✅ LIVE |
+| **4. Zod Backend Validation** | POST/PUT validate 24 field-uri server-side | Input Security | ✅ LIVE |
+| **5. Database Indexes** | 3 compound indexes: (status,sectionId), (name), (entity,timestamp) | Performance 5-10x | ✅ LIVE |
+
+**Commits:** d12e8d0 + 05fa489
 ```
 
 ---

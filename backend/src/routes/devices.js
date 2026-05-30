@@ -8,6 +8,7 @@ const rateLimit = require('express-rate-limit');
 const { z } = require('zod');
 const prisma = require('../db');
 const authMiddleware = require('../middleware/auth');
+const { antivirusMiddleware } = require('../middleware/antivirus');
 
 // Rate limiter for exports
 const exportLimiter = rateLimit({
@@ -406,8 +407,8 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-// ENDPOINT 9: POST /:id/upload — upload fișier
-router.post('/:id/upload', upload.single('file'), async (req, res) => {
+// ENDPOINT 9: POST /:id/upload — upload fișier (cu antivirus scan)
+router.post('/:id/upload', upload.single('file'), antivirusMiddleware, async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: 'Nu s-a găsit fișier' });
@@ -418,10 +419,33 @@ router.post('/:id/upload', upload.single('file'), async (req, res) => {
 
     const device = await prisma.devices.update({
       where: { id: deviceId },
-      data: { manualUrl: fileUrl }, // or another URL field based on file type
+      data: { manualUrl: fileUrl },
     });
 
-    res.json({ message: 'Fișier încărcat cu succes', device, fileUrl });
+    // Audit log for file upload with scan result
+    const scanInfo = req.fileScanResult ? ` [Scanned: ${req.fileScanResult.mimeType}]` : '';
+    await prisma.audit_logs.create({
+      data: {
+        userId: req.user.sub,
+        action: 'FILE_UPLOAD',
+        entity: 'Device',
+        entityId: String(device.id),
+        changes: {
+          filename: req.file.originalname,
+          size: req.file.size,
+          mimeType: req.fileScanResult?.mimeType || req.file.mimetype,
+          clamavScanned: req.fileScanResult?.clamavScanned || false,
+          timestamp: req.fileScanResult?.timestamp,
+        },
+      },
+    });
+
+    res.json({
+      message: `Fișier încărcat cu succes${scanInfo}`,
+      device,
+      fileUrl,
+      scan: req.fileScanResult,
+    });
   } catch (error) {
     console.error('Error uploading file:', error);
     res.status(500).json({ error: 'Eroare la încărcarea fișierului' });
