@@ -4,8 +4,53 @@ const fs = require('fs');
 const path = require('path');
 const PDFDocument = require('pdfkit');
 const XLSX = require('xlsx');
+const rateLimit = require('express-rate-limit');
+const { z } = require('zod');
 const prisma = require('../db');
 const authMiddleware = require('../middleware/auth');
+
+// Rate limiter for exports
+const exportLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: parseInt(process.env.EXPORT_RATE_LIMIT_MAX || 10),
+  message: { error: 'Prea multe exporturi. Încearcă peste 15 minute.' },
+  standardHeaders: true,
+  skip: (req) => process.env.NODE_ENV === 'development' && req.query.skip_ratelimit === 'true',
+});
+
+// Validation schemas
+const VALID_STATUSES = ['FUNCTIONAL', 'IN_REPARATIE', 'DEFECT', 'CASAT', 'IMPRUMUTAT', 'REZERVA'];
+const VALID_CLASSES = ['I', 'IIa', 'IIb', 'III'];
+const VALID_CURRENCIES = ['MDL', 'USD', 'EUR', 'RON'];
+
+const deviceCreateSchema = z.object({
+  inventoryNumber: z.string().regex(/^[A-Z0-9\-]+$/, 'Doar litere majuscule, cifre și liniuțe'),
+  name: z.string().min(3, 'Minim 3 caractere'),
+  riskClass: z.enum(VALID_CLASSES),
+  sectionId: z.coerce.number().int().min(1),
+  status: z.enum(VALID_STATUSES).default('FUNCTIONAL'),
+  serialNumber: z.string().optional().nullable(),
+  model: z.string().optional().nullable(),
+  manufacturer: z.string().optional().nullable(),
+  countryOfOrigin: z.string().optional().nullable(),
+  yearMade: z.coerce.number().int().min(1900).max(new Date().getFullYear() + 1).optional().nullable(),
+  ceMarking: z.string().optional().nullable(),
+  cndCode: z.string().optional().nullable(),
+  room: z.string().optional().nullable(),
+  acquisitionDate: z.coerce.date().optional().nullable(),
+  warrantyEndDate: z.coerce.date().optional().nullable(),
+  acquisitionValue: z.coerce.number().min(0).optional().nullable(),
+  residualValue: z.coerce.number().min(0).optional().nullable(),
+  currency: z.enum(VALID_CURRENCIES).default('MDL'),
+  voltage: z.string().optional().nullable(),
+  frequency: z.string().optional().nullable(),
+  power: z.string().optional().nullable(),
+  accessories: z.string().optional().nullable(),
+  maintenanceFreq: z.coerce.number().int().min(1).optional().nullable(),
+  notes: z.string().max(2000).optional().nullable(),
+});
+
+const deviceUpdateSchema = deviceCreateSchema.partial().omit({ inventoryNumber: true });
 
 const router = express.Router();
 
@@ -67,7 +112,7 @@ router.get('/dropdown/sections', async (req, res) => {
 });
 
 // ENDPOINT 2: GET /export/xlsx — export Excel (cu filtre)
-router.get('/export/xlsx', async (req, res) => {
+router.get('/export/xlsx', exportLimiter, async (req, res) => {
   try {
     const { search, status, riskClass, sectionId } = req.query;
     const where = {};
@@ -117,7 +162,7 @@ router.get('/export/xlsx', async (req, res) => {
 });
 
 // ENDPOINT 3: GET /export/csv — export CSV (cu filtre)
-router.get('/export/csv', async (req, res) => {
+router.get('/export/csv', exportLimiter, async (req, res) => {
   try {
     const { search, status, riskClass, sectionId } = req.query;
     const where = {};
@@ -160,10 +205,19 @@ router.get('/export/csv', async (req, res) => {
 // ENDPOINT 4: GET / — lista cu filtre + paginare
 router.get('/', async (req, res) => {
   try {
-    const { search, status, riskClass, sectionId, page = 1, limit = 10 } = req.query;
-    const skip = (parseInt(page) - 1) * parseInt(limit);
+    const rawPage = Math.max(parseInt(req.query.page) || 1, 1);
+    const rawLimit = Math.min(parseInt(req.query.limit) || 50, 1000);
+    const skip = (rawPage - 1) * rawLimit;
 
+    const { search, status, riskClass, sectionId, includeCasat } = req.query;
     const where = {};
+
+    // Default: exclude CASAT devices unless explicitly requested
+    if (includeCasat !== 'true') {
+      where.status = { not: 'CASAT' };
+    }
+
+    // Apply filters (explicit status overrides the default filter)
     if (search) {
       where.OR = [
         { inventoryNumber: { contains: search, mode: 'insensitive' } },
@@ -181,18 +235,18 @@ router.get('/', async (req, res) => {
         where,
         include: { sections: { select: { name: true } } },
         skip,
-        take: parseInt(limit),
+        take: rawLimit,
         orderBy: { createdAt: 'desc' },
       }),
       prisma.devices.count({ where }),
     ]);
 
-    const pages = Math.ceil(total / parseInt(limit));
+    const pages = Math.ceil(total / rawLimit);
     res.json({
       devices,
       pagination: {
-        page: parseInt(page),
-        limit: parseInt(limit),
+        page: rawPage,
+        limit: rawLimit,
         total,
         pages,
       },
@@ -203,32 +257,29 @@ router.get('/', async (req, res) => {
   }
 });
 
-// ENDPOINT 5: POST / — creare DM
+// ENDPOINT 5: POST / — criere DM
 router.post('/', async (req, res) => {
   try {
-    const { inventoryNumber, name, riskClass, sectionId, status = 'FUNCTIONAL', ...rest } = req.body;
-
-    // Validate required fields
-    if (!inventoryNumber || !name || !riskClass || !sectionId) {
-      return res.status(400).json({ error: 'Câmpuri obligatorii lipsă' });
+    const parsed = deviceCreateSchema.safeParse(req.body);
+    if (!parsed.success) {
+      return res.status(400).json({
+        error: 'Date invalide',
+        fields: parsed.error.flatten().fieldErrors,
+      });
     }
 
+    const data = parsed.data;
+
     // Check for duplicate inventory number
-    const existing = await prisma.devices.findUnique({ where: { inventoryNumber } });
+    const existing = await prisma.devices.findUnique({ where: { inventoryNumber: data.inventoryNumber } });
     if (existing) {
       return res.status(409).json({ error: 'Numărul inventarului există deja' });
     }
 
     const device = await prisma.devices.create({
       data: {
-        inventoryNumber,
-        name,
-        riskClass,
-        sectionId: parseInt(sectionId),
-        status,
+        ...data,
         createdById: req.user.sub,
-        updatedAt: new Date(),
-        ...rest,
       },
       include: { sections: { select: { name: true } } },
     });
@@ -278,7 +329,16 @@ router.get('/:id', async (req, res) => {
 router.put('/:id', async (req, res) => {
   try {
     const deviceId = parseInt(req.params.id);
-    const { inventoryNumber, ...updateData } = req.body;
+
+    const parsed = deviceUpdateSchema.safeParse(req.body);
+    if (!parsed.success) {
+      return res.status(400).json({
+        error: 'Date invalide',
+        fields: parsed.error.flatten().fieldErrors,
+      });
+    }
+
+    const updateData = parsed.data;
 
     // Get old device for audit log
     const oldDevice = await prisma.devices.findUnique({ where: { id: deviceId } });
@@ -368,7 +428,7 @@ router.post('/:id/upload', upload.single('file'), async (req, res) => {
 });
 
 // ENDPOINT 10: GET /:id/fisa-pdf — generare PDF
-router.get('/:id/fisa-pdf', async (req, res) => {
+router.get('/:id/fisa-pdf', exportLimiter, async (req, res) => {
   try {
     const device = await prisma.devices.findUnique({
       where: { id: parseInt(req.params.id) },

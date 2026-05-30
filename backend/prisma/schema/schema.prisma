@@ -52,6 +52,7 @@ model audit_logs {
   @@index([entity, entityId])
   @@index([timestamp])
   @@index([userId])
+  @@index([entity, timestamp])
 }
 
 model consumables {
@@ -132,6 +133,8 @@ model devices {
   @@index([nextMaintenanceAt])
   @@index([sectionId])
   @@index([status])
+  @@index([status, sectionId])
+  @@index([name])
 }
 
 model documents {
