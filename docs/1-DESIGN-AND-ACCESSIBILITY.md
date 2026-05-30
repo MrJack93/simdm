@@ -375,7 +375,7 @@ font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
 </div>
 ```
 
-**Componenta StatusBadge:**
+**Componenta StatusBadge (6 statuses — Faza 2):**
 ```jsx
 function StatusBadge({ status }) {
   const stiluri = {
@@ -383,15 +383,20 @@ function StatusBadge({ status }) {
     DEFECT: 'bg-red-950/30 border border-red-600 text-red-400',
     IN_REPARATIE: 'bg-amber-950/30 border border-amber-600 text-amber-400',
     CASAT: 'bg-gray-700 border border-gray-600 text-gray-400',
+    IMPRUMUTAT: 'bg-blue-950/30 border border-blue-600 text-blue-400',
+    REZERVA: 'bg-yellow-950/30 border border-yellow-600 text-yellow-400',
   };
   const etichete = {
     FUNCTIONAL: '✓ Funcțional',
     DEFECT: '✗ Defect',
     IN_REPARATIE: '⟳ În Reparație',
     CASAT: '− Casat',
+    IMPRUMUTAT: '↔ Împrumutat',
+    REZERVA: '📦 Rezervă',
   };
   return (
-    <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold ${stiluri[status]}`}>
+    <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold ${stiluri[status]}`}
+          role="status" aria-label={`Status: ${etichete[status]}`}>
       {etichete[status]}
     </span>
   );

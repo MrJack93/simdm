@@ -63,7 +63,7 @@ npm run dev  # Port 5173
 
 ## 🔀 Fluxul de Lucru
 
-### Paso 1: Creează Branch de Feature
+### Pasul 1: Creează Branch de Feature
 
 **Întotdeauna branchez din `dev`** (brandul principal de lucru):
 
@@ -87,7 +87,7 @@ git checkout -b test/device-crud-tests          # Teste
 - `test/*` — Teste
 - `chore/*` — Setup, deps, tooling
 
-### Paso 2: Implementare
+### Pasul 2: Implementare
 
 #### Backend
 
@@ -134,7 +134,7 @@ npm run dev
 npm run lint  # (dacă repo are lint config)
 ```
 
-### Paso 3: Commit cu Mesaje Profesionale
+### Pasul 3: Commit cu Mesaje Profesionale
 
 ```bash
 # Commit frecvent (nu mega-commits)
@@ -199,7 +199,7 @@ commit: zzz
 commit: temp
 ```
 
-### Paso 4: Push și Creează Pull Request
+### Pasul 4: Push și Creează Pull Request
 
 ```bash
 # Push branch
@@ -235,7 +235,7 @@ Add Device inventory table with real-time filtering
 - [x] Added/updated documentation
 ```
 
-### Paso 5: Code Review & Merge
+### Pasul 5: Code Review & Merge
 
 1. **Maintainer** (sau senior dev) reviewează PR
 2. Cere modificări dacă necesar

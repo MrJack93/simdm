@@ -405,7 +405,7 @@ const api = axios.create({
 
 // Request interceptor — attach JWT token
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('simdm_token');
+  const token = sessionStorage.getItem('accessToken');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -422,12 +422,12 @@ api.interceptors.response.use(
         const { data } = await axios.post('/api/auth/refresh', {}, {
           withCredentials: true,
         });
-        localStorage.setItem('simdm_token', data.accessToken);
+        sessionStorage.setItem('accessToken', data.accessToken);
         // Retry original request
         return api.request(error.config);
       } catch {
         // Refresh failed — logout
-        localStorage.removeItem('simdm_token');
+        sessionStorage.removeItem('accessToken');
         window.location.href = '/login';
       }
     }
@@ -581,6 +581,116 @@ export class ErrorBoundary extends Component {
 }
 ```
 
+### Pattern 4: Backend Zod Validation (Faza 2)
+
+```javascript
+// backend/src/routes/devices.js
+const { z } = require('zod');
+
+const deviceCreateSchema = z.object({
+  inventoryNumber: z.string().regex(/^[A-Z0-9\-]+$/, 'Doar litere majuscule'),
+  name: z.string().min(3, 'Minim 3 caractere'),
+  riskClass: z.enum(['I', 'IIa', 'IIb', 'III']),
+  sectionId: z.coerce.number().int().min(1),
+  status: z.enum(['FUNCTIONAL', 'IN_REPARATIE', 'DEFECT', 'CASAT', 'IMPRUMUTAT', 'REZERVA']).default('FUNCTIONAL'),
+  acquisitionDate: z.coerce.date().optional().nullable(),
+  acquisitionValue: z.coerce.number().min(0).optional().nullable(),
+  // ... 18 more fields validated
+});
+
+// In POST handler:
+router.post('/', (req, res) => {
+  const parsed = deviceCreateSchema.safeParse(req.body);
+  if (!parsed.success) {
+    return res.status(400).json({
+      error: 'Date invalide',
+      fields: parsed.error.flatten().fieldErrors,
+    });
+  }
+  // Create device with validated data
+  const device = await prisma.devices.create({ data: parsed.data });
+  res.status(201).json(device);
+});
+```
+
+### Pattern 5: Pagination with Validation (Faza 2)
+
+```javascript
+// backend/src/routes/devices.js
+router.get('/', async (req, res) => {
+  const rawPage = Math.max(parseInt(req.query.page) || 1, 1);
+  const rawLimit = Math.min(parseInt(req.query.limit) || 50, 1000);
+  const skip = (rawPage - 1) * rawLimit;
+
+  const [devices, total] = await Promise.all([
+    prisma.devices.findMany({ skip, take: rawLimit, orderBy: { createdAt: 'desc' } }),
+    prisma.devices.count({}),
+  ]);
+
+  res.json({
+    devices,
+    pagination: {
+      page: rawPage,
+      limit: rawLimit,
+      total,
+      pages: Math.ceil(total / rawLimit),
+    },
+  });
+});
+```
+
+### Pattern 6: File Upload with Antivirus (Faza 2)
+
+```javascript
+// backend/src/routes/devices.js
+const { antivirusMiddleware } = require('../middleware/antivirus');
+
+router.post('/:id/upload', upload.single('file'), antivirusMiddleware, async (req, res) => {
+  const device = await prisma.devices.update({
+    where: { id: parseInt(req.params.id) },
+    data: { manualUrl: `/uploads/devices/${req.file.filename}` },
+  });
+
+  // Log file upload with scan result
+  await prisma.audit_logs.create({
+    data: {
+      userId: req.user.sub,
+      action: 'FILE_UPLOAD',
+      entity: 'Device',
+      entityId: String(device.id),
+      changes: {
+        filename: req.file.originalname,
+        mimeType: req.fileScanResult?.mimeType,
+        clamavScanned: req.fileScanResult?.clamavScanned || false,
+      },
+    },
+  });
+
+  res.json({ message: 'Fișier încărcat cu succes', device });
+});
+```
+
+### Pattern 7: Soft-Delete Filtering (Faza 2)
+
+```javascript
+// backend/src/routes/devices.js
+router.get('/', async (req, res) => {
+  const { includeCasat } = req.query;
+  const where = {};
+
+  // Default: exclude CASAT devices unless explicitly requested
+  if (includeCasat !== 'true') {
+    where.status = { not: 'CASAT' };
+  }
+
+  // Apply explicit filters (override default)
+  if (req.query.status) where.status = req.query.status;
+
+  const devices = await prisma.devices.findMany({ where });
+  res.json(devices);
+});
+```
+
 ---
 
 ## ✅ Checklist Calitate
@@ -610,21 +720,27 @@ export class ErrorBoundary extends Component {
 
 ### Backend
 
-- [ ] **Validare:**
-  - [ ] Input validation (schema, type-safety)
+- [ ] **Validare (Faza 2):**
+  - [ ] **Zod schema validation** on POST/PUT (24 fields)
+  - [ ] Structured error responses (400 + fieldErrors)
   - [ ] Auth check (token valid, not expired)
   - [ ] Error messages în română
+  - [ ] Query params validated (page ≥ 1, limit ≤ 1000)
 
-- [ ] **Database:**
-  - [ ] Queries sunt indexed
+- [ ] **Database (Faza 2):**
+  - [ ] Queries are indexed (7+ migrations applied)
+  - [ ] Soft-delete filter working (status != 'CASAT')
+  - [ ] Audit log recorded (CREATE, UPDATE, DELETE, FILE_UPLOAD)
   - [ ] Relații sunt populate dacă necesar
   - [ ] Tranzacții pentru operații multi-step
 
-- [ ] **Security:**
+- [ ] **Security (Faza 2):**
+  - [ ] Rate limiting on exports (10/15min)
+  - [ ] File upload antivirus scanning (magic bytes)
   - [ ] Niciun secret în logs
   - [ ] SQL injection protected (Prisma)
   - [ ] CORS configured
-  - [ ] Rate limiting pe login
+  - [ ] Rate limiting pe login (5/15min)
 
 ---
 

@@ -1,8 +1,10 @@
-# Jurnal Audit Accesibilitate — SIMDM Faza 1
+# Jurnal Audit Accesibilitate — SIMDM Faza 1-2
 
 **Tip document:** Arhivă / Referință
-**Data auditului:** 2026-05-28
-**Standard:** WCAG 2.1 Nivel AA
+**Data auditului Faza 1:** 2026-05-28  
+**Data auditului Faza 2:** 2026-05-30  
+**Standard:** WCAG 2.1 Nivel AA  
+**Status:** ✅ Faza 1 (104/104) + ✅ Faza 2 (130/130)
 **Domeniu:** Frontend Faza 1 (Login.jsx, App.jsx, Auth, Dashboard)
 **Status:** Snapshot de referință (problemele au fost rezolvate)
 
