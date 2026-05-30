@@ -270,4 +270,33 @@ const handleSubmit = async (e) => {
 
 ---
 
-**Actualizat:** 2026-05-29 | **Fază curentă:** 1
+---
+
+## 🆕 Faza 2 — CRUD Device + Inventar (nou în 2026-05-30)
+
+### Componente noi:
+- `DeviceForm.jsx` (560 linii) — Formular add/edit cu React Hook Form + Zod
+- `InventoryPage.jsx` (357 linii) — Tabel cu filtre, paginare, export
+- `deviceSchema.js` (134 linii) — Validare Zod (24 câmpuri)
+
+### API Endpoints (Faza 2):
+```
+GET    /api/devices                      — lista cu filtre + paginare
+POST   /api/devices                      — creare (201)
+GET    /api/devices/:id                  — detalii
+PUT    /api/devices/:id                  — update
+DELETE /api/devices/:id                  — soft delete (CASAT)
+POST   /api/devices/:id/upload           — upload fișier (multer)
+GET    /api/devices/:id/fisa-pdf         — PDF generator (PDFKit)
+GET    /api/devices/export/xlsx          — Excel export (XLSX)
+GET    /api/devices/export/csv           — CSV export (UTF-8)
+GET    /api/devices/dropdown/sections    — secții pentru dropdown
+```
+
+### Librării noi:
+- `react-hook-form` + `zod` — validare form
+- `react-select` + `react-datepicker` — componente form
+- `react-toastify` — notificări
+- `multer` + `pdfkit` + `xlsx` — backend processing
+
+**Actualizat:** 2026-05-30 | **Fază curentă:** 2 ✅

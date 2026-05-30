@@ -1,8 +1,15 @@
 # SIMDM — Sistem Informațional de Management al Dispozitivelor Medicale
 
-**Versiune:** 1.0 (Faza 1 completă)
-**Status:** Fundație gata pentru Faza 2
-**Actualizat:** 2026-05-29
+**Versiune:** 2.0 (Faza 2 completă)
+**Status:** ✅ CRUD + Inventar funcțional · Gata pentru Faza 3 (Mentenanță)
+**Actualizat:** 2026-05-30
+
+| Faza | Modul | Status | Commits |
+|------|-------|--------|---------|
+| **1** | Fundație (Docker, Auth, Schema) | ✅ Complet | fab7394, 450a5ea + ... |
+| **2** | CRUD Device + Inventar Tabel | ✅ Complet | fab7394, 5663d9d, 454e2af |
+| **3** | Mentenanță (MP/MC, ticketing) | ⬜ Planned | — |
+| **4-8** | Documente, Incidente, KPI, QA | ⬜ Planned | — |
 
 ---
 

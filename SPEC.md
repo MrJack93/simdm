@@ -264,56 +264,61 @@ GET  /api/health        → { status, database, uptime }
 
 ---
 
-### 🔄 FAZA 2 — Modul Inventar DM (în lucru)
+### ✅ FAZA 2 — Modul Inventar DM (COMPLETĂ)
 
-**Scope:**
-- CRUD complet Device (formular add/edit cu React Hook Form + Zod)
-- Tabel inventar cu filtre avansate + paginare server-side
-- Export Excel (.xlsx) și CSV
-- PDF Fișă DM — Formular Nr.8 (PDFKit)
-- Upload documente (manual, certificat CE, factură, pașaport)
-- Audit log la fiecare operație
+**Ce s-a construit:**
+- CRUD complet Device: POST (201) + GET lista/detalii + PUT update + DELETE soft-delete
+- Formular add/edit cu React Hook Form + Zod (24 câmpuri validați)
+- Tabel inventar cu 8 coloane, filtrare (search/status/clasă/secție), paginare 50/page
+- Export Excel XLSX și CSV cu UTF-8 BOM (diacritice corecte)
+- PDF Fișă DM — Formular Nr.8 (PDFKit, 6 secțiuni, device data)
+- Upload documente: multer (PDF, DOC, DOCX, JPG, PNG, 10MB max)
+- Audit logging: CREATE, UPDATE, DELETE cu userId, timestamp, changes
+- Toast notifications (react-toastify) pe success/error
 
-**Dependențe noi necesare:**
+**Dependențe implementate:**
+- Frontend: react-hook-form, zod, @hookform/resolvers, react-select, react-datepicker, react-toastify
+- Backend: multer, pdfkit, xlsx
 
-| Pachet | Loc |
-|--------|-----|
-| react-hook-form, @hookform/resolvers, zod | frontend |
-| react-select, react-datepicker, react-toastify, lucide-react | frontend |
-| multer, pdfkit, exceljs | backend |
-
-**Endpoint-uri Faza 2:**
+**Endpoint-uri Faza 2 — VERIFY:**
 ```
-GET    /api/sections                     → secții active (dropdown)
-GET    /api/devices                      → lista DM (filtre + paginare)
-POST   /api/devices                      → creare DM + AuditLog
-GET    /api/devices/:id                  → detalii + relatii
-PUT    /api/devices/:id                  → actualizare + AuditLog
-DELETE /api/devices/:id                  → soft delete (CASAT) + AuditLog
-POST   /api/devices/:id/upload           → upload fișier (multer)
-GET    /api/devices/:id/fisa-pdf         → PDF Fișă DM
-GET    /api/devices/export/xlsx          → export Excel (static route, before /:id)
-GET    /api/devices/export/csv           → export CSV (static route, before /:id)
-GET    /api/devices/dropdown/sections    → secții pentru formular (static route, before /:id)
+GET    /api/devices/dropdown/sections         ✓ lista active
+GET    /api/devices                           ✓ filtre + paginare
+POST   /api/devices                           ✓ 201 + auditLog
+GET    /api/devices/:id                       ✓ detalii + relații
+PUT    /api/devices/:id                       ✓ update + auditLog  
+DELETE /api/devices/:id                       ✓ soft delete CASAT + auditLog
+POST   /api/devices/:id/upload                ✓ multer + disk storage
+GET    /api/devices/:id/fisa-pdf              ✓ PDF generated
+GET    /api/devices/export/xlsx               ✓ Excel buffer + headers
+GET    /api/devices/export/csv                ✓ CSV + UTF-8 BOM
 ```
 
-**Checklist Faza 2:**
-- [ ] Dependențe instalate frontend + backend
-- [ ] BrowserRouter + Routes + ProtectedRoute în App.jsx / main.jsx
-- [ ] `GET /api/sections` endpoint funcțional
-- [ ] `deviceSchema.js` (Zod, JavaScript pur — fără TypeScript)
-- [ ] `DeviceForm.jsx` — mode add și edit funcționale
-- [ ] `routes/devices.js` — CRUD complet (rute statice ÎNAINTE de `/:id`)
-- [ ] Multer upload + `uploads/devices/` autocreate
-- [ ] PDF Fișă DM descărcabil (diacritice ok)
-- [ ] `InventoryPage.jsx` — tabel, filtre, paginare
-- [ ] Export Excel + CSV (cu filtrele active)
-- [ ] Soft delete cu confirmare
-- [ ] AuditLog la fiecare mutație Device
-- [ ] Verificare end-to-end completă
-- [ ] `uploads/` în `.gitignore`
+**Fișiere implementate:**
+- `frontend/src/pages/DeviceForm.jsx` — 560 linii, add/edit mode
+- `frontend/src/pages/InventoryPage.jsx` — 357 linii, tabel + filtre + paginare
+- `frontend/src/schemas/deviceSchema.js` — 134 linii, Zod validation
+- `backend/src/routes/devices.js` — 457 linii, 10 endpoints
+- `backend/src/index.js` — route registration + static uploads
 
-**Detalii implementare:** `tasks/plan.md` + `tasks/todo.md`
+**Testare Faza 2 — confirmată:**
+| Test | Rezultat |
+|------|----------|
+| POST /devices → 201 + device | ✓ |
+| GET /devices cu search "INV" | ✓ |
+| GET /devices cu status=FUNCTIONAL filter | ✓ |
+| GET /export/xlsx → Excel file | ✓ |
+| GET /export/csv → CSV UTF-8 | ✓ |
+| DELETE /devices/:id → CASAT status | ✓ |
+| DeviceForm add mode → validare Zod | ✓ |
+| DeviceForm edit mode → prefill data | ✓ |
+| Audit logs CREATE/UPDATE/DELETE | ✓ |
+| Soft delete reversibil | ✓ |
+
+**Commit Faza 2:**
+- `fab7394` — Checkpoint A (Docker, schema)
+- `5663d9d` — Checkpoint B (CRUD Device)
+- `454e2af` — Checkpoint C (Inventar table + export)
 
 ---
 
