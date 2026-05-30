@@ -1,6 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const XLSX = require('xlsx');
+const PDFDocument = require('pdfkit');
 const prisma = require('../db');
 const authMiddleware = require('../middleware/auth');
 
@@ -268,6 +269,89 @@ router.post('/:year/discrepancies/:id/verify', async (req, res) => {
   } catch (error) {
     console.error('Error verifying discrepancy:', error);
     res.status(500).json({ error: 'Eroare la marcarea discrepanței' });
+  }
+});
+
+// GET /api/annual-inventory/:year/report-pdf — generate PDF report
+router.get('/:year/report-pdf', async (req, res) => {
+  try {
+    const { year } = req.params;
+    const yearNum = parseInt(year);
+
+    if (!yearNum || yearNum < 2000 || yearNum > 2100) {
+      return res.status(400).json({ error: 'An invalid' });
+    }
+
+    // Query discrepancies
+    const discrepancies = await prisma.inventory_check_items.findMany({
+      where: {
+        found: false,
+        inventory: { year: yearNum },
+      },
+      include: {
+        device: { select: { inventoryNumber: true, name: true, status: true } },
+        inventory: { select: { section: { select: { name: true } } } },
+      },
+      orderBy: [{ inventory: { sectionId: 'asc' } }, { device: { name: 'asc' } }],
+    });
+
+    // Create PDF
+    const doc = new PDFDocument({ margin: 50 });
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename="Raport_Inventariere_${yearNum}.pdf"`);
+
+    doc.pipe(res);
+
+    // Header
+    doc.fontSize(18).font('Helvetica-Bold').text('RAPORT INVENTARIERE ANUALĂ', { align: 'center' });
+    doc.fontSize(12).text(`An: ${yearNum}`, { align: 'center' });
+    doc.text(`Data: ${new Date().toLocaleDateString('ro-RO')}`, { align: 'center' });
+    doc.moveDown(1);
+
+    // Summary
+    doc.fontSize(14).font('Helvetica-Bold').text('REZUMAT');
+    doc.fontSize(10).font('Helvetica');
+    doc.text(`Total discrepanțe: ${discrepancies.length}`, { indent: 20 });
+    doc.moveDown(0.5);
+
+    // Discrepancies section
+    doc.fontSize(14).font('Helvetica-Bold').text('DISCREPANȚE IDENTIFICATE:');
+    doc.fontSize(10).font('Helvetica');
+
+    if (discrepancies.length === 0) {
+      doc.text('✓ Nicio discrepanță găsită', { color: '#4ade80', indent: 20 });
+    } else {
+      discrepancies.forEach((item, idx) => {
+        doc.text(`${idx + 1}. ${item.device.inventoryNumber} - ${item.device.name}`, {
+          underline: true,
+          indent: 20,
+        });
+        doc.text(`   Status: ${item.device.status}`, { indent: 40 });
+        doc.text(`   Secție: ${item.inventory?.section?.name || 'N/A'}`, { indent: 40 });
+        doc.text(`   Localizare găsită: ${item.locationFound || 'NEGĂSIT'}`, {
+          indent: 40,
+          color: '#f87171',
+        });
+        doc.moveDown(0.3);
+      });
+    }
+
+    // Footer
+    doc.moveDown(1);
+    doc.fontSize(10).text('─'.repeat(80), { align: 'center' });
+    doc.text(`Raport generat: ${new Date().toLocaleString('ro-RO')}`, {
+      align: 'center',
+      color: '#6b7280',
+    });
+    doc.text(`Utilizator: ${req.user.username}`, {
+      align: 'center',
+      color: '#6b7280',
+    });
+
+    doc.end();
+  } catch (error) {
+    console.error('Error generating PDF report:', error);
+    res.status(500).json({ error: 'Eroare la generarea raportului' });
   }
 });
 

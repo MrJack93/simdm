@@ -72,6 +72,8 @@ export default function DeviceForm() {
   const queryClient = useQueryClient();
   const isEditMode = !!id;
   const [currentStep, setCurrentStep] = useState(0);
+  const [uploadingDoc, setUploadingDoc] = useState(false);
+  const [uploadSuccess, setUploadSuccess] = useState(false);
 
   const steps = ['Identificare', 'Clasificare', 'Exploatare', 'Financiar', 'Tehnic', 'Confirmă'];
 
@@ -150,6 +152,35 @@ export default function DeviceForm() {
       toast.error('Eroare la descărcarea PDF');
     },
   });
+
+  const handleDocumentUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!id) {
+      toast.error('Salvează mai întâi dispozitivul înainte de upload');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    setUploadingDoc(true);
+    try {
+      await api.post(`/devices/${id}/upload`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      setUploadSuccess(true);
+      toast.success('Document încărcat cu succes');
+      queryClient.invalidateQueries({ queryKey: ['device', id] });
+      setTimeout(() => setUploadSuccess(false), 3000);
+    } catch (error) {
+      toast.error('Eroare la upload: ' + error.message);
+    } finally {
+      setUploadingDoc(false);
+      e.target.value = '';
+    }
+  };
 
   if (deviceLoading) {
     return (
@@ -577,14 +608,36 @@ export default function DeviceForm() {
               </div>
 
               {isEditMode && (
-                <button
-                  type="button"
-                  onClick={() => downloadPdfMutation.mutate()}
-                  disabled={downloadPdfMutation.isPending}
-                  className="btn-secondary w-full"
-                >
-                  📄 Descarcă PDF
-                </button>
+                <>
+                  <button
+                    type="button"
+                    onClick={() => downloadPdfMutation.mutate()}
+                    disabled={downloadPdfMutation.isPending}
+                    className="btn-secondary w-full"
+                  >
+                    📄 Descarcă PDF
+                  </button>
+
+                  <div className="mt-4 p-4 rounded-lg" style={{ backgroundColor: 'var(--color-bg-tertiary)' }}>
+                    <label htmlFor="document" className="label-base block mb-2">
+                      📎 Atașează Document (Manual, Certificat, Factură, Pașaport)
+                    </label>
+                    <input
+                      id="document"
+                      type="file"
+                      accept=".pdf,.doc,.docx,.jpg,.png"
+                      onChange={handleDocumentUpload}
+                      disabled={uploadingDoc}
+                      className="input-base w-full"
+                    />
+                    {uploadingDoc && (
+                      <span className="text-cyan-400 text-sm mt-2 inline-block">⏳ Se încarcă...</span>
+                    )}
+                    {uploadSuccess && (
+                      <span className="text-green-400 text-sm mt-2 inline-block">✓ Fișier încărcat</span>
+                    )}
+                  </div>
+                </>
               )}
             </div>
           )}

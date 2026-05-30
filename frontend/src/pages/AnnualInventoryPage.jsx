@@ -314,6 +314,28 @@ export default function AnnualInventoryPage() {
     }
   };
 
+  const handleDownloadReport = async () => {
+    try {
+      const response = await api.get(`/annual-inventory/${selectedYear}/report-pdf`, {
+        responseType: 'blob',
+      });
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `Raport_Inventariere_${selectedYear}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+
+      toast.success('Raport descărcat cu succes');
+    } catch (error) {
+      console.error(error);
+      toast.error('Eroare la download raport');
+    }
+  };
+
   const sections = statusData || [];
   const devices = devicesData?.devices || [];
 
@@ -420,12 +442,18 @@ export default function AnnualInventoryPage() {
 
             {/* Show Discrepancies Button */}
             {sections.some(s => s.foundCount < s.totalCount) && (
-              <div className="card-base p-4 mb-6">
+              <div className="card-base p-4 mb-6 flex gap-2">
                 <button
                   onClick={() => setShowDiscrepanciesModal(true)}
-                  className="btn-danger"
+                  className="btn-danger flex-1"
                 >
                   🔍 Vizualizare Discrepanțe
+                </button>
+                <button
+                  onClick={handleDownloadReport}
+                  className="btn-primary flex-1"
+                >
+                  📄 Descarcă Raport PDF
                 </button>
               </div>
             )}
