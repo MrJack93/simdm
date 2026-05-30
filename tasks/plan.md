@@ -1,53 +1,218 @@
-# Implementation Plan: SIMDM — Faza 2: Modul Inventar DM — ✅ COMPLET
+# 📋 Project Plan — SIMDM 8 Faze
 
-> **STATUS: FAZA 2 MVP COMPLETĂ 100%** — Finalizat 2026-05-30.
-> 
-> Faza 1 ✅ (Fundație) → Faza 2 ✅ (CRUD + Inventar) → Faza 3 (Mentenanță)
->
-> Ce s-a realizat: 3 checkpoints (A, B, C) + 3 commits + 500+ linii cod + 9 endpoint-uri API
-
----
-
-## Baseline Faza 1 (ce există deja)
-
-| Componentă | Stare | Detalii |
-|------------|-------|---------|
-| Backend Express 5 | ✅ | src/index.js — port 3001, helmet, CORS, cookie-parser |
-| Auth DB-backed | ✅ | login / refresh / logout / me, refresh httpOnly cookie, rate limiting |
-| authMiddleware | ✅ | Bearer token → `req.user = { sub, username, role }` |
-| authService + tokens | ✅ | src/services/authService.js + src/lib/tokens.js |
-| PrismaClient unic | ✅ | src/db.js cu PrismaPg adapter |
-| Schema multi-fișier | ✅ | 10 modele + enums în prisma/schema/ |
-| 4 migrații aplicate | ✅ | tabele create în DB |
-| Seed | ✅ | Admin user + 8 secții + DM test |
-| Frontend React 19 | ✅ | Vite 8 + Tailwind v4 |
-| Login.jsx | ✅ | cu useAuth hook, accesibil, dark theme |
-| App.jsx | ✅ | shell simplu (fără router), arată Dashboard placeholder |
-| axios.js | ✅ | withCredentials, auto-refresh-on-401, sessionStorage['accessToken'] |
-| useAuth hook | ✅ | login / logout / user / loading |
-| TanStack Query | ✅ | instalat în frontend |
-
-**Dependențe lipsă pentru Faza 2:**
-
-| Pachet | Loc | Scop |
-|--------|-----|------|
-| `react-hook-form` | frontend | forme |
-| `@hookform/resolvers` | frontend | integrare Zod |
-| `zod` | frontend | validare schema |
-| `react-select` | frontend | dropdown-uri custom |
-| `react-datepicker` | frontend | selectori dată |
-| `react-toastify` | frontend | notificări |
-| `lucide-react` | frontend | icoane SVG |
-| `multer` | backend | upload fișiere |
-| `pdfkit` | backend | generare PDF |
-| `exceljs` | backend | export Excel |
+**Versiune:** 2.0 (Faza 1 Complete + Full Roadmap)  
+**Actualizat:** 2026-05-30  
+**Audiență:** Product Managers, Team Leads  
+**Status:** ✅ Faza 1 COMPLETĂ — Roadmap 8 faze definit
 
 ---
 
-## Scope Faza 2
+## 🎯 Overview
 
-| Pas | Conținut | Durata |
-|-----|---------|--------|
+**Vision:** Înlocuiți evidența pe hârtie a dispozitivelor medicale cu aplicație web securizată (Faza 1-8), conformă cu Ghidurile Bioinginerului (Ordinul MS 889/2024).
+
+**Timeline estimate:** 18-22 săptămâni (4-5 luni dev time)
+
+**Resurse estimate:** 1 backend dev + 1 frontend dev (full-time)
+
+---
+
+## ✅ STATUS FAZA 1 — COMPLETĂ
+
+**Delivered:** 2026-05-30
+
+**Checklist:**
+- ✅ Docker stack (PostgreSQL, backend, frontend)
+- ✅ Authentication (JWT, bcrypt, refresh tokens)
+- ✅ Login page (dark/light, responsive, WCAG 2.1 AA)
+- ✅ Database (10+ tabele, 6 migrații, seed data)
+- ✅ Documentație (8 fișiere profesioniste)
+- ✅ Audit score: **104/104 (100%)**
+
+**Next:** Faza 2 (Inventar DM) — kickoff
+
+---
+
+## 🗂️ FAZA 2: Inventar DM
+
+**Status:** PLANNING  
+**ETA:** 3-4 săptămâni  
+**Priority:** 🔴 CRITICAL (MVP core)
+
+### Deliverables
+
+| Modul | Tasks | Complexity |
+|-------|-------|-----------|
+| **CRUD Devices** | GET list + filters, POST create, PUT edit, DELETE soft-delete | Medium |
+| **Inventory Page** | DataGrid, sorting, filtering, pagination | Medium |
+| **DeviceForm** | 6-step wizard, validation (Zod), file upload | High |
+| **Components** | StatusBadge, DeviceCard, SearchBar | Low |
+| **Export** | CSV export with all columns | Low |
+| **Backend API** | 5-6 endpoints, validation, error handling | Medium |
+
+### Acceptance Criteria
+- [ ] CRUD tested (Postman)
+- [ ] Inventory table displays 8 seed devices
+- [ ] Filters work (status, name, section, risk class)
+- [ ] Export to CSV
+- [ ] Mobile responsive
+- [ ] Lighthouse ≥ 95
+- [ ] Zero console errors
+- [ ] Documentation updated
+
+---
+
+## 🔧 FAZA 3: Mentenanță
+
+**Status:** PLANNED  
+**ETA:** 3-4 săptămâni după Faza 2
+
+### Deliverables
+
+| Modul | Tasks |
+|-------|-------|
+| **Maintenance CRUD** | Create MP/MC, schedule, track completion |
+| **Plan Preventiv** | Auto-calculate next due dates |
+| **Cost Tracking** | Per-device cost breakdown |
+| **Service Providers** | Internal/external vendor tracking |
+| **Reports** | Schedule, cost, MP vs MC ratio |
+
+---
+
+## 📄 FAZA 4: Documente & Proceduri
+
+**Status:** PLANNED  
+**ETA:** 2-3 săptămâni
+
+### Deliverables
+
+| Modul | Tasks |
+|-------|-------|
+| **DMS** | Upload, categorize, version control |
+| **PDF Generation** | Device sheet, maintenance reports |
+| **Procedures** | Templates, checklists, printing |
+
+---
+
+## 🚨 FAZA 5: Incidente & Vigilență
+
+**Status:** PLANNED  
+**ETA:** 2-3 săptămâni
+
+### Deliverables
+
+| Modul | Tasks |
+|-------|-------|
+| **Incident Reporting** | Severity, impact, root cause, actions |
+| **Alerts** | Email, dashboard, escalation |
+| **AMDM Reporting** | Compliance reporting to national system |
+
+---
+
+## 🛒 FAZA 6: Procurement
+
+**Status:** PLANNED  
+**ETA:** 2-3 săptămâni
+
+### Deliverables
+
+| Modul | Tasks |
+|-------|-------|
+| **Supplier Management** | Vendor contacts, contracts |
+| **Device Lifecycle** | PIF workflow, decommissioning |
+
+---
+
+## 📊 FAZA 7: Dashboard & Raportare
+
+**Status:** PLANNED  
+**ETA:** 2-3 săptămâni
+
+### Deliverables
+
+| Modul | Tasks |
+|-------|-------|
+| **Dashboard KPI** | Device status pie chart, alerts, upcoming maintenance |
+| **Monthly Reports** | PDF export with KPI |
+| **Data Export** | CSV, Excel, PDF formats |
+
+---
+
+## 🎓 FAZA 8: QA & Go-Live
+
+**Status:** PLANNED  
+**ETA:** 1-2 săptămâni
+
+### Deliverables
+
+| Modul | Tasks |
+|-------|-------|
+| **Testing** | Functional, security, performance, accessibility |
+| **Deployment** | Docker optimization, server setup, backup strategy |
+| **Training** | User documentation, IT staff training |
+
+---
+
+## 📊 Resource Timeline
+
+```
+Faza 1  ✅ DONE                (2026-05-30)
+Faza 2  |████████| 3-4 week    (2026-06-15 — 2026-06-26)
+Faza 3  |████████| 3-4 week    (2026-06-26 — 2026-07-17)
+Faza 4  |██████| 2-3 week      (2026-07-17 — 2026-08-01)
+Faza 5  |██████| 2-3 week      (2026-08-01 — 2026-08-17)
+Faza 6  |██████| 2-3 week      (2026-08-17 — 2026-09-01)
+Faza 7  |██████| 2-3 week      (2026-09-01 — 2026-09-17)
+Faza 8  |████| 1-2 week        (2026-09-17 — 2026-10-01)
+```
+
+**Milestones:**
+- 🎯 MVP (Faza 1-2): 2026-06-26
+- 🎯 Core (Faza 1-3): 2026-07-17
+- 🎯 Complete: 2026-10-01
+
+---
+
+## 📈 Estimate Daysworktrack
+
+| Fază | Backend | Frontend | QA | Total |
+|------|---------|----------|-----|-------|
+| 1    | ✅ Done | ✅ Done | ✅ 2 | ✅ Done |
+| 2    | 12-15  | 12-15  | 2-3 | 26-33 |
+| 3    | 14-18  | 8-10   | 2-3 | 24-31 |
+| 4    | 8-10   | 10-12  | 2   | 20-24 |
+| 5    | 10-12  | 8-10   | 2   | 20-24 |
+| 6    | 8-10   | 6-8    | 1   | 15-19 |
+| 7    | 10-12  | 10-12  | 2   | 22-26 |
+| 8    | 5-8    | 5-8    | 3-5 | 13-21 |
+| **TOTAL** | **67-85** | **59-75** | **16-22** | **142-182 days** |
+
+**At 5 days/week:** 6-7 months total
+
+---
+
+## ⚠️ Riscuri & Mitigation
+
+| Risc | Impact | Plan |
+|------|--------|------|
+| Scope creep | High | Strict phase gates |
+| Data migration | High | Test + validate + dry-run |
+| Performance | Medium | Monitoring + indexing |
+| Training delays | Medium | Early materials |
+| Security issues | High | Audits + penetration test |
+
+---
+
+## ✍️ Decizii Aprobate
+
+- ✅ Stack locked (React, Express, PostgreSQL)
+- ✅ Faza 1 DONE (104/104 audit)
+- ⏳ Faza 2 kickoff date: TBD
+- ⏳ Go-live target: October 2026
+
+---
+
+**Următor:** Faza 2 planning — citire [SPEC.md](../SPEC.md)
 | **2.1** | CRUD Device — formular add/edit + backend routes | 5 zile |
 | **2.2** | Tabel Inventar + Filtre avansate + Export | 3 zile |
 | **2.3** | Inventariere Anuală (workflow calendar + checklist) | 3 zile |

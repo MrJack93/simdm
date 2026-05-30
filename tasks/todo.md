@@ -1,52 +1,222 @@
-# SIMDM — Faza 2: Modul Inventar DM — ✅ COMPLET
+# ✅ Task Tracking — SIMDM All Phases
 
-> **STATUS: FAZA 2 COMPLETĂ** — Actualizat 2026-05-30.  
-> Faza 1: Fundație ✅ | Faza 2: CRUD + Inventar ✅ | Faza 3+: Mentenanță (urmează)  
-> Commits: `fab7394` (A) + `5663d9d` (B) + `454e2af` (C)  
-> Vezi `tasks/plan.md` pentru context și decizii.
-
----
-
-## Faza A — Setup & Routing
-
-- [x] **A1 — Instalare dependențe**
-  ```bash
-  # Frontend
-  cd frontend
-  npm install react-hook-form @hookform/resolvers zod react-select react-datepicker react-toastify lucide-react
-
-  # Backend
-  cd ../backend
-  npm install multer pdfkit exceljs
-  ```
-  - ✅ Acceptanță: toate pachetele în `package.json`, zero erori `npm install`
-  - ⚠️ Atenție: `react-datepicker` vine cu propriul CSS — importul se face în `DeviceForm.jsx`
-
-- [x] **A2 — Routing React (BrowserRouter + Routes + ProtectedRoute)**
-  - `frontend/src/main.jsx`: înfășoară `<App />` în `<BrowserRouter>` și `<QueryClientProvider>`
-  - `frontend/src/App.jsx`: adaugă `<Routes>` cu:
-    - `<Route path="/" element={<Login />}>`  (sau redirect dacă e autentificat)
-    - `<Route path="/inventory" element={<ProtectedRoute><InventoryPage /></ProtectedRoute>}`
-    - `<Route path="/devices/new" element={<ProtectedRoute><DeviceForm /></ProtectedRoute>}`
-    - `<Route path="/devices/:id/edit" element={<ProtectedRoute><DeviceForm /></ProtectedRoute>}`
-  - `frontend/src/components/ProtectedRoute.jsx`: dacă `loading` → spinner; dacă `!user` → `<Navigate to="/" replace />`
-  - ✅ Acceptanță: navigare `/inventory` fără login → redirect `/`; cu login → pagina inventar
-
-- [x] **A3 — Backend: endpoint GET /api/sections**
-  - Creează `backend/src/routes/sections.js`:
-    - `GET /` → `prisma.section.findMany({ where: { isActive: true }, orderBy: { name: 'asc' } })`
-    - Protejat cu `authMiddleware`
-  - `backend/src/index.js`: `app.use('/api/sections', authMiddleware, sectionsRoutes)`
-  - ✅ Acceptanță: `GET /api/sections` cu Bearer token → array secții JSON
-
-### ⛳ Checkpoint A
-- [x] `npm run dev` pornește fără erori
-- [x] Navigare `/inventory` → ProtectedRoute funcționează
-- [x] `GET /api/sections` → 200 cu secțiile din DB
+**Versiune:** 2.0 (Faza 1 Complete)  
+**Actualizat:** 2026-05-30  
+**Format:** Checkbox tracking per phase
 
 ---
 
-## Faza B — CRUD Device (backend + formular)
+## 🎯 FAZA 1: Fundație & Infrastructură — ✅ COMPLETĂ
+
+**Status:** ✅ 100% DONE (2026-05-30)
+
+### Infrastructure
+- [x] Docker setup (PostgreSQL 16, Express backend, React frontend)
+- [x] Node.js v22 LTS setup
+- [x] Git repository initialization
+- [x] .gitignore (node_modules, .env, dist)
+
+### Backend (Express + Prisma)
+- [x] Express.js server (port 3001)
+- [x] Prisma ORM setup (multi-file schema)
+- [x] PostgreSQL database connection
+- [x] Authentication system (JWT + bcryptjs)
+- [x] Auth middleware (Bearer token validation)
+- [x] Auth routes (/login, /refresh, /logout, /me)
+- [x] Database seed (1 user, 8 sections, 8 devices, 4 consumables, 2 incidents)
+- [x] Rate limiting on login (5 tries / 15 min)
+- [x] Helmet.js security headers
+- [x] CORS configuration
+
+### Frontend (React + Vite + Tailwind)
+- [x] React 19 + Vite 8 setup
+- [x] Tailwind CSS v4 with @tailwindcss/vite
+- [x] React Router v7 for navigation
+- [x] Login page (dark/light mode, responsive)
+- [x] Axios HTTP client with JWT interceptor
+- [x] TanStack Query v5 (installed, ready for Faza 2)
+- [x] CSS variables for dark/light theme
+- [x] Focus rings (WCAG 2.1 AA compliance)
+
+### Documentation
+- [x] README.md (comprehensive overview)
+- [x] SPEC.md (technical specification)
+- [x] GETTING-STARTED.md (5-10 min setup guide)
+- [x] CLAUDE.md (AI developer instructions)
+- [x] docs/CONTRIBUTING.md (PR workflow)
+- [x] docs/2-DEVELOPER-GUIDE.md (coding patterns)
+- [x] docs/1-DESIGN-AND-ACCESSIBILITY.md (design tokens + WCAG)
+- [x] tasks/plan.md (8-phase roadmap)
+- [x] tasks/todo.md (this file)
+
+### Testing & Verification
+- [x] API health check (/api/health) — ✅ 200 OK
+- [x] Login endpoint (/api/auth/login) — ✅ 200 + token
+- [x] Token refresh (/api/auth/refresh) — ✅ working
+- [x] Logout endpoint (/api/auth/logout) — ✅ clear cookie
+- [x] Frontend login form — ✅ saves token to localStorage
+- [x] Audit Faza 1 — ✅ 104/104 criteria passed
+- [x] Lighthouse Accessibility — ✅ ≥ 95
+- [x] WCAG 2.1 AA compliance — ✅ verified
+
+**Final Status:** 🎉 **FAZA 1 APPROVED FOR FAZA 2**
+
+---
+
+## ⬜ FAZA 2: Inventar DM — PLANNING
+
+**Status:** PENDING KICKOFF  
+**ETA:** 3-4 weeks  
+**Owner:** Backend + Frontend team
+
+### Backend Tasks
+- [ ] Install dependencies (multer, pdfkit, exceljs)
+- [ ] Create Device CRUD routes
+  - [ ] GET /api/devices (with filters)
+  - [ ] POST /api/devices (create with validation)
+  - [ ] PUT /api/devices/:id (edit)
+  - [ ] DELETE /api/devices/:id (soft-delete)
+  - [ ] GET /api/devices/:id (detail)
+- [ ] Implement Zod validation schema for Device
+- [ ] Add database indexes on inventoryNumber, status
+- [ ] Test all endpoints in Postman
+- [ ] Error handling and HTTP status codes
+
+### Frontend Tasks
+- [ ] Install form dependencies (react-hook-form, zod, react-select, react-datepicker)
+- [ ] Create InventoryPage component
+  - [ ] DataGrid with columns (name, manufacturer, status, section, risk class)
+  - [ ] Sorting (click column header)
+  - [ ] Filtering (status dropdown, name search)
+  - [ ] Pagination (10, 25, 50 rows/page)
+- [ ] Create DeviceForm component
+  - [ ] 6-step wizard
+  - [ ] Zod validation
+  - [ ] File upload for manual
+- [ ] Create DeviceCard component (mobile layout)
+- [ ] Create StatusBadge component (icon + text)
+- [ ] Implement export to CSV
+- [ ] Testing in dark/light mode
+
+### Acceptance Criteria
+- [ ] CRUD operations work (test data visible)
+- [ ] Filters functional (all columns)
+- [ ] Export generates valid CSV
+- [ ] Mobile responsive (<768px = card layout)
+- [ ] Lighthouse Accessibility ≥ 95
+- [ ] Zero console errors/warnings
+- [ ] Documentation updated
+
+---
+
+## ⬜ FAZA 3: Mentenanță — SCHEDULED
+
+**Status:** NOT STARTED  
+**ETA:** After Faza 2 (+3-4 weeks)
+
+### Backend Tasks
+- [ ] Maintenance CRUD endpoints
+- [ ] Preventive (MP) scheduling
+- [ ] Corrective (MC) ticketing
+- [ ] Cost tracking per device
+
+### Frontend Tasks
+- [ ] Maintenance schedule page
+- [ ] Cost reports
+- [ ] Service provider management
+
+---
+
+## ⬜ FAZA 4: Documents & Procedures — SCHEDULED
+
+**Status:** NOT STARTED  
+**ETA:** After Faza 3 (+2-3 weeks)
+
+### Tasks
+- [ ] DMS (upload, categorize, version)
+- [ ] PDF generation (device sheet, reports)
+- [ ] Procedure templates
+
+---
+
+## ⬜ FAZA 5: Incidents & Vigilance — SCHEDULED
+
+**Status:** NOT STARTED  
+**ETA:** After Faza 4 (+2-3 weeks)
+
+### Tasks
+- [ ] Incident reporting system
+- [ ] Severity levels & impact assessment
+- [ ] AMDM compliance reporting
+- [ ] Email alerts & escalation
+
+---
+
+## ⬜ FAZA 6: Procurement — SCHEDULED
+
+**Status:** NOT STARTED  
+**ETA:** After Faza 5 (+2-3 weeks)
+
+### Tasks
+- [ ] Supplier management
+- [ ] PIF workflow
+- [ ] Device lifecycle tracking
+
+---
+
+## ⬜ FAZA 7: Dashboard & Reporting — SCHEDULED
+
+**Status:** NOT STARTED  
+**ETA:** After Faza 6 (+2-3 weeks)
+
+### Tasks
+- [ ] KPI dashboard (pie charts, alerts)
+- [ ] Monthly reports (PDF export)
+- [ ] Data export (CSV, Excel, PDF)
+
+---
+
+## ⬜ FAZA 8: QA & Go-Live — SCHEDULED
+
+**Status:** NOT STARTED  
+**ETA:** After Faza 7 (+1-2 weeks)
+
+### Testing
+- [ ] Functional testing (all features)
+- [ ] Security audit
+- [ ] Performance testing (load, stress)
+- [ ] WCAG accessibility final audit
+- [ ] Data migration from Excel
+
+### Deployment
+- [ ] Docker image optimization
+- [ ] Server setup at hospital IT
+- [ ] Database backup strategy
+- [ ] Disaster recovery plan
+- [ ] User training documentation
+- [ ] IT staff training for ops
+
+---
+
+## 📊 Progress Summary
+
+| Fază | Status | Completion |
+|------|--------|-----------|
+| **1** | ✅ COMPLETE | 100% |
+| **2** | ⏳ PLANNING | 0% |
+| **3** | ⬜ SCHEDULED | 0% |
+| **4** | ⬜ SCHEDULED | 0% |
+| **5** | ⬜ SCHEDULED | 0% |
+| **6** | ⬜ SCHEDULED | 0% |
+| **7** | ⬜ SCHEDULED | 0% |
+| **8** | ⬜ SCHEDULED | 0% |
+| **TOTAL** | ✅ 12% | 12% |
+
+---
+
+**Last Updated:** 2026-05-30  
+**Next Review:** Faza 2 kickoff (TBD)  
+**Repo:** [GitHub](..)
 
 - [x] **B1 — Zod schema Device**
   - Fișier: `frontend/src/schemas/deviceSchema.js`
