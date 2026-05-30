@@ -1,12 +1,14 @@
 services:
   # PostgreSQL Database
   db:
-    image: postgres:16
+    image: postgres:16-alpine
     restart: unless-stopped
+    container_name: simdm-db
     environment:
       POSTGRES_USER: simdm_user
-      POSTGRES_PASSWORD: simdm_secure_2024
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-simdm_secure_2024}
       POSTGRES_DB: simdm_db
+      POSTGRES_INITDB_ARGS: "-c shared_buffers=256MB -c max_connections=100"
     ports:
       - "5432:5432"
     volumes:
@@ -16,26 +18,45 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 15s
     networks:
       - simdm_network
+    # Resource limits to prevent WSL exhaustion
+    deploy:
+      resources:
+        limits:
+          cpus: '1.5'
+          memory: 512M
+        reservations:
+          cpus: '0.5'
+          memory: 256M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   # Backend — Express.js
   backend:
     build:
       context: .
       dockerfile: backend/Dockerfile
+      cache_from:
+        - simdm-backend:latest
     restart: unless-stopped
+    container_name: simdm-backend
     ports:
       - "3001:3001"
     environment:
-      DATABASE_URL: "postgresql://simdm_user:simdm_secure_2024@db:5432/simdm_db"
+      DATABASE_URL: "postgresql://simdm_user:${POSTGRES_PASSWORD:-simdm_secure_2024}@db:5432/simdm_db"
       JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET:-9a7b3c5f8e2d1b4a6c9f0e3d8b1a5c7f9e2d4b6a8c0f1e3d5b7a9c1e3f5a}
       PORT: 3001
-      NODE_ENV: "development"
+      NODE_ENV: ${NODE_ENV:-development}
       ADMIN_USERNAME: ${ADMIN_USERNAME:-inginer}
       ACCESS_TOKEN_EXPIRES: "15m"
       REFRESH_TOKEN_TTL_DAYS: "30"
       COOKIE_SECURE: "false"
+      LOG_LEVEL: ${LOG_LEVEL:-info}
     depends_on:
       db:
         condition: service_healthy
@@ -44,17 +65,34 @@ services:
     volumes:
       - ./backend:/app/backend
       - /app/backend/node_modules
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
+        reservations:
+          cpus: '0.5'
+          memory: 256M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   # Frontend — Vite + React
   frontend:
     build:
       context: .
       dockerfile: frontend/Dockerfile
+      cache_from:
+        - simdm-frontend:latest
     restart: unless-stopped
+    container_name: simdm-frontend
     ports:
       - "5173:5173"
     environment:
-      VITE_BACKEND_URL: "http://backend:3001"
+      VITE_BACKEND_URL: ${VITE_BACKEND_URL:-http://backend:3001}
     depends_on:
       backend:
         condition: service_healthy
@@ -63,10 +101,28 @@ services:
     volumes:
       - ./frontend:/app/frontend
       - /app/frontend/node_modules
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
+        reservations:
+          cpus: '0.5'
+          memory: 256M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
 volumes:
   postgres_data:
+    driver: local
 
 networks:
   simdm_network:
     driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16
