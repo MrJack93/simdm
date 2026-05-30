@@ -8,7 +8,7 @@ Ghid rapid pentru a porni aplicația SIMDM pe calculatorul tău în **5-10 minut
 
 Înainte de a începe, asigură-te că ai instalat:
 
-- **Node.js** v18+ — descarcă de la [nodejs.org](https://nodejs.org/)
+- **Node.js** v22 LTS — descarcă de la [nodejs.org](https://nodejs.org/) (sau v20+)
 - **PostgreSQL** v14+ — descarcă de la [postgresql.org](https://www.postgresql.org/download/)
 - **Git** — descarcă de la [git-scm.com](https://git-scm.com/)
 
@@ -132,7 +132,7 @@ Odată ce serverele sunt pornite:
 
 | Sarcină | Fișier |
 |---------|--------|
-| **Cum să adaug un dispozitiv?** | [QUICK_REFERENCE.md](QUICK_REFERENCE.md) |
+| **Cum să adaug un dispozitiv?** | [SPEC.md - Faza 2 Endpoints](SPEC.md#52-faza-2--inventar-dm-) |
 | **Arhitectura proiectului** | [CLAUDE.md](CLAUDE.md) |
 | **Ghid developer complet** | [docs/2-DEVELOPER-GUIDE.md](docs/2-DEVELOPER-GUIDE.md) |
 | **Design & Accesibilitate** | [docs/1-DESIGN-AND-ACCESSIBILITY.md](docs/1-DESIGN-AND-ACCESSIBILITY.md) |
