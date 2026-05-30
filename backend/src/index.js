@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
 const prisma = require('./db');
 const fs = require('fs');
+const path = require('path');
 const LOG_FILE = '/tmp/backend.log';
 
 function log(msg) {
@@ -16,12 +17,14 @@ function log(msg) {
 
 const authMiddleware = require('./middleware/auth');
 
-let authRoutes, sectionsRoutes;
+let authRoutes, sectionsRoutes, deviceRoutes;
 try {
   authRoutes = require('./routes/auth');
   console.log('✅ Auth routes loaded');
   sectionsRoutes = require('./routes/sections');
   console.log('✅ Sections routes loaded');
+  deviceRoutes = require('./routes/devices');
+  console.log('✅ Device routes loaded');
 } catch (e) {
   console.error('❌ Error loading routes:', e.message);
   process.exit(1);
@@ -38,6 +41,10 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(cookieParser());
+
+// Static files for uploads
+const uploadsDir = path.join(__dirname, '../uploads');
+app.use('/uploads', express.static(uploadsDir));
 
 // Debug middleware
 app.use((req, res, next) => {
@@ -66,9 +73,9 @@ app.get('/api/health', async (req, res) => {
 
 app.use('/api/auth', authRoutes);
 app.use('/api/sections', authMiddleware, sectionsRoutes);
+app.use('/api/devices', deviceRoutes);
 
 // Viitoarele rute se adaugă în fazele 2-8:
-// app.use('/api/devices',     authMiddleware, deviceRoutes);
 // app.use('/api/maintenance', authMiddleware, maintenanceRoutes);
 // app.use('/api/incidents',   authMiddleware, incidentRoutes);
 // app.use('/api/documents',   authMiddleware, documentRoutes);
