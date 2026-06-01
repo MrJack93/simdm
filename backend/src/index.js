@@ -16,6 +16,7 @@ function log(msg) {
 }
 
 const authMiddleware = require('./middleware/auth');
+const { cleanupExpiredTokens } = require('./jobs/cleanupTokens');
 
 let authRoutes, sectionsRoutes, deviceRoutes, consumableRoutes, annualInventoryRoutes;
 try {
@@ -110,6 +111,10 @@ app.use((req, res) => {
 const server = app.listen(PORT, () => {
   log(`Server SIMDM pornit pe http://localhost:${PORT}`);
   log(`Health check: http://localhost:${PORT}/api/health`);
+
+  // Daily cleanup of expired refresh tokens
+  setInterval(cleanupExpiredTokens, 24 * 60 * 60 * 1000);
+  log('Refresh token cleanup job started (daily)');
 });
 
 server.on('error', (err) => {
