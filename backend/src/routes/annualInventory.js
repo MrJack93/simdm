@@ -306,6 +306,10 @@ router.get('/:year/report-pdf', async (req, res) => {
     doc.fontSize(18).font('Helvetica-Bold').text('RAPORT INVENTARIERE ANUALĂ', { align: 'center' });
     doc.fontSize(12).text(`An: ${yearNum}`, { align: 'center' });
     doc.text(`Data: ${new Date().toLocaleDateString('ro-RO')}`, { align: 'center' });
+    doc.fontSize(9).font('Helvetica').text(
+      'Conform Ordinului MS nr. 763/2023 și Procedurii MDM Nr. 1 (Ordinul MS nr. 889/2024)',
+      { align: 'center' }
+    );
     doc.moveDown(1);
 
     // Summary
