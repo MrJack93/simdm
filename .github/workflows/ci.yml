@@ -60,6 +60,24 @@ jobs:
         env:
           DATABASE_URL: postgresql://test:test@localhost:5432/test_db
 
+      - name: Seed test DB
+        working-directory: backend
+        run: node prisma/seed.js
+        env:
+          DATABASE_URL: postgresql://test:test@localhost:5432/test_db
+
+      - name: Run backend tests + coverage
+        working-directory: backend
+        run: npm run test:coverage
+        env:
+          DATABASE_URL: postgresql://test:test@localhost:5432/test_db
+          JWT_ACCESS_SECRET: test_secret_64_chars_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+          JWT_REFRESH_SECRET: test_secret_64_chars_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+          ACCESS_TOKEN_EXPIRES: 15m
+          REFRESH_TOKEN_EXPIRES: 7d
+          TEST_PASSWORD: Test123!
+          NODE_ENV: test
+
       - name: Lint check
         working-directory: backend
         run: npm run lint --if-present || echo "No lint script"
@@ -85,6 +103,10 @@ jobs:
       - name: Install dependencies
         working-directory: frontend
         run: npm ci
+
+      - name: Run frontend tests + coverage
+        working-directory: frontend
+        run: npm run test:coverage
 
       - name: Build
         working-directory: frontend
