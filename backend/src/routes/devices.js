@@ -416,10 +416,12 @@ router.post('/:id/upload', upload.single('file'), antivirusMiddleware, async (re
 
     const deviceId = parseInt(req.params.id);
     const fileUrl = `/uploads/devices/${req.file.filename}`;
+    const allowedFields = ['manualUrl', 'certificateUrl', 'invoiceUrl', 'passportUrl'];
+    const field = allowedFields.includes(req.body.field) ? req.body.field : 'manualUrl';
 
     const device = await prisma.devices.update({
       where: { id: deviceId },
-      data: { manualUrl: fileUrl },
+      data: { [field]: fileUrl },
     });
 
     // Audit log for file upload with scan result
