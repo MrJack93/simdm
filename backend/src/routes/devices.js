@@ -470,8 +470,8 @@ router.get('/:id/fisa-pdf', exportLimiter, async (req, res) => {
     doc.pipe(res);
 
     // Header
-    doc.fontSize(16).font('Helvetica-Bold').text('FIȘĂ DISPOZITIV MEDICAL', { align: 'center' });
-    doc.fontSize(10).font('Helvetica').text('Formular Nr. 8 – Anexa 3, Ordinul MS nr. 889/2024', { align: 'center' });
+    doc.fontSize(16).font('Helvetica-Bold').text('FIȘA DISPOZITIVULUI MEDICAL', { align: 'center' });
+    doc.fontSize(10).font('Helvetica').text('Format SIMDM (AMDM) · Ordinul MS nr. 889/2024', { align: 'center' });
     doc.moveDown();
 
     // Section 1: Identification
