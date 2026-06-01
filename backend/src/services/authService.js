@@ -161,7 +161,7 @@ class AuthService {
 
     // Generează tokens noi (rotation)
     const newAccessToken = this.generateAccessToken(tokenRecord.users);
-    const { token: newRefreshToken, id: newRefreshTokenId } = await this.generateRefreshToken(tokenRecord.user.id, req);
+    const { token: newRefreshToken, id: newRefreshTokenId } = await this.generateRefreshToken(tokenRecord.userId, req);
 
     // Marcheaza vechiul ca revocat si inlocuit
     await prisma.refresh_tokens.update({
