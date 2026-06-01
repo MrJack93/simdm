@@ -155,6 +155,7 @@ router.post('/:year/section/:sectionId', async (req, res) => {
           year: yearNum,
           sectionId: sectionIdNum,
           status: 'IN_PROGRESS',
+          updatedAt: new Date(),
           items: {
             create: devices.map(device => ({
               deviceId: device.id,
@@ -426,6 +427,7 @@ router.post('/import-fixed-assets', upload.single('file'), async (req, res) => {
             acquisitionDate,
             status: 'FUNCTIONAL',
             sectionId: defaultSection?.id || null,
+            updatedAt: new Date(),
           },
         });
         createdCount++;

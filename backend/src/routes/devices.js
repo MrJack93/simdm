@@ -311,7 +311,7 @@ router.get('/:id', async (req, res) => {
       where: { id: parseInt(req.params.id) },
       include: {
         sections: { select: { id: true, name: true } },
-        maintenanceRecords: { take: 5, orderBy: { executedDate: 'desc' } },
+        maintenance_records: { take: 5, orderBy: { executedDate: 'desc' } },
         incidents: { take: 5, orderBy: { occurredAt: 'desc' } },
       },
     });

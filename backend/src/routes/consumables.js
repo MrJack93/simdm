@@ -115,6 +115,7 @@ router.post('/', async (req, res) => {
         expiryDate: expiryDate ? new Date(expiryDate) : null,
         location: location?.trim() || null,
         notes: notes?.trim() || null,
+        updatedAt: new Date(),
       },
     });
 
