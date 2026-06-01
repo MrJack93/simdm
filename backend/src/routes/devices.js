@@ -501,7 +501,7 @@ router.get('/:id/fisa-pdf', exportLimiter, async (req, res) => {
     doc.text(`Status: ${device.status}`);
     doc.text(`Secție: ${device.sections?.name || '—'}`);
     doc.text(`Cameră/Locație: ${device.room || '—'}`);
-    doc.text(`Frecvență mentenanță: ${device.maintenanceFreq ? device.maintenanceFreq + ' zile' : '—'}`);
+    doc.text(`Frecvență mentenanță: ${device.maintenanceFreq ? device.maintenanceFreq + ' luni' : '—'}`);
     doc.moveDown();
 
     // Section 4: Financial Data
