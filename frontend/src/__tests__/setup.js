@@ -61,30 +61,32 @@ vi.mock('react-datepicker', () => ({
 // Mock react-select — îl reducem la un <select> nativ accesibil,
 // pentru ca testele să poată selecta opțiuni fără DOM-ul complex react-select.
 // ---------------------------------------------------------------------------
-vi.mock('react-select', () => ({
-  default: ({ options = [], value, onChange, placeholder, id }) => {
-    // eslint-disable-next-line global-require
-    const React = require('react');
-    return React.createElement(
-      'select',
-      {
-        'data-testid': id ? `select-${id}` : 'react-select',
-        id,
-        value: value?.value ?? '',
-        onChange: (e) => {
-          const opt = options.find((o) => String(o.value) === e.target.value);
-          onChange && onChange(opt || null);
+vi.mock('react-select', () => {
+  // eslint-disable-next-line global-require
+  const React = require('react');
+  return {
+    default: ({ options = [], value, onChange, placeholder, id }) => {
+      return React.createElement(
+        'select',
+        {
+          'data-testid': id ? `select-${id}` : 'react-select',
+          id,
+          value: value?.value ?? '',
+          onChange: (e) => {
+            const opt = options.find((o) => String(o.value) === e.target.value);
+            onChange && onChange(opt || null);
+          },
         },
-      },
-      [
-        React.createElement('option', { key: '__placeholder', value: '' }, placeholder || '—'),
-        ...options.map((o) =>
-          React.createElement('option', { key: o.value, value: o.value }, o.label)
-        ),
-      ]
-    );
-  },
-}));
+        [
+          React.createElement('option', { key: '__placeholder', value: '' }, placeholder || '—'),
+          ...options.map((o) =>
+            React.createElement('option', { key: o.value, value: o.value }, o.label)
+          ),
+        ]
+      );
+    },
+  };
+});
 
 // ---------------------------------------------------------------------------
 // API-uri DOM lipsă în jsdom, folosite de export/download în pagini.
