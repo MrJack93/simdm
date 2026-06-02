@@ -1,7 +1,7 @@
 # Frontend SIMDM — React 19 + Vite + Tailwind
 
-**Versiune:** 2.1  
-**Status:** ✅ Faza 1-2 Completă (Login + Inventory module, 91.99% coverage)  
+**Versiune:** 2.2  
+**Status:** ✅ Faza 1-2 Complete (Login + Inventory module, 91.99% coverage) + Faza 3 Ready  
 **Data:** 2026-06-02
 
 ---
@@ -32,9 +32,13 @@ frontend/
 │   ├── App.jsx           # Router
 │   ├── main.jsx          # Entry point
 │   └── index.css         # Tailwind + globals
+├── e2e/                  # Playwright E2E tests
+│   ├── *.spec.js
+│   └── playwright.config.js
 ├── vite.config.js        # Vite config (proxy /api → backend)
 ├── package.json
-└── README.md (this file)
+├── vitest.config.js      # Vitest config
+└── README.md             # This file
 ```
 
 ---
@@ -59,7 +63,6 @@ npm run test:coverage    # With coverage report
 # E2E tests (Playwright)
 npm run test:e2e         # Run all
 npm run test:e2e:ui      # Interactive UI
-npm run test:e2e:debug   # Debug mode
 ```
 
 ---
@@ -67,19 +70,22 @@ npm run test:e2e:debug   # Debug mode
 ## 🎨 Design System
 
 **Colors & Tokens:**
-- **Accent:** Cyan-400 (`#22d3ee`) — headings, buttons, active states
+- **Accent:** Cyan-400 (#22d3ee) — headings, buttons, active states
 - **Secondary:** Gray-400 — labels, helpers
 - **Background:** Gray-950 — page background
 - **Surfaces:** Gray-900, Gray-800, Gray-600
 - **Text:** White (#ffffff) — primary, Gray-400 — secondary
-- **Status:** Green (success), Red (error), Yellow (warning)
+- **Status:** Green (FUNCTIONAL), Red (DEFECT), Yellow (IN_REPARATIE), Gray (CASAT)
 
 **Components:**
-- StatusBadge (FUNCTIONAL, DEFECT, IN_REPARATIE, CASAT)
+- StatusBadge (6 statuses with icons)
 - DataGrid with sorting/filtering
+- DeviceForm (multi-step, Zod validation)
 - Forms with error handling
 - Modals, Toasts, Alerts
 - Dark/Light mode toggle
+
+**Accessibility:** WCAG 2.1 AA certified
 
 See [docs/1-DESIGN-AND-ACCESSIBILITY.md](../docs/1-DESIGN-AND-ACCESSIBILITY.md) for full design system.
 
@@ -87,17 +93,18 @@ See [docs/1-DESIGN-AND-ACCESSIBILITY.md](../docs/1-DESIGN-AND-ACCESSIBILITY.md) 
 
 ## 🔐 Authentication
 
-1. **Login:** POST `/api/auth/login` → accessToken (sessionStorage) + refreshToken (httpOnly cookie)
-2. **Auto-refresh:** Axios interceptor catches 401, calls `/api/auth/refresh` → new accessToken
-3. **Logout:** POST `/api/auth/logout` → clear token + redirect to login
+1. **Login:** POST \/api/auth/login\ → accessToken + refreshToken (httpOnly)
+2. **Auto-refresh:** Axios interceptor → new accessToken on 401
+3. **Logout:** POST \/api/auth/logout\ → clear token
+4. **Rate limiting:** 5 tries per 15 minutes
 
-See [src/api/axios.js](src/api/axios.js) for interceptor details.
+See [src/api/axios.js](src/api/axios.js) for interceptor.
 
 ---
 
-## 📊 API Integration
+## 📡 API Integration
 
-All API calls go through `src/api/axios.js`:
+All API calls via \src/api/axios.js\:
 
 ```javascript
 import api from '@/api/axios';
@@ -106,73 +113,62 @@ import api from '@/api/axios';
 const devices = await api.get('/devices', { params: { status: 'FUNCTIONAL' } });
 const device = await api.post('/devices', { inventoryNumber, name, ... });
 
-// Consumables
-const consumables = await api.get('/consumables');
+// Export
+const csv = await api.get('/devices/export/csv', { responseType: 'blob' });
+const pdf = await api.get('/devices/:id/fisa-pdf', { responseType: 'blob' });
 
-// Files
+// File upload
 const formData = new FormData();
 formData.append('file', file);
-await api.post('/devices/:id/upload', formData, {
-  headers: { 'Content-Type': 'multipart/form-data' }
-});
+await api.post('/devices/:id/upload', formData);
 ```
 
 ---
 
 ## 🧪 Testing
 
-**Unit/Integration Tests:**
-- Vitest + React Testing Library
-- 91.99% statements coverage (39 integration tests)
-- Test files: `src/__tests__/pages/*.test.jsx` and `*.integration.test.jsx`
+**Unit/Integration (Vitest + React Testing Library):**
+- 91.99% coverage (103 tests)
+- Target Faza 3: ≥95%
 
-**E2E Tests:**
-- Playwright for browser automation
-- 5 critical flows: login, device CRUD, token refresh, inventory, PDF export
-- Config: [e2e/playwright.config.js](./playwright.config.js)
+**E2E (Playwright):**
+- 15 tests, 5 scenarios
+- Login, Device CRUD, Token refresh, Inventory, PDF export
 
 Run:
 ```bash
+npm run test
+npm run test:coverage
 npm run test:e2e
 ```
 
 ---
 
-## 🚢 Production Build
-
-```bash
-npm run build
-# Output: dist/ (ready for deployment)
-```
-
-Vite automatically optimizes:
-- Code splitting by route
-- Tree-shaking (dead code removal)
-- Asset minification
-- CSS purging (Tailwind)
-
----
-
-## 🌍 Environment Variables
-
-Create `.env.local` (Git-ignored):
-
-```bash
-VITE_BACKEND_URL=http://localhost:3001  # Dev
-VITE_BACKEND_URL=http://spital-lan:3001 # Production (spital network)
-```
-
-Note: `VITE_` prefix exposes vars to browser. Backend URL is exposed by design (CORS safe).
-
----
-
 ## 📚 Resources
 
-- [docs/1-DESIGN-AND-ACCESSIBILITY.md](../docs/1-DESIGN-AND-ACCESSIBILITY.md) — Design system, WCAG rules
-- [docs/2-DEVELOPER-GUIDE.md](../docs/2-DEVELOPER-GUIDE.md) — React patterns, checklist
-- [docs/CONTRIBUTING.md](../docs/CONTRIBUTING.md) — PR workflow
-- [CLAUDE.md](../CLAUDE.md) — Backend + architecture overview
+- [docs/1-DESIGN-AND-ACCESSIBILITY.md](../docs/1-DESIGN-AND-ACCESSIBILITY.md)
+- [docs/2-DEVELOPER-GUIDE.md](../docs/2-DEVELOPER-GUIDE.md)
+- [docs/CONTRIBUTING.md](../docs/CONTRIBUTING.md)
+- [CLAUDE.md](../CLAUDE.md)
+- [SPEC.md](../SPEC.md)
+
+---
+
+## 🔧 Faza 3: Mentenanță (⏳ PLANNED — 2026-06-05)
+
+Frontend components:
+- MaintenanceCalendarPage (react-big-calendar)
+- MppExecutionForm (semnătură digitală)
+- RepairTicketsPage (Kanban board)
+- VerificationsPage (registru)
+- ServiceContractsPage (contracte + rating)
+
+Dependencies: react-big-calendar, date-fns, react-signature-canvas
+
+See [tasks/plan.md](../tasks/plan.md) for details.
 
 ---
 
 **Ready to contribute? Read [docs/CONTRIBUTING.md](../docs/CONTRIBUTING.md).**
+
+**Versiune:** 2.2 | **Status:** Faza 1-2 ✅ | Faza 3 ⏳ | **Data:** 2026-06-02

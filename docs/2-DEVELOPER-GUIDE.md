@@ -1,6 +1,6 @@
 # Ghid Dezvoltator — SIMDM Frontend & Backend
 
-**Versiune:** 2.1 (Faza 1-2 Complete + Testing & Docker Best Practices 2026)  
+**Versiune:** 2.1 (Faza 1-2 Complete + Faza 3 Ready + Testing & Docker Best Practices 2026)  
 **Actualizat:** 2026-06-02  
 **Audiență:** Dezvoltatori frontend și backend  
 **Limbă:** Engleză (cod), Română (comentarii și UI)
@@ -75,7 +75,7 @@ export function DeviceCard({ device, onEdit }) {
           }`}
         />
         <span className="text-sm text-text-secondary">
-          {device.status === 'FUNCTIONAL' ? '✓ Funcțional' : '✗ Defect'}
+          {device.status === 'FUNCTIONAL' ? '✓ Funcțional' : '�- Defect'}
         </span>
       </div>
 
@@ -102,12 +102,12 @@ export function DeviceCard({ device, onEdit }) {
   </button>
 </div>
 
-// ❌ RĂU — CSS custom
+// ❌ R�'U — CSS custom
 <div style={{ display: 'flex', gap: '16px', backgroundColor: '#111827' }}>
   <h2>Titlu</h2>
 </div>
 
-// ❌ RĂU — nume clase aleatorii
+// ❌ R�'U — nume clase aleatorii
 <div className="my-custom-box">...</div>
 ```
 
@@ -212,17 +212,17 @@ npm run dev  # Server Express — http://localhost:3001
 ```
 backend/
 ├── prisma/
-│   ├── schema/            # Schemă multi-fișier
-│   ├── migrations/        # Migrații versionizate
-│   └── seed.js            # Pre-populate date
+�'   ├── schema/            # Schemă multi-fișier
+�'   ├── migrations/        # Migrații versionizate
+�'   └── seed.js            # Pre-populate date
 ├── src/
-│   ├── routes/            # Rute API (auth.js, devices.js)
-│   ├── controllers/       # Logică de business
-│   ├── middleware/        # Autentificare, erori, validare
-│   ├── services/          # Apeluri externe, logică complexă
-│   ├── lib/              # Utilitare (tokenuri, crypto)
-│   ├── db.js             # Client Prisma
-│   └── index.js          # Server Express
+�'   ├── routes/            # Rute API (auth.js, devices.js)
+�'   ├── controllers/       # Logică de business
+�'   ├── middleware/        # Autentificare, erori, validare
+�'   ├── services/          # Apeluri externe, logică complexă
+�'   ├── lib/              # Utilitare (tokenuri, crypto)
+�'   ├── db.js             # Client Prisma
+�'   └── index.js          # Server Express
 ├── scripts/              # Instrumente unice
 ├── uploads/              # Fișiere încărcate de utilizator
 ├── .env                  # Secrete (NU în Git)
@@ -390,7 +390,7 @@ const stats = await prisma.devices.aggregate({
 
 ---
 
-## 🔗 Integrare API & Axios
+## �- Integrare API & Axios
 
 ### Configurare Client Axios
 
@@ -792,3 +792,4 @@ npm run db:studio  # Explorer vizual bază de date
 ---
 
 **Gata cu development? Consultă [CONTRIBUTING.md](./CONTRIBUTING.md) pentru fluxul de PR.**
+

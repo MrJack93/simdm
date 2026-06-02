@@ -251,7 +251,7 @@ Add Device inventory table with real-time filtering
 
 **Componente:**
 ```jsx
-// ✅ BUNĂ
+// ✅ BUN�'
 export function DeviceForm({ deviceId, onSave }) {
   const [formData, setFormData] = useState({});
   const { register, handleSubmit, errors } = useForm();
@@ -269,7 +269,7 @@ export function DeviceForm({ deviceId, onSave }) {
   );
 }
 
-// ❌ PROASTĂ
+// ❌ PROAST�'
 function device({ props }) {  // camelCase prop
   return <input placeholder="name" />  // No label
 }
@@ -424,7 +424,7 @@ npm run db:studio  # http://localhost:5555
 
 ---
 
-## 📖 Documentație
+## �- Documentație
 
 ### Când Să Documentezi
 
@@ -534,3 +534,4 @@ POST /api/auth/login
 **Gata? Creează branch și start coding! 🚀**
 
 **Întrebări? Citește [SPEC.md](../SPEC.md) și [CLAUDE.md](../CLAUDE.md).**
+

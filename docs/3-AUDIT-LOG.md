@@ -332,3 +332,4 @@ Ce se întâmplă acum?
 | Versiune | Data | Modificări |
 |----------|------|------------|
 | 1.0 | 2026-05-28 | Audit inițial (fundație Faza 1) |
+

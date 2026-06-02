@@ -49,7 +49,7 @@
 | Status | Culoare | Hex |
 |--------|---------|-----|
 | ✓ Funcțional | Verde | #4ade80 |
-| ✗ Defect | Roșu | #ffb4ab |
+| �- Defect | Roșu | #ffb4ab |
 | ⟳ Reparație | Galben | #fbbf24 |
 | − Casat | Gri | #6b7280 |
 
@@ -224,7 +224,7 @@ font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
 
    // Corect: text + icoană + culoare
    <span className="flex items-center gap-2 text-red-400">
-     ✗ Defect
+     �- Defect
    </span>
    ```
    - SVG-uri decorative: `aria-hidden="true"`
@@ -353,7 +353,7 @@ font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
         <th scope="col" className="px-4 py-3 text-left text-sm font-bold text-cyan-400"
             aria-sort={sortKey === 'name' ? 'ascending' : 'none'}>
           <button onClick={() => handleSort('name')}>
-            Denumire {sortKey === 'name' && (sortOrder === 'asc' ? '▲' : '▼')}
+            Denumire {sortKey === 'name' && (sortOrder === 'asc' ? '�-�' : '�-�')}
           </button>
         </th>
         <th scope="col" className="px-4 py-3 text-left text-sm font-bold text-cyan-400">
@@ -388,7 +388,7 @@ function StatusBadge({ status }) {
   };
   const etichete = {
     FUNCTIONAL: '✓ Funcțional',
-    DEFECT: '✗ Defect',
+    DEFECT: '�- Defect',
     IN_REPARATIE: '⟳ În Reparație',
     CASAT: '− Casat',
     IMPRUMUTAT: '↔ Împrumutat',
@@ -571,3 +571,4 @@ export default {
 - v1.0 — 2026-05-29: Consolidare design Faza 1 + audit
 
 **Întrebări?** Vezi [CLAUDE.md](../CLAUDE.md) sau [2-DEVELOPER-GUIDE.md](./2-DEVELOPER-GUIDE.md)
+

@@ -1,397 +1,376 @@
-# ✅ Task Tracking — SIMDM All Phases
+﻿# ✅ Task Tracking — SIMDM All Phases
 
-**Versiune:** 2.0 (Faza 1 Complete)  
-**Actualizat:** 2026-05-30  
+**Versiune:** 2.2 (Faza 1-2 Complete + Faza 3 Detailed Tasks)  
+**Actualizat:** 2026-06-02  
 **Format:** Checkbox tracking per phase
 
 ---
 
-## 🎯 FAZA 1: Fundație & Infrastructură — ✅ COMPLETĂ
+## ✅ FAZA 1: Fundație & Infrastructură — COMPLETĂ
 
-**Status:** ✅ 100% DONE (2026-05-30)
+**Status:** ✅ 100% DONE (2026-05-30)  
+**Audit Score:** 104/104 (100%)
 
-### Infrastructure
-- [x] Docker setup (PostgreSQL 16, Express backend, React frontend)
-- [x] Node.js v22 LTS setup
-- [x] Git repository initialization
-- [x] .gitignore (node_modules, .env, dist)
-
-### Backend (Express + Prisma)
-- [x] Express.js server (port 3001)
-- [x] Prisma ORM setup (multi-file schema)
-- [x] PostgreSQL database connection
-- [x] Authentication system (JWT + bcryptjs)
-- [x] Auth middleware (Bearer token validation)
-- [x] Auth routes (/login, /refresh, /logout, /me)
-- [x] Database seed (1 user, 8 sections, 8 devices, 4 consumables, 2 incidents)
-- [x] Rate limiting on login (5 tries / 15 min)
-- [x] Helmet.js security headers
-- [x] CORS configuration
-
-### Frontend (React + Vite + Tailwind)
-- [x] React 19 + Vite 8 setup
-- [x] Tailwind CSS v4 with @tailwindcss/vite
-- [x] React Router v7 for navigation
-- [x] Login page (dark/light mode, responsive)
-- [x] Axios HTTP client with JWT interceptor
-- [x] TanStack Query v5 (installed, ready for Faza 2)
-- [x] CSS variables for dark/light theme
-- [x] Focus rings (WCAG 2.1 AA compliance)
-
-### Documentation
-- [x] README.md (comprehensive overview)
-- [x] SPEC.md (technical specification)
-- [x] GETTING-STARTED.md (5-10 min setup guide)
-- [x] CLAUDE.md (AI developer instructions)
-- [x] docs/CONTRIBUTING.md (PR workflow)
-- [x] docs/2-DEVELOPER-GUIDE.md (coding patterns)
-- [x] docs/1-DESIGN-AND-ACCESSIBILITY.md (design tokens + WCAG)
-- [x] tasks/plan.md (8-phase roadmap)
-- [x] tasks/todo.md (this file)
-
-### Testing & Verification
-- [x] API health check (/api/health) — ✅ 200 OK
-- [x] Login endpoint (/api/auth/login) — ✅ 200 + token
-- [x] Token refresh (/api/auth/refresh) — ✅ working
-- [x] Logout endpoint (/api/auth/logout) — ✅ clear cookie
-- [x] Frontend login form — ✅ saves token to localStorage
-- [x] Audit Faza 1 — ✅ 104/104 criteria passed
-- [x] Lighthouse Accessibility — ✅ ≥ 95
-- [x] WCAG 2.1 AA compliance — ✅ verified
-
-**Final Status:** 🎉 **FAZA 1 APPROVED FOR FAZA 2**
+All infrastructure, authentication, and foundational components complete.
 
 ---
 
 ## ✅ FAZA 2: Inventar DM — COMPLETĂ
 
-**Status:** ✅ 100% DONE (2026-05-30)  
-**Delivered:** 130/130 audit criteria passed  
-**Security Hardening:** 6 additional fixes (pagination, validation, rate limiting, antivirus, indexing)
+**Status:** ✅ 100% DONE (2026-06-02)  
+**Audit Score:** 130/130 (100%)  
+**Test Coverage:** 95.36% backend + 91.99% frontend + 15 E2E tests
 
-### Backend Tasks
-- [x] Install dependencies (multer, pdfkit, exceljs, zod, clamscan, file-type)
-- [x] Create Device CRUD routes
-  - [x] GET /api/devices (with filters, pagination, soft-delete)
-  - [x] POST /api/devices (create with Zod validation)
-  - [x] PUT /api/devices/:id (edit with validation)
-  - [x] DELETE /api/devices/:id (soft-delete to CASAT)
-  - [x] GET /api/devices/:id (detail with relations)
-- [x] Implement Zod validation schema for Device (24 fields)
-- [x] Add database indexes (status+sectionId, name, entity+timestamp)
-- [x] Test all endpoints in Postman — ✅ all passing
-- [x] Error handling and HTTP status codes — ✅ comprehensive
-- [x] File upload with antivirus scanning (magic bytes + optional ClamAV)
-- [x] Rate limiting on export endpoints (10 per 15 min)
-
-### Frontend Tasks
-- [x] Install form dependencies (react-hook-form, zod, react-select, react-datepicker, react-toastify)
-- [x] Create InventoryPage component
-  - [x] DataGrid with columns (name, manufacturer, status, section, risk class)
-  - [x] Sorting (click column header)
-  - [x] Filtering (status dropdown, name search, risk class)
-  - [x] Pagination (configurable rows/page, capped at 1000)
-- [x] Create DeviceForm component
-  - [x] Multi-step form (identification, classification, status, financial, technical, notes)
-  - [x] Zod validation (24 field schema)
-  - [x] File upload for documents
-- [x] Create DeviceCard component (mobile layout)
-- [x] Create StatusBadge component (icon + text, 6 statuses)
-- [x] Implement export to CSV
-- [x] Implement export to Excel (XLSX)
-- [x] Implement PDF generation (Fișă DM per device)
-- [x] Testing in dark/light mode — ✅ WCAG 2.1 AA
-
-### Acceptance Criteria
-- [x] CRUD operations work (test data visible)
-- [x] Filters functional (all columns)
-- [x] Export generates valid CSV/XLSX
-- [x] PDF generation (Formular Nr. 8)
-- [x] Mobile responsive (<768px = card layout)
-- [x] Lighthouse Accessibility ≥ 95
-- [x] Zero console errors/warnings
-- [x] Documentation updated to reflect Faza 2 + security hardening
+All device management CRUD, export, PDF, forms, and UI components complete.
 
 ---
 
-## ⬜ FAZA 3: Mentenanță — SCHEDULED
+## 🔧 FAZA 3: Mentenanță — DETAILED TASK BREAKDOWN
 
-**Status:** NOT STARTED  
-**ETA:** After Faza 2 (+3-4 weeks)
+**Status:** READY TO START  
+**Start Date:** 2026-06-05 (provisional)  
+**Duration:** 16 days (4 weeks)
 
-### Backend Tasks
-- [ ] Maintenance CRUD endpoints
-- [ ] Preventive (MP) scheduling
-- [ ] Corrective (MC) ticketing
-- [ ] Cost tracking per device
+### PAS 3.1 — Plan Mentenanță Preventivă (4 zile)
 
-### Frontend Tasks
-- [ ] Maintenance schedule page
-- [ ] Cost reports
-- [ ] Service provider management
+**Etapa 3.1.1 — Database Schema (0.5 zile)**
+- [ ] Creează `backend/prisma/schema/maintenance.prisma`
+- [ ] Adaugă modele: `maintenance_plans`, `mpp_occurrences`
+- [ ] Adaugă relații inverse în `devices` (maintenance_plans[], mpp_occurrences[])
+- [ ] Adaugă câmpuri pe devices: `lastMaintenanceAt`, `requiresVerification`, `verificationFreqMonths`
+- [ ] Rulează: `npx prisma migrate dev --name add_maintenance_module`
+- [ ] Rulează: `npx prisma generate`
 
----
+**Etapa 3.1.2 — Backend Generator Plan (1.5 zile)**
+- [ ] Creează `backend/src/routes/maintenancePlans.js`
+- [ ] Implementează POST `/api/maintenance-plans/generate`
+  - [ ] Mapare frecvență → luni (LUNAR=12, TRIMESTRIAL=4, SEMESTRIAL=2, ANUAL=1)
+  - [ ] Creare/update plan cu upsert
+  - [ ] Ștergere apariții vechi neefectuate
+  - [ ] Creare apariții noi din luni calculate
+- [ ] Implementează GET `/api/maintenance-plans/calendar?year=YYYY`
+  - [ ] Filtrare după an
+  - [ ] Calcul automat status pe baza datei (PROGRAMAT/SCADENT/DEPASIT/EFECTUAT)
+- [ ] Implementează PATCH `/api/maintenance-plans/occurrence/:id/reschedule`
+  - [ ] Validare motivare min 5 caractere (obligatorie)
+  - [ ] Salvare dată reprogramării + motiv
+- [ ] Adaugă audit log pentru toate operațiile
+- [ ] Test caz critic: reschedule fără motivare → 400
 
-## ⬜ FAZA 4: Documents & Procedures — SCHEDULED
+**Etapa 3.1.3 — Frontend Calendar (1.5 zile)**
+- [ ] Instalează: `npm install react-big-calendar date-fns`
+- [ ] Creează `frontend/src/pages/MaintenanceCalendarPage.jsx`
+  - [ ] Calendar interactiv cu react-big-calendar
+  - [ ] Localizare română (ro locale din date-fns)
+  - [ ] Dropdown pentru schimbare an
+  - [ ] Legendă culori: PROGRAMAT (verde), SCADENT (portocaliu), DEPASIT (roșu), EFECTUAT (albastru)
+  - [ ] Query backend `/api/maintenance-plans/calendar?year=...`
+  - [ ] Click event: deschide detalii/reschedule modal
+- [ ] Crează modal reschedule cu validare text min 5 caractere
 
-**Status:** NOT STARTED  
-**ETA:** After Faza 3 (+2-3 weeks)
+**Etapa 3.1.4 — Formular Nr. 5 PDF (1 zi)**
+- [ ] Implementează GET `/api/maintenance-plans/:year/formular5-pdf`
+- [ ] PDF structure (landscape A4):
+  - [ ] Titlu: "PLAN DE MENTENANȚĂ PREVENTIVĂ ... ANUL [year]"
+  - [ ] Referință: "Formular Nr. 5 – Anexa 16, Procedura MDM Nr. 6"
+  - [ ] Antet tabel: Nr | Denumire | Serie | Secție | Responsabil | Ian | Feb | ... | Dec
+  - [ ] Rânduri cu X pentru lunile planificate
+  - [ ] Footer cu dată generare
+- [ ] Test: Generate PDF cu 3-5 DM, verifică diacritice și format
 
-### Tasks
-- [ ] DMS (upload, categorize, version)
-- [ ] PDF generation (device sheet, reports)
-- [ ] Procedure templates
-
----
-
-## ⬜ FAZA 5: Incidents & Vigilance — SCHEDULED
-
-**Status:** NOT STARTED  
-**ETA:** After Faza 4 (+2-3 weeks)
-
-### Tasks
-- [ ] Incident reporting system
-- [ ] Severity levels & impact assessment
-- [ ] AMDM compliance reporting
-- [ ] Email alerts & escalation
-
----
-
-## ⬜ FAZA 6: Procurement — SCHEDULED
-
-**Status:** NOT STARTED  
-**ETA:** After Faza 5 (+2-3 weeks)
-
-### Tasks
-- [ ] Supplier management
-- [ ] PIF workflow
-- [ ] Device lifecycle tracking
-
----
-
-## ⬜ FAZA 7: Dashboard & Reporting — SCHEDULED
-
-**Status:** NOT STARTED  
-**ETA:** After Faza 6 (+2-3 weeks)
-
-### Tasks
-- [ ] KPI dashboard (pie charts, alerts)
-- [ ] Monthly reports (PDF export)
-- [ ] Data export (CSV, Excel, PDF)
+**Checklist Pas 3.1:**
+- [ ] Database schema migrate + generate
+- [ ] Generator frecvențe corect (LUNAR=12, TRIMESTRIAL=4, etc.)
+- [ ] Calendar status automat PROGRAMAT/SCADENT/DEPASIT (după dată)
+- [ ] Reprogramare cu motivare obligatorie (5+ caractere)
+- [ ] Formular Nr. 5 PDF cu grilă luni (Jan-Dec)
+- [ ] Audit log complet
+- [ ] Tests: ≥8 teste unitare
 
 ---
 
-## ⬜ FAZA 8: QA & Go-Live — SCHEDULED
+### PAS 3.2 — Implementare MPP (3 zile)
 
-**Status:** NOT STARTED  
-**ETA:** After Faza 7 (+1-2 weeks)
+**Etapa 3.2.1 — Database Schema (0.5 zile)**
+- [ ] Adaugă modele: `mpp_executions`
+- [ ] Migrate: `npx prisma migrate dev --name add_mpp_executions`
 
-### Testing
-- [ ] Functional testing (all features)
-- [ ] Security audit
-- [ ] Performance testing (load, stress)
-- [ ] WCAG accessibility final audit
-- [ ] Data migration from Excel
+**Etapa 3.2.2 — Backend Execuție (1 zi)**
+- [ ] Creează `backend/src/routes/mppExecutions.js`
+- [ ] Implementează POST `/api/mpp-executions`
+  - [ ] Validare date obligatorii (deviceId, executedDate, performedBy, checklist)
+  - [ ] Tranzacție Prisma:
+    - [ ] Crează execuție (mpp_executions)
+    - [ ] Update apariție: status = EFECTUAT, link executionId
+    - [ ] Update device: lastMaintenanceAt
+    - [ ] Scade consumabile din stoc (pentru fiecare din consumablesUsed)
+  - [ ] Audit log CREATE
+- [ ] Implementează GET `/api/mpp-executions/checklist-template/:deviceId`
+  - [ ] Return template generic (6 operațiuni standard)
+  - [ ] Opțional: lookup pe model DM pentru template specific
 
-### Deployment
-- [ ] Docker image optimization
-- [ ] Server setup at hospital IT
-- [ ] Database backup strategy
-- [ ] Disaster recovery plan
-- [ ] User training documentation
-- [ ] IT staff training for ops
+**Etapa 3.2.3 — Frontend Formular Execuție (1 dia)**
+- [ ] Instalează: `npm install react-signature-canvas`
+- [ ] Creează `frontend/src/pages/MppExecutionForm.jsx`
+  - [ ] Select DM + occurrence din calendar
+  - [ ] Data execuție, durată (minute)
+  - [ ] Checklist dinamic: map-eaza template
+    - [ ] Checkbox per operațiune
+    - [ ] Text field pentru notă per operațiune
+  - [ ] Selector consumabile cu cantitate (useQuery `/consumables/dropdown`)
+  - [ ] Upload foto înainte (+ antivirus din Faza 2)
+  - [ ] Upload foto după
+  - [ ] SignaturePad component (bioinginer + responsabil secție)
+  - [ ] Buton Submit → POST `/mpp-executions` → redirect calendar
+- [ ] Criptează/encode semnături în base64 înainte de submit
+
+**Etapa 3.2.4 — Formular Nr. 6 PDF (0.5 zile)**
+- [ ] Implementează GET `/api/mpp-executions/:id/formular6-pdf`
+- [ ] PDF structure (Anexa 2):
+  - [ ] Antet identificare DM (denumire, serie, inventar, secție, clasă electrică, producător)
+  - [ ] Antet mentenanță (frecvență MPP: DA/NU, verificare periodică: DA/NU)
+  - [ ] Tabel operațiuni (descriere | data/ora început | data/ora final | responsabil | semnătură)
+  - [ ] Observații
+  - [ ] Semnături digitale (bioinginer, responsabil secție)
+
+**Checklist Pas 3.2:**
+- [ ] Checklist dinamic cu operațiuni + note per operațiune
+- [ ] Semnătură digitală (canvas) bioinginer + responsabil secție
+- [ ] Upload foto înainte/după
+- [ ] Tranzacție atomică: creare + scădere stoc + update calendar
+- [ ] Apariția din calendar → status EFECTUAT
+- [ ] Formular Nr. 6 PDF
+- [ ] Tests: ≥6 teste
+
+---
+
+### PAS 3.3 — Mentenanță Corectivă (4 zile)
+
+**Etapa 3.3.1 — Database Schema (0.5 zile)**
+- [ ] Adaugă modele: `repair_tickets`, `service_providers` (partial)
+- [ ] Migrate
+
+**Etapa 3.3.2 — Backend Ticketing (2 zile)**
+- [ ] Creează `backend/src/routes/repairTickets.js`
+- [ ] Implementează POST `/api/repair-tickets` (raportare defecțiune)
+  - [ ] Generate ticketNumber (TKT-YYYY-NNNN)
+  - [ ] Creare ticket: status = DESCHIS, priority = NORMAL/URGENT/PROGRAMAT
+  - [ ] Tranzacție: update device.status = DEFECT
+- [ ] Implementează PATCH `/api/repair-tickets/:id/status`
+  - [ ] State machine validare: STATUS_FLOW = { DESCHIS: [IN_LUCRU], IN_LUCRU: [REZOLVAT, DESCHIS], ...}
+  - [ ] Tranziție invalidă → 400
+  - [ ] REZOLVAT → setează resolvedAt
+  - [ ] INCHIS → setează closedAt + update device.status = FUNCTIONAL
+- [ ] Implementează PATCH `/api/repair-tickets/:id/triage`
+  - [ ] Acceptă: repairType (INTERN/EXTERN), defectCause, externalProviderId
+  - [ ] Status → IN_LUCRU
+- [ ] Implementează PUT `/api/repair-tickets/:id/repair` (reparație internă - Formular Nr. 8)
+  - [ ] Acceptă: repairReport, actionsTaken, durationHours, partsUsed[], functionalTest
+  - [ ] Tranzacție:
+    - [ ] Calculează totalCost din partsUsed
+    - [ ] Scade piese din stoc (consumables)
+    - [ ] Update ticket + status → REZOLVAT dacă functionalTest = FUNCTIONAL
+  - [ ] Audit log UPDATE
+- [ ] Implementează GET `/api/repair-tickets` cu filtre (status, priority, deviceId)
+- [ ] Implementează GET `/api/repair-tickets/:id/formular8-pdf`
+
+**Etapa 3.3.3 — Frontend Board Kanban (1.5 zile)**
+- [ ] Creează `frontend/src/pages/RepairTicketsPage.jsx`
+  - [ ] Board cu 5 coloane: DESCHIS | IN_LUCRU | REZOLVAT | TESTAT | INCHIS
+  - [ ] Card per ticket: nr, DM, prioritate (badge culoare roșu=Urgent), descriere
+  - [ ] Click card: deschide modal detalii
+  - [ ] Modal triage (intern/extern, cauză)
+  - [ ] Modal reparație internă (Formular Nr. 8):
+    - [ ] Descriere defecțiune
+    - [ ] Cauză (din triage)
+    - [ ] Raport reparație
+    - [ ] Acțiuni întreprinse (text)
+    - [ ] Durata (ore, decimal)
+    - [ ] Piese folosite (selector + cantitate + cost unitar)
+    - [ ] Test funcțional: select (FUNCTIONAL / NEFUNCTIONAL)
+    - [ ] Semnări digitale (useRef + canvas)
+    - [ ] Buton "Generează Bon Reparație (Formular Nr. 8)" → download PDF
+  - [ ] Filtrare prioritate/status
+  - [ ] Drag-and-drop pe coloane (opțional, pentru Faza 3.5)
+
+**Etapa 3.3.4 — Formular Nr. 8 PDF (0.5 zile)**
+- [ ] Implementează GET `/api/repair-tickets/:id/formular8-pdf`
+- [ ] PDF structure (Anexa 3):
+  - [ ] Antet: nr fișă, instituție, secție, DM, cod, serie, inventar
+  - [ ] Descriere defecțiune
+  - [ ] Cauza (din triage)
+  - [ ] Raport reparație (actionsTaken)
+  - [ ] Materiale utilizate (tabel: descriere | cantitate | cost unitate | total)
+  - [ ] Cost total
+  - [ ] Testare după reparație (FUNCTIONAL/NEFUNCTIONAL)
+  - [ ] Comentarii (observații)
+  - [ ] Semnături: utilizator + inginer
+
+**Checklist Pas 3.3:**
+- [ ] Creare ticket: photo, descriere, prioritate
+- [ ] State machine: DESCHIS → IN_LUCRU → REZOLVAT → TESTAT → INCHIS (tranziții valide)
+- [ ] Prioritate: URGENT (roșu), NORMAL, PROGRAMAT (badge culore)
+- [ ] Triaj: intern vs extern (+ cauză defecțiune)
+- [ ] Piese folosite → scădere automată din stoc (tranzacție)
+- [ ] Cost total calculat automat
+- [ ] DM marcat DEFECT la creare, FUNCTIONAL la INCHIS
+- [ ] Formular Nr. 8 (Bon reparație intern) — NU Formular Nr. 9!
+- [ ] Tests: ≥10 teste (cu state machine edge cases)
+
+---
+
+### PAS 3.4 — Verificări Periodice & Metrologie (3 zile)
+
+**Etapa 3.4.1 — Database Schema + Seed (0.5 zile)**
+- [ ] Adaugă model: `verifications`
+- [ ] Seed Anexa 24 nomenclator (17+ tipuri, periodicitate 24 luni):
+  - [ ] Monitoare de pacient, Ventilatoare, Defibrilatoare, Pompe infuzie, etc.
+- [ ] Migrate
+
+**Etapa 3.4.2 — Backend Registru Verificări (1.5 zile)**
+- [ ] Creează `backend/src/routes/verifications.js`
+- [ ] Implementează POST `/api/verifications`
+  - [ ] Crează înregistrare: deviceId, type, performedDate, validUntil, certificateUrl, provider, result
+- [ ] Implementează GET `/api/verifications/compliance-report`
+  - [ ] Filtrează: devices cu requiresVerification = true, status != CASAT
+  - [ ] Include: ultima verificare per device
+  - [ ] Calculează status:
+    - [ ] NEVERIFICAT — nu are înregistrare
+    - [ ] CONFORM — validUntil >= azi
+    - [ ] EXPIRAT — validUntil < azi
+  - [ ] Calculează daysLeft
+  - [ ] Return: { total, conform, expirat, neverificat, devices[] }
+- [ ] Audit log
+
+**Etapa 3.4.3 — Cron Job Alerte (1 dia)**
+- [ ] Instalează: `npm install node-cron`
+- [ ] Creează `backend/src/jobs/notifications.js`
+- [ ] Implementează cron job zilnic 08:00 (timezone: Europe/Chisinau):
+  - [ ] checkVerificationExpiry(): 60/30/7 zile înainte de expirare
+  - [ ] Crează notificări in-app sau trimite email
+  - [ ] Log pe console: [Cron] X verificări expiră în Y zile
+- [ ] În `backend/src/index.js` (după app.listen):
+  - [ ] Import + start: `const { startCronJobs } = require('./jobs/notifications'); startCronJobs();`
+
+**Etapa 3.4.4 — Frontend Registru Verificări (0.5 zile)**
+- [ ] Creează `frontend/src/pages/VerificationsPage.jsx`
+  - [ ] Tabel: DM | Tip | Data | Valabil până | Status (badge) | Zile Rămase
+  - [ ] Filtrare: CONFORM, EXPIRAT, NEVERIFICAT
+  - [ ] Buton "Upload Certificat": modal cu upload + date
+  - [ ] Raport conformitate: summary card (total / conform / expirat / neverificat)
+
+**Checklist Pas 3.4:**
+- [ ] Nomenclator Anexa 24 (17+ tipuri, periodicitate 24 luni)
+- [ ] Câmp requiresVerification pe devices
+- [ ] Înregistrare verificare + upload certificat + date validare
+- [ ] Status automat: CONFORM / EXPIRAT / NEVERIFICAT
+- [ ] Alerte cron 60/30/7 zile înainte de expirare
+- [ ] Raport conformitate pentru audit
+- [ ] Tests: ≥5 teste
+
+---
+
+### PAS 3.5 — Contracte Mentenanță Externă (2 zile)
+
+**Etapa 3.5.1 — Database Schema (0.5 zile)**
+- [ ] Finalizează modele: `service_providers`, `service_contracts`, `provider_ratings`
+- [ ] Migrate
+
+**Etapa 3.5.2 — Backend CRUD Contracte (1 dia)**
+- [ ] Creează `backend/src/routes/serviceContracts.js`
+- [ ] Implementează POST `/api/service-contracts/providers`
+- [ ] Implementează POST `/api/service-contracts/contracts`
+  - [ ] Acceptă: providerId, contractNumber, startDate, endDate, value, slaHours, coveredDeviceIds[]
+- [ ] Implementează GET `/api/service-contracts/contracts`
+  - [ ] Include provider
+  - [ ] Calculează daysUntilExpiry = (endDate - azi) / 86400000
+  - [ ] Return cu daysUntilExpiry
+- [ ] Implementează POST `/api/service-contracts/providers/:id/rate`
+  - [ ] Crează rating (1-5) + comment
+  - [ ] Recalculează medie: provider.rating = avg
+- [ ] Implementează GET `/api/service-contracts/cost-analysis`
+  - [ ] Sumează: repair_tickets cu repairType = INTERN (totalCost)
+  - [ ] Sumează: service_contracts (value)
+  - [ ] Return: { internal: {totalCost, count}, externalContracts: {totalValue} }
+
+**Etapa 3.5.3 — Frontend Pagină Contracte (0.5 zile)**
+- [ ] Creează `frontend/src/pages/ServiceContractsPage.jsx`
+  - [ ] Tabel contracte: Furnizor | DM Acoperite | Perioada | Valoare | Zile Expirare (badge roșu <30)
+  - [ ] Rating stele (1-5) per furnizor
+  - [ ] Grafic cost: intern vs extern (bar/pie chart)
+  - [ ] Buton "Crează Contract"
+  - [ ] Modal: Formular Nr. 9 (Act predare-primire) — deschide quando externaalizezi ticket
+
+**Etapa 3.5.4 — Formular Nr. 9 PDF (0.5 zile)**
+- [ ] Implementează în `backend/src/routes/repairTickets.js` (pe ticket cu repairType = EXTERN)
+- [ ] GET `/api/repair-tickets/:id/handover-pdf` (Act predare-primire Formular Nr. 9)
+- [ ] PDF structure (Anexa 21):
+  - [ ] Antet: aprobat, nr act, dată
+  - [ ] Beneficiar (spital) | Furnizor (service)
+  - [ ] Referință contract
+  - [ ] Tabel DM: denumire | producător | serie | cod | inventar | localizare
+  - [ ] Stare fizică la predare (text)
+  - [ ] Consumabile incluse (text)
+  - [ ] Semnături: predat (bioinginer) | primit (furnizor)
+
+**Checklist Pas 3.5:**
+- [ ] CRUD contract: furnizor, DM acoperite, perioadă, valoare, SLA
+- [ ] Alertă expirare cu 30 zile înainte
+- [ ] Evaluare furnizor: rating 1-5 + medie automată
+- [ ] Analiză cost intern vs extern
+- [ ] Formular Nr. 9 PDF (Act predare-primire extern)
+- [ ] Tests: ≥6 teste
+
+---
+
+## 🔔 NOTIFICĂRI AUTOMATE (Backend)
+
+- [ ] Instalează node-cron
+- [ ] Creează jobs/notifications.js
+- [ ] Cron job zilnic 08:00: checkMppDue + checkVerificationExpiry + checkContractExpiry
+- [ ] Integrare în index.js (startCronJobs)
+- [ ] Tests: mock cron, verifică logică alerte
+
+---
+
+## 🧪 TESTARE FAZA 3 (Target: ≥95% coverage)
+
+**Backend Test Files:**
+- [ ] `maintenancePlans.test.js` — 8+ tests
+- [ ] `mppExecutions.test.js` — 6+ tests
+- [ ] `repairTickets.test.js` — 12+ tests (cu state machine edge cases)
+- [ ] `verifications.test.js` — 5+ tests
+- [ ] `serviceContracts.test.js` — 6+ tests
+- [ ] `notifications.test.js` — 4+ tests (mock cron)
+
+**Frontend Test Files:**
+- [ ] `MaintenanceCalendarPage.test.jsx`
+- [ ] `MppExecutionForm.test.jsx` (cu SignaturePad)
+- [ ] `RepairTicketsPage.test.jsx`
+- [ ] `VerificationsPage.test.jsx`
+- [ ] `ServiceContractsPage.test.jsx`
+
+**E2E Tests (Playwright):**
+- [ ] Login → Calendar MPP → Create Plan → Verify apariții
+- [ ] Login → Select apariție → Execute MPP → Upload foto → Sign → Redirect
+- [ ] Login → Create Ticket → Triage → Reparație internă → Formular 8 → Download PDF
+- [ ] Login → Upload verificare → Raport conformitate
+- [ ] Login → Create contract → Rate furnizor → Cost analysis
 
 ---
 
 ## 📊 Progress Summary
 
-| Fază | Status | Completion |
-|------|--------|-----------|
-| **1** | ✅ COMPLETE | 100% |
-| **2** | ✅ COMPLETE | 100% |
-| **3** | ⏳ SCHEDULED | 0% |
-| **4** | ⬜ SCHEDULED | 0% |
-| **5** | ⬜ SCHEDULED | 0% |
-| **6** | ⬜ SCHEDULED | 0% |
-| **7** | ⬜ SCHEDULED | 0% |
-| **8** | ⬜ SCHEDULED | 0% |
-| **TOTAL** | ✅ 25% | 25% |
+| Fază | Status | Completion | Tests |
+|------|--------|-----------|-------|
+| **1** | ✅ DONE | 100% | Auth: 14 suites |
+| **2** | ✅ DONE | 100% | 95.36% backend / 91.99% frontend |
+| **3** | ⭕ PLANNED | 0% | Target: ≥95% |
+| **4-8** | ⬜ PLANNED | 0% | — |
+| **TOTAL** | ✅ 25% | 25% | All tests passing |
 
 ---
 
-**Last Updated:** 2026-05-30  
-**Next Review:** Faza 3 kickoff (Mentenanță module)  
-**Repo:** [GitHub](..)
-
-- [x] **B1 — Zod schema Device**
-  - Fișier: `frontend/src/schemas/deviceSchema.js`
-  - ⚠️ JavaScript pur — NU adăuga `export type ...` (e sintaxă TypeScript)
-  - Câmpuri obligatorii: `inventoryNumber` (regex `^[A-Z0-9\-]+$`), `name` (min 3), `riskClass` (enum I/IIa/IIb/III), `sectionId` (coerce.number, min 1)
-  - Status enum: `FUNCTIONAL / IN_REPARATIE / DEFECT / CASAT / IMPRUMUTAT / REZERVA` (toate 6)
-  - Câmpuri opționale cu `.optional().or(z.literal(''))` pentru inputuri text goale
-  - `acquisitionDate`, `warrantyEndDate`: `z.coerce.date().nullable().optional()`
-  - `acquisitionValue`, `residualValue`: `z.coerce.number().min(0).optional().or(z.literal(''))`
-  - ✅ Acceptanță: `import { deviceSchema } from '../schemas/deviceSchema'` fără erori
-
-- [x] **B2 — DeviceForm.jsx**
-  - Fișier: `frontend/src/pages/DeviceForm.jsx`
-  - Detectează mode: `const { id } = useParams()` — dacă există `id` → edit mode
-  - `useForm({ resolver: zodResolver(deviceSchema), defaultValues: { status: 'FUNCTIONAL', currency: 'MDL', riskClass: 'IIb' }, mode: 'onBlur' })`
-  - Query sections: `useQuery(['sections'], () => api.get('/sections').then(r => r.data))`
-  - Edit mode: `useQuery(['device', id], () => api.get('/devices/' + id).then(r => r.data), { enabled: !!id, onSuccess: (data) => reset(data) })`
-  - useMutation: POST `/devices` sau PUT `/devices/:id` — `onSuccess` → toast + navigate('/inventory')
-  - Secțiuni formular: Identificare, Clasificare, Status & Exploatare, Date Financiare, Date Tehnice, Observații
-  - react-select pentru: riskClass, status, sectionId (cu Controller)
-  - react-datepicker pentru: acquisitionDate, warrantyEndDate (cu Controller)
-  - Buton "Fișă PDF" vizibil doar în edit mode → `GET /devices/:id/fisa-pdf` cu responseType: 'blob'
-  - Clase accesibilitate: `label-base`, `input-base`, focus ring, `role="alert"` pe erori
-  - ✅ Acceptanță: add DM → 201 → toast succes → redirect inventar; edit DM → formular prefilled
-
-- [x] **B3 — Backend routes/devices.js**
-  - Fișier: `backend/src/routes/devices.js`
-  - `const prisma = require('../db')` — NU `new PrismaClient()`
-  - `router.use(authMiddleware)` la top
-  - **Ordine obligatorie a rutelor (static înainte de /:id):**
-    1. `GET /dropdown/sections` → sections active (pentru dropdown formular)
-    2. `GET /export/xlsx` → export Excel
-    3. `GET /export/csv` → export CSV
-    4. `GET /` → lista DM cu filtre + paginare
-    5. `POST /` → creare DM (verifică inventoryNumber unic, audit log CREATE)
-    6. `GET /:id` → detalii DM (include section, maintenanceRecords last 5, incidents last 5)
-    7. `PUT /:id` → actualizare DM (audit log UPDATE cu before/after)
-    8. `DELETE /:id` → soft delete: `status: 'CASAT', decommissionDate: new Date()` (audit log DELETE)
-    9. `POST /:id/upload` → multer single + actualizare câmp URL
-    10. `GET /:id/fisa-pdf` → generare PDF PDFKit
-  - Filtre pentru GET `/`: `search` (OR pe inventoryNumber/name/model/manufacturer, mode: 'insensitive'), `status`, `riskClass`, `sectionId`
-  - Paginare: `skip = (page-1)*limit`, response include `{ devices, pagination: { page, limit, total, pages } }`
-  - Audit log: `prisma.auditLog.create({ data: { userId: req.user.sub, action, entity: 'Device', entityId: String(device.id), changes } })`
-  - ✅ Acceptanță: toate rutele returnează status corect; nici una nu confundă "export" sau "dropdown" cu un ID
-
-- [x] **B4 — Multer upload + autocreate directory**
-  - În `backend/src/routes/devices.js` sau `backend/src/index.js`:
-    ```javascript
-    const fs = require('fs');
-    const uploadDir = path.join(__dirname, '../../uploads/devices');
-    fs.mkdirSync(uploadDir, { recursive: true });
-    ```
-  - Multer config: diskStorage în `uploadDir`, filename = `Date.now() + '-' + random + ext`
-  - fileFilter: permite doar `.pdf .doc .docx .jpg .jpeg .png`
-  - limits: `fileSize: 10 * 1024 * 1024` (10MB)
-  - `backend/src/index.js`: `app.use('/uploads', express.static(path.join(__dirname, '../uploads')))`
-  - ✅ Acceptanță: `POST /api/devices/:id/upload` cu fișier PDF → 200, fișier salvat, URL în DB
-
-- [x] **B5 — PDF Fișă DM (Formular Nr.8)**
-  - `GET /api/devices/:id/fisa-pdf`
-  - PDFKit: header cu titlu "FIȘĂ DISPOZITIV MEDICAL", "Formular Nr.8 – Anexa 3", "Ordinul MS nr. 889/2024"
-  - Secțiuni: 1. Identificare, 2. Clasificare, 3. Status & Exploatare, 4. Date Financiare, 5. Date Tehnice, 6. Mentenanță, 7. Observații (dacă există)
-  - Footer: data generării + utilizator
-  - Response: `Content-Type: application/pdf` + `Content-Disposition: attachment; filename="Fisa_DM_${inventoryNumber}.pdf"`
-  - ✅ Acceptanță: PDF descărcat, conține datele corecte, diacritice vizibile
-
-- [x] **B6 — Wire devices routes în index.js**
-  - `backend/src/index.js`: `app.use('/api/devices', deviceRoutes)`
-  - ⚠️ NU pune `authMiddleware` și în index.js dacă deja e aplicat în routes/devices.js (dublă aplicare)
-  - ✅ Acceptanță: `GET /api/devices` cu token → 200; fără token → 401
-
-### ⛳ Checkpoint B
-- [x] `POST /api/devices` → 201, auditLog creat în DB
-- [x] `GET /api/devices/dropdown/sections` → array (nu confundat cu /:id)
-- [x] `GET /api/devices/export/xlsx` → nu returnează 404 sau eroare /:id
-- [x] `GET /api/devices/1/fisa-pdf` → PDF blob descărcat
-- [x] Upload fișier: fișier pe disc, URL în câmpul corect al DM
-- [x] Formular add DM: validare Zod funcționează (erori afișate în timp real)
-- [x] Formular edit DM: câmpurile prefilled corect
-
----
-
-## Faza C — Tabel Inventar + Export
-
-- [x] **C1 — InventoryPage.jsx**
-  - Fișier: `frontend/src/pages/InventoryPage.jsx`
-  - State: `search`, `filters` (status, riskClass, sectionId), `page`, `limit=50`
-  - `useQuery(['devices', search, filters, page, limit], ...)` → `api.get('/devices?' + params)`
-  - `useQuery(['sections'], ...)` → pentru filtrul de secție
-  - Tabel cu coloane: Nr. Inventar, Denumire/Model, Producator, Clasa, Status (colorat), Secție, Data PIF, Acțiuni
-  - Status badge colorat: FUNCTIONAL=green, IN_REPARATIE=yellow, DEFECT=red, CASAT=gray, IMPRUMUTAT=blue, REZERVA=purple
-  - Acțiuni per rând: Edit (Link → /devices/:id/edit), Delete (buton cu confirmare)
-  - Paginare: Înapoi / Înainte + afișare "Pagina X din Y · Z total"
-  - Butoane export: Excel + CSV (apelează /export/xlsx și /export/csv cu filtrele active)
-  - Buton "Adaugă DM" → Link /devices/new
-  - ✅ Acceptanță: tabel afișat, filtre funcționează, paginare corectă, export descarcă fișier
-
-- [x] **C2 — Export Excel + CSV în devices.js**
-  - `GET /export/xlsx` (înregistrat ÎNAINTE de `/:id`):
-    - ExcelJS: worksheet "Inventar DM", coloane cu lățimi, antet bold pe fundal închis
-    - Date: inventoryNumber, name, model, manufacturer, riskClass, status, section.name, acquisitionDate, acquisitionValue
-    - `res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')`
-    - `await workbook.xlsx.write(res)`
-  - `GET /export/csv` (înregistrat ÎNAINTE de `/:id`):
-    - BOM UTF-8: `res.write('﻿')` pentru diacritice în Excel
-    - Câmpuri cu ghilimele duble, separator virgulă
-    - `res.setHeader('Content-Type', 'text/csv; charset=utf-8')`
-  - Ambele suportă filtrele din query (search, status, riskClass, sectionId)
-  - ✅ Acceptanță: Excel deschis în LibreOffice/Excel cu date corecte; CSV cu diacritice vizibile
-
-- [x] **C3 — Soft delete cu confirmare**
-  - `useMutation({ mutationFn: (id) => api.delete('/devices/' + id), onSuccess: () => { queryClient.invalidateQueries(['devices']); toast.success('DM marcat ca CASAT') } })`
-  - Confirmare înainte de apel: `window.confirm('Marchezi DM ca CASAT? Acțiunea este reversibilă.')`
-  - ✅ Acceptanță: DM dispare din lista default (statusul CASAT e filtrat sau vizibil); DB are status=CASAT
-
-### ⛳ Checkpoint C
-- [x] Tabel afișat cu DM din DB
-- [x] Filtrare status + clasa + secție funcționează
-- [x] Căutare text (nr. inventar, model, producator) funcționează
-- [x] Paginare: prev/next, contor total corect
-- [x] Export xlsx descărcat + valid
-- [x] Export csv descărcat + diacritice ok
-- [x] Delete → toast + dispare din tabel
-
----
-
-## Faza D — Integrare & Verificare
-
-- [x] **D1 — Wire routes în App.jsx**
-  - Importă `InventoryPage`, `DeviceForm`, `ProtectedRoute`
-  - Adaugă `<Routes>` cu toate rutele (vezi A2)
-  - Dashboard placeholder din Faza 1 devine ruta autentificată default sau se mută la `/dashboard`
-  - ✅ Acceptanță: navigare completă funcționează; `/inventory` protejat; `/devices/new` protejat
-
-- [x] **D2 — ToastContainer global**
-  - `frontend/src/main.jsx`: `import { ToastContainer } from 'react-toastify'; import 'react-toastify/dist/ReactToastify.css';`
-  - Adaugă `<ToastContainer position="bottom-right" theme="dark" />` lângă `<App />`
-  - ✅ Acceptanță: toast-urile apărute din DeviceForm și InventoryPage sunt vizibile
-
-- [x] **D3 — Verificare end-to-end**
-  - [ ] Adaugă un DM nou → 201 → toast → redirect inventar → DM apare în tabel
-  - [ ] Click Edit → câmpuri prefilled → modificare → salvare → DM actualizat
-  - [ ] Descarcă Fișă PDF → conține datele DM
-  - [ ] Upload document (PDF) → fișier vizibil pe server
-  - [ ] Filtrare status=FUNCTIONAL → doar DM funcționale
-  - [ ] Export Excel → fișier .xlsx cu DM conform filtrelor
-  - [ ] Delete DM → confirmare → CASAT → dispare/gri în tabel
-  - [ ] Reload browser → sesiune păstrată (refresh cookie funcționează)
-  - [ ] `git status` → fără `.env`, fără `node_modules`, fără `uploads/`
-
-### ⛳ Checkpoint Final Faza 2
-- [x] Toate testele din D3 trecute
-- [x] Nicio consolă de erori în browser sau terminal
-- [x] AuditLog în DB: CREATE, UPDATE, DELETE pentru operații DM
-- [x] `uploads/devices/` în `.gitignore`
-- [x] Commit curat pe branch `dev`
-- [x] Gata pentru Faza 3: Modul Mentenanță
-
----
-
-## Note Tehnice Rapide
-
-**Enum-uri din schema reală (nu din docs Faza2):**
-- `DeviceStatus`: FUNCTIONAL, IN_REPARATIE, DEFECT, CASAT, IMPRUMUTAT, REZERVA
-- `RiskClass`: I, IIa, IIb, III
-- `MaintenanceType`: PREVENTIVA, CORECTIVA, VERIFICARE, CALIBRARE (nu MP/MC!)
-- `IncidentSeverity`: NEAR_MISS, MINOR, MODERAT, GRAV, CRITIC
-
-**Token:** `sessionStorage['accessToken']` — NU localStorage.
-
-**PrismaClient:** întotdeauna `require('../db')` — niciodată `new PrismaClient()` în routes.
-
-**Route conflict:** statice (`/dropdown/sections`, `/export/xlsx`, `/export/csv`) ÎNAINTE de `/:id`.
+**Last Updated:** 2026-06-02  
+**Ready for Faza 3:** YES — All planning complete, ready to start 2026-06-05  
+**Plan Based On:** Ordinul MS nr. 889/2024 (Ghidul Bioinginerului)

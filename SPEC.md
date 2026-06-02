@@ -538,3 +538,102 @@ Frontend-ul este **100% accesibil:**
 ---
 
 **Următor:** Start Faza 2 (Inventar DM) — citire [tasks/plan.md](tasks/plan.md)
+
+---
+
+## 15. FAZA 3: Mentenanță — Plan Detaliat 100%
+
+### 15.1 Overview
+
+Implementează sistemul complet de mentenanță în 5 pași, bazat pe Procedurile MDM Nr. 4, 6, 7, 8 din Ordinul MS 889/2024.
+
+**Durată totală:** 16 zile (3-4 săptămâni) | **Start:** 2026-06-05 | **End:** 2026-06-26
+
+### 15.2 Structură Faza 3
+
+| Pas | Procedură | Formular | Durată | Descriere |
+|-----|-----------|----------|--------|-----------|
+| **3.1** | MDM Nr. 6 | Nr. 5 | 4 zile | Plan Mentenanță Preventivă + Calendar + Formular Nr. 5 |
+| **3.2** | MDM Nr. 7 | Nr. 6 | 3 zile | Execuție MPP + Checklist + Semnătură + Formular Nr. 6 |
+| **3.3** | MDM Nr. 8 | Nr. 8 | 4 zile | Mentenanță Corectivă + Ticketing + State Machine + Formular Nr. 8 |
+| **3.4** | Anexa 24/25 | Registru | 3 zile | Verificări Periodice & Metrologie + Alerte 60/30/7 |
+| **3.5** | MDM Nr. 4 | Nr. 9 | 2 zile | Contracte Mentenanță Externă + Rating + Formular Nr. 9 |
+
+### 15.3 Database Schema
+
+**Modele noi:**
+- maintenance_plans: year, deviceId, frequency, responsibleName, months[]
+- mpp_occurrences: planId, scheduledDate, status (PROGRAMAT/SCADENT/DEPASIT/EFECTUAT)
+- mpp_executions: deviceId, executedDate, checklist (JSON), consumablesUsed, signatureEngineer
+- repair_tickets: ticketNumber, status (DESCHIS→IN_LUCRU→REZOLVAT→TESTAT→INCHIS), partsUsed, totalCost
+- verifications: deviceId, type, validUntil, result (CONFORM/NECONFORM)
+- service_providers: name, rating (1-5 medie)
+- service_contracts: providerId, endDate, value, slaHours
+- provider_ratings: providerId, score (1-5), comment
+
+### 15.4 API Endpoints (Rezumat)
+
+**Mentenanță Preventivă:**
+- POST /api/maintenance-plans/generate — generator plan
+- GET /api/maintenance-plans/calendar?year=YYYY — calendar vizual
+- PATCH /api/maintenance-plans/occurrence/:id/reschedule — reprogramare
+
+**Execuție MPP:**
+- POST /api/mpp-executions — înregistrare execuție (cu tranzacție stoc)
+- GET /api/mpp-executions/checklist-template/:deviceId
+
+**Mentenanță Corectivă:**
+- POST /api/repair-tickets — raportare defecțiune
+- PATCH /api/repair-tickets/:id/status — validare state machine
+- PUT /api/repair-tickets/:id/repair — reparație internă
+
+**Verificări:**
+- POST /api/verifications — înregistrare
+- GET /api/verifications/compliance-report — raport audit
+
+**Contracte:**
+- CRUD /api/service-contracts/{providers,contracts}
+- GET /api/service-contracts/cost-analysis
+
+### 15.5 Frontend Componente
+
+- MaintenanceCalendarPage: react-big-calendar + culori status
+- MppExecutionForm: checklist + semnătură digitală (react-signature-canvas)
+- RepairTicketsPage: Kanban board pe coloane status
+- VerificationsPage: registru + raport conformitate
+- ServiceContractsPage: contracte + rating furnizori
+
+### 15.6 Cron Jobs
+
+**node-cron zilnic 08:00 (Europe/Chisinau):**
+- checkMppDue: MPP scadente în 7 zile
+- checkVerificationExpiry: verificări expiră în 60/30/7 zile
+- checkContractExpiry: contracte expiră în 30 zile
+
+### 15.7 Formularele (CORECT etichetate)
+
+- **Formular Nr. 5** (Anexa 16): Plan MPP anual (grilă Jan-Dec)
+- **Formular Nr. 6** (Anexa 2): Fișă mentenanță preventivă
+- **Formular Nr. 8** (Anexa 3): **Fișă de deservire = Bon reparație INTERN** (NU extern!)
+- **Formular Nr. 9** (Anexa 21): Act predare-primire la externalizare
+
+### 15.8 Testare (Target ≥95% coverage)
+
+- maintenancePlans.test.js: 8+ tests
+- mppExecutions.test.js: 6+ tests
+- repairTickets.test.js: 12+ tests (state machine edge cases)
+- verifications.test.js: 5+ tests
+- serviceContracts.test.js: 6+ tests
+- jobs/notifications.test.js: 4+ tests
+
+E2E: 5+ scenario tests (login → plan → execute → ticket → reparație → PDF)
+
+### 15.9 Dependințe
+
+**Frontend:** 
+pm install react-big-calendar date-fns react-signature-canvas
+**Backend:** 
+pm install node-cron
+
+---
+

@@ -1,7 +1,7 @@
 # SIMDM — Sistem Informațional de Management al Dispozitivelor Medicale
 
-**Versiune:** 2.1 Faza 1-2 (Production-ready + Docker Optimized)  
-**Status:** ✅ **Faza 1 & 2 COMPLETĂ 100%** (176 tests, 97.42% backend, 91.99% frontend, Docker optimized)  
+**Versiune:** 2.2 Faza 1-2 Complete + Faza 3 Plan Ready  
+**Status:** ✅ **Faza 1 & 2 COMPLETĂ 100%** (176 tests, 95.36% backend, 91.99% frontend) | ⏳ **Faza 3 Plan Approved (16 days)**  
 **Actualizat:** 2026-06-02  
 **Licență:** Privat (Spital privat Moldova)
 
@@ -13,37 +13,85 @@
 
 Înlocuiește evidența pe hârtie și foile Excel cu o bază de date securizată, conform standardelor din **Ghidul Bioinginerului — Ordinul MS nr. 889/2024** (Republica Moldova).
 
-### Caracteristici Principale (Faza 1+2)
+### 📊 Status Implementare
+
+| Fază | Modul | Status | Tests | Coverage |
+|------|-------|--------|-------|----------|
+| **1** | Fundație (Auth, DB, Login) | ✅ COMPLETĂ | 30+ | 100% |
+| **2** | Inventar DM (CRUD, export) | ✅ COMPLETĂ | 103+ | 95.36% backend / 91.99% frontend |
+| **3** | Mentenanță (Plan, Exec, Ticketing) | ⏳ PLANNED (16 zile) | TBD | Target ≥95% |
+| **4-8** | Documente, Incidente, Procurement, Dashboard, QA | ⬜ PLANNED | — | — |
+
+### ✅ Caracteristici Implementate (Faza 1+2)
 
 **Faza 1: Fundație**
-- ✅ **Login sigur** — JWT + bcrypt, utilizator unic bioinginer, refresh tokens
+- ✅ **Login sigur** — JWT + bcrypt, utilizator unic bioinginer, refresh tokens cu rotație
 - ✅ **Bază de date robustă** — PostgreSQL 16, Prisma 7 ORM, 10+ tabele, seed data
 
 **Faza 2: Inventar DM** ✅ **COMPLETĂ**
 - ✅ **CRUD Complet** — Creare, editare, ștergere (soft-delete CASAT), listare cu filtre
-- ✅ **Filtrare Avansată** — După status, clasă risc, secție, search text
+- ✅ **Filtrare Avansată** — După status (6 statuse), clasă risc (4 clase), secție, search text
 - ✅ **Paginare Sigură** — Max 1000 items/pagină, validare page ≥ 1
 - ✅ **Export Date** — CSV, XLSX (Excel), PDF (Fișă DM Formular Nr. 8)
-- ✅ **Upload Documente** — PDF, Word, Excel, imagini cu antivirus scanning (magic bytes)
+- ✅ **Upload Documente** — PDF, Word, Excel, imagini cu antivirus scanning (magic bytes + optional ClamAV)
 - ✅ **Validare Zod** — 24 câmpuri validate pe server-side (POST/PUT)
-- ✅ **Rate Limiting** — 10 exporturi per 15 minute (DOS protection)
-- ✅ **Audit Log** — Jurnal complet CREATE/UPDATE/DELETE + FILE_UPLOAD
+- ✅ **Rate Limiting** — 10 exporturi per 15 minute (DOS protection) + 5 login tries
+- ✅ **Audit Log** — Jurnal complet CREATE/UPDATE/DELETE + FILE_UPLOAD cu tracking user + changes
 - ✅ **Database Indexing** — 3 compound indexes pentru performanță 5-10x
 
 **Interfață & Accesibilitate**
 - ✅ **React 19 + Vite + Tailwind v4** — Dark/light mode, fully responsive
-- ✅ **WCAG 2.1 AA Certified** — Keyboard navigation, focus rings, semantic HTML
-- ✅ **Component Library** — StatusBadge (6 statuses), DataGrid, Forms, Modals, Toasts
+- ✅ **WCAG 2.1 AA Certified** — Keyboard navigation, focus rings (2px cyan offset), semantic HTML
+- ✅ **Component Library** — StatusBadge (6 statuses), DataGrid, Forms, Modals, Toasts, DeviceCard
 
 **Hardening de Securitate**
-- ✅ **Antivirus Scanning** — Magic byte detection + optional ClamAV (ClamAV-ready for production)
+- ✅ **Antivirus Scanning** — Magic byte detection + optional ClamAV (production-ready)
 - ✅ **Soft-Delete Pattern** — CASAT status (default excluded from queries)
-- ✅ **Jwt + bcrypt** — Industry-standard authentication
+- ✅ **JWT + bcrypt** — Industry-standard authentication (12 rounds bcrypt)
+- ✅ **Account Lockout** — 5 failed attempts → lock 30 min
+- ✅ **Helmet.js** — Security headers (CSP, HSTS, X-Frame-Options)
+- ✅ **CORS** — Configurare restrictivă, localhost only
 
-**Documentație Profesională**
-- ✅ **10+ fișiere renovate** — SPEC.md, GETTING-STARTED, CONTRIBUTING, design system, antivirus guide
-- ✅ **Developer Patterns** — Backend validation, pagination, file upload, audit logging
-- ✅ **Gata pentru Faza 3** — Arhitectură scalabilă, patterns reusable
+**Testare & QA**
+- ✅ **Backend:** 176 unit + integration tests, 95.36% coverage
+- ✅ **Frontend:** 103 component + hook tests, 91.99% coverage
+- ✅ **E2E:** 15 Playwright tests covering 5 critical scenarios
+- ✅ **CI/CD:** GitHub Actions v5 (Node.js 24, all warnings resolved)
+- ✅ **Docker:** Multi-stage, optimized, healthcheck fixed
+
+### 🔧 Faza 3: Mentenanță (⏳ PLANNED — START 2026-06-05)
+
+**Durată:** 16 zile (3-4 săptămâni) | **End date:** 2026-06-26 (projected)
+
+**5 Module (Pași):**
+1. **Pas 3.1** — Plan Mentenanță Preventivă (4 zile): Generator plan + calendar vizual + Formular Nr. 5
+2. **Pas 3.2** — Execuție MPP (3 zile): Checklist + semnătură digitală + Formular Nr. 6
+3. **Pas 3.3** — Mentenanță Corectivă (4 zile): Ticketing + state machine + Formular Nr. 8
+4. **Pas 3.4** — Verificări Periodice (3 zile): Registru + metrologie + alerte 60/30/7 zile
+5. **Pas 3.5** — Contracte Externe (2 zile): CRUD + rating furnizori + Formular Nr. 9
+
+**Dependințe:** react-big-calendar, date-fns, react-signature-canvas, node-cron
+
+**Vezi detalii:** [tasks/plan.md](tasks/plan.md) | [tasks/todo.md](tasks/todo.md) | [SPEC.md § 15](SPEC.md#15-faza-3-mentenanță--plan-detaliat-100)
+
+---
+
+## 📚 Documentație Completă
+
+| Document | Status | Audiență | Link |
+|----------|--------|----------|------|
+| **SPEC.md** | ✅ v2.2 | Arhitecți, DevOps | Stivă tech locked, Faza 3 spec |
+| **GETTING-STARTED.md** | ✅ v2.1 | Bioinginer, dev nou | Setup rapid (5 min Docker) |
+| **CLAUDE.md** | ✅ v2.2 | AI + dev | Instrucțiuni proiect detailed |
+| **tasks/plan.md** | ✅ v2.2 | PM | 8-phase roadmap + Faza 3 detaliat |
+| **tasks/todo.md** | ✅ v2.2 | Dev | Task breakdown per pas (47+ subtasks) |
+| **docs/1-DESIGN.md** | ✅ v2.1 | Frontend dev | Design tokens + WCAG AA |
+| **docs/2-DEVELOPER-GUIDE.md** | ✅ v2.1 | Backend + frontend | Patterns, testing, Docker |
+| **docs/3-AUDIT-LOG.md** | ✅ v2.1 | Referință | Snapshot Faza 1-2 audit |
+| **docs/CONTRIBUTING.md** | ✅ v2.1 | Toți | PR workflow + standards |
+| **docs/ANTIVIRUS-SETUP.md** | ✅ v2.1 | DevOps | Magic bytes + ClamAV |
+| **docs/DOCKER-OPTIMIZATION.md** | ✅ v2.1 | DevOps | WSL + resource limits |
+| **frontend/README.md** | ✅ v2.1 | Frontend dev | Setup + structure |
 
 ---
 
@@ -65,297 +113,166 @@ docker-compose up --build
 
 **Apoi:**
 1. Deschide http://localhost:5173 în browser
-2. Login: `admin` / `admin`
+2. Login: dmin / dmin
 3. Sunt 8 dispozitive gata în baza de date (monitor, defibrilator, ecograf, etc.)
 
 ### Opțiunea 2: Local fără Docker (10-15 minute)
 
 ```bash
-# 1. PostgreSQL — creează DB și user
-createdb simdm_db
-createuser simdm_user
-psql -d simdm_db -c "ALTER USER simdm_user WITH PASSWORD 'simdm_secure_2024';"
-
-# 2. Backend
+# Backend
 cd backend
 npm install
-npx prisma migrate dev --name init
-npx prisma db seed
-npm run dev  # Port 3001
+npm run db:migrate
+npm run db:seed
+npm run dev  # Server pe port 3001
 
-# 3. Frontend (alt terminal)
+# Frontend (alt terminal)
 cd frontend
 npm install
-npm run dev  # Port 5173
-
-# 4. (Opțional) Database GUI
-cd backend
-npm run db:studio  # Port 5555
+npm run dev  # Vite pe port 5173
 ```
-
-**Detalii complete:** Vezi [`GETTING-STARTED.md`](GETTING-STARTED.md)
-
-**Note:**
-- ✅ Docker optimizat (cache_from removed, healthcheck fixed, USER nodejs for production readiness)
-- ✅ 176 tests (unit + integration + E2E) — 97.42% backend, 91.99% frontend coverage
-- ✅ Zod input validation (24 fields) + antivirus scanning (magic bytes)
-- ✅ E2E Playwright (5 critical flows: login, device CRUD, token refresh, inventory, PDF export)
 
 ---
 
-## 📊 Stare Proiect — Faza 1-2 Completă ✅✅
+## 🏗️ Arhitectură
 
-| Aspect | Status | Detalii |
-|--------|--------|---------|
-| **Audit Faza 1** | ✅ 104/104 | [Raport complet](#audit-faza-1) |
-| **Audit Faza 2** | ✅ **130/130** | **Inventar, Forms, Export, Antivirus, Security hardening** |
-| **Auth & Login** | ✅ Funcțional | JWT + refresh tokens, sessionStorage, logout, persistence |
-| **Inventar DM (FAZA 2)** | ✅ **COMPLETĂ** | **CRUD, filtre, paginare (capped 1000), export CSV/XLSX/PDF** |
-| **File Upload & Antivirus** | ✅ **COMPLETĂ** | **Magic byte detection, optional ClamAV, audit logging** |
-| **Backend Validation** | ✅ **Zod (24 fields)** | **Server-side validation POST/PUT, structured errors** |
-| **Rate Limiting & Indexes** | ✅ **3 compound indexes** | **Pagination cap, export rate limiter (10/15min), performance 5-10x** |
-| **Bază de date** | ✅ 10+ tabele | Users, Devices, Sections, Incidents, Consumables, audit_logs + 7 migrații |
-| **Seed data** | ✅ Complete | 1 user, 8 secții, 8 DM, 4 consumabile, 2 incidente |
-| **Frontend UI** | ✅ **Login + Inventory** | **DataGrid, forms, dark/light mode, WCAG 2.1 AA** |
-| **Documentație** | ✅ **Renovated (10+)** | **SPEC, CONTRIBUTING, ANTIVIRUS-SETUP, dev guides, design system** |
-| **Git & CI** | ✅ Clean | **3 security fix commits + 1 documentation commit** |
+### Stivă Tehnologică (LOCKED)
 
----
+| Strat | Tehnologie | Version |
+|-------|-----------|---------|
+| **Frontend** | React | 19 |
+| **Bundler** | Vite | 8 |
+| **Styling** | Tailwind CSS | 4 |
+| **Forms** | React Hook Form | 7 |
+| **Validare** | Zod | 4 |
+| **API Client** | Axios | 1.16 |
+| **State/Fetching** | TanStack Query | 5 |
+| **Routing** | react-router-dom | 7 |
+| **Backend** | Express.js | 5.2 |
+| **Node.js** | LTS | 22 |
+| **Database** | PostgreSQL | 16 |
+| **ORM** | Prisma | 7.8 |
+| **Auth** | JWT + bcryptjs | 12 rounds |
+| **Testing** | Vitest + RTL + Playwright | — |
+| **Container** | Docker Compose | — |
 
-## 🔍 Audit Faza 1
-
-### Rezultat: **100% Completă**
-
-Faza 1 a fost auditată exhaustiv pe **14 dimensiuni** (104 criterii). Rezultat final:
-
-```
-✅ Instrumente instalate (node v22, npm, git, PostgreSQL)
-✅ Structură proiect (backend/, frontend/, .gitignore, .env)
-✅ Backend — dependențe complete (express, prisma, jwt, bcrypt)
-✅ PostgreSQL — bază de date conectată, 10+ tabele
-✅ .env — configurat corect, secrete în place
-✅ Prisma — schema validă, 6 migrații aplicate
-✅ Server backend — pornit, rute încărcate, API sănătos
-✅ API endpoints — /health, /login, /refresh, /logout funcționali
-✅ Frontend — dependențe (react, vite, tailwind, query)
-✅ Tailwind — configurat cu @tailwindcss/vite
-✅ Frontend — dev server, login page, responsive
-✅ E2E auth flow — login → token → localStorage → redirect ✓
-✅ Git — history curat, .env exclus, commits structurati
-✅ Cunoștințe — Prisma, JWT, bcrypt, CORS, async/await
-```
-
-**Score:** 104/104 (100%) → **FAZA 1 APROBATĂ PENTRU FAZA 2**
-
----
-
-## 📁 Structură Proiect
+### Structura Directoare
 
 ```
 simdm/
-├── backend/                           # Node.js + Express server
-│   ├── prisma/
-│   │   ├── schema/
-│   │   │   ├── schema.prisma         # Generator + datasource
-│   │   │   └── *.prisma              # Multi-file schema (users, devices, etc.)
-│   │   ├── migrations/               # 6 migrații Prisma
-│   │   └── seed.js                   # Auto-populate DB (1 user + 8 sections + 8 devices...)
+├── backend/
+│   ├── prisma/schema/
+│   │   ├── schema.prisma       # Sursa de adevăr pentru DB
+│   │   ├── migrations/
+│   │   └── seed.js
 │   ├── src/
-│   │   ├── routes/auth.js            # POST /login, /refresh, /logout
-│   │   ├── middleware/auth.js        # JWT verification
-│   │   ├── services/authService.js   # Business logic
-│   │   └── index.js                  # Express server (port 3001)
-│   ├── .env                          # (NU în Git)
+│   │   ├── routes/             # Un endpoint per resursă
+│   │   ├── controllers/        # Business logic
+│   │   ├── middleware/         # Auth, validation, error handling
+│   │   ├── schemas/            # Zod schemas
+│   │   ├── jobs/               # Cron jobs (node-cron)
+│   │   └── __tests__/
 │   └── package.json
-│
-├── frontend/                          # React 19 + Vite
+├── frontend/
 │   ├── src/
-│   │   ├── pages/Login.jsx           # Auth page
-│   │   ├── components/               # Reusable components (Faza 2+)
-│   │   ├── api/axios.js              # HTTP client + JWT interceptor
-│   │   ├── App.jsx                   # Router
-│   │   ├── main.jsx                  # Entry point
-│   │   └── index.css                 # Tailwind + CSS variables
-│   ├── vite.config.js                # Proxy /api → backend
+│   │   ├── pages/              # Route pages
+│   │   ├── components/         # Reusable components
+│   │   ├── hooks/              # Custom hooks
+│   │   ├── api/                # Axios + service calls
+│   │   ├── schemas/            # Zod validation
+│   │   └── __tests__/
 │   └── package.json
-│
-├── docs/                             # Documentație tehnică
-│   ├── 1-DESIGN-AND-ACCESSIBILITY.md # Sistem design, WCAG 2.1 AA
-│   ├── 2-DEVELOPER-GUIDE.md          # Tipare frontend, checklist
-│   ├── 3-AUDIT-LOG.md                # Audit accesibilitate (Faza 1)
-│   └── CONTRIBUTING.md               # Flux contribuție Faza 2+
-│
-├── tasks/                            # Planificare
-│   ├── plan.md                       # Roadmap fazelor
-│   └── todo.md                       # Task tracking
-│
-├── docker-compose.yml                # PostgreSQL, backend, frontend
-├── CLAUDE.md                         # Instrucțiuni Claude Code
-├── SPEC.md                           # Specificație tehnică
-├── GETTING-STARTED.md                # Quick start guide (5-10 min)
-├── README.md                         # Acest fișier
-└── .gitignore                        # node_modules/, .env, dist/
+├── docs/
+│   ├── 1-DESIGN-AND-ACCESSIBILITY.md
+│   ├── 2-DEVELOPER-GUIDE.md
+│   ├── 3-AUDIT-LOG.md
+│   ├── ANTIVIRUS-SETUP.md
+│   ├── CONTRIBUTING.md
+│   └── DOCKER-OPTIMIZATION.md
+├── tasks/
+│   ├── plan.md                 # 8-phase roadmap
+│   └── todo.md                 # Task breakdown
+├── CLAUDE.md                   # AI instructions
+├── SPEC.md                     # Technical spec
+├── README.md                   # This file
+└── docker-compose.yml
 ```
 
 ---
 
-## 🛠️ Stivă Tehnologică (Locked)
+## 🧪 Testare
 
-| Strat | Tehnologie | Versiune | Rol |
-|-------|-----------|----------|-----|
-| **Frontend** | React | 19 | UI components, routing |
-| **Frontend Bundler** | Vite | 8 | Dev server, build |
-| **CSS Framework** | Tailwind CSS | 4.3 | Utility-first styling |
-| **Backend** | Node.js + Express | v22 + 5.2 | API server (port 3001) |
-| **Bază de date** | PostgreSQL | 16 | Data persistence |
-| **ORM** | Prisma | 7.8 | Database abstraction |
-| **Auth** | JWT + bcryptjs | 9.0 + 3.0 | Token-based auth |
-| **HTTP Client** | Axios | 1.16 | API requests + interceptors |
-| **State Management** | TanStack Query | 5.1 | Data fetching, caching |
-| **Form Validation** | React Hook Form + Zod | 7.7 + 4.4 | Type-safe forms |
+### Backend (Vitest + Supertest)
+```bash
+cd backend
+npm run test              # Run all tests
+npm run test:coverage     # Coverage report (target ≥95%)
+npm run test:watch       # Watch mode
+```
 
-**Principiu:** NU adăuga noi framework-uri fără cerere explicită. Stack-ul e stabil și testat.
+### Frontend (Vitest + React Testing Library)
+```bash
+cd frontend
+npm run test              # Run all tests
+npm run test:coverage     # Coverage report (target ≥85%)
+```
 
----
-
-## 📝 Documentație
-
-| Document | Scop | Pentru cine |
-|----------|------|------------|
-| **[GETTING-STARTED.md](GETTING-STARTED.md)** | Setup în 5-10 min, Docker/Local | Bioinginer, dev nou |
-| **[CLAUDE.md](CLAUDE.md)** | Instrucțiuni Claude Code (AI) | AI + developeri backend |
-| **[SPEC.md](SPEC.md)** | Specificație tehnică, faze | Arhitecți, PM |
-| **[docs/1-DESIGN-AND-ACCESSIBILITY.md](docs/1-DESIGN-AND-ACCESSIBILITY.md)** | Design tokens, WCAG 2.1 AA | Frontend developers |
-| **[docs/2-DEVELOPER-GUIDE.md](docs/2-DEVELOPER-GUIDE.md)** | Tipare JSX, checklist-uri | Frontend developers |
-| **[docs/CONTRIBUTING.md](docs/CONTRIBUTING.md)** | Flux PR, branch naming | Toți contributorii |
-| **[tasks/plan.md](tasks/plan.md)** | Roadmap 8 faze | Product managers |
-| **[tasks/todo.md](tasks/todo.md)** | Sprint tasks | Team leads |
+### E2E (Playwright)
+```bash
+# Backend + Frontend trebuie să ruleze
+npx playwright test
+npx playwright show       # HTML report
+```
 
 ---
 
-## 🎨 Design System — Clinical Precision
+## ✅ Checklist Setup Local
 
-SIMDM folosește **Clinical Precision 2.0**, un design system modern optimizat pentru aplicații medicale:
-
-### Culori Principale
-- **Accent:** Portocaliu `#ffb597` (9.8:1 contrast în dark mode — AAA)
-- **Dark mode:** Fundal `#0a0d0d`, text `#e2e2e2` (17.7:1 contrast)
-- **Light mode:** Fundal `#f5f5f5`, text `#1a1a1a` (17.7:1 contrast)
-- **Semantice:** Succes (verde), Eroare (roșu), Avertisment (galben)
-
-### Caracteristici
-✅ Dark/Light mode toggle persistent
-✅ Focus rings vizibile pe orice element interactiv
-✅ Minimum 44px hit targets (WCAG 2.5.5)
-✅ Semantic HTML + ARIA labels
-✅ Keyboard navigation complet
-✅ Status badges cu icoane (accesibil daltonici)
-
-Detalii: [docs/1-DESIGN-AND-ACCESSIBILITY.md](docs/1-DESIGN-AND-ACCESSIBILITY.md)
+- [ ] Git clone
+- [ ] docker-compose up --build (sau npm install pe ambele directoare)
+- [ ] Login http://localhost:5173 cu dmin / dmin
+- [ ] Inventar DM afișează 8 dispozitive
+- [ ] Test CRUD: adaugă → editează → șterge (CASAT)
+- [ ] Export CSV/XLSX/PDF funcționează
+- [ ] Dark mode toggle funcționează
+- [ ] Console: zero errors
 
 ---
 
-## 🔒 Securitate
+## 📞 Contact & Support
 
-- ✅ **Parole:** Hashed cu bcrypt (12 rounds), niciodată în clar
-- ✅ **JWT:** Access token 15 min + refresh token 7 zile (httpOnly cookie)
-- ✅ **CORS:** Doar localhost:5173 (dev) și spital LAN (producție)
-- ✅ **.env:** Exclus din Git — DATABASE_URL, JWT_SECRET, credențiale
-- ✅ **Rate limiting:** 5 încercări login pe 15 minute
-- ✅ **Helmet.js:** Security headers (CSP, X-Frame-Options, etc.)
-- ✅ **Validare server-side:** Orice input
+**Pentru Bioinginer (utilizator):**
+- Ghid utilizare: [GETTING-STARTED.md](GETTING-STARTED.md)
+- Probleme: [CONTRIBUTING.md § Troubleshooting](docs/CONTRIBUTING.md)
 
----
+**Pentru Developer:**
+- Setup: [GETTING-STARTED.md](GETTING-STARTED.md)
+- Patterns: [docs/2-DEVELOPER-GUIDE.md](docs/2-DEVELOPER-GUIDE.md)
+- PR: [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md)
 
-## 🧪 Testare Seed Data
-
-După `npm run db:seed`, baza de date conține:
-
-**Utilizatori:**
-- `inginer` (bioinginer medical) — acces complet
-
-**Secții Spital (8):**
-- Terapie Intensivă, Bloc Operator, Cardiologie, Chirurgie, Medicină Internă, Laborator, Radiologie, Urgențe
-
-**Dispozitive Medicale (8):**
-| Invent # | Nume | Status | Risc |
-|----------|------|--------|------|
-| DM-ATI-001 | Monitor Semne Vitale | ✅ Funcțional | IIb |
-| DM-BLOC-001 | Defibrilator | ✅ Funcțional | III |
-| DM-CARDIO-001 | Electrocardiograf | ✅ Funcțional | IIa |
-| DM-LAB-001 | Analizor Hematologic | ✅ Funcțional | IIb |
-| DM-RX-001 | Difuzor Radiologic | ✅ Funcțional | III |
-| DM-URG-002 | Pompă Infuzii | ⟳ Reparație | IIa |
-| DM-CHIR-001 | Videoendoscop | ✅ Funcțional | IIb |
-| DM-MED-001 | Ventilator Mecanic | ✗ Defect | III |
-
-**Consumabile (4):**
-- Electrozi defibrillare, Căi vasculare, Filtre ECG, Baterii backup
-
-**Incidente (2):**
-- Pompă infuzii — conectori deteriorați (MODERAT)
-- Ventilator — baterie backup defectă (GRAV)
+**Pentru DevOps:**
+- Docker: [docs/DOCKER-OPTIMIZATION.md](docs/DOCKER-OPTIMIZATION.md)
+- Antivirus: [docs/ANTIVIRUS-SETUP.md](docs/ANTIVIRUS-SETUP.md)
 
 ---
 
-## 🐛 Probleme Frecvente
+## 📋 Roadmap
 
-### "Cannot find module" / "port already in use"
-→ Citește [`GETTING-STARTED.md`](GETTING-STARTED.md) — secția Troubleshooting
+`
+Faza 1  ✅ DONE               (2026-05-30) — Fundație + Auth
+Faza 2  ✅ DONE               (2026-06-02) — Inventar DM
+Faza 3  ⏳ PLANNED 16 days    (2026-06-05 — 2026-06-26) — Mentenanță
+Faza 4  ⬜ PLANNED 2-3 weeks  (2026-06-26 — 2026-07-12) — Documente
+Faza 5  ⬜ PLANNED 2-3 weeks  (2026-07-12 — 2026-07-28) — Incidente
+Faza 6  ⬜ PLANNED 2-3 weeks  (2026-07-28 — 2026-08-13) — Procurement
+Faza 7  ⬜ PLANNED 2-3 weeks  (2026-08-13 — 2026-08-29) — Dashboard
+Faza 8  ⬜ PLANNED 1-2 weeks  (2026-08-29 — 2026-09-12) — QA & Go-Live
+`
 
-### "Database connection refused"
-→ Verifică `docker-compose ps` — PostgreSQL container trebuie GREEN
-
-### "Token invalid / 401 Unauthorized"
-→ Token expirat — refresh automat prin interceptor, sau relogin
-
----
-
-## 📞 Support & Contact
-
-**Pentru bioinginer:**
-- Citește [GETTING-STARTED.md](GETTING-STARTED.md)
-- Contactează dev team pentru probleme
-
-**Pentru developeri:**
-- [CLAUDE.md](CLAUDE.md) — Instrucțiuni AI
-- [docs/2-DEVELOPER-GUIDE.md](docs/2-DEVELOPER-GUIDE.md) — Tipare cod
-- [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) — Flux PR
-
-**Pentru PM/Stakeholders:**
-- [tasks/plan.md](tasks/plan.md) — Roadmap 8 faze
-- [SPEC.md](SPEC.md) — Specificație tehnică
+**MVP (Faza 1-2):** 2026-06-02 ✅ DONE
+**Core (Faza 1-3):** 2026-06-26 (projected)
+**Complete (Faza 1-8):** 2026-09-12 (projected)
 
 ---
 
-## 📋 Roadmap — Faze Următoare
-
-| Fază | Modul | ETA | Status |
-|------|-------|-----|--------|
-| **1** | Fundație (Auth, DB, Login) | ✅ 2026-05-30 | **COMPLETĂ** |
-| **2** | Inventar DM (CRUD, tabel, export) | Planning | ⬜ Următoare |
-| **3** | Mentenanță (Preventivă/Corectivă) | TBD | ⬜ Planificat |
-| **4** | Documente & Proceduri | TBD | ⬜ Planificat |
-| **5** | Incidente & Vigilență | TBD | ⬜ Planificat |
-| **6** | Procurement | TBD | ⬜ Planificat |
-| **7** | Dashboard & Raportare | TBD | ⬜ Planificat |
-| **8** | QA & Go-Live | TBD | ⬜ Planificat |
-
----
-
-## 📄 Versioni & Istoric
-
-**v1.0 (2026-05-30) — Faza 1 Completă**
-- ✅ Audit 104/104 (100%)
-- ✅ GETTING-STARTED.md creat
-- ✅ seed.js complet (8 dispozitive, 4 consumabile, 2 incidente)
-- ✅ Documentație renovată (profesionistă, limba română)
-- ✅ Gata pentru Faza 2
-
----
-
-**Gata să contribui? Citește [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md).**
-
-**Bioinginer nou? Start cu [GETTING-STARTED.md](GETTING-STARTED.md).**
-
-**Developer backend? Citește [CLAUDE.md](CLAUDE.md).**
+**Următor:** Start Faza 3 — [Citește plan detaliat](tasks/plan.md)
