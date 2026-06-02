@@ -57,7 +57,7 @@ test.describe('PDF Export Functionality', () => {
       const filename = download.suggestedFilename();
       expect(filename).toMatch(/\.(pdf|xlsx|csv)$/i);
       console.log(`✓ Downloaded: ${filename}`);
-    } catch (e) {
+    } catch (error) {
       // Download might not happen in some environments
       console.log('Note: Download event not captured, but button click succeeded');
     }

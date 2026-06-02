@@ -185,14 +185,14 @@ export default function InventoryPage() {
   // Autocomplete suggestions
   const suggestions = useMemo(() => {
     if (!search || search.length < 2) return [];
-    return devices
+    return (devicesData?.devices || [])
       .filter(
         (d) =>
           d.inventoryNumber.toLowerCase().includes(search.toLowerCase()) ||
           d.name.toLowerCase().includes(search.toLowerCase())
       )
       .slice(0, 5);
-  }, [search, devices]);
+  }, [search, devicesData?.devices]);
 
   const handleEditClick = (device) => {
     setEditingDevice(device);

@@ -208,10 +208,10 @@ export default function ConsumablesPage() {
 
   const suggestions = useMemo(() => {
     if (!search || search.length < 2) return [];
-    return consumables
+    return (consumablesData?.consumables || [])
       .filter(c => c.name.toLowerCase().includes(search.toLowerCase()))
       .slice(0, 5);
-  }, [search, consumables]);
+  }, [search, consumablesData?.consumables]);
 
   const handleEditClick = (consumable) => {
     setEditingConsumable(consumable);

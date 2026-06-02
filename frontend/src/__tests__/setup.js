@@ -1,6 +1,7 @@
 // Setup global pentru testele frontend SIMDM (Vitest + React Testing Library).
 // Conține: matchers jest-dom, mock global axios, cleanup, mock-uri pentru
 // librării grele (react-toastify, react-select, react-datepicker) și API-uri DOM.
+import React from 'react';
 import '@testing-library/jest-dom/vitest';
 import { cleanup } from '@testing-library/react';
 import { afterEach, vi } from 'vitest';
@@ -47,8 +48,6 @@ vi.mock('react-toastify', () => ({
 // ---------------------------------------------------------------------------
 vi.mock('react-datepicker', () => ({
   default: ({ onChange, placeholderText, selected }) => {
-    // import lazy pentru a evita dependența de top-level în fișierul de setup
-    const React = require('react');
     return React.createElement('input', {
       type: 'text',
       placeholder: placeholderText,

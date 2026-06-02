@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Session and Token Refresh', () => {
-  test('Access token auto-refreshes on expiry', async ({ page, context }) => {
+  test('Access token auto-refreshes on expiry', async ({ page }) => {
     // Login
     await page.goto('/login');
     await page.fill('input[name="username"]', 'testuser');
