@@ -7,7 +7,7 @@ beforeAll(async () => {
   const passwordHash = await bcrypt.hash(process.env.TEST_PASSWORD || 'Test123!', 12);
   await prisma.users.upsert({
     where: { email: 'test@simdm.local' },
-    update: {},
+    update: { failedLoginAttempts: 0, lockedUntil: null, isActive: true },
     create: {
       email: 'test@simdm.local',
       username: 'testuser',
@@ -15,6 +15,7 @@ beforeAll(async () => {
       fullName: 'Test User',
       role: 'BIOINGINER',
       isActive: true,
+      failedLoginAttempts: 0,
       updatedAt: new Date(),
     },
   });

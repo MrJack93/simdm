@@ -14,9 +14,12 @@ const loginLimiter = rateLimit({
   max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS || 5),
   message: { error: 'Prea multe încercări. Încearcă peste 15 minute.' },
   standardHeaders: true,
+  trust: true, // Trust X-Forwarded-For header for correct IP
   skip: (req) => {
-    // Nu aplica rate limiting în dev pentru testare
-    return process.env.NODE_ENV === 'development' && req.query.skip_ratelimit;
+    // Skip rate limiting în development cu flag sau în test environment
+    if (process.env.NODE_ENV === 'development' && req.query.skip_ratelimit) return true;
+    if (process.env.NODE_ENV === 'test') return req.query.skip_ratelimit; // test: only skip with flag
+    return false;
   },
 });
 
