@@ -2,6 +2,8 @@ const express = require('express');
 const rateLimit = require('express-rate-limit');
 const AuthService = require('../services/authService');
 const authMiddleware = require('../middleware/auth');
+const { validateBody } = require('../middleware/validate');
+const { loginSchema } = require('../schemas/auth.schema');
 const prisma = require('../db');
 
 const router = express.Router();
@@ -28,13 +30,9 @@ const refreshCookieOptions = {
 };
 
 // POST /api/auth/login
-router.post('/login', loginLimiter, async (req, res) => {
+router.post('/login', loginLimiter, validateBody(loginSchema), async (req, res) => {
   try {
-    const { username, password } = req.body;
-
-    if (!username || !password) {
-      return res.status(400).json({ error: 'Username și parolă sunt obligatorii' });
-    }
+    const { username, password } = req.validated;
 
     const result = await AuthService.login(username, password, req);
 
