@@ -29,15 +29,17 @@ jobs:
           --health-retries 5
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js (Backend)
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v4
         with:
           node-version: '22'
 
       - name: Cache backend dependencies
-        uses: actions/cache@v5
+        uses: actions/cache@v4
         with:
           path: backend/node_modules
           key: ${{ runner.os }}-node-${{ hashFiles('backend/package-lock.json') }}
@@ -85,15 +87,17 @@ jobs:
   test-frontend:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js (Frontend)
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v4
         with:
           node-version: '22'
 
       - name: Cache frontend dependencies
-        uses: actions/cache@v5
+        uses: actions/cache@v4
         with:
           path: frontend/node_modules
           key: ${{ runner.os }}-node-${{ hashFiles('frontend/package-lock.json') }}
