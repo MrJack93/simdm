@@ -26,6 +26,13 @@ const upload = multer({
 // Apply auth middleware to all routes
 router.use(authMiddleware);
 
+// [ORD-889-SEC-2.1] Annual Inventory Procedures (Procedura MDM Nr. 1)
+// Yearly verification of medical devices against inventory records.
+// - Physical count per section
+// - Reconciliation with DB records
+// - Discrepancy investigation
+// - Regulatory compliance reporting
+
 // Helper: Log audit trail
 async function logAudit(userId, action, entity, entityId, changes = null) {
   try {
@@ -210,6 +217,9 @@ router.post('/:year/section/:sectionId', async (req, res) => {
 });
 
 // GET /api/annual-inventory/:year/discrepancies — lista discrepanțe
+// [ORD-889-SEC-2.2] Discrepancies = devices în DB dar not found în physical count
+// Require investigation: misplaced, stolen, wrongly recorded, or actual loss.
+// Must document resolution for regulatory audit trail.
 router.get('/:year/discrepancies', async (req, res) => {
   try {
     const { year } = req.params;
@@ -242,6 +252,9 @@ router.get('/:year/discrepancies', async (req, res) => {
 });
 
 // POST /api/annual-inventory/:year/discrepancies/:id/verify — marchez pentru verificare
+// [ORD-889-SEC-2.3] Discrepancy verification: bioinginer investigates and resolves
+// Status transitions: found → VERIFIED (device located), or lost → INVESTIGATED
+// Documented resolution required for compliance.
 router.post('/:year/discrepancies/:id/verify', async (req, res) => {
   try {
     const { id } = req.params;

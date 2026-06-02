@@ -20,6 +20,10 @@ const exportLimiter = rateLimit({
 });
 
 // Validation schemas
+// [ORD-889-SEC-3.1.2] Risk classification per Ordinul MS nr. 889/2024
+//   - Clasa I: Risk minimal, mentenanță anuală
+//   - Clasa IIa/IIb: Risk moderat, mentenanță semestrial-anual
+//   - Clasa III: Risk maxim, mentenanță trimestrial-semestrial
 const VALID_STATUSES = ['FUNCTIONAL', 'IN_REPARATIE', 'DEFECT', 'CASAT', 'IMPRUMUTAT', 'REZERVA'];
 const VALID_CLASSES = ['I', 'IIa', 'IIb', 'III'];
 const VALID_CURRENCIES = ['MDL', 'USD', 'EUR', 'RON'];
@@ -375,7 +379,10 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// ENDPOINT 8: DELETE /:id — soft delete
+// ENDPOINT 8: DELETE /:id — soft delete (CASAT status)
+// [ORD-889-SEC-4.3] Dispozitivele casate trebuie păstrate în DB 5 ani
+// pentru audit trail și urmărire retrospectivă. Soft-delete (status=CASAT)
+// nu permite modificări ulterioare. Ștergere permanentă e interzisă.
 router.delete('/:id', async (req, res) => {
   try {
     const deviceId = parseInt(req.params.id);
