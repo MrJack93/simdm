@@ -46,3 +46,12 @@ public/uploads/
 # Prisma generated
 prisma/generated/
 .prisma/
+
+# Claude Code worktrees (local only, not for CI)
+.claude/worktrees/
+
+# Test coverage & reports (local only)
+backend/coverage/
+frontend/coverage/
+frontend/playwright-report/
+frontend/test-results/
