@@ -6,12 +6,16 @@ on:
   pull_request:
     branches: [main, dev]
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+permissions:
+  contents: read
+  actions: read
 
 jobs:
   test-backend:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
 
     services:
       postgres:
@@ -29,22 +33,18 @@ jobs:
           --health-retries 5
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
-
-      - name: Configure Git
-        run: |
-          git config --global user.email "ci@simdm.local"
-          git config --global user.name "SIMDM CI"
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node.js (Backend)
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: '24'
 
       - name: Cache backend dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: backend/node_modules
           key: ${{ runner.os }}-node-${{ hashFiles('backend/package-lock.json') }}
@@ -91,23 +91,22 @@ jobs:
 
   test-frontend:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
-
-      - name: Configure Git
-        run: |
-          git config --global user.email "ci@simdm.local"
-          git config --global user.name "SIMDM CI"
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node.js (Frontend)
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: '24'
 
       - name: Cache frontend dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: frontend/node_modules
           key: ${{ runner.os }}-node-${{ hashFiles('frontend/package-lock.json') }}
