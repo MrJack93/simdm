@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
@@ -45,7 +45,7 @@ function EditModal({ device, onClose, onSave }) {
       await api.put(`/devices/${device.id}`, formData);
       toast.success('Dispozitiv actualizat');
       onSave();
-    } catch (err) {
+    } catch {
       toast.error('Eroare la actualizare');
     } finally {
       setLoading(false);

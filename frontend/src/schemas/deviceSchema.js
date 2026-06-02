@@ -4,7 +4,7 @@ export const deviceSchema = z.object({
   inventoryNumber: z
     .string()
     .min(1, 'Numărul inventarului este obligatoriu')
-    .regex(/^[A-Z0-9\-]+$/, 'Doar litere majuscule, cifre și liniuțe'),
+    .regex(/^[A-Z0-9-]+$/, 'Doar litere majuscule, cifre și liniuțe'),
 
   name: z
     .string()

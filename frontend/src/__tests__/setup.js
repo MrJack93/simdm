@@ -63,6 +63,7 @@ vi.mock('react-datepicker', () => ({
 // ---------------------------------------------------------------------------
 vi.mock('react-select', () => ({
   default: ({ options = [], value, onChange, placeholder, id }) => {
+    // eslint-disable-next-line global-require
     const React = require('react');
     return React.createElement(
       'select',

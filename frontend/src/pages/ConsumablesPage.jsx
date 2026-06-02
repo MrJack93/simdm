@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import api from '../api/axios';
@@ -19,7 +19,7 @@ function EditModal({ consumable, onClose, onSave }) {
         toast.success('Consumabil actualizat');
       }
       onSave();
-    } catch (err) {
+    } catch {
       toast.error(isNew ? 'Eroare la adăugare consumabil' : 'Eroare la actualizare');
     } finally {
       setLoading(false);
