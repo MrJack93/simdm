@@ -33,10 +33,15 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Configure Git
+        run: |
+          git config --global user.email "ci@simdm.local"
+          git config --global user.name "SIMDM CI"
+
       - name: Setup Node.js (Backend)
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '24'
 
       - name: Cache backend dependencies
         uses: actions/cache@v4
@@ -91,10 +96,15 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Configure Git
+        run: |
+          git config --global user.email "ci@simdm.local"
+          git config --global user.name "SIMDM CI"
+
       - name: Setup Node.js (Frontend)
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '24'
 
       - name: Cache frontend dependencies
         uses: actions/cache@v4
