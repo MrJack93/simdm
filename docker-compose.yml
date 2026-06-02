@@ -41,8 +41,6 @@ services:
     build:
       context: .
       dockerfile: backend/Dockerfile
-      cache_from:
-        - simdm-backend:latest
     restart: unless-stopped
     container_name: simdm-backend
     ports:
@@ -85,8 +83,6 @@ services:
     build:
       context: .
       dockerfile: frontend/Dockerfile
-      cache_from:
-        - simdm-frontend:latest
     restart: unless-stopped
     container_name: simdm-frontend
     ports:

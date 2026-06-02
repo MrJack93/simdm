@@ -120,9 +120,9 @@ Odată ce serverele sunt pornite:
 
 1. Deschide `http://localhost:5173`
 2. Introdu credențialele:
-   - **Utilizator:** `inginer`
-   - **Parolă:** (aceasta din `.env` — schimbă-o după prima logare!)
-3. Click **"Conectare"**
+   - **Utilizator:** `admin`
+   - **Parolă:** `admin`
+3. Click **"Conectare"** → ✅ Ești logat!
 
 ✅ Ești în aplicație!
 
@@ -159,12 +159,13 @@ npx prisma generate
 ```
 
 ### ❌ Eroare: `Credentiale incorecte` la login
-**Cauză:** Username/parolă greșite.
-**Soluție:** Parolă implicită pentru dev e cea din `.env` (ADMIN_PASSWORD_HASH). Reia seed-ul:
+**Cauză:** Credențialele introduse sunt greșite.
+**Soluție:** Parolă implicit e `admin`, username `admin`. Dacă ai modificat-o, reia seed-ul:
 ```bash
 cd backend
 npx prisma db seed
 ```
+Apoi relogin cu `admin` / `admin`.
 
 ### ❌ Frontend nu se conectează la backend
 **Cauză:** Proxy Vite nu e configurat.
@@ -184,4 +185,4 @@ Plăcere! Dacă ai întrebări, citește [CONTRIBUTING.md](docs/CONTRIBUTING.md)
 
 ---
 
-**Versiunea:** v1.0 · **Data:** 2026-05-30 · **Status:** Faza 1 Completă ✅
+**Versiunea:** v2.1 · **Data:** 2026-06-02 · **Status:** Faza 1-2 Completă + Docker Optimized ✅✅

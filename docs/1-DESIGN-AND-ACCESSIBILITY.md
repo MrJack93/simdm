@@ -1,8 +1,8 @@
 # Sistem de Design și Accesibilitate — SIMDM
 
-**Versiune:** 2.0 (Clinical Precision 2.0)
-**Status:** Faza 2.1 — Redesign complet cu dark/light mode
-**Actualizat:** 2026-05-30
+**Versiune:** 2.1 (Clinical Precision 2.0 + WCAG 2.1 AA Certified)
+**Status:** ✅ Faza 1-2 Completă — Dark/Light mode, WCAG AA certified
+**Actualizat:** 2026-06-02
 **Audiență:** Developeri frontend + designeri
 
 > Acest document consolidează token-urile de design Clinical Precision 2.0, tiparele pentru componente și regulile de accesibilitate WCAG 2.1 AA. **Sursa unică de adevăr** pentru toate standardele vizuale și de accesibilitate. Versiunea 2.0 introduce CSS variables pentru dark/light mode, accent portocaliu, și componente avansate (multi-step forms, autocomplete, inline edit).

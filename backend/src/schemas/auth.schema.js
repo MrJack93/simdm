@@ -1,8 +1,8 @@
 const { z } = require('zod');
 
 exports.loginSchema = z.object({
-  username: z.string().min(3, 'Username min 3 caractere').max(50),
-  password: z.string().min(6, 'Parolă min 6 caractere').max(100),
+  username: z.string({ required_error: 'Username obligatoriu' }).min(1, 'Username obligatoriu').max(50),
+  password: z.string({ required_error: 'Parolă obligatorie' }).min(1, 'Parolă obligatorie').max(100),
 });
 
 exports.refreshSchema = z.object({

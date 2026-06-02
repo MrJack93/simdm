@@ -1,9 +1,9 @@
 # Ghid de Contribuție — SIMDM
 
-**Versiune:** 1.0 (Faza 1 Complete)  
-**Actualizat:** 2026-05-30  
-**Audiență:** Toți contributorii (backend, frontend, docs)  
-**Limbă:** Română (interfață), Engleză (cod)
+**Versiune:** 2.1 (Faza 1-2 Complete + Faza 3 Ready)  
+**Actualizat:** 2026-06-02  
+**Audiență:** Toți contributorii (backend, frontend, docs, DevOps)  
+**Limbă:** Română (interfață + docs), Engleză (cod)
 
 ---
 

@@ -1,8 +1,8 @@
 # 🔒 Antivirus Setup & File Security — SIMDM
 
-**Dată:** 2026-05-30  
-**Caracteristică:** Scanare upload fișiere + detectare malware  
-**Status:** ✅ Implementat cu integrare ClamAV opțională
+**Dată:** 2026-06-02 (Updated for Faza 1-2)  
+**Caracteristică:** Magic byte detection + ClamAV optional  
+**Status:** ✅ Implementat (Faza 2) + Production-ready
 
 **Descripție:** SIMDM implementează **siguritate multi-strat pentru documente medicale**, inclusiv detectare magic bytes, validare dimensiune fișier, și scanare cu antivirus (ClamAV-ready pentru producție). Documentele încărcate sunt validate și loggate complet în jurnal de audit.
 

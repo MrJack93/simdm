@@ -33,14 +33,17 @@ inventarul DM, mentenanța (preventivă și corectivă), incidentele, documentel
 
 | Strat | Tehnologie |
 |-------|------------|
-| Frontend | React 18 + Vite + TailwindCSS |
-| Backend | Node.js + Express.js |
+| Frontend | React 19 + Vite 8 + TailwindCSS 4 |
+| Backend | Node.js 22 LTS + Express 5.2 |
 | Bază de date | PostgreSQL 16 |
-| ORM | Prisma |
-| Auth | JWT (jsonwebtoken) + bcryptjs |
-| HTTP client | Axios |
-| Routing frontend | react-router-dom |
-| State/fetching | react-query (TanStack Query) |
+| ORM | Prisma 7.8 |
+| Auth | JWT + bcryptjs (12 rounds) |
+| HTTP client | Axios 1.16 |
+| Routing frontend | react-router-dom 7.1 |
+| State/fetching | TanStack Query 5.1 |
+| Validare | Zod (backend + frontend) |
+| Testing | Vitest + React Testing Library + Playwright |
+| Containerization | Docker Compose (PostgreSQL + Backend + Frontend) |
 
 NU adăuga alte framework-uri sau librării fără a fi cerute explicit. Păstrează stiva simplă.
 

@@ -91,7 +91,7 @@ describe('POST /api/auth/login', () => {
       .post('/api/auth/login?skip_ratelimit=true')
       .send({ password: TEST_PASSWORD });
     expect(res.status).toBe(400);
-    expect(res.body.error).toMatch(/obligatorii/i);
+    expect(res.body.error).toMatch(/obligatorii|lipsă/i);
   });
 
   it('respinge cererea fără parolă -> 400', async () => {
@@ -99,7 +99,7 @@ describe('POST /api/auth/login', () => {
       .post('/api/auth/login?skip_ratelimit=true')
       .send({ username: TEST_USERNAME });
     expect(res.status).toBe(400);
-    expect(res.body.error).toMatch(/obligatorii/i);
+    expect(res.body.error).toMatch(/obligatorii|lipsă/i);
   });
 
   it('respinge cererea cu body gol -> 400', async () => {

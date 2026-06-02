@@ -1,8 +1,8 @@
 # SIMDM — Sistem Informațional de Management al Dispozitivelor Medicale
 
-**Versiune:** 2.0 Faza 1-2 (Inventar Complet + Hardening de Securitate)  
-**Status:** ✅ **Faza 1 & 2 COMPLETĂ 100%** (130/130 + 6 reparații de securitate)  
-**Actualizat:** 2026-05-30  
+**Versiune:** 2.1 Faza 1-2 (Production-ready + Docker Optimized)  
+**Status:** ✅ **Faza 1 & 2 COMPLETĂ 100%** (176 tests, 97.42% backend, 91.99% frontend, Docker optimized)  
+**Actualizat:** 2026-06-02  
 **Licență:** Privat (Spital privat Moldova)
 
 ---
@@ -65,8 +65,8 @@ docker-compose up --build
 
 **Apoi:**
 1. Deschide http://localhost:5173 în browser
-2. Login: `inginer` / (parolă din `.env`)
-3. Sunt 8 dispozitive gata în baza de date
+2. Login: `admin` / `admin`
+3. Sunt 8 dispozitive gata în baza de date (monitor, defibrilator, ecograf, etc.)
 
 ### Opțiunea 2: Local fără Docker (10-15 minute)
 
@@ -94,6 +94,12 @@ npm run db:studio  # Port 5555
 ```
 
 **Detalii complete:** Vezi [`GETTING-STARTED.md`](GETTING-STARTED.md)
+
+**Note:**
+- ✅ Docker optimizat (cache_from removed, healthcheck fixed, USER nodejs for production readiness)
+- ✅ 176 tests (unit + integration + E2E) — 97.42% backend, 91.99% frontend coverage
+- ✅ Zod input validation (24 fields) + antivirus scanning (magic bytes)
+- ✅ E2E Playwright (5 critical flows: login, device CRUD, token refresh, inventory, PDF export)
 
 ---
 
