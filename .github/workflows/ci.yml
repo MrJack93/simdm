@@ -54,17 +54,24 @@ jobs:
         working-directory: backend
         run: npm ci
 
+      - name: Setup Git for Prisma
+        run: |
+          git config --global user.email "ci@simdm.local"
+          git config --global user.name "SIMDM CI"
+
       - name: Generate Prisma Client
         working-directory: backend
         run: npx prisma generate
         env:
           DATABASE_URL: postgresql://test:test@localhost:5432/test_db
+          PRISMA_SKIP_GIT_VALIDATION: 1
 
       - name: Run migrations
         working-directory: backend
         run: npx prisma migrate deploy
         env:
           DATABASE_URL: postgresql://test:test@localhost:5432/test_db
+          PRISMA_SKIP_GIT_VALIDATION: 1
 
       - name: Seed test DB
         working-directory: backend
@@ -115,14 +122,26 @@ jobs:
         working-directory: frontend
         run: npm ci
 
+      - name: Setup Git for Prisma
+        run: |
+          git config --global user.email "ci@simdm.local"
+          git config --global user.name "SIMDM CI"
+        if: always()
+
       - name: Run frontend tests + coverage
         working-directory: frontend
         run: npm run test:coverage
+        env:
+          PRISMA_SKIP_GIT_VALIDATION: 1
 
       - name: Build
         working-directory: frontend
         run: npm run build
+        env:
+          PRISMA_SKIP_GIT_VALIDATION: 1
 
       - name: Lint check
         working-directory: frontend
         run: npm run lint --if-present || echo "No lint script"
+        env:
+          PRISMA_SKIP_GIT_VALIDATION: 1
