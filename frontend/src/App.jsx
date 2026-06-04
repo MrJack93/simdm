@@ -1,73 +1,197 @@
-import { useState, useEffect } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { useState, useRef, useEffect } from 'react';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import { useAuth } from './hooks/useAuth';
+import { useTheme } from './hooks/useTheme';
 import Login from './pages/Login';
-import InventoryPage from './pages/InventoryPage';
+import Dashboard from './pages/Dashboard';
+import InventoryPageV2 from './pages/InventoryPageV2';
 import ConsumablesPage from './pages/ConsumablesPage';
 import AnnualInventoryPage from './pages/AnnualInventoryPage';
 import DeviceForm from './pages/DeviceForm';
+import SettingsPage from './pages/SettingsPage';
 import ProtectedRoute from './components/ProtectedRoute';
+import { Menu, X, Home, Warehouse, Package, Calendar, Cog, LogOut } from 'lucide-react';
 
-function Dashboard({ isDarkMode, setIsDarkMode }) {
-  const { user, logout } = useAuth();
+function Header({ user, logout, theme, toggleTheme, isMobileMenuOpen, setIsMobileMenuOpen }) {
+  const location = useLocation();
+  const isActive = (path) => location.pathname === path;
 
   return (
-    <div className="min-h-screen transition-colors" style={{ backgroundColor: 'var(--color-bg-primary)', color: 'var(--color-text-primary)' }}>
-      <header className="border-b px-8 py-4 flex justify-between items-center" style={{ borderColor: 'var(--color-border)' }}>
-        <div className="flex items-center gap-4">
-          <h1 className="text-2xl font-bold" style={{ color: 'var(--color-accent)' }}>SIMDM</h1>
-          <nav className="hidden md:flex gap-6">
-            <a href="/inventory" className="text-sm font-medium hover:opacity-70 transition-opacity">
-              Inventar
-            </a>
-            <a href="/inventory/annual" className="text-sm font-medium hover:opacity-70 transition-opacity">
-              Inventariere
-            </a>
-            <a href="/consumables" className="text-sm font-medium hover:opacity-70 transition-opacity">
-              Consumabile
-            </a>
-          </nav>
-        </div>
+    <header
+      className="border-b px-4 md:px-8 py-4 flex justify-between items-center sticky top-0 z-40"
+      style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)' }}
+    >
+      <div className="flex items-center gap-4">
+        <button
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          className="md:hidden p-2 hover:opacity-70 transition-opacity"
+          aria-label="Meniu"
+          aria-expanded={isMobileMenuOpen}
+          aria-controls="mobile-menu"
+          style={{ color: 'var(--color-accent)' }}
+        >
+          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
 
-        <div className="flex items-center gap-4">
-          <button
-            onClick={() => setIsDarkMode(!isDarkMode)}
-            className="focusable p-2 rounded-lg hover:opacity-70 transition-opacity"
-            aria-label={isDarkMode ? 'Comută la modul clar' : 'Comută la modul închis'}
-            title={isDarkMode ? 'Modul clar' : 'Modul închis'}
-          >
-            {isDarkMode ? '☀️' : '🌙'}
-          </button>
-          <button onClick={logout} className="btn-danger px-4 py-2 text-sm">
-            Deconectare
-          </button>
-        </div>
-      </header>
+        <a href="/" className="flex items-center gap-2" style={{ textDecoration: 'none' }}>
+          <h1 className="text-2xl font-bold" style={{ color: 'var(--color-accent)' }}>SIMDM</h1>
+        </a>
+
+        <nav className="hidden md:flex gap-6 ml-8">
+          {[
+            { href: '/inventory',        Icon: Warehouse, label: 'Inventar' },
+            { href: '/inventory/annual', Icon: Calendar,  label: 'Inventariere' },
+            { href: '/consumables',      Icon: Package,   label: 'Consumabile' },
+          ].map(({ href, Icon, label }) => (
+            <a
+              key={href}
+              href={href}
+              aria-current={isActive(href) ? 'page' : undefined}
+              className={`text-sm font-medium hover:opacity-70 transition-opacity flex items-center gap-1.5 pb-2 ${
+                isActive(href) ? 'border-b-2' : ''
+              }`}
+              style={{
+                color: 'var(--color-text-primary)',
+                textDecoration: 'none',
+                borderColor: isActive(href) ? 'var(--color-accent)' : 'transparent',
+              }}
+            >
+              <Icon size={15} /> {label}
+            </a>
+          ))}
+        </nav>
+      </div>
+
+      <div className="flex items-center gap-3">
+        <button
+          onClick={toggleTheme}
+          className="p-2 rounded-lg hover:opacity-70 transition-opacity"
+          aria-label={theme === 'dark' ? 'Comută la modul clar' : 'Comută la modul închis'}
+          style={{ color: 'var(--color-text-secondary)' }}
+        >
+          {theme === 'dark' ? '☀️' : '🌙'}
+        </button>
+
+        <a
+          href="/settings"
+          className="p-2 rounded-lg hover:opacity-70 transition-opacity hidden sm:inline-flex"
+          aria-label="Setări"
+          style={{ color: 'var(--color-text-secondary)', textDecoration: 'none' }}
+        >
+          <Cog size={20} />
+        </a>
+
+        <button
+          onClick={logout}
+          className="px-4 py-2 rounded-lg font-medium transition-all text-sm flex items-center gap-2"
+          style={{ backgroundColor: 'var(--color-error)', color: '#ffffff' }}
+        >
+          <LogOut size={16} />
+          <span>Deconectare</span>
+        </button>
+      </div>
+    </header>
+  );
+}
+
+function MobileMenu({ isOpen, onClose }) {
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+
+      if (e.key === 'Tab') {
+        const focusable = menuRef.current?.querySelectorAll(
+          'a, button, [tabindex]:not([tabindex="-1"])'
+        );
+        if (!focusable || focusable.length === 0) return;
+
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+
+        if (e.shiftKey) {
+          if (document.activeElement === first) {
+            last.focus();
+            e.preventDefault();
+          }
+        } else {
+          if (document.activeElement === last) {
+            first.focus();
+            e.preventDefault();
+          }
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
+  const links = [
+    { href: '/',                 Icon: Home,      label: 'Dashboard' },
+    { href: '/inventory',        Icon: Warehouse, label: 'Inventar' },
+    { href: '/inventory/annual', Icon: Calendar,  label: 'Inventariere' },
+    { href: '/consumables',      Icon: Package,   label: 'Consumabile' },
+    { href: '/settings',         Icon: Cog,       label: 'Setări' },
+  ];
+
+  if (!isOpen) return null;
+
+  return (
+    <div
+      ref={menuRef}
+      id="mobile-menu"
+      className="md:hidden fixed inset-0 top-16 z-30 border-b p-4 space-y-2 animate-slide-down"
+      role="navigation"
+      aria-label="Meniu mobil"
+      style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)' }}
+    >
+      {links.map(({ href, Icon, label }) => (
+        <a
+          key={href}
+          href={href}
+          onClick={onClose}
+          className="flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-all"
+          style={{ backgroundColor: 'var(--color-bg-tertiary)', color: 'var(--color-text-primary)', textDecoration: 'none' }}
+        >
+          <Icon size={18} /> {label}
+        </a>
+      ))}
+    </div>
+  );
+}
+
+function DashboardLayout({ logout, theme, toggleTheme }) {
+  const { user } = useAuth();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  return (
+    <div className="min-h-screen" style={{ backgroundColor: 'var(--color-bg-primary)' }}>
+      <Header
+        user={user}
+        logout={logout}
+        theme={theme}
+        toggleTheme={toggleTheme}
+        isMobileMenuOpen={isMobileMenuOpen}
+        setIsMobileMenuOpen={setIsMobileMenuOpen}
+      />
+
+      <MobileMenu isOpen={isMobileMenuOpen} onClose={() => setIsMobileMenuOpen(false)} />
 
       <main id="main">
         <Routes>
-          <Route path="/inventory" element={<ProtectedRoute><InventoryPage /></ProtectedRoute>} />
-          <Route path="/inventory/annual" element={<ProtectedRoute><AnnualInventoryPage /></ProtectedRoute>} />
-          <Route path="/consumables" element={<ProtectedRoute><ConsumablesPage /></ProtectedRoute>} />
-          <Route path="/devices/new" element={<ProtectedRoute><DeviceForm /></ProtectedRoute>} />
-          <Route path="/devices/:id/edit" element={<ProtectedRoute><DeviceForm /></ProtectedRoute>} />
-          <Route path="/" element={
-            <ProtectedRoute>
-              <div className="container mx-auto p-8">
-                <div className="card-base">
-                  <p className="text-xl mb-3">
-                    Bine ai venit, <span style={{ color: 'var(--color-accent)' }} className="font-bold">{user.username}</span>!
-                  </p>
-                  <p style={{ color: 'var(--color-text-secondary)' }}>
-                    Faza 1 completă ✅ — Autentificare funcțională
-                  </p>
-                  <p style={{ color: 'var(--color-text-secondary)' }} className="mt-2">
-                    Faza 2: <a href="/inventory" style={{ color: 'var(--color-accent)' }} className="hover:underline">Modul Inventar DM</a>
-                  </p>
-                </div>
-              </div>
-            </ProtectedRoute>
-          } />
+          <Route path="/"                  element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+          <Route path="/inventory"         element={<ProtectedRoute><InventoryPageV2 /></ProtectedRoute>} />
+          <Route path="/inventory/annual"  element={<ProtectedRoute><AnnualInventoryPage /></ProtectedRoute>} />
+          <Route path="/consumables"       element={<ProtectedRoute><ConsumablesPage /></ProtectedRoute>} />
+          <Route path="/devices/new"       element={<ProtectedRoute><DeviceForm /></ProtectedRoute>} />
+          <Route path="/devices/:id/edit"  element={<ProtectedRoute><DeviceForm /></ProtectedRoute>} />
+          <Route path="/settings"          element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
         </Routes>
       </main>
     </div>
@@ -75,21 +199,8 @@ function Dashboard({ isDarkMode, setIsDarkMode }) {
 }
 
 export default function App() {
-  const { user, loading } = useAuth();
-  const [isDarkMode, setIsDarkMode] = useState(() => {
-    const saved = localStorage.getItem('simdm_theme');
-    return saved ? saved === 'dark' : true;
-  });
-
-  useEffect(() => {
-    const html = document.documentElement;
-    if (isDarkMode) {
-      html.classList.remove('light-mode');
-    } else {
-      html.classList.add('light-mode');
-    }
-    localStorage.setItem('simdm_theme', isDarkMode ? 'dark' : 'light');
-  }, [isDarkMode]);
+  const { user, loading, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
 
   if (loading) {
     return (
@@ -99,9 +210,7 @@ export default function App() {
     );
   }
 
-  if (!user) {
-    return <Login />;
-  }
+  if (!user) return <Login />;
 
-  return <Dashboard isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />;
+  return <DashboardLayout logout={logout} theme={theme} toggleTheme={toggleTheme} />;
 }
