@@ -113,6 +113,20 @@ const tests = [
     bg: '#0c0f10',
     expected: 'AAA',
   },
+
+  // Disabled button states (M3)
+  {
+    name: 'Dark mode: Disabled button text',
+    fg: '#9da3ae',
+    bg: '#1c2022',
+    expected: 'AA',
+  },
+  {
+    name: 'Light mode: Disabled button text',
+    fg: '#5c6370',
+    bg: '#eef0f2',
+    expected: 'AA',
+  },
 ];
 
 console.log(
