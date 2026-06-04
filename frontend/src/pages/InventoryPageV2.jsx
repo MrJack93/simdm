@@ -130,10 +130,10 @@ export default function InventoryPage() {
               <td className="px-6 py-4"><StatusBadge status={device.status} /></td>
               <td className="px-6 py-4">
                 <div className="flex gap-2">
-                  <Link to={`/devices/${device.id}/edit`} className="p-2 rounded hover:opacity-70 transition-opacity" style={{ color: 'var(--color-accent)' }} aria-label={`Editare ${device.name}`}>
+                  <Link to={`/devices/${device.id}/edit`} className="p-3 rounded hover:opacity-70 transition-opacity min-h-[44px] min-w-[44px] flex items-center justify-center" style={{ color: 'var(--color-accent)' }} aria-label={`Editare ${device.name}`}>
                     <Edit2 size={16} />
                   </Link>
-                  <button onClick={() => handleDelete(device.id, device.name)} className="p-2 rounded hover:opacity-70 transition-opacity" style={{ color: 'var(--color-error)' }} aria-label={`Ștergere ${device.name}`}>
+                  <button onClick={() => handleDelete(device.id, device.name)} className="p-3 rounded hover:opacity-70 transition-opacity min-h-[44px] min-w-[44px] flex items-center justify-center" style={{ color: 'var(--color-error)' }} aria-label={`Ștergere ${device.name}`}>
                     <Trash2 size={16} />
                   </button>
                 </div>
