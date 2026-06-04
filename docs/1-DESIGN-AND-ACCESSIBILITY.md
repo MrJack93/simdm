@@ -858,6 +858,61 @@ html.light-mode button:disabled {
 
 ---
 
+### #M4: StatCard aria-label ✅
+
+**Problemă (WCAG 2.1.4.1 — Link Purpose in Context):**
+- Dashboard.jsx StatCard links anunțau doar label (ex. "Total dispozitive")
+- Screen reader nu prezenta valoarea cardului (ex. "42")
+- Utilizatorii cu screen reader nu știau ce valoare reprezenta linkul
+
+**Soluție implementată (Dashboard.jsx):**
+```jsx
+// BEFORE
+<a href={href} className="...">
+  <div className="p-3">
+    <Icon size={24} />
+  </div>
+  <p>{label}</p>
+  <p>{value}</p>
+</a>
+
+// AFTER
+<a
+  href={href}
+  aria-label={`${label}: ${value}`}    ✅ Label + valoare
+  className="..."
+>
+  <div className="p-3">
+    <Icon size={24} />
+  </div>
+  <p>{label}</p>
+  <p>{value}</p>
+</a>
+```
+
+**Beneficii:**
+- ✅ WCAG 2.1.4.1 — Link purpose clear din context
+- ✅ Screen reader announces: "Total dispozitive: 42" (nu doar "Total dispozitive")
+- ✅ Applies to all 6 StatCards:
+  - Total dispozitive
+  - Funcționale
+  - Defecte
+  - În reparație
+  - Consumabile stoc scăzut
+  - Împrumutate
+
+**Fișiere modificate:**
+- `frontend/src/pages/Dashboard.jsx` — StatCard component aria-label
+
+**Timp:** ~15 minute (1 component, 6 cards beneficiază automat)
+
+**Testing checklist:**
+- [x] Screen reader — announces "label: value" (ex. "Funcționale: 12")
+- [x] All StatCards — aria-label applied to all 6 instances
+- [x] Link purpose — clear even without visual context
+
+---
+
 ### Planurate în Faza 3: Mentenanță
 
 (Sunt în `SPEC.md § 15` și `CLAUDE.md` — Faza 3 START 2026-06-05)
@@ -866,10 +921,11 @@ html.light-mode button:disabled {
 |----|-----------|--------|--------|
 | #M2 | Search input label (sr-only + htmlFor) | 30min | ✅ Completat |
 | #M3 | Disabled button contrast (opacity + color) | 30min | ✅ Completat |
-| #M4 | Form validation aria-invalid | 2-3h | Planificat |
-| #M5 | Table column sort aria-sort | 2h | Planificat |
-| #M6 | Modal backdrop dismiss (Esc + overlay) | 1-2h | Planificat |
-| #M7 | Verificări contrast — Icon contrast pe dark theme | 1-2h | Planificat |
+| #M4 | StatCard aria-label (label + value) | 15min | ✅ Completat |
+| #M5 | Form validation aria-invalid | 2-3h | Planificat |
+| #M6 | Table column sort aria-sort | 2h | Planificat |
+| #M7 | Modal backdrop dismiss (Esc + overlay) | 1-2h | Planificat |
+| #M8 | Verificări contrast — Icon contrast pe dark theme | 1-2h | Planificat |
 
 ---
 
