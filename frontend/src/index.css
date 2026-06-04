@@ -1,31 +1,6 @@
 @import "tailwindcss";
-
-/* Clinical Precision 2.0 — CSS Variables untuk Dark/Light Toggle */
-:root {
-  --color-bg-primary: #0a0d0d;
-  --color-bg-secondary: #121414;
-  --color-bg-tertiary: #1a1c1c;
-  --color-accent: #ffb597;
-  --color-accent-hover: #eb6b2c;
-  --color-text-primary: #e2e2e2;
-  --color-text-secondary: #dfc0b4;
-  --color-border: #333535;
-  --color-success: #4ade80;
-  --color-error: #ffb4ab;
-  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-html.light-mode {
-  --color-bg-primary: #f5f5f5;
-  --color-bg-secondary: #ffffff;
-  --color-bg-tertiary: #f0f0f0;
-  --color-accent: #ffb597;
-  --color-accent-hover: #eb6b2c;
-  --color-text-primary: #1a1a1a;
-  --color-text-secondary: #5a5a5a;
-  --color-border: #e0e0e0;
-}
+@import "./design-system.css";
+@import "./design-system-animations.css";
 
 @layer base {
   body {
@@ -86,6 +61,10 @@ html.light-mode {
     background-color: var(--color-accent-hover);
   }
 
+  .btn-primary:disabled {
+    color: #9da3ae;
+  }
+
   .btn-secondary {
     @apply inline-flex items-center justify-center px-4 py-3 min-h-[44px]
            font-semibold rounded-lg
@@ -103,6 +82,10 @@ html.light-mode {
     background-color: var(--color-bg-secondary);
   }
 
+  .btn-secondary:disabled {
+    color: #9da3ae;
+  }
+
   .btn-danger {
     @apply inline-flex items-center justify-center px-4 py-3 min-h-[44px]
            text-white font-bold rounded-lg
@@ -117,16 +100,25 @@ html.light-mode {
     background-color: #991b1b;
   }
 
+  .btn-danger:disabled {
+    color: #9da3ae;
+  }
+
   .input-base {
     @apply w-full px-4 py-3 min-h-[44px] border rounded-lg text-base
            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
-           placeholder:opacity-50 disabled:opacity-50 disabled:cursor-not-allowed;
+           disabled:opacity-50 disabled:cursor-not-allowed;
     background-color: var(--color-bg-tertiary);
     color: var(--color-text-primary);
     border-color: var(--color-border);
     --tw-ring-color: var(--color-accent);
     --tw-ring-offset-color: var(--color-bg-primary);
     transition: all var(--transition-fast);
+  }
+
+  .input-base::placeholder {
+    color: var(--color-placeholder);
+    opacity: 1;
   }
 
   .input-base:focus {

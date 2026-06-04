@@ -92,15 +92,16 @@ export default function InventoryPage() {
       {[
         { key: 'table',  Icon: List,     label: 'Tabel' },
         { key: 'cards',  Icon: Grid3x3,  label: 'Carduri' },
-        { key: 'kanban', Icon: Layout,   label: 'Kanban' },
-      ].map(({ key, Icon, label }) => (
+        { key: 'kanban', Icon: Layout,   label: 'Kanban', hideOnMobile: true },
+      ].map(({ key, Icon, label, hideOnMobile }) => (
         <button
           key={key}
           onClick={() => setView(key)}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-medium transition-all"
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-medium transition-all ${hideOnMobile ? 'hidden md:flex' : ''}`}
           style={{ backgroundColor: view === key ? 'var(--color-accent)' : 'transparent', color: view === key ? 'var(--color-bg-primary)' : 'var(--color-text-secondary)' }}
           aria-pressed={view === key}
           aria-label={label}
+          data-view-toggle={key}
         >
           <Icon size={16} />{label}
         </button>
@@ -259,7 +260,10 @@ export default function InventoryPage() {
       {/* Content */}
       <div className="p-8">
         {isLoading ? (
-          <p style={{ color: 'var(--color-text-secondary)' }}>Se încarcă…</p>
+          <div className="flex flex-col items-center justify-center gap-4 py-16">
+            <div className="loading-spinner"></div>
+            <p style={{ color: 'var(--color-text-secondary)' }}>Se încarcă dispozitivele…</p>
+          </div>
         ) : filteredDevices.length === 0 ? (
           <div className="text-center py-16">
             <p className="text-lg mb-4" style={{ color: 'var(--color-text-secondary)' }}>Niciun dispozitiv găsit</p>

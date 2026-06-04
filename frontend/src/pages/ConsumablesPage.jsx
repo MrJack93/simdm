@@ -130,6 +130,27 @@ function getStockStatus(quantity, minQuantity) {
   }
 }
 
+function getStockPercentage(quantity, minQuantity) {
+  if (minQuantity === 0) return 100;
+  return Math.round((quantity / minQuantity) * 100);
+}
+
+function getUrgencyBadge(quantity, minQuantity) {
+  const percentage = getStockPercentage(quantity, minQuantity);
+
+  if (percentage === 0) {
+    return { label: '🔴 DEPLIN EPUIZAT', color: '#dc2626', textColor: 'white', isUrgent: true };
+  } else if (percentage < 10) {
+    return { label: '⚠️ URGENT', color: '#dc2626', textColor: 'white', isUrgent: true };
+  } else if (percentage < 25) {
+    return { label: '🟠 CRITIC', color: '#ea580c', textColor: 'white', isUrgent: true };
+  } else if (percentage < 50) {
+    return { label: '🟡 REDUS', color: '#fbbf24', textColor: '#1a1a1a', isUrgent: false };
+  }
+
+  return null;
+}
+
 export default function ConsumablesPage() {
   const queryClient = useQueryClient();
   const [showModal, setShowModal] = useState(false);
@@ -360,9 +381,9 @@ export default function ConsumablesPage() {
                     Min
                   </th>
                   <th scope="col" className="px-4 py-3 text-center font-semibold" style={{ color: 'var(--color-accent)' }}>
-                    Stoc
+                    Urgență
                   </th>
-                  <th scope="col" className="px-4 py-3 text-left font-semibold" style={{ color: 'var(--color-accent)' }}>
+                  <th scope="col" className="px-4 py-3 text-center font-semibold" style={{ color: 'var(--color-accent)' }}>
                     Expirare
                   </th>
                   <th scope="col" className="px-4 py-3 text-center font-semibold" style={{ color: 'var(--color-accent)' }}>
@@ -373,13 +394,18 @@ export default function ConsumablesPage() {
               <tbody>
                 {consumables.map((consumable) => {
                   const stockStatus = getStockStatus(consumable.quantity, consumable.minQuantity);
+                  const urgencyBadge = getUrgencyBadge(consumable.quantity, consumable.minQuantity);
                   const expiryBadge = getExpiryBadge(consumable.expiryDate);
+                  const isCritical = urgencyBadge && urgencyBadge.isUrgent;
 
                   return (
                     <tr
                       key={consumable.id}
-                      className="border-b hover:opacity-70 transition"
-                      style={{ borderColor: 'var(--color-border)' }}
+                      className="border-b transition hover:shadow-md"
+                      style={{
+                        borderColor: 'var(--color-border)',
+                        backgroundColor: isCritical ? 'rgba(248, 113, 113, 0.08)' : 'transparent',
+                      }}
                     >
                       <td className="px-4 py-3">
                         <div className="font-medium">{consumable.name}</div>
@@ -391,18 +417,31 @@ export default function ConsumablesPage() {
                       <td className="px-4 py-3 text-center font-mono">{consumable.quantity} {consumable.unitOfMeasure}</td>
                       <td className="px-4 py-3 text-center font-mono">{consumable.minQuantity}</td>
                       <td className="px-4 py-3 text-center">
-                        <span
-                          className="px-3 py-1 rounded text-xs font-semibold inline-flex items-center gap-1"
-                          style={{
-                            backgroundColor: stockStatus.color,
-                            color: stockStatus.textColor,
-                            border: '1px solid currentColor',
-                          }}
-                        >
-                          {stockStatus.icon} {stockStatus.label}
-                        </span>
+                        {urgencyBadge ? (
+                          <span
+                            className="px-3 py-1 rounded text-xs font-semibold inline-block animate-bounce-in"
+                            style={{
+                              backgroundColor: urgencyBadge.color,
+                              color: urgencyBadge.textColor,
+                              border: '1px solid currentColor',
+                            }}
+                          >
+                            {urgencyBadge.label}
+                          </span>
+                        ) : (
+                          <span
+                            className="px-3 py-1 rounded text-xs font-semibold inline-flex items-center gap-1"
+                            style={{
+                              backgroundColor: '#4ade80',
+                              color: '#1a1a1a',
+                              border: '1px solid currentColor',
+                            }}
+                          >
+                            ✅ Normal
+                          </span>
+                        )}
                       </td>
-                      <td className="px-4 py-3">
+                      <td className="px-4 py-3 text-center">
                         {expiryBadge ? (
                           <span
                             className="px-3 py-1 rounded text-xs font-semibold inline-block"
@@ -420,7 +459,7 @@ export default function ConsumablesPage() {
                           </span>
                         )}
                       </td>
-                      <td className="px-4 py-3 text-center space-x-2 flex justify-center gap-2">
+                      <td className="px-4 py-3 text-center flex justify-center gap-2">
                         <button
                           onClick={() => handleEditClick(consumable)}
                           className="px-3 py-1 rounded text-xs font-semibold focusable hover:opacity-70 transition"

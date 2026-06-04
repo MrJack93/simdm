@@ -27,9 +27,12 @@ const STATUSES = [
 ];
 
 function StepIndicator({ currentStep, totalSteps, steps }) {
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+
   return (
     <div className="mb-8">
-      <div className="flex gap-2 items-center">
+      {/* Desktop: Full visual indicator */}
+      <div className="hidden md:flex gap-2 items-center">
         {steps.map((step, idx) => (
           <div key={idx} className="flex items-center flex-1">
             <div
@@ -59,7 +62,27 @@ function StepIndicator({ currentStep, totalSteps, steps }) {
           </div>
         ))}
       </div>
-      <div className="mt-4 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
+
+      {/* Mobile: Simple counter */}
+      <div className="md:hidden flex items-center gap-3 p-3 rounded-lg" style={{ backgroundColor: 'var(--color-bg-secondary)' }}>
+        <div
+          className="flex items-center justify-center w-8 h-8 rounded-full font-bold flex-shrink-0"
+          style={{ backgroundColor: 'var(--color-accent)', color: '#1a1a1a' }}
+        >
+          {currentStep + 1}
+        </div>
+        <div>
+          <p className="text-sm font-semibold" style={{ color: 'var(--color-text-primary)' }}>
+            {steps[currentStep]}
+          </p>
+          <p className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+            Pasul {currentStep + 1}/{totalSteps}
+          </p>
+        </div>
+      </div>
+
+      {/* Desktop label */}
+      <div className="hidden md:block mt-4 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
         Pasul {currentStep + 1} din {totalSteps}: <span style={{ color: 'var(--color-accent)' }} className="font-bold">{steps[currentStep]}</span>
       </div>
     </div>
@@ -74,8 +97,9 @@ export default function DeviceForm() {
   const [currentStep, setCurrentStep] = useState(0);
   const [uploadingDoc, setUploadingDoc] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
+  const [showAdvanced, setShowAdvanced] = useState(false);
 
-  const steps = ['Identificare', 'Clasificare', 'Exploatare', 'Financiar', 'Tehnic', 'Confirmă'];
+  const steps = ['Identificare', 'Clasificare', 'Confirmă'];
 
   const { control, register, handleSubmit, reset, getValues, formState: { errors } } = useForm({
     resolver: zodResolver(deviceSchema),
@@ -184,8 +208,9 @@ export default function DeviceForm() {
 
   if (deviceLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" role="status" style={{ backgroundColor: 'var(--color-bg-primary)' }}>
-        <p style={{ color: 'var(--color-text-secondary)' }}>Se încarcă…</p>
+      <div className="min-h-screen flex flex-col items-center justify-center gap-4" role="status" style={{ backgroundColor: 'var(--color-bg-primary)' }}>
+        <div className="loading-spinner"></div>
+        <p style={{ color: 'var(--color-text-secondary)' }}>Se încarcă dispozitivul…</p>
       </div>
     );
   }
@@ -305,85 +330,87 @@ export default function DeviceForm() {
             </div>
           )}
 
-          {/* STEP 1: CLASIFICARE */}
+          {/* STEP 1: CLASIFICARE (Risk + Status + Section + Important Dates) */}
           {currentStep === 1 && (
             <div className="card-base p-6 animate-slide-up space-y-4">
               <h2 className="text-xl font-semibold">Clasificare Risc și Status</h2>
 
-              <div>
-                <label htmlFor="riskClass" className="label-base">
-                  Clasa de risc *
-                </label>
-                <Controller
-                  control={control}
-                  name="riskClass"
-                  render={({ field }) => (
-                    <Select
-                      {...field}
-                      id="riskClass"
-                      options={RISK_CLASSES}
-                      value={RISK_CLASSES.find((r) => r.value === field.value)}
-                      onChange={(opt) => field.onChange(opt?.value)}
-                      isSearchable={false}
-                      styles={{
-                        control: (base) => ({
-                          ...base,
-                          backgroundColor: 'var(--color-bg-tertiary)',
-                          borderColor: 'var(--color-border)',
-                          color: 'var(--color-text-primary)',
-                        }),
-                        menu: (base) => ({
-                          ...base,
-                          backgroundColor: 'var(--color-bg-secondary)',
-                          color: 'var(--color-text-primary)',
-                        }),
-                        option: (base, state) => ({
-                          ...base,
-                          backgroundColor: state.isSelected ? 'var(--color-accent)' : 'transparent',
-                          color: state.isSelected ? '#1a1a1a' : 'var(--color-text-primary)',
-                        }),
-                      }}
-                    />
-                  )}
-                />
-              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="riskClass" className="label-base">
+                    Clasa de risc *
+                  </label>
+                  <Controller
+                    control={control}
+                    name="riskClass"
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        id="riskClass"
+                        options={RISK_CLASSES}
+                        value={RISK_CLASSES.find((r) => r.value === field.value)}
+                        onChange={(opt) => field.onChange(opt?.value)}
+                        isSearchable={false}
+                        styles={{
+                          control: (base) => ({
+                            ...base,
+                            backgroundColor: 'var(--color-bg-tertiary)',
+                            borderColor: 'var(--color-border)',
+                            color: 'var(--color-text-primary)',
+                          }),
+                          menu: (base) => ({
+                            ...base,
+                            backgroundColor: 'var(--color-bg-secondary)',
+                            color: 'var(--color-text-primary)',
+                          }),
+                          option: (base, state) => ({
+                            ...base,
+                            backgroundColor: state.isSelected ? 'var(--color-accent)' : 'transparent',
+                            color: state.isSelected ? '#1a1a1a' : 'var(--color-text-primary)',
+                          }),
+                        }}
+                      />
+                    )}
+                  />
+                </div>
 
-              <div>
-                <label htmlFor="status" className="label-base">
-                  Status *
-                </label>
-                <Controller
-                  control={control}
-                  name="status"
-                  render={({ field }) => (
-                    <Select
-                      {...field}
-                      id="status"
-                      options={STATUSES}
-                      value={STATUSES.find((s) => s.value === field.value)}
-                      onChange={(opt) => field.onChange(opt?.value)}
-                      isSearchable={false}
-                      styles={{
-                        control: (base) => ({
-                          ...base,
-                          backgroundColor: 'var(--color-bg-tertiary)',
-                          borderColor: 'var(--color-border)',
-                          color: 'var(--color-text-primary)',
-                        }),
-                        menu: (base) => ({
-                          ...base,
-                          backgroundColor: 'var(--color-bg-secondary)',
-                          color: 'var(--color-text-primary)',
-                        }),
-                        option: (base, state) => ({
-                          ...base,
-                          backgroundColor: state.isSelected ? 'var(--color-accent)' : 'transparent',
-                          color: state.isSelected ? '#1a1a1a' : 'var(--color-text-primary)',
-                        }),
-                      }}
-                    />
-                  )}
-                />
+                <div>
+                  <label htmlFor="status" className="label-base">
+                    Status *
+                  </label>
+                  <Controller
+                    control={control}
+                    name="status"
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        id="status"
+                        options={STATUSES}
+                        value={STATUSES.find((s) => s.value === field.value)}
+                        onChange={(opt) => field.onChange(opt?.value)}
+                        isSearchable={false}
+                        styles={{
+                          control: (base) => ({
+                            ...base,
+                            backgroundColor: 'var(--color-bg-tertiary)',
+                            borderColor: 'var(--color-border)',
+                            color: 'var(--color-text-primary)',
+                          }),
+                          menu: (base) => ({
+                            ...base,
+                            backgroundColor: 'var(--color-bg-secondary)',
+                            color: 'var(--color-text-primary)',
+                          }),
+                          option: (base, state) => ({
+                            ...base,
+                            backgroundColor: state.isSelected ? 'var(--color-accent)' : 'transparent',
+                            color: state.isSelected ? '#1a1a1a' : 'var(--color-text-primary)',
+                          }),
+                        }}
+                      />
+                    )}
+                  />
+                </div>
               </div>
 
               <div>
@@ -428,156 +455,58 @@ export default function DeviceForm() {
                   </p>
                 )}
               </div>
-            </div>
-          )}
 
-          {/* STEP 2: EXPLOATARE */}
-          {currentStep === 2 && (
-            <div className="card-base p-6 animate-slide-up space-y-4">
-              <h2 className="text-xl font-semibold">Date Exploatare</h2>
-
-              <div>
-                <label htmlFor="acquisitionDate" className="label-base">
-                  Data achiziției / Punere în funcțiune
-                </label>
-                <Controller
-                  control={control}
-                  name="acquisitionDate"
-                  render={({ field }) => (
-                    <DatePicker
-                      selected={field.value ? new Date(field.value) : null}
-                      onChange={(date) => field.onChange(date?.toISOString())}
-                      dateFormat="dd/MM/yyyy"
-                      className="input-base w-full"
-                      placeholderText="DD/MM/YYYY"
-                    />
-                  )}
-                />
-              </div>
-
-              <div>
-                <label htmlFor="location" className="label-base">
-                  Locație / Spațiu
-                </label>
-                <input {...register('location')} id="location" className="input-base w-full" />
-              </div>
-
-              <div>
-                <label htmlFor="countryOfOrigin" className="label-base">
-                  Țara de origine
-                </label>
-                <input {...register('countryOfOrigin')} id="countryOfOrigin" className="input-base w-full" />
-              </div>
-            </div>
-          )}
-
-          {/* STEP 3: FINANCIAR */}
-          {currentStep === 3 && (
-            <div className="card-base p-6 animate-slide-up space-y-4">
-              <h2 className="text-xl font-semibold">Date Financiare</h2>
-
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="purchasePrice" className="label-base">
-                    Preț achiziție
+                  <label htmlFor="acquisitionDate" className="label-base">
+                    Data achiziției
                   </label>
-                  <input
-                    {...register('purchasePrice')}
-                    id="purchasePrice"
-                    type="number"
-                    step="0.01"
-                    className="input-base w-full"
+                  <Controller
+                    control={control}
+                    name="acquisitionDate"
+                    render={({ field }) => (
+                      <DatePicker
+                        selected={field.value ? new Date(field.value) : null}
+                        onChange={(date) => field.onChange(date?.toISOString())}
+                        dateFormat="dd/MM/yyyy"
+                        className="input-base w-full"
+                        placeholderText="DD/MM/YYYY"
+                      />
+                    )}
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="currency" className="label-base">
-                    Monedă
+                  <label htmlFor="warrantyExpiry" className="label-base">
+                    Data expirării garanției
                   </label>
-                  <select {...register('currency')} id="currency" className="input-base w-full">
-                    <option value="MDL">MDL</option>
-                    <option value="EUR">EUR</option>
-                    <option value="USD">USD</option>
-                  </select>
+                  <Controller
+                    control={control}
+                    name="warrantyExpiry"
+                    render={({ field }) => (
+                      <DatePicker
+                        selected={field.value ? new Date(field.value) : null}
+                        onChange={(date) => field.onChange(date?.toISOString())}
+                        dateFormat="dd/MM/yyyy"
+                        className="input-base w-full"
+                        placeholderText="DD/MM/YYYY"
+                      />
+                    )}
+                  />
                 </div>
               </div>
-
-              <div>
-                <label htmlFor="warrantyExpiry" className="label-base">
-                  Data expirării garanției
-                </label>
-                <Controller
-                  control={control}
-                  name="warrantyExpiry"
-                  render={({ field }) => (
-                    <DatePicker
-                      selected={field.value ? new Date(field.value) : null}
-                      onChange={(date) => field.onChange(date?.toISOString())}
-                      dateFormat="dd/MM/yyyy"
-                      className="input-base w-full"
-                      placeholderText="DD/MM/YYYY"
-                    />
-                  )}
-                />
-              </div>
             </div>
           )}
 
-          {/* STEP 4: TEHNIC */}
-          {currentStep === 4 && (
+          {/* STEP 2: CONFIRMĂ + ADVANCED FIELDS */}
+          {currentStep === 2 && (
             <div className="card-base p-6 animate-slide-up space-y-4">
-              <h2 className="text-xl font-semibold">Date Tehnice</h2>
-
-              <div>
-                <label htmlFor="ceMarking" className="label-base">
-                  Marcaj CE
-                </label>
-                <input {...register('ceMarking')} id="ceMarking" className="input-base w-full" />
-              </div>
-
-              <div>
-                <label htmlFor="cndCode" className="label-base">
-                  Cod CND
-                </label>
-                <input {...register('cndCode')} id="cndCode" className="input-base w-full" />
-              </div>
-
-              <div>
-                <label htmlFor="maintenanceSchedule" className="label-base">
-                  Schema mentenanță (luni)
-                </label>
-                <input
-                  {...register('maintenanceSchedule')}
-                  id="maintenanceSchedule"
-                  type="number"
-                  className="input-base w-full"
-                  placeholder="Ex: 12 (anual)"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="notes" className="label-base">
-                  Note / Observații
-                </label>
-                <textarea
-                  {...register('notes')}
-                  id="notes"
-                  rows="3"
-                  className="input-base w-full"
-                  placeholder="Informații suplimentare..."
-                />
-              </div>
-            </div>
-          )}
-
-          {/* STEP 5: CONFIRMĂ */}
-          {currentStep === 5 && (
-            <div className="card-base p-6 animate-slide-up space-y-4">
-              <h2 className="text-xl font-semibold">Confirmă Datele</h2>
+              <h2 className="text-xl font-semibold">Confirmă și Finalizare</h2>
               <p style={{ color: 'var(--color-text-secondary)' }} className="text-sm">
                 Verifică datele înainte de a salva
               </p>
 
+              {/* Summary Card */}
               <div
                 className="mt-4 p-4 rounded-lg space-y-2 text-sm"
                 style={{
@@ -585,6 +514,7 @@ export default function DeviceForm() {
                   color: 'var(--color-text-primary)',
                 }}
               >
+                <div className="font-semibold" style={{ color: 'var(--color-accent)' }}>Informații Principale</div>
                 <div>
                   <span style={{ color: 'var(--color-accent)' }} className="font-bold">
                     Inventar:
@@ -611,6 +541,113 @@ export default function DeviceForm() {
                 </div>
               </div>
 
+              {/* Advanced Fields Tab */}
+              <button
+                type="button"
+                onClick={() => setShowAdvanced(!showAdvanced)}
+                className="w-full p-3 rounded-lg text-left font-semibold transition-all"
+                style={{
+                  backgroundColor: 'var(--color-bg-secondary)',
+                  color: showAdvanced ? 'var(--color-accent)' : 'var(--color-text-primary)',
+                  border: `1px solid ${showAdvanced ? 'var(--color-accent)' : 'var(--color-border)'}`,
+                }}
+              >
+                {showAdvanced ? '▼' : '▶'} Câmpuri Avansate (Opțional)
+              </button>
+
+              {showAdvanced && (
+                <div className="p-4 rounded-lg space-y-4" style={{ backgroundColor: 'var(--color-bg-secondary)' }}>
+                  <h3 className="font-semibold">Date Suplimentare</h3>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label htmlFor="location" className="label-base">
+                        Locație / Spațiu
+                      </label>
+                      <input {...register('location')} id="location" className="input-base w-full" />
+                    </div>
+
+                    <div>
+                      <label htmlFor="countryOfOrigin" className="label-base">
+                        Țara de origine
+                      </label>
+                      <input {...register('countryOfOrigin')} id="countryOfOrigin" className="input-base w-full" />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label htmlFor="purchasePrice" className="label-base">
+                        Preț achiziție
+                      </label>
+                      <input
+                        {...register('purchasePrice')}
+                        id="purchasePrice"
+                        type="number"
+                        step="0.01"
+                        className="input-base w-full"
+                      />
+                    </div>
+
+                    <div>
+                      <label htmlFor="currency" className="label-base">
+                        Monedă
+                      </label>
+                      <select {...register('currency')} id="currency" className="input-base w-full">
+                        <option value="MDL">MDL</option>
+                        <option value="EUR">EUR</option>
+                        <option value="USD">USD</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label htmlFor="ceMarking" className="label-base">
+                        Marcaj CE
+                      </label>
+                      <input {...register('ceMarking')} id="ceMarking" className="input-base w-full" />
+                    </div>
+
+                    <div>
+                      <label htmlFor="cndCode" className="label-base">
+                        Cod CND
+                      </label>
+                      <input {...register('cndCode')} id="cndCode" className="input-base w-full" />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label htmlFor="maintenanceSchedule" className="label-base">
+                        Schema mentenanță (luni)
+                      </label>
+                      <input
+                        {...register('maintenanceSchedule')}
+                        id="maintenanceSchedule"
+                        type="number"
+                        className="input-base w-full"
+                        placeholder="Ex: 12 (anual)"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label htmlFor="notes" className="label-base">
+                      Note / Observații
+                    </label>
+                    <textarea
+                      {...register('notes')}
+                      id="notes"
+                      rows="3"
+                      className="input-base w-full"
+                      placeholder="Informații suplimentare..."
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* Edit Mode: PDF + Document Upload */}
               {isEditMode && (
                 <>
                   <button
@@ -619,10 +656,10 @@ export default function DeviceForm() {
                     disabled={downloadPdfMutation.isPending}
                     className="btn-secondary w-full"
                   >
-                    📄 Descarcă PDF
+                    📄 Descarcă Fișa PDF
                   </button>
 
-                  <div className="mt-4 p-4 rounded-lg" style={{ backgroundColor: 'var(--color-bg-tertiary)' }}>
+                  <div className="p-4 rounded-lg" style={{ backgroundColor: 'var(--color-bg-secondary)' }}>
                     <label htmlFor="document" className="label-base block mb-2">
                       📎 Atașează Document (Manual, Certificat, Factură, Pașaport)
                     </label>
@@ -635,10 +672,10 @@ export default function DeviceForm() {
                       className="input-base w-full"
                     />
                     {uploadingDoc && (
-                      <span className="text-cyan-400 text-sm mt-2 inline-block">⏳ Se încarcă...</span>
+                      <span className="text-sm mt-2 inline-block" style={{ color: 'var(--color-accent)' }}>⏳ Se încarcă...</span>
                     )}
                     {uploadSuccess && (
-                      <span className="text-green-400 text-sm mt-2 inline-block">✓ Fișier încărcat</span>
+                      <span className="text-sm mt-2 inline-block" style={{ color: 'var(--color-success)' }}>✓ Fișier încărcat</span>
                     )}
                   </div>
                 </>
