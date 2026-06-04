@@ -963,6 +963,116 @@ html.light-mode input::placeholder {
 
 ---
 
+### #M6: Form Validation Completeness ✅
+
+**Problemă (WCAG 2.1.3.1 + 4.1.3 — Labels & Status Messages):**
+- DeviceForm, Login — form inputs nu ÎNTOTDEAUNA au aria-invalid + aria-describedby
+- Error messages nu anunțate ca alerts pentru screen readers
+- Required indicator (*) nu etichetat semantic
+
+**Soluție implementată (Input.jsx component):**
+```jsx
+// COMPLETE pattern in Input.jsx
+export default function Input({
+  label,
+  error,
+  helpText,
+  required,
+  disabled,
+  icon: Icon,
+  type = 'text',
+  ...props
+}) {
+  const inputId = props.id || `input-${Math.random().toString(36).slice(2)}`;
+  const hasError = !!error;
+
+  return (
+    <div className="flex flex-col gap-2">
+      {label && (
+        <label htmlFor={inputId} className="text-sm font-medium">
+          {label}
+          {required && (
+            <span aria-label="obligatoriu" className="text-error"> *</span>
+            /* ← ADD aria-label on required indicator */
+          )}
+        </label>
+      )}
+
+      <input
+        {...props}
+        id={inputId}
+        type={type}
+        disabled={disabled}
+        aria-invalid={hasError}        /* ✅ Announces error state */
+        aria-describedby={             /* ✅ Links to help/error */
+          helpText || error ? `${inputId}-help` : undefined
+        }
+      />
+
+      {(error || helpText) && (
+        <p
+          id={`${inputId}-help`}
+          role={error ? 'alert' : undefined}  /* ← ADD role=alert for errors */
+          className="text-xs"
+          style={{ color: error ? 'var(--color-error)' : 'var(--color-text-tertiary)' }}
+        >
+          {error || helpText}
+        </p>
+      )}
+    </div>
+  );
+}
+```
+
+**Beneficii:**
+- ✅ WCAG 2.1.3.1 — Label associated with input (`htmlFor` ↔ `id`)
+- ✅ WCAG 1.4.3.2 — Required indicator labeled (`aria-label="obligatoriu"`)
+- ✅ WCAG 4.1.3 — Error announced as alert (`role="alert"`)
+- ✅ `aria-describedby` — Links input to help/error text
+- ✅ `aria-invalid` — Announces error state to screen reader
+
+**Pattern usage în formuri:**
+```jsx
+// DeviceForm, SettingsPage, etc.
+import Input from '../components/Input';
+
+<form onSubmit={handleSubmit}>
+  <Input
+    label="Nume dispozitiv"
+    error={errors.name?.message}
+    required
+    {...register('name')}
+  />
+  
+  <Input
+    label="Parolă"
+    type="password"
+    error={errors.password?.message}
+    helpText="Minim 8 caractere"
+    required
+    {...register('password')}
+  />
+</form>
+```
+
+**Fișiere modificate:**
+- `frontend/src/components/Input.jsx` — aria-label + role="alert" enhancements
+
+**Status:** ✅ Input component fully compliant  
+**Pending:** Refactor DeviceForm, Login, SettingsPage to use Input component (separate task)
+
+**Timp:** ~30 min (Input component upgrade) + ~2-3h (refactor all forms — pending)
+
+**Testing checklist:**
+- [x] Input component has aria-invalid
+- [x] Input component has aria-describedby
+- [x] Error message has role="alert"
+- [x] Required indicator has aria-label="obligatoriu"
+- [ ] DeviceForm uses Input component (pending refactor)
+- [ ] Login uses Input component (pending refactor)
+
+---
+
 ### Planurate în Faza 3: Mentenanță
 
 (Sunt în `SPEC.md § 15` și `CLAUDE.md` — Faza 3 START 2026-06-05)
@@ -973,7 +1083,7 @@ html.light-mode input::placeholder {
 | #M3 | Disabled button contrast (opacity + color) | 30min | ✅ Completat |
 | #M4 | StatCard aria-label (label + value) | 15min | ✅ Completat |
 | #M5 | Placeholder text contrast (color + opacity) | 20min | ✅ Completat |
-| #M6 | Form validation aria-invalid | 2-3h | Planificat |
+| #M6 | Form validation (Input component complete) | 30min | ✅ Component Done / DeviceForm pending |
 | #M7 | Table column sort aria-sort | 2h | Planificat |
 | #M8 | Modal backdrop dismiss (Esc + overlay) | 1-2h | Planificat |
 | #M9 | Verificări contrast — Icon contrast pe dark theme | 1-2h | Planificat |
