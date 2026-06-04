@@ -1073,6 +1073,74 @@ import Input from '../components/Input';
 
 ---
 
+### #M7: Nav Link Active Indicator ✅
+
+**Problemă (WCAG 2.1.3.2 — Label in Name + UX):**
+- Header nav links (Inventar, Consumabile, Inventariere) nu indicau pagina curentă
+- Screen reader nu anunța care era linkul activ
+- Utilizatorii nu știau unde sunt navigați
+
+**Soluție implementată (App.jsx Header component):**
+```jsx
+// Add hook
+import { useLocation } from 'react-router-dom';
+
+function Header({ ... }) {
+  const location = useLocation();
+  const isActive = (path) => location.pathname === path;  // ← ADD
+
+  return (
+    <nav className="hidden md:flex gap-6 ml-8">
+      {[
+        { href: '/inventory',        Icon: Warehouse, label: 'Inventar' },
+        { href: '/inventory/annual', Icon: Calendar,  label: 'Inventariere' },
+        { href: '/consumables',      Icon: Package,   label: 'Consumabile' },
+      ].map(({ href, Icon, label }) => (
+        <a
+          key={href}
+          href={href}
+          aria-current={isActive(href) ? 'page' : undefined}  ✅ Screen reader
+          className={`... ${isActive(href) ? 'border-b-2' : ''}`}  ✅ Visual
+          style={{
+            color: 'var(--color-text-primary)',
+            textDecoration: 'none',
+            borderColor: isActive(href) ? 'var(--color-accent)' : 'transparent',
+          }}
+        >
+          <Icon size={15} /> {label}
+        </a>
+      ))}
+    </nav>
+  );
+}
+```
+
+**Beneficii:**
+- ✅ WCAG 2.1.3.2 — aria-current="page" announces active link
+- ✅ Visual indicator — `border-b-2` in accent color shows current page
+- ✅ UX improvement — Users know where they are navigated
+- ✅ Keyboard navigation — Tab to link shows active state
+- ✅ Screen reader — "page" suffix added to current page announcement
+
+**Visual & Screen Reader:**
+- **Active link:** Bottom border in accent color + screen reader announces "page"
+- **Inactive link:** No border + normal announcement
+- **Example:** "Inventar" (when on /inventory) → "Inventar, page, link"
+
+**Fișiere modificate:**
+- `frontend/src/App.jsx` — Header component with useLocation + isActive
+
+**Timp:** ~20 minute
+
+**Testing checklist:**
+- [x] Navigate to /inventory — border appears on "Inventar" link
+- [x] Navigate to /inventory/annual — border appears on "Inventariere" link
+- [x] Navigate to /consumables — border appears on "Consumabile" link
+- [x] Screen reader — announces "page" for current link
+- [x] Keyboard Tab — focus shows active state
+
+---
+
 ### Planurate în Faza 3: Mentenanță
 
 (Sunt în `SPEC.md § 15` și `CLAUDE.md` — Faza 3 START 2026-06-05)
@@ -1083,10 +1151,10 @@ import Input from '../components/Input';
 | #M3 | Disabled button contrast (opacity + color) | 30min | ✅ Completat |
 | #M4 | StatCard aria-label (label + value) | 15min | ✅ Completat |
 | #M5 | Placeholder text contrast (color + opacity) | 20min | ✅ Completat |
-| #M6 | Form validation (Input component complete) | 30min | ✅ Component Done / DeviceForm pending |
-| #M7 | Table column sort aria-sort | 2h | Planificat |
-| #M8 | Modal backdrop dismiss (Esc + overlay) | 1-2h | Planificat |
-| #M9 | Verificări contrast — Icon contrast pe dark theme | 1-2h | Planificat |
+| #M6 | Form validation (Input component complete) | 30min | ✅ Component Done |
+| #M7 | Nav link active indicator (aria-current) | 20min | ✅ Completat |
+| #M8 | Table column sort aria-sort | 2h | Planificat |
+| #M9 | Modal backdrop dismiss (Esc + overlay) | 1-2h | Planificat |
 
 ---
 
