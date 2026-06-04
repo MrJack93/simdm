@@ -266,6 +266,17 @@ html.light-mode button:disabled {
   color: #5c6370;  /* 5.5:1 contrast on #eef0f2 ✅ */
 }
 
+/* ===== PLACEHOLDER TEXT (WCAG 1.4.3) ===== */
+input::placeholder {
+  color: #a0a9b1;  /* 6.9:1 contrast on #1c2022 ✅ */
+  opacity: 1;
+}
+
+html.light-mode input::placeholder {
+  color: #5c6370;  /* 5.5:1 contrast on #eef0f2 ✅ */
+  opacity: 1;
+}
+
 /* ===== PRINT ===== */
 @media print {
   body { background: white; color: black; }

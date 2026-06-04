@@ -127,6 +127,20 @@ const tests = [
     bg: '#eef0f2',
     expected: 'AA',
   },
+
+  // Placeholder text (M5)
+  {
+    name: 'Dark mode: Placeholder text',
+    fg: '#a0a9b1',
+    bg: '#1c2022',
+    expected: 'AA',
+  },
+  {
+    name: 'Light mode: Placeholder text',
+    fg: '#5c6370',
+    bg: '#eef0f2',
+    expected: 'AA',
+  },
 ];
 
 console.log(
