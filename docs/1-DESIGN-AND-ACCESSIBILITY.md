@@ -754,16 +754,72 @@ useEffect(() => {
 
 ---
 
+### #M2: Search Input Label ✅
+
+**Problemă (WCAG 2.1.3.3 — Label in Name):**
+- InventoryPageV2.jsx — search input fără `<label>` element
+- Screen reader nu cunoștea destinația inputului
+- Doar `aria-label` și `placeholder` — insuficient
+
+**Soluție implementată (InventoryPageV2.jsx):**
+```jsx
+// BEFORE
+<div className="relative">
+  <Search size={16} />
+  <input
+    type="text"
+    placeholder="Căuta după nume, inv. nr., model…"
+    value={searchTerm}
+    onChange={e => setSearchTerm(e.target.value)}
+    aria-label="Căutare dispozitive"  // ← Numai ARIA, fără label
+  />
+</div>
+
+// AFTER
+<div className="relative">
+  <label htmlFor="inventory-search" className="sr-only">
+    Cauta dispozitivele              ✅ Screen reader vede
+  </label>
+  <Search size={16} />
+  <input
+    id="inventory-search"             ✅ Asociere cu label
+    type="text"
+    placeholder="Căuta după nume, inv. nr., model…"
+    value={searchTerm}
+    onChange={e => setSearchTerm(e.target.value)}
+    aria-label="Căuta dispozitivele"  ✅ Fallback ARIA
+  />
+</div>
+```
+
+**Beneficii:**
+- ✅ WCAG 2.1.3.3 — Label asociat cu input (`htmlFor` ↔ `id`)
+- ✅ Screen reader — citeşte labela + placeholder
+- ✅ Conform best practice: `placeholder` ≠ label substitut
+- ✅ `.sr-only` class din design-system.css — ascunde vizual dar rămâne accesibilă
+
+**Fișiere modificate:** `frontend/src/pages/InventoryPageV2.jsx`
+
+**Timp:** ~30 minute
+
+**Testing checklist:**
+- [x] Screen reader (NVDA/Narrator) — "Cauta dispozitivele, input de căutare"
+- [x] Inspect element — `id="inventory-search"` legat la label `htmlFor`
+- [x] Tab to input — focus vizibil
+
+---
+
 ### Planurate în Faza 3: Mentenanță
 
 (Sunt în `SPEC.md § 15` și `CLAUDE.md` — Faza 3 START 2026-06-05)
 
 | ID | Problemă | Durată | Status |
-|----|----|--------|--------|
-| #M2 | Form validation aria-invalid | 2-3h | Planificat |
-| #M3 | Table column sort aria-sort | 2h | Planificat |
-| #M4 | Modal backdrop dismiss (Esc + overlay) | 1-2h | Planificat |
-| #M5 | Verificări contrast — Icon contrast pe dark theme | 1-2h | Planificat |
+|----|-----------|--------|--------|
+| #M2 | Search input label (sr-only + htmlFor) | 30min | ✅ Completat |
+| #M3 | Form validation aria-invalid | 2-3h | Planificat |
+| #M4 | Table column sort aria-sort | 2h | Planificat |
+| #M5 | Modal backdrop dismiss (Esc + overlay) | 1-2h | Planificat |
+| #M6 | Verificări contrast — Icon contrast pe dark theme | 1-2h | Planificat |
 
 ---
 
