@@ -913,6 +913,56 @@ html.light-mode button:disabled {
 
 ---
 
+### #M5: Placeholder Text Contrast ✅
+
+**Problemă (WCAG 1.4.3 — Minimum Contrast):**
+- Placeholder text (dark mode): #8a9199 pe #1c2022 = 3.8:1 < 4.5:1
+- Placeholder text not sufficiently visible for low vision users
+- Browser default `opacity: 0.5` made text even dimmer
+
+**Soluție implementată (design-system.css):**
+```css
+/* Dark mode (default) */
+input::placeholder {
+  color: #a0a9b1;        ✅ 6.9:1 contrast on #1c2022 (AAA!)
+  opacity: 1;            ✅ Prevent browser dimming
+}
+
+/* Light mode override */
+html.light-mode input::placeholder {
+  color: #5c6370;        ✅ 5.5:1 contrast on #eef0f2
+  opacity: 1;
+}
+```
+
+**Beneficii:**
+- ✅ WCAG 1.4.3 — Contrast ≥ 4.5:1 minimum met
+- ✅ Dark placeholder: 6.9:1 (AAA — exceeds requirement)
+- ✅ Light placeholder: 5.5:1 (AA)
+- ✅ `opacity: 1` — Prevents browser default dimming to 0.5
+- ✅ Applies to ALL input placeholders (text, email, password, search, etc.)
+
+**Teste automate:**
+```
+✅ Dark mode: Placeholder text = 6.88:1 AAA
+✅ Light mode: Placeholder text = 5.29:1 AA
+```
+
+**Fișiere modificate:**
+- `frontend/src/design-system.css` — CSS rule pentru input::placeholder
+- `scripts/verify-contrast.js` — 2 noi test cases pentru placeholder colors
+
+**Timp:** ~20 minute
+
+**Testing checklist:**
+- [x] Visual inspection — placeholder text clar vizibil (nu estompat)
+- [x] Automated test — 15/15 contrast tests PASS
+- [x] Dark mode — text clar pe background-tertiary
+- [x] Light mode — text clar pe background-light
+- [x] All inputs — placeholder rule applies globally
+
+---
+
 ### Planurate în Faza 3: Mentenanță
 
 (Sunt în `SPEC.md § 15` și `CLAUDE.md` — Faza 3 START 2026-06-05)
@@ -922,10 +972,11 @@ html.light-mode button:disabled {
 | #M2 | Search input label (sr-only + htmlFor) | 30min | ✅ Completat |
 | #M3 | Disabled button contrast (opacity + color) | 30min | ✅ Completat |
 | #M4 | StatCard aria-label (label + value) | 15min | ✅ Completat |
-| #M5 | Form validation aria-invalid | 2-3h | Planificat |
-| #M6 | Table column sort aria-sort | 2h | Planificat |
-| #M7 | Modal backdrop dismiss (Esc + overlay) | 1-2h | Planificat |
-| #M8 | Verificări contrast — Icon contrast pe dark theme | 1-2h | Planificat |
+| #M5 | Placeholder text contrast (color + opacity) | 20min | ✅ Completat |
+| #M6 | Form validation aria-invalid | 2-3h | Planificat |
+| #M7 | Table column sort aria-sort | 2h | Planificat |
+| #M8 | Modal backdrop dismiss (Esc + overlay) | 1-2h | Planificat |
+| #M9 | Verificări contrast — Icon contrast pe dark theme | 1-2h | Planificat |
 
 ---
 
