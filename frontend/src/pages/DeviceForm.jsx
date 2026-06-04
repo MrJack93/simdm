@@ -237,9 +237,11 @@ export default function DeviceForm() {
                   id="inventoryNumber"
                   placeholder="EX: DM-2024-001"
                   className="input-base w-full"
+                  aria-invalid={!!errors.inventoryNumber}
+                  aria-describedby={errors.inventoryNumber ? 'inventoryNumber-error' : undefined}
                 />
                 {errors.inventoryNumber && (
-                  <p style={{ color: 'var(--color-error)' }} className="text-sm mt-1" role="alert">
+                  <p id="inventoryNumber-error" style={{ color: 'var(--color-error)' }} className="text-sm mt-1" role="alert">
                     {errors.inventoryNumber.message}
                   </p>
                 )}
@@ -254,9 +256,11 @@ export default function DeviceForm() {
                   id="name"
                   placeholder="Nume dispozitiv"
                   className="input-base w-full"
+                  aria-invalid={!!errors.name}
+                  aria-describedby={errors.name ? 'name-error' : undefined}
                 />
                 {errors.name && (
-                  <p style={{ color: 'var(--color-error)' }} className="text-sm mt-1" role="alert">
+                  <p id="name-error" style={{ color: 'var(--color-error)' }} className="text-sm mt-1" role="alert">
                     {errors.name.message}
                   </p>
                 )}
