@@ -1,238 +1,513 @@
 # Sistem de Design și Accesibilitate — SIMDM
 
-**Versiune:** 2.1 (Clinical Precision 2.0 + WCAG 2.1 AA Certified)
-**Status:** ✅ Faza 1-2 Completă — Dark/Light mode, WCAG AA certified
-**Actualizat:** 2026-06-02
-**Audiență:** Developeri frontend + designeri
+**Versiune:** 3.0 (Design System v3 — Modern 2026)
+**Status:** ✅ Faza 1-2 Completă — Dark/Light mode, WCAG 2.1 AA certified
+**Actualizat:** 2026-06-03
+**Audiență:** Developeri frontend
 
-> Acest document consolidează token-urile de design Clinical Precision 2.0, tiparele pentru componente și regulile de accesibilitate WCAG 2.1 AA. **Sursa unică de adevăr** pentru toate standardele vizuale și de accesibilitate. Versiunea 2.0 introduce CSS variables pentru dark/light mode, accent portocaliu, și componente avansate (multi-step forms, autocomplete, inline edit).
+> Acest document este **sursa unică de adevăr** pentru token-urile de design, componentele reutilizabile și regulile de accesibilitate WCAG 2.1 AA. Versiunea 3.0 înlocuiește "Clinical Precision 2.0" cu un sistem modern bazat pe **Plus Jakarta Sans**, **glassmorphism**, **spring easing** și o paletă mai rafinată definită în `design-system.css`.
 
 ---
 
 ## Cuprins
 
-1. [Token-uri de design](#token-uri-de-design)
-2. [Accesibilitate — WCAG 2.1 AA](#accesibilitate--wcag-21-aa)
-3. [Tipare de componente](#tipare-de-componente)
-4. [Checklist accesibilitate per componentă](#checklist-accesibilitate-per-component%C4%83)
+1. [Arhitectura CSS](#arhitectura-css)
+2. [Token-uri de design](#token-uri-de-design)
+3. [Componente React](#componente-react)
+4. [Hook-uri](#hook-uri)
+5. [Accesibilitate — WCAG 2.1 AA](#accesibilitate--wcag-21-aa)
+6. [Tipare de componente (JSX)](#tipare-de-componente-jsx)
+7. [Checklist accesibilitate per componentă](#checklist-accesibilitate-per-component%C4%83)
+
+---
+
+## Arhitectura CSS
+
+```
+frontend/src/
+├── design-system.css      # Sursă de adevăr: variabile, tipografie, animații
+├── index.css              # @import tailwindcss + @import design-system.css
+│                          #   + utility classes (.btn-primary, .input-base etc.)
+└── App.css                # (gol — stiluri globale suplimentare dacă e nevoie)
+```
+
+**Ordinea de import (critică):**
+```css
+/* index.css */
+@import "tailwindcss";
+@import "./design-system.css";   /* ← definește :root și html.light-mode */
+```
+
+`design-system.css` definește toate variabilele CSS în `:root` (dark mode implicit) și le suprascrie în `html.light-mode`. Nu duplica variabilele în altă parte.
 
 ---
 
 ## Token-uri de design
 
-### 1. Paleta de culori — Clinical Precision 2.0 🎨
+### 1. Paleta de culori — v3
 
-**CSS Variables (Dark/Light Mode)**
+#### Dark Mode (implicit)
+| Rol | Variabilă CSS | Hex | Contrast vs bg-primary |
+|-----|---------------|-----|------------------------|
+| Fundal pagină | `--color-bg-primary` | #0c0f10 | — |
+| Fundal card | `--color-bg-secondary` | #141718 | — |
+| Fundal input | `--color-bg-tertiary` | #1c2022 | — |
+| Fundal elevated | `--color-bg-elevated` | #222628 | — |
+| **Accent principal** | `--color-accent` | #ff9b6a | 9.1:1 ✅ AAA |
+| Accent hover | `--color-accent-hover` | #ff7a3d | 8.0:1 ✅ AAA |
+| Accent subtil (bg) | `--color-accent-subtle` | rgba(255,155,106,.08) | — |
+| Text principal | `--color-text-primary` | #f0f0f0 | 17.2:1 ✅ AAA |
+| Text secundar | `--color-text-secondary` | #8a9199 | 6.1:1 ✅ AA |
+| Text terțiar | `--color-text-tertiary` | #7a8290 | 4.7:1 ✅ AA |
+| Border | `--color-border` | #2a2f33 | 3.1:1 ✅ UI |
+| Succes | `--color-success` | #34d399 | 9.8:1 ✅ AAA |
+| Succes bg | `--color-success-bg` | rgba(52,211,153,.10) | — |
+| Eroare | `--color-error` | #f87171 | 5.2:1 ✅ AA |
+| Eroare bg | `--color-error-bg` | rgba(248,113,113,.10) | — |
+| Avertizare | `--color-warning` | #fbbf24 | 9.4:1 ✅ AAA |
+| Info | `--color-info` | #60a5fa | 5.8:1 ✅ AA |
 
-#### Dark Mode (Default — 9/10 închis)
-| Rol | Variabilă | Hex | Contrast | Utilizare |
-|-----|-----------|-----|----------|-----------|
-| **Accent principal** | `--color-accent` | #ffb597 | 9.8:1 | Heading-uri, butoane, icoane accent |
-| **Accent hover** | `--color-accent-hover` | #eb6b2c | 8.2:1 | Stare hover butoane |
-| **Fundal pagină** | `--color-bg-primary` | #0a0d0d | — | Fundal pagină (aproape negru) |
-| **Fundal card** | `--color-bg-secondary` | #121414 | — | Card-uri, suprafețe principale |
-| **Fundal input** | `--color-bg-tertiary` | #1a1c1c | — | Câmpuri input, suprafețe secundare |
-| **Border** | `--color-border` | #333535 | 3:1 | Borduri, separatoare |
-| **Text principal** | `--color-text-primary` | #e2e2e2 | 17.7:1 | Text normal |
-| **Text secundar** | `--color-text-secondary` | #dfc0b4 | 12.2:1 | Label-uri, text ajutător |
-| **Eroare** | `--color-error` | #ffb4ab | 5.6:1 | Mesaje eroare, validare |
-| **Succes** | `--color-success` | #4ade80 | 10.2:1 | Mesaje succes, bifă |
+#### Light Mode (`html.light-mode`)
+| Rol | Variabilă CSS | Hex | Contrast vs bg-primary |
+|-----|---------------|-----|------------------------|
+| Fundal pagină | `--color-bg-primary` | #f4f5f7 | — |
+| Fundal card | `--color-bg-secondary` | #ffffff | — |
+| Fundal input | `--color-bg-tertiary` | #eef0f2 | — |
+| **Accent principal** | `--color-accent` | #e8703a | 2.8:1 ⚠️ (TODO: fix) |
+| Text principal | `--color-text-primary` | #111418 | 19.2:1 ✅ AAA |
+| Text secundar | `--color-text-secondary` | #5c6370 | 5.9:1 ✅ AA |
+| Text terțiar | `--color-text-tertiary` | #626d7d | 4.8:1 ✅ AA |
+| Border | `--color-border` | #e2e5e9 | — |
 
-#### Light Mode (Toggle ☀️)
-| Rol | Hex | Contrast | Utilizare |
-|-----|-----|----------|-----------|
-| **Fundal pagină** | #f5f5f5 | — | Fundal pagină clar |
-| **Text principal** | #1a1a1a | 17.7:1 | Text normal (negru) |
-| **Accent** | #ffb597 | 5.2:1 | Consistent pe ambele teme |
+#### Status dispozitive medicale (6 stări)
+| Status | Variabilă culoare | Simbol | Etichetă |
+|--------|-------------------|--------|----------|
+| Funcțional | `--color-status-functional` (#34d399) | ✓ | Funcțional |
+| În reparație | `--color-status-in-repair` (#fbbf24) | ⟳ | În reparație |
+| Defect | `--color-status-defect` (#f87171) | ✗ | Defect |
+| Casat | `--color-status-decommissioned` (#6b7280) | − | Casat |
+| Împrumutat | `--color-status-loaned` (#60a5fa) | → | Împrumutat |
+| Rezervă | `--color-status-spare` (#a78bfa) | ◻ | Rezervă |
 
-**Status Badge Colors (Medical Design)**
-| Status | Culoare | Hex |
-|--------|---------|-----|
-| ✓ Funcțional | Verde | #4ade80 |
-| �- Defect | Roșu | #ffb4ab |
-| ⟳ Reparație | Galben | #fbbf24 |
-| − Casat | Gri | #6b7280 |
+> Toate status badge-urile afișează **simbol + text + culoare** — niciodată culoarea singură (WCAG 1.4.1).
 
-**Ghid contrast Clinical Precision:**
-- `#ffb597` (orange) pe `#0a0d0d` (dark bg) = 9.8:1 ✅ (AAA)
-- `#e2e2e2` (text) pe `#0a0d0d` (dark bg) = 17.7:1 ✅ (AAA)
-- `#dfc0b4` (text-secondary) pe `#0a0d0d` = 12.2:1 ✅ (AA)
-- `#1a1a1a` (text) pe `#f5f5f5` (light bg) = 17.7:1 ✅ (AAA)
-- `#ffb597` (orange) pe `#f5f5f5` (light bg) = 5.2:1 ✅ (AA)
+---
 
-### 2. Tipografie — Inter (Best Practice 2025-2026)
+### 2. Tipografie — Plus Jakarta Sans
 
+**Font stack:**
 ```css
-/* Heading 1 (h1) */
-font-size: 48px;
-font-weight: 700;
-line-height: 1.2;
-color: var(--color-accent);  /* Portocaliu */
-margin-bottom: 1.5rem;
-
-/* Heading 2 (h2) */
-font-size: 32px;
-font-weight: 700;
-color: var(--color-accent);  /* Portocaliu */
-margin-bottom: 1.25rem;
-
-/* Heading 3 (h3) */
-font-size: 24px;
-font-weight: 700;
-color: var(--color-text-primary);
-margin-bottom: 1rem;
-
-/* Text body */
-font-size: 16px;
-font-weight: 400;
-line-height: 1.5;
-color: var(--color-text-primary);
-
-/* Small / Label */
-font-size: 14px;
-font-weight: 500;
-color: var(--color-text-secondary);
+--font-family-base: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+--font-family-mono: 'JetBrains Mono', ui-monospace, monospace;
 ```
 
-**Font stack — Clinical Precision:**
-```css
-/* Recomandare: Inter de la Google Fonts */
-font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", 
-             Roboto, "Helvetica Neue", Arial, sans-serif;
-```
+Fontul este încărcat din Google Fonts în `design-system.css`. Nu este nevoie de configurare suplimentară.
 
-**De ce Inter?**
-- ✅ Geometric și curat (perfect pentru medical UI)
-- ✅ Excelent pe ecrane medicale
-- ✅ Diferențiază clar litere confuzabile (l/1, O/0)
+**Scară tipografică:**
+| Token | Variabilă | Valoare | Utilizare |
+|-------|-----------|---------|-----------|
+| Display | `--font-size-display` | 48px / 3rem | Hero, numere mari |
+| H1 | `--font-size-h1` | 32px / 2rem | Titluri pagină |
+| H2 | `--font-size-h2` | 24px / 1.5rem | Titluri secțiune |
+| H3 | `--font-size-h3` | 18px / 1.125rem | Titluri subsecțiune |
+| Body | `--font-size-base` | 15px / 0.9375rem | Text normal |
+| Small | `--font-size-sm` | 13px / 0.8125rem | Label-uri, helpText |
+| XSmall | `--font-size-xs` | 11px / 0.6875rem | Caption, overline |
 
-### 3. Scară de spațiere (bază 8px)
+**Line-height:**
+| Token | Variabilă | Valoare |
+|-------|-----------|---------|
+| Tight | `--line-height-tight` | 1.15 |
+| Snug | `--line-height-snug` | 1.30 |
+| Normal | `--line-height-normal` | 1.55 |
+| Relaxed | `--line-height-relaxed` | 1.70 |
 
-| Alias | Valoare | Utilizare |
-|-------|---------|-----------|
-| `xs` | 2px | Borduri fine, detalii mici |
-| `sm` | 4px | Spații mici în linie |
-| `md` | 8px | Padding implicit, gap normal |
-| `lg` | 16px | Padding card, gap componente |
-| `xl` | 24px | Spațiere secțiuni |
-| `2xl` | 32px | Blocuri mari |
-| `3xl` | 48px | Nivel hero / pagină |
+---
 
-**Aplicare prin Tailwind:** `p-4`, `gap-6`, `mb-8` etc.
+### 3. Spațiere (grilă 8px)
+
+| Token | Variabilă | Valoare | Echivalent Tailwind |
+|-------|-----------|---------|---------------------|
+| 4px | `--space-1` | 0.25rem | `p-1`, `gap-1` |
+| 8px | `--space-2` | 0.5rem | `p-2`, `gap-2` |
+| 12px | `--space-3` | 0.75rem | `p-3`, `gap-3` |
+| 16px | `--space-4` | 1rem | `p-4`, `gap-4` |
+| 24px | `--space-6` | 1.5rem | `p-6`, `gap-6` |
+| 32px | `--space-8` | 2rem | `p-8`, `gap-8` |
+| 48px | `--space-12` | 3rem | `p-12`, `gap-12` |
+| 64px | `--space-16` | 4rem | `p-16`, `gap-16` |
+
+---
 
 ### 4. Borduri și rotunjire
 
-| Element | Radius | Border |
-|---------|--------|--------|
-| Input | `rounded-lg` (8px) | 1px solid `gray-600` |
-| Buton | `rounded-lg` (8px) | Niciuna |
-| Card | `rounded-lg` (8px) | 1px solid `gray-700` (decorativ) |
-| Modal | `rounded-xl` (12px) | Niciuna |
+| Element | Token | Valoare |
+|---------|-------|---------|
+| Mic (badge) | `--radius-sm` | 6px |
+| Input / Buton | `--radius-md` | 10px |
+| Card | `--radius-lg` | 14px |
+| Modal | `--radius-xl` | 20px |
+| Pill / Tag | `--radius-full` | 9999px |
 
-### 5. Dimensionare
+---
 
-| Element | Dimensiune | Notă |
-|---------|------------|------|
-| **Înălțime input** | min 44px (`py-3`) | WCAG 2.5.5 |
-| **Înălțime buton** | min 44px | Țintă de atingere |
-| **Lățime buton** | fit-content / full-width | Depinde de context |
-| **Focus ring** | 2px, cyan-400 | Offset 2px față de element |
+### 5. Umbre
+
+| Token | Utilizare |
+|-------|-----------|
+| `--shadow-xs` | Badge-uri, elemente mici |
+| `--shadow-sm` | Card-uri implicite |
+| `--shadow-md` | Card-uri hover |
+| `--shadow-lg` | Elemente ridicate (dropdowns) |
+| `--shadow-glow-accent` | Glow portocaliu pe focus/hover accent |
+
+---
+
+### 6. Tranziții
+
+```css
+--transition-fast:   0.15s var(--ease-out);    /* Hover, focus */
+--transition-normal: 0.30s var(--ease-out);    /* Tranziții de stare */
+--transition-slow:   0.50s var(--ease-out);    /* Animații de intrare */
+
+--ease-out:    cubic-bezier(0.16, 1, 0.3, 1);   /* Ieșire rapidă */
+--ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1); /* Efect spring */
+```
+
+---
+
+## Componente React
+
+Toate componentele sunt în `frontend/src/components/`. Le importi direct — nu necesită configurare suplimentară.
+
+### Button
+
+```jsx
+import Button from '../components/Button';
+
+// Variante
+<Button variant="primary">Salvare</Button>
+<Button variant="secondary">Anulare</Button>
+<Button variant="danger">Ștergere</Button>
+<Button variant="outline">Mai mult</Button>
+
+// Mărimi
+<Button size="sm">Mic</Button>
+<Button size="base">Normal (implicit)</Button>
+<Button size="lg">Mare</Button>
+
+// Stări
+<Button disabled>Dezactivat</Button>
+<Button loading>Salvare</Button>          {/* afișează "Se încarcă…" */}
+
+// Cu icon (lucide-react)
+import { Save } from 'lucide-react';
+<Button icon={Save} iconPosition="left">Salvare</Button>
+<Button icon={Save} iconPosition="right">Salvare</Button>
+```
+
+**Props:**
+| Prop | Tip | Default | Descriere |
+|------|-----|---------|-----------|
+| `variant` | `'primary' \| 'secondary' \| 'danger' \| 'outline'` | `'primary'` | Stilul vizual |
+| `size` | `'sm' \| 'base' \| 'lg'` | `'base'` | Dimensiunea |
+| `disabled` | `boolean` | `false` | Dezactivat |
+| `loading` | `boolean` | `false` | Afișează "Se încarcă…" |
+| `icon` | componenta Lucide | — | Icon afișat lângă text |
+| `iconPosition` | `'left' \| 'right'` | `'left'` | Poziția icon-ului |
+
+---
+
+### Input
+
+```jsx
+import Input from '../components/Input';
+
+// Simplu
+<Input label="Utilizator" placeholder="bioinginer" />
+
+// Cu validare
+<Input
+  label="Email"
+  type="email"
+  required
+  error={errors.email?.message}
+  helpText="Adresa de email a biroului"
+/>
+
+// Cu icon
+import { User } from 'lucide-react';
+<Input label="Utilizator" icon={User} />
+
+// Ref forwarding (react-hook-form)
+<Input label="Parolă" type="password" {...register('password')} />
+```
+
+**Props:**
+| Prop | Tip | Descriere |
+|------|-----|-----------|
+| `label` | `string` | Text label (afișat deasupra) |
+| `error` | `string` | Mesaj de eroare (roșu) |
+| `helpText` | `string` | Text ajutător (gri, sub input) |
+| `required` | `boolean` | Afișează `*` și setează `aria-required` |
+| `icon` | componenta Lucide | Icon la stânga input-ului |
+| `type` | `string` | Tipul HTML al input-ului |
+
+---
+
+### Card
+
+```jsx
+import Card from '../components/Card';
+import Button from '../components/Button';
+
+// Simplu
+<Card>
+  <p>Conținut card</p>
+</Card>
+
+// Cu header și acțiuni
+<Card
+  header="Detalii dispozitiv"
+  actions={
+    <>
+      <Button variant="secondary">Anulare</Button>
+      <Button variant="primary">Salvare</Button>
+    </>
+  }
+>
+  <p>Monitor Semne Vitale — Funcțional</p>
+</Card>
+
+// Elevated + interactiv (cursor pointer, hover accent border)
+<Card elevated interactive onClick={handleClick}>
+  <p>Click pe card</p>
+</Card>
+```
+
+---
+
+### StatusBadge
+
+```jsx
+import StatusBadge from '../components/StatusBadge';
+
+// Statusuri valide: FUNCTIONAL | IN_REPARATIE | DEFECT | CASAT | IMPRUMUTAT | REZERVA
+<StatusBadge status="FUNCTIONAL" />       {/* ✓ Funcțional */}
+<StatusBadge status="IN_REPARATIE" />     {/* ⟳ În reparație */}
+<StatusBadge status="DEFECT" />           {/* ✗ Defect */}
+<StatusBadge status="CASAT" />            {/* − Casat */}
+<StatusBadge status="IMPRUMUTAT" />       {/* → Împrumutat */}
+<StatusBadge status="REZERVA" />          {/* ◻ Rezervă */}
+
+// Mărimi
+<StatusBadge status="FUNCTIONAL" size="sm" />
+<StatusBadge status="FUNCTIONAL" size="md" />   {/* implicit */}
+<StatusBadge status="FUNCTIONAL" size="lg" />
+```
+
+Afișează întotdeauna **simbol + text + culoare** (color-blind friendly, WCAG 1.4.1).
+
+---
+
+### Alert
+
+```jsx
+import Alert from '../components/Alert';
+
+<Alert type="success">Dispozitiv salvat cu succes!</Alert>
+<Alert type="error">Eroare: câmpul este obligatoriu.</Alert>
+<Alert type="warning">Revizie lunară datorată.</Alert>
+<Alert type="info">Sistemul va fi indisponibil duminică.</Alert>
+
+// Dismissibil
+<Alert type="warning" dismissible onDismiss={() => setShowAlert(false)}>
+  Atenție: bateria monitorului este descărcată.
+</Alert>
+```
+
+---
+
+## Hook-uri
+
+### useTheme
+
+```jsx
+import { useTheme } from '../hooks/useTheme';
+
+function Header() {
+  const { theme, toggleTheme } = useTheme();
+
+  return (
+    <button onClick={toggleTheme} aria-label={theme === 'dark' ? 'Modul clar' : 'Modul întunecat'}>
+      {theme === 'dark' ? '☀️' : '🌙'}
+    </button>
+  );
+}
+```
+
+- Citește preferința din `localStorage` (`simdm_theme`)
+- Fallback: preferința sistemului (`prefers-color-scheme`)
+- Fallback final: dark mode
+- Aplică/scoate clasa `light-mode` pe `<html>` la fiecare schimbare
+
+---
+
+### usePageTitle
+
+```jsx
+import { usePageTitle } from '../hooks/usePageTitle';
+
+function InventoryPage() {
+  usePageTitle('Inventar DM');
+  // → document.title = "Inventar DM — SIMDM"
+  // ...
+}
+```
+
+---
+
+### useAccessibility
+
+```jsx
+import { useAccessibility } from '../hooks/useAccessibility';
+
+function ConfirmModal({ onClose }) {
+  const { announce, trapFocus } = useAccessibility();
+  const modalRef = useRef(null);
+
+  useEffect(() => {
+    const cleanup = trapFocus(modalRef);
+    return cleanup;
+  }, [trapFocus]);
+
+  const handleDelete = () => {
+    // ... logică ștergere
+    announce('Dispozitiv șters cu succes.');
+    onClose();
+  };
+
+  return (
+    <div ref={modalRef} role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      {/* ... */}
+    </div>
+  );
+}
+```
+
+| Funcție | Descriere |
+|---------|-----------|
+| `announce(mesaj)` | Injectează un nod `aria-live="polite"` pentru screen readere |
+| `trapFocus(ref)` | Limitează Tab/Shift+Tab în interiorul containerului (modal) |
 
 ---
 
 ## Accesibilitate — WCAG 2.1 AA
 
-### Reguli obligatorii (pentru orice componentă)
+### Reguli obligatorii
 
-1. **Label-uri asociate**
-   ```jsx
-   <label htmlFor="username">Utilizator</label>
-   <input id="username" ... />
-   ```
-   - Niciun input fără label asociat
-   - Folosește `htmlFor`/`id` cu valori identice
-   - Label-urile trebuie vizibile (nu doar placeholder)
+**1. Label-uri asociate cu inputuri**
+```jsx
+// Folosind componenta Input (label automat asociat):
+<Input label="Utilizator" id="username" />
 
-2. **Focus ring vizibil — Portocaliu (Clinical Precision)**
-   ```jsx
-   // Folosește CSS variables
-   className="focusable"
-   
-   // Definit în CSS global (index.css)
-   @layer utilities {
-     .focusable {
-       @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2;
-       --tw-ring-color: var(--color-accent);      /* Portocaliu #ffb597 */
-       --tw-ring-offset-color: var(--color-bg-primary);
-       transition: all var(--transition-fast);
-     }
-   }
-   ```
+// Sau manual:
+<label htmlFor="username">Utilizator</label>
+<input id="username" ... />
+```
+- Niciun input fără label vizibil (`placeholder` nu înlocuiește label-ul)
+- `autoComplete` setat corect (`username`, `current-password`, `email` etc.)
 
-   **Rezultat:** Portocaliu 2px ring cu 2px offset, se tranziționează smooth (150ms) la ambele teme
-   - Ring de 2px, contrast vizibil
-   - Offset 2px față de element
-   - NU `outline: none` fără înlocuitor
+---
 
-3. **Ținte de atingere 44x44px**
-   ```jsx
-   <button className="... min-h-[44px] px-4 py-3 ...">
-   <input className="... min-h-[44px] ..."/>
-   ```
-   - Butoane: `min-h-[44px]`
-   - Inputuri: `py-3` sau `min-h-[44px]`
-   - Spațiu de minimum 8px între elemente clicabile
+**2. Focus ring — portocaliu, 2px**
 
-4. **Erori anunțate**
-   ```jsx
-   {error && (
-     <p id="username-error" role="alert" aria-live="assertive" className="text-red-400">
-       {error}
-     </p>
-   )}
-   <input aria-describedby="username-error" aria-invalid={!!error} />
-   ```
-   - `role="alert"` pentru erori
-   - `aria-live="assertive"` (anunțare imediată)
-   - Leagă input-ul de eroare prin `aria-describedby`
+Clasa `.focusable` din `index.css` aplică ring-ul portocaliu cu offset 2px:
+```jsx
+<button className="focusable ...">Acțiune</button>
+```
 
-5. **Mesaje de stare anunțate**
-   ```jsx
-   <div role="status" aria-live="polite">
-     Dispozitiv salvat cu succes!
-   </div>
-   ```
-   - Încărcare: `aria-live="polite"` + `aria-busy="true"`
-   - Succes / Informații: `role="status"`
+Componentele `Button` și `Input` aplică focus ring-ul intern — nu e nevoie de clasă manuală.
 
-6. **HTML semantic**
-   ```jsx
-   <header>...</header>
-   <main id="main">...</main>
-   <table>
-     <thead><tr><th scope="col">...</th></tr></thead>
-   </table>
-   ```
-   - `<header>`, `<main id="main">`, `<footer>`
-   - `<th scope="col">` / `<th scope="row">`
-   - Folosește `<button>` nu `<div onClick>`
+Nu folosi niciodată `outline: none` fără un înlocuitor vizibil.
 
-7. **Culoarea nu e singura sursă de informație**
-   ```jsx
-   // Greșit: culoare singură
-   <span className="text-red-400">Defect</span>
+---
 
-   // Corect: text + icoană + culoare
-   <span className="flex items-center gap-2 text-red-400">
-     �- Defect
-   </span>
-   ```
-   - SVG-uri decorative: `aria-hidden="true"`
-   - Icoane funcționale: `aria-label="..."`
+**3. Ținte de atingere ≥ 44×44px (WCAG 2.5.5)**
+```jsx
+// Componenta Button respectă automat (min-h-[44px])
+<Button>Acțiune</Button>
 
-8. **Contrast ≥ 4.5:1 (text) / 3:1 (UI)**
-   - Verifică cu [WebAIM Contrast Checker](https://webaim.org/resources/contrastchecker/)
-   - Text mare (18pt+): 3:1 este suficient
+// Manual:
+<button className="... min-h-[44px] px-4 py-3 ...">...</button>
+```
+Spațiu minim 8px între elemente clicabile vecine.
+
+---
+
+**4. Erori anunțate (WCAG 1.3.1, 3.3.1)**
+```jsx
+// Componenta Input gestionează automat:
+<Input error="Câmpul este obligatoriu." />
+// → border roșu, aria-invalid, aria-describedby
+
+// Manual:
+{error && (
+  <p id="field-error" role="alert" aria-live="assertive" className="text-xs text-red-400">
+    {error}
+  </p>
+)}
+<input aria-invalid={!!error} aria-describedby={error ? "field-error" : undefined} />
+```
+
+---
+
+**5. Mesaje de stare (WCAG 4.1.3)**
+```jsx
+// Componenta Alert gestionează automat (role="status" sau role="alert")
+<Alert type="success">Salvat!</Alert>
+
+// Manual:
+<div role="status" aria-live="polite">Dispozitiv salvat.</div>
+<div role="alert" aria-live="assertive">Eroare critică.</div>
+```
+
+---
+
+**6. HTML semantic**
+```jsx
+<header>...</header>
+<main id="main">...</main>
+
+<table>
+  <thead>
+    <tr><th scope="col">Denumire</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>...</td></tr>
+  </tbody>
+</table>
+```
+Folosește `<button>` nu `<div onClick>`.
+
+---
+
+**7. Culoarea nu este singura sursă de informație (WCAG 1.4.1)**
+```jsx
+// Greșit — culoare singură:
+<span className="text-green-400">Funcțional</span>
+
+// Corect — simbol + text + culoare:
+<StatusBadge status="FUNCTIONAL" />  {/* ✓ Funcțional */}
+```
+
+---
+
+**8. Contrast ≥ 4.5:1 (WCAG 1.4.3)**
+
+Toate combinațiile din paleta v3 respectă minimul AA. Verifică cu [WebAIM Contrast Checker](https://webaim.org/resources/contrastchecker/) la orice culoare nouă adăugată.
+
+---
 
 ### Testare manuală
 
@@ -240,133 +515,74 @@ font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
 |------|--------|-------|
 | **Tastatură** | Tab singur, fără mouse | Focus vizibil, ordine logică, niciun trap |
 | **Screen reader** | NVDA / Narrator | Erori anunțate, label-uri citite, butoane etichetate |
-| **Zoom 200%** | Chrome Ctrl+Shift+= | Fără scroll orizontal, text lizibil |
+| **Zoom 200%** | Ctrl+Shift+= în Chrome | Fără scroll orizontal, text lizibil |
 | **Lighthouse** | DevTools → Lighthouse | Scor accesibilitate ≥ 95 |
 | **axe DevTools** | Extensie Chrome | 0 erori critice/serioase |
+| **Mod întunecat** | Click 🌙 → refresh | Tema persistă în localStorage |
+| **Mobile 375px** | DevTools → Toggle device | Layout responsive, butoane ≥ 44px |
 
 ---
 
-## Tipare de componente
+## Tipare de componente (JSX)
 
-### Buton (4 variante)
-
-```jsx
-// Primary
-<button className="px-4 py-3 min-h-[44px] bg-cyan-500 hover:bg-cyan-400
-                   text-black font-bold rounded-lg focusable
-                   disabled:bg-cyan-500/50 disabled:cursor-not-allowed">
-  Conectare
-</button>
-
-// Secondary
-<button className="px-4 py-3 min-h-[44px] bg-gray-700 hover:bg-gray-600
-                   text-gray-100 font-semibold rounded-lg focusable">
-  Anulare
-</button>
-
-// Danger
-<button className="px-4 py-3 min-h-[44px] bg-red-600 hover:bg-red-700
-                   text-white font-bold rounded-lg focusable-danger">
-  Ștergere
-</button>
-
-// Ghost (asemănător link)
-<button className="px-4 py-3 text-cyan-400 hover:text-cyan-300 font-semibold focusable">
-  Link-buton
-</button>
-
-// Stare de încărcare
-<button disabled aria-busy={loading} className="btn-primary">
-  {loading ? <span className="flex items-center gap-2"><Spinner /> Se conectează…</span> : "Conectare"}
-</button>
-```
-
-### Input + Label
+### Formular de autentificare
 
 ```jsx
-<div className="mb-4">
-  <label htmlFor="email" className="text-gray-400 text-sm mb-1 block font-medium">
-    Email <span className="text-red-400">*</span>
-  </label>
-  <input
-    id="email"
-    type="email"
-    autoComplete="email"
+import Button from '../components/Button';
+import Input from '../components/Input';
+import Alert from '../components/Alert';
+
+<form onSubmit={handleSubmit} noValidate>
+  <Input
+    label="Utilizator"
+    id="username"
+    autoComplete="username"
     autoFocus
-    aria-invalid={error ? "true" : "false"}
-    aria-describedby={error ? "email-error" : undefined}
-    placeholder="exemplu@exemplu.com"
-    className="w-full px-4 py-3 min-h-[44px] bg-gray-800 border border-gray-600
-               text-white rounded-lg focusable placeholder:text-gray-500
-               disabled:opacity-50"
+    required
+    error={error}
   />
-  {error && (
-    <p id="email-error" role="alert" className="text-red-400 text-sm mt-1">
-      {error}
-    </p>
-  )}
-</div>
+  <Input
+    label="Parolă"
+    id="password"
+    type="password"
+    autoComplete="current-password"
+    required
+  />
+  {error && <Alert type="error">{error}</Alert>}
+  <Button type="submit" loading={loading} className="w-full mt-4">
+    Conectare
+  </Button>
+</form>
 ```
 
-### Card
+---
+
+### Tabel accesibil cu StatusBadge
 
 ```jsx
-<div className="bg-gray-900 border border-gray-700 rounded-lg px-6 py-6 transition-all hover:shadow-lg">
-  <h3 className="text-lg font-bold text-cyan-400 mb-2">Titlu Card</h3>
-  <p className="text-gray-400 text-sm">Descriere...</p>
-</div>
-```
+import StatusBadge from '../components/StatusBadge';
 
-### Alert (mesaje de feedback)
-
-```jsx
-// Eroare
-{error && (
-  <div role="alert" aria-live="assertive" className="bg-red-950/30 border border-red-600
-       px-4 py-3 rounded-lg text-red-400 text-sm">
-    Eroare: {error}
-  </div>
-)}
-
-// Succes
-{success && (
-  <div role="status" aria-live="polite" className="bg-green-950/30 border border-green-600
-       px-4 py-3 rounded-lg text-green-400 text-sm">
-    {success}
-  </div>
-)}
-
-// Informații
-<div role="status" aria-live="polite" className="bg-blue-950/30 border border-blue-600
-     px-4 py-3 rounded-lg text-blue-400 text-sm">
-  Informație
-</div>
-```
-
-### Tabel (accesibil)
-
-```jsx
 <div className="overflow-x-auto">
   <table className="w-full border-collapse">
     <thead>
-      <tr className="border-b border-gray-600">
-        <th scope="col" className="px-4 py-3 text-left text-sm font-bold text-cyan-400"
-            aria-sort={sortKey === 'name' ? 'ascending' : 'none'}>
-          <button onClick={() => handleSort('name')}>
-            Denumire {sortKey === 'name' && (sortOrder === 'asc' ? '�-�' : '�-�')}
-          </button>
+      <tr className="border-b" style={{ borderColor: 'var(--color-border)' }}>
+        <th scope="col" className="px-4 py-3 text-left text-sm font-bold"
+            style={{ color: 'var(--color-accent)' }}>
+          Denumire
         </th>
-        <th scope="col" className="px-4 py-3 text-left text-sm font-bold text-cyan-400">
+        <th scope="col" className="px-4 py-3 text-left text-sm font-bold"
+            style={{ color: 'var(--color-accent)' }}>
           Status
         </th>
       </tr>
     </thead>
     <tbody>
-      {data.map((row) => (
-        <tr key={row.id} className="border-b border-gray-700 hover:bg-gray-800/50">
-          <td className="px-4 py-3 text-gray-100">{row.name}</td>
+      {devices.map((d) => (
+        <tr key={d.id} className="border-b hover:bg-[var(--color-bg-elevated)]"
+            style={{ borderColor: 'var(--color-border)' }}>
+          <td className="px-4 py-3">{d.name}</td>
           <td className="px-4 py-3">
-            <StatusBadge status={row.status} />
+            <StatusBadge status={d.status} />
           </td>
         </tr>
       ))}
@@ -375,192 +591,104 @@ font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
 </div>
 ```
 
-**Componenta StatusBadge (6 statuses — Faza 2):**
+---
+
+### Modal de confirmare (cu focus trap)
+
 ```jsx
-function StatusBadge({ status }) {
-  const stiluri = {
-    FUNCTIONAL: 'bg-green-950/30 border border-green-600 text-green-400',
-    DEFECT: 'bg-red-950/30 border border-red-600 text-red-400',
-    IN_REPARATIE: 'bg-amber-950/30 border border-amber-600 text-amber-400',
-    CASAT: 'bg-gray-700 border border-gray-600 text-gray-400',
-    IMPRUMUTAT: 'bg-blue-950/30 border border-blue-600 text-blue-400',
-    REZERVA: 'bg-yellow-950/30 border border-yellow-600 text-yellow-400',
-  };
-  const etichete = {
-    FUNCTIONAL: '✓ Funcțional',
-    DEFECT: '�- Defect',
-    IN_REPARATIE: '⟳ În Reparație',
-    CASAT: '− Casat',
-    IMPRUMUTAT: '↔ Împrumutat',
-    REZERVA: '📦 Rezervă',
-  };
+import { useRef, useEffect } from 'react';
+import { useAccessibility } from '../hooks/useAccessibility';
+import Button from '../components/Button';
+import Card from '../components/Card';
+
+function ConfirmModal({ onConfirm, onCancel }) {
+  const { trapFocus } = useAccessibility();
+  const modalRef = useRef(null);
+
+  useEffect(() => {
+    const cleanup = trapFocus(modalRef);
+    modalRef.current?.querySelector('button')?.focus();
+    return cleanup;
+  }, [trapFocus]);
+
   return (
-    <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold ${stiluri[status]}`}
-          role="status" aria-label={`Status: ${etichete[status]}`}>
-      {etichete[status]}
-    </span>
-  );
-}
-```
-
-### Modal (dialog accesibil)
-
-```jsx
-{showModal && (
-  <div role="dialog" aria-modal="true" aria-labelledby="modal-title"
-       className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-    <div className="bg-gray-900 rounded-xl px-6 py-6 max-w-md w-full mx-4">
-      <h2 id="modal-title" className="text-xl font-bold text-cyan-400 mb-4">
-        Confirmă ștergere
-      </h2>
-      <p className="text-gray-400 mb-6">
-        Ești sigur? Această acțiune nu poate fi anulată.
-      </p>
-      <div className="flex gap-3">
-        <button className="btn-secondary flex-1" onClick={() => setShowModal(false)}>
-          Anulare
-        </button>
-        <button className="btn-danger flex-1" onClick={handleDelete}>
-          Ștergere
-        </button>
+    <div
+      className="fixed inset-0 flex items-center justify-center z-50"
+      style={{ backgroundColor: 'rgba(0,0,0,0.7)' }}
+      onClick={onCancel}
+    >
+      <div ref={modalRef} onClick={(e) => e.stopPropagation()}>
+        <Card
+          header="Confirmă ștergerea"
+          actions={
+            <>
+              <Button variant="secondary" onClick={onCancel}>Anulare</Button>
+              <Button variant="danger" onClick={onConfirm}>Ștergere</Button>
+            </>
+          }
+        >
+          <p style={{ color: 'var(--color-text-secondary)' }}>
+            Această acțiune este ireversibilă.
+          </p>
+        </Card>
       </div>
     </div>
-  </div>
-)}
+  );
+}
 ```
 
 ---
 
 ## Checklist accesibilitate per componentă
 
-Înainte de a face merge la orice componentă:
+Bifează înainte de orice merge:
 
 - [ ] **Label-uri și inputuri**
-  - [ ] Toate inputurile au `id` + label cu `htmlFor` identic
+  - [ ] Toate inputurile au `id` + label cu `htmlFor` identic (sau se folosește `<Input label="...">`)
   - [ ] `autoComplete` setat corect
-  - [ ] `autoFocus` pe primul câmp dacă e formular
+  - [ ] `autoFocus` pe primul câmp dacă e formular de sine stătător
 
-- [ ] **Gestionarea focus-ului**
-  - [ ] Focus ring vizibil pe toate elementele interactive
+- [ ] **Focus vizibil**
+  - [ ] Clasa `.focusable` sau componentă `Button`/`Input` (focus ring automat)
   - [ ] Ordinea Tab logică (sus-stânga → jos-dreapta)
-  - [ ] Niciun keyboard trap
+  - [ ] Niciun keyboard trap în afara modalelor intenționate
 
-- [ ] **Gestionarea erorilor**
-  - [ ] Erorile au `role="alert" aria-live="assertive"`
-  - [ ] Input-ul are `aria-describedby` legat de eroare
-  - [ ] Input-ul are `aria-invalid="true"` când există eroare
+- [ ] **Erori**
+  - [ ] Erori cu `role="alert"` sau componentă `<Alert type="error">`
+  - [ ] Input cu `aria-invalid` + `aria-describedby` la eroare (automat în `<Input error="...">`)
 
-- [ ] **Butoane și ținte de atingere**
-  - [ ] `min-h-[44px]` sau `py-3` (înălțime 44px)
-  - [ ] Clasa `.focusable` sau focus ring manual
-  - [ ] Spațiu de min 8px între butoane
+- [ ] **Butoane și ținte**
+  - [ ] `min-h-[44px]` (automat în componentă `Button`)
+  - [ ] Spațiu ≥ 8px între butoane vecine
+  - [ ] `aria-label` pe butoane fără text vizibil (icon-only)
 
 - [ ] **Culori și contrast**
   - [ ] Contrast text ≥ 4.5:1 (verificat cu WebAIM)
-  - [ ] Culoarea NU e singura sursă de informație
-  - [ ] Icoane + text + culoare împreună
+  - [ ] Status-uri: simbol + text + culoare (folosește `<StatusBadge>`)
 
-- [ ] **Tabele** (dacă e cazul)
+- [ ] **Tabele**
   - [ ] `<th scope="col">` pentru antete
-  - [ ] `aria-sort="ascending|descending|none"` dacă e sortabil
-  - [ ] `<thead>`, `<tbody>` prezente
+  - [ ] `<thead>` și `<tbody>` prezente
+  - [ ] `aria-sort` dacă coloana e sortabilă
 
-- [ ] **Icoane SVG**
-  - [ ] Decorative: `aria-hidden="true"`
-  - [ ] Funcționale: `aria-label="Descriere"`
+- [ ] **Icoane SVG (Lucide)**
+  - [ ] Decorative: `aria-hidden="true"` (automat în Lucide)
+  - [ ] Funcționale (fără text): `aria-label="Descriere"` pe buton
 
-- [ ] **Testare**
-  - [ ] Navigare cu tastatură (Tab/Enter/Escape)
-  - [ ] Test screen reader (NVDA/Narrator — erori anunțate)
+- [ ] **Testare finală**
+  - [ ] Tab prin toată pagina fără mouse
   - [ ] Lighthouse Accessibility ≥ 95
   - [ ] axe DevTools: 0 erori critice
-
----
-
-## Configurare Tailwind cu token-uri de design
-
-`tailwind.config.js`:
-```javascript
-export default {
-  content: ['./index.html', './src/**/*.{js,jsx}'],
-  theme: {
-    extend: {
-      colors: {
-        // Culorile brandului SIMDM
-        cyan: { 400: '#22d3ee', 500: '#06b6d4' },
-      },
-    },
-  },
-};
-```
-
-`src/index.css`:
-```css
-@layer components {
-  .focusable {
-    @apply focus-visible:outline-none focus-visible:ring-2
-           focus-visible:ring-cyan-400 focus-visible:ring-offset-2
-           focus-visible:ring-offset-gray-950 transition-all;
-  }
-
-  .focusable-danger {
-    @apply focus-visible:ring-red-400 focus-visible:ring-offset-gray-950;
-  }
-
-  .btn-primary {
-    @apply px-4 py-3 min-h-[44px] bg-cyan-500 hover:bg-cyan-400
-           text-black font-bold rounded-lg focusable
-           disabled:bg-cyan-500/50 disabled:cursor-not-allowed;
-  }
-
-  .btn-secondary {
-    @apply px-4 py-3 min-h-[44px] bg-gray-700 hover:bg-gray-600
-           text-gray-100 font-semibold rounded-lg focusable;
-  }
-
-  .btn-danger {
-    @apply px-4 py-3 min-h-[44px] bg-red-600 hover:bg-red-700
-           text-white font-bold rounded-lg focusable-danger;
-  }
-
-  .input-base {
-    @apply w-full px-4 py-3 min-h-[44px] bg-gray-800 border border-gray-600
-           text-white text-base rounded-lg focusable placeholder:text-gray-500
-           disabled:opacity-50;
-  }
-
-  .label-base {
-    @apply text-gray-400 text-sm mb-1 block font-medium;
-  }
-
-  .card-base {
-    @apply bg-gray-900 border border-gray-700 rounded-lg px-6 py-6 transition-all;
-  }
-
-  .alert-error {
-    @apply bg-red-950/30 border border-red-600 px-4 py-3 rounded-lg
-           text-red-400 text-sm;
-  }
-
-  .alert-success {
-    @apply bg-green-950/30 border border-green-600 px-4 py-3 rounded-lg
-           text-green-400 text-sm;
-  }
-
-  .alert-info {
-    @apply bg-blue-950/30 border border-blue-600 px-4 py-3 rounded-lg
-           text-blue-400 text-sm;
-  }
-}
-```
 
 ---
 
 ## Resurse externe
 
 - [WCAG 2.1 Quick Reference](https://www.w3.org/WAI/WCAG21/quickref/)
-- [ARIA Authoring Practices](https://www.w3.org/WAI/ARIA/apg/)
+- [ARIA Authoring Practices Guide](https://www.w3.org/WAI/ARIA/apg/)
 - [WebAIM Contrast Checker](https://webaim.org/resources/contrastchecker/)
+- [Lucide React Icons](https://lucide.dev)
+- [Plus Jakarta Sans — Google Fonts](https://fonts.google.com/specimen/Plus+Jakarta+Sans)
 - [Tailwind CSS Docs](https://tailwindcss.com)
 - [NVDA Screen Reader](https://www.nvaccess.org)
 - [Deque axe DevTools](https://www.deque.com/axe/devtools/)
@@ -568,7 +696,8 @@ export default {
 ---
 
 **Istoric versiuni:**
+- v3.0 — 2026-06-03: Design System v3 — Plus Jakarta Sans, glassmorphism, componente React reutilizabile, hook-uri
+- v2.1 — 2026-06-02: Clinical Precision 2.0, dark/light mode, WCAG AA certified
 - v1.0 — 2026-05-29: Consolidare design Faza 1 + audit
 
 **Întrebări?** Vezi [CLAUDE.md](../CLAUDE.md) sau [2-DEVELOPER-GUIDE.md](./2-DEVELOPER-GUIDE.md)
-
