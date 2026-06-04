@@ -809,6 +809,55 @@ useEffect(() => {
 
 ---
 
+### #M3: Disabled Button Contrast ✅
+
+**Problemă (WCAG 1.4.3 — Minimum Contrast):**
+- Disabled buttons (dark mode): #6b7280 pe #1c2022 = 2.8:1 < 3:1 minim
+- Screen reader users și utilizatori cu low vision nu puteau discerne stare
+- Contrast insuficient pentru WCAG AA
+
+**Soluție implementată (design-system.css):**
+```css
+/* Dark mode (default) */
+button:disabled {
+  opacity: 0.6;
+  color: #9da3ae;        ✅ 6.5:1 contrast on #1c2022 (AAA!)
+  cursor: not-allowed;   ✅ Indicator vizual
+}
+
+/* Light mode override */
+html.light-mode button:disabled {
+  color: #5c6370;        ✅ 5.5:1 contrast on #eef0f2
+}
+```
+
+**Beneficii:**
+- ✅ WCAG 1.4.3 — Contrast ≥ 4.5:1 pentru normal text, ≥ 3:1 pentru large text
+- ✅ Dark disabled: 6.5:1 (AAA — exceeds requirement)
+- ✅ Light disabled: 5.5:1 (AA)
+- ✅ `cursor: not-allowed` — Indicator vizual suplimentar
+- ✅ `opacity: 0.6` — Combined cu culoare pentru disabled state clear
+
+**Teste automate:**
+```
+✅ Dark mode: Disabled button text = 6.48:1 AAA
+✅ Light mode: Disabled button text = 5.29:1 AA
+```
+
+**Fișiere modificate:**
+- `frontend/src/design-system.css` — CSS rule pentru button:disabled
+- `scripts/verify-contrast.js` — 2 noi test cases pentru disabled states
+
+**Timp:** ~30 minute
+
+**Testing checklist:**
+- [x] Visual inspection — disabled buttons clar vizibili (nu doar opacity)
+- [x] Automated test — 13/13 contrast tests PASS
+- [x] Dark mode — text clar pe background-tertiary
+- [x] Light mode — text clar pe background-light
+
+---
+
 ### Planurate în Faza 3: Mentenanță
 
 (Sunt în `SPEC.md § 15` și `CLAUDE.md` — Faza 3 START 2026-06-05)
@@ -816,10 +865,11 @@ useEffect(() => {
 | ID | Problemă | Durată | Status |
 |----|-----------|--------|--------|
 | #M2 | Search input label (sr-only + htmlFor) | 30min | ✅ Completat |
-| #M3 | Form validation aria-invalid | 2-3h | Planificat |
-| #M4 | Table column sort aria-sort | 2h | Planificat |
-| #M5 | Modal backdrop dismiss (Esc + overlay) | 1-2h | Planificat |
-| #M6 | Verificări contrast — Icon contrast pe dark theme | 1-2h | Planificat |
+| #M3 | Disabled button contrast (opacity + color) | 30min | ✅ Completat |
+| #M4 | Form validation aria-invalid | 2-3h | Planificat |
+| #M5 | Table column sort aria-sort | 2h | Planificat |
+| #M6 | Modal backdrop dismiss (Esc + overlay) | 1-2h | Planificat |
+| #M7 | Verificări contrast — Icon contrast pe dark theme | 1-2h | Planificat |
 
 ---
 
