@@ -2,6 +2,70 @@ import { useState, useMemo, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import api from '../api/axios';
+import { Plus } from 'lucide-react';
+
+function AddStockModal({ consumable, onClose, onSave }) {
+  const [quantity, setQuantity] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleSave = async () => {
+    const addQty = parseInt(quantity);
+    if (!addQty || addQty <= 0) {
+      toast.error('Cantitate trebuie să fie un număr pozitiv');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await api.post(`/consumables/${consumable.id}/stock`, { quantity: addQty });
+      toast.success('Stoc actualizat cu succes');
+      onSave();
+    } catch {
+      toast.error('Eroare la actualizarea stocului');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div
+      className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 animate-fade-in"
+      onClick={onClose}
+    >
+      <div
+        className="rounded-xl max-w-sm w-full p-6 animate-slide-up"
+        style={{ backgroundColor: 'var(--color-bg-secondary)' }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <h2 className="text-xl font-bold mb-4">Adaugă Stoc — {consumable.name}</h2>
+        <div className="mb-6">
+          <label htmlFor="add-qty" className="label-base">Cantitate de adăugat</label>
+          <input
+            id="add-qty"
+            type="number"
+            min="1"
+            value={quantity}
+            onChange={(e) => setQuantity(e.target.value)}
+            className="input-base w-full"
+            placeholder="ex. 10"
+            autoFocus
+          />
+          <p className="text-xs mt-2" style={{ color: 'var(--color-text-secondary)' }}>
+            Stoc curent: <strong>{consumable.quantity}</strong> → După: <strong>{parseInt(quantity || 0) + consumable.quantity}</strong>
+          </p>
+        </div>
+        <div className="flex gap-2">
+          <button onClick={onClose} className="btn-secondary flex-1" disabled={loading}>
+            Anulare
+          </button>
+          <button onClick={handleSave} className="btn-primary flex-1" disabled={loading}>
+            {loading ? 'Se salvează...' : 'Adaugă'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function EditModal({ consumable, onClose, onSave }) {
   const [formData, setFormData] = useState(consumable || { quantity: 0, minQuantity: 0, unitOfMeasure: 'buc' });
@@ -155,6 +219,8 @@ export default function ConsumablesPage() {
   const queryClient = useQueryClient();
   const [showModal, setShowModal] = useState(false);
   const [editingConsumable, setEditingConsumable] = useState(null);
+  const [showAddStockModal, setShowAddStockModal] = useState(false);
+  const [addStockConsumable, setAddStockConsumable] = useState(null);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const searchInputRef = useRef(null);
 
@@ -381,6 +447,9 @@ export default function ConsumablesPage() {
                     Min
                   </th>
                   <th scope="col" className="px-4 py-3 text-center font-semibold" style={{ color: 'var(--color-accent)' }}>
+                    % Stoc
+                  </th>
+                  <th scope="col" className="px-4 py-3 text-center font-semibold" style={{ color: 'var(--color-accent)' }}>
                     Urgență
                   </th>
                   <th scope="col" className="px-4 py-3 text-center font-semibold" style={{ color: 'var(--color-accent)' }}>
@@ -416,6 +485,24 @@ export default function ConsumablesPage() {
                       <td className="px-4 py-3">{consumable.model || '—'}</td>
                       <td className="px-4 py-3 text-center font-mono">{consumable.quantity} {consumable.unitOfMeasure}</td>
                       <td className="px-4 py-3 text-center font-mono">{consumable.minQuantity}</td>
+                      <td className="px-4 py-3">
+                        {(() => {
+                          const pct = getStockPercentage(consumable.quantity, consumable.minQuantity);
+                          let barColor = '#34d399'; // verde
+                          if (pct < 10) barColor = '#f87171'; // roșu
+                          else if (pct < 25) barColor = '#ea580c'; // portocaliu
+                          else if (pct < 50) barColor = '#fbbf24'; // galben
+
+                          return (
+                            <div className="flex items-center gap-2 justify-center">
+                              <div style={{ width: '50px', height: '6px', backgroundColor: 'var(--color-bg-tertiary)', borderRadius: '3px' }}>
+                                <div style={{ width: `${Math.min(pct, 100)}%`, height: '100%', backgroundColor: barColor, borderRadius: '3px', transition: 'width 0.3s ease' }} />
+                              </div>
+                              <span style={{ fontSize: '12px', minWidth: '30px' }}>{pct}%</span>
+                            </div>
+                          );
+                        })()}
+                      </td>
                       <td className="px-4 py-3 text-center">
                         {urgencyBadge ? (
                           <span
@@ -460,6 +547,20 @@ export default function ConsumablesPage() {
                         )}
                       </td>
                       <td className="px-4 py-3 text-center flex justify-center gap-2">
+                        <button
+                          onClick={() => {
+                            setAddStockConsumable(consumable);
+                            setShowAddStockModal(true);
+                          }}
+                          className="p-2 rounded text-xs font-semibold focusable hover:opacity-70 transition flex items-center justify-center"
+                          style={{
+                            backgroundColor: '#10b981',
+                            color: 'white',
+                          }}
+                          aria-label={`Adaugă stoc la ${consumable.name}`}
+                        >
+                          <Plus size={14} />
+                        </button>
                         <button
                           onClick={() => handleEditClick(consumable)}
                           className="px-3 py-1 rounded text-xs font-semibold focusable hover:opacity-70 transition"
@@ -529,6 +630,22 @@ export default function ConsumablesPage() {
               queryClient.invalidateQueries({ queryKey: ['consumables'] });
               setShowModal(false);
               setEditingConsumable(null);
+            }}
+          />
+        )}
+
+        {/* Add Stock Modal */}
+        {showAddStockModal && addStockConsumable && (
+          <AddStockModal
+            consumable={addStockConsumable}
+            onClose={() => {
+              setShowAddStockModal(false);
+              setAddStockConsumable(null);
+            }}
+            onSave={() => {
+              queryClient.invalidateQueries({ queryKey: ['consumables'] });
+              setShowAddStockModal(false);
+              setAddStockConsumable(null);
             }}
           />
         )}

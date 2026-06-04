@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef } from 'react';
+import { useState, useMemo, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
@@ -51,6 +51,8 @@ export default function InventoryPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
   const [filterSection, setFilterSection] = useState('all');
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 20;
   const searchInputRef = useRef(null);
 
   const { data: devicesData, isLoading } = useQuery({
@@ -76,6 +78,13 @@ export default function InventoryPage() {
   }), [devices, searchTerm, filterStatus, filterSection]);
 
   const sections = useMemo(() => [...new Set(devices.map(d => d.section).filter(Boolean))].sort(), [devices]);
+
+  const totalPages = Math.ceil(filteredDevices.length / ITEMS_PER_PAGE);
+  const paginatedDevices = filteredDevices.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, filterStatus, filterSection]);
 
   const deleteMutation = useMutation({
     mutationFn: (id) => api.delete(`/devices/${id}`),
@@ -120,7 +129,12 @@ export default function InventoryPage() {
           </tr>
         </thead>
         <tbody>
-          {filteredDevices.map(device => (
+          {isLoading && Array.from({length: 8}).map((_, i) => (
+            <tr key={`skeleton-${i}`} className="border-b" style={{ borderColor: 'var(--color-border)' }}>
+              <td colSpan={5} className="px-6 py-4"><div className="skeleton skeleton-row" /></td>
+            </tr>
+          ))}
+          {!isLoading && paginatedDevices.map(device => (
             <tr key={device.id} className="border-b transition-colors hover:bg-[var(--color-bg-elevated)]" style={{ borderColor: 'var(--color-border)' }}>
               <td className="px-6 py-4">
                 <p className="font-medium" style={{ color: 'var(--color-text-primary)' }}>{device.name}</p>
@@ -148,8 +162,8 @@ export default function InventoryPage() {
 
   const CardView = () => (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      {filteredDevices.map(device => (
-        <div key={device.id} className="p-6 rounded-xl border transition-all hover:shadow-lg hover:-translate-y-0.5" style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)' }}>
+      {paginatedDevices.map(device => (
+        <div key={device.id} className="p-6 rounded-xl border transition-all hover:shadow-lg hover:shadow-[var(--color-accent)] hover:-translate-y-1 animate-bounce-in" style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)' }}>
           <div className="flex items-start justify-between mb-4">
             <div className="flex-1">
               <h3 className="font-bold" style={{ color: 'var(--color-text-primary)' }}>{device.name}</h3>
@@ -253,7 +267,7 @@ export default function InventoryPage() {
         </div>
 
         <p className="text-xs" style={{ color: 'var(--color-text-tertiary)' }}>
-          {filteredDevices.length} din {devices.length} dispozitive
+          Pagina {currentPage} din {totalPages || 1} • {paginatedDevices.length} din {filteredDevices.length} dispozitive pe această pagină
         </p>
       </div>
 
@@ -277,6 +291,34 @@ export default function InventoryPage() {
           <CardView />
         ) : (
           <KanbanView />
+        )}
+
+        {/* Pagination */}
+        {filteredDevices.length > ITEMS_PER_PAGE && (
+          <div className="flex justify-between items-center mt-8 pt-6 border-t" style={{ borderColor: 'var(--color-border)' }}>
+            <button
+              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+              className="px-4 py-2 rounded-lg border font-medium transition-all disabled:opacity-50"
+              style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)', color: 'var(--color-text-primary)' }}
+            >
+              ← Înapoi
+            </button>
+
+            <span style={{ color: 'var(--color-text-primary)' }}>
+              Pagina <span className="font-bold" style={{ color: 'var(--color-accent)' }}>{currentPage}</span> din{' '}
+              <span className="font-bold" style={{ color: 'var(--color-accent)' }}>{totalPages}</span>
+            </span>
+
+            <button
+              onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+              disabled={currentPage >= totalPages}
+              className="px-4 py-2 rounded-lg border font-medium transition-all disabled:opacity-50"
+              style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)', color: 'var(--color-text-primary)' }}
+            >
+              Înainte →
+            </button>
+          </div>
         )}
       </div>
     </div>

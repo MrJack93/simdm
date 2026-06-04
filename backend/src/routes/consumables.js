@@ -215,4 +215,46 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
+// POST /api/consumables/:id/stock — adaugă stoc
+router.post('/:id/stock', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { quantity } = req.body;
+
+    const consumableId = parseInt(id);
+    if (!consumableId) {
+      return res.status(400).json({ error: 'ID consumabil invalid' });
+    }
+
+    const addedQty = parseInt(quantity);
+    if (isNaN(addedQty) || addedQty <= 0) {
+      return res.status(400).json({ error: 'Cantitate trebuie să fie un număr pozitiv' });
+    }
+
+    const existing = await prisma.consumables.findUnique({ where: { id: consumableId } });
+    if (!existing || existing.isDeleted) {
+      return res.status(404).json({ error: 'Consumabil nu găsit' });
+    }
+
+    const updated = await prisma.consumables.update({
+      where: { id: consumableId },
+      data: {
+        quantity: { increment: addedQty },
+        updatedAt: new Date(),
+      },
+    });
+
+    await logAudit(req.user.id, 'UPDATE', 'consumables', consumableId, {
+      name: updated.name,
+      quantityAdded: addedQty,
+      newQuantity: updated.quantity,
+    });
+
+    res.json(updated);
+  } catch (error) {
+    console.error('Error adding consumable stock:', error);
+    res.status(500).json({ error: 'Eroare la adaugarea stocului' });
+  }
+});
+
 module.exports = router;

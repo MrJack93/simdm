@@ -1,5 +1,6 @@
 const express = require('express');
 const rateLimit = require('express-rate-limit');
+const bcryptjs = require('bcryptjs');
 const AuthService = require('../services/authService');
 const authMiddleware = require('../middleware/auth');
 const { validateBody } = require('../middleware/validate');
@@ -114,6 +115,72 @@ router.get('/me', authMiddleware, async (req, res) => {
   } catch (error) {
     console.error('[Me Error]', error.message);
     res.status(500).json({ error: 'Eroare server' });
+  }
+});
+
+// PATCH /api/auth/change-password — schimbare parolă
+router.patch('/change-password', authMiddleware, async (req, res) => {
+  try {
+    const { currentPassword, newPassword, confirmPassword } = req.body;
+    const userId = req.user.sub;
+
+    // Validare
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      return res.status(400).json({ error: 'Toate câmpurile sunt obligatorii' });
+    }
+
+    if (newPassword !== confirmPassword) {
+      return res.status(400).json({ error: 'Parolele nu coincid' });
+    }
+
+    if (newPassword.length < 8) {
+      return res.status(400).json({ error: 'Parola nouă trebuie să aibă minim 8 caractere' });
+    }
+
+    // Obțineți utilizatorul curent
+    const user = await prisma.users.findUnique({
+      where: { id: userId },
+      select: { id: true, password_hash: true },
+    });
+
+    if (!user) {
+      return res.status(404).json({ error: 'Utilizator nu găsit' });
+    }
+
+    // Verificați parola curentă
+    const isPasswordValid = await bcryptjs.compare(currentPassword, user.password_hash);
+    if (!isPasswordValid) {
+      return res.status(400).json({ error: 'Parolă curentă incorectă' });
+    }
+
+    // Hash parola nouă
+    const newPasswordHash = await bcryptjs.hash(newPassword, 12);
+
+    // Update parola în baza de date
+    await prisma.users.update({
+      where: { id: userId },
+      data: { password_hash: newPasswordHash },
+    });
+
+    // Log audit
+    try {
+      await prisma.audit_logs.create({
+        data: {
+          userId,
+          action: 'UPDATE',
+          entity: 'auth',
+          entityId: userId.toString(),
+          changes: { action: 'password_changed' },
+        },
+      });
+    } catch (auditError) {
+      console.error('Error logging audit:', auditError.message);
+    }
+
+    res.json({ message: 'Parolă schimbată cu succes' });
+  } catch (error) {
+    console.error('[Change Password Error]', error.message);
+    res.status(500).json({ error: 'Eroare la schimbarea parolei' });
   }
 });
 

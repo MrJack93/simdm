@@ -3,7 +3,7 @@ import { useAuth } from '../hooks/useAuth';
 import api from '../api/axios';
 import { Activity, Wrench, AlertCircle, Package, Calendar, TrendingUp } from 'lucide-react';
 
-function StatCard({ icon: Icon, label, value, color = 'accent', href }) {
+function StatCard({ icon: Icon, label, value, color = 'accent', href, isLoading = false }) {
   const colorMap = {
     accent:  { bg: 'var(--color-accent-subtle)',  icon: 'var(--color-accent)' },
     success: { bg: 'var(--color-success-bg)',      icon: 'var(--color-success)' },
@@ -16,7 +16,7 @@ function StatCard({ icon: Icon, label, value, color = 'accent', href }) {
   return (
     <a
       href={href}
-      aria-label={`${label}: ${value}`}
+      aria-label={`${label}: ${isLoading ? 'Se încarcă' : value}`}
       className="group p-6 rounded-xl border transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 block"
       style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)', textDecoration: 'none', color: 'inherit' }}
     >
@@ -26,7 +26,9 @@ function StatCard({ icon: Icon, label, value, color = 'accent', href }) {
         </div>
       </div>
       <p className="text-sm font-medium mb-1" style={{ color: 'var(--color-text-secondary)' }}>{label}</p>
-      <p className="text-3xl font-bold" style={{ color: 'var(--color-text-primary)' }}>{value}</p>
+      <p className="text-3xl font-bold" style={{ color: 'var(--color-text-primary)' }}>
+        {isLoading ? <span className="skeleton skeleton-text" style={{width:'40px', display: 'inline-block'}} /> : value}
+      </p>
     </a>
   );
 }
@@ -34,7 +36,7 @@ function StatCard({ icon: Icon, label, value, color = 'accent', href }) {
 export default function Dashboard() {
   const { user } = useAuth();
 
-  const { data: stats } = useQuery({
+  const { data: stats, isLoading: statsLoading } = useQuery({
     queryKey: ['dashboard-stats'],
     queryFn: async () => {
       const { data } = await api.get('/devices');
@@ -50,7 +52,7 @@ export default function Dashboard() {
     staleTime: 5 * 60 * 1000,
   });
 
-  const { data: consumableStats } = useQuery({
+  const { data: consumableStats, isLoading: consumableLoading } = useQuery({
     queryKey: ['consumable-stats'],
     queryFn: async () => {
       const { data } = await api.get('/consumables');
@@ -75,12 +77,12 @@ export default function Dashboard() {
       <div className="container mx-auto p-8">
         {/* Stats grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          <StatCard icon={Package}      label="Total dispozitive"          value={stats?.total    ?? '—'} href="/inventory" color="accent" />
-          <StatCard icon={Activity}     label="Funcționale"                value={stats?.functional ?? '—'} href="/inventory" color="success" />
-          <StatCard icon={AlertCircle}  label="Defecte"                    value={stats?.defect   ?? '—'} href="/inventory" color="error" />
-          <StatCard icon={Wrench}       label="În reparație"               value={stats?.inRepair ?? '—'} href="/inventory" color="warning" />
-          <StatCard icon={Package}      label="Consumabile stoc scăzut"    value={consumableStats?.lowStock ?? '—'} href="/consumables" color="warning" />
-          <StatCard icon={Calendar}     label="Împrumutate"                value={stats?.loaned   ?? '—'} href="/inventory" color="info" />
+          <StatCard icon={Package}      label="Total dispozitive"          value={stats?.total    ?? '—'} href="/inventory" color="accent" isLoading={statsLoading} />
+          <StatCard icon={Activity}     label="Funcționale"                value={stats?.functional ?? '—'} href="/inventory" color="success" isLoading={statsLoading} />
+          <StatCard icon={AlertCircle}  label="Defecte"                    value={stats?.defect   ?? '—'} href="/inventory" color="error" isLoading={statsLoading} />
+          <StatCard icon={Wrench}       label="În reparație"               value={stats?.inRepair ?? '—'} href="/inventory" color="warning" isLoading={statsLoading} />
+          <StatCard icon={Package}      label="Consumabile stoc scăzut"    value={consumableStats?.lowStock ?? '—'} href="/consumables" color="warning" isLoading={consumableLoading} />
+          <StatCard icon={Calendar}     label="Împrumutate"                value={stats?.loaned   ?? '—'} href="/inventory" color="info" isLoading={statsLoading} />
         </div>
 
         {/* Quick actions */}
