@@ -23,6 +23,7 @@
   --color-success: #34d399;
   --color-success-bg: rgba(52, 211, 153, 0.1);
   --color-error: #f87171;
+  --color-error-hover: #d32f2f;
   --color-error-bg: rgba(248, 113, 113, 0.1);
   --color-warning: #fbbf24;
   --color-warning-bg: rgba(251, 191, 36, 0.1);
@@ -117,6 +118,17 @@
   --card-padding: var(--space-6);
   --modal-radius: var(--radius-xl);
 
+  /* ===== ICON SIZING ===== */
+  --icon-size-xs: 12px;
+  --icon-size-sm: 16px;
+  --icon-size-md: 20px;
+  --icon-size-lg: 24px;
+  --icon-size-xl: 32px;
+
+  /* ===== DISABLED STATE ===== */
+  --color-disabled-text: #9da3ae;
+  --color-disabled-bg: rgba(0, 0, 0, 0.06);
+
   /* Focus ring */
   --focus-ring: 0 0 0 2px var(--color-bg-primary), 0 0 0 4px var(--color-accent);
 }
@@ -144,6 +156,8 @@ html.light-mode {
   --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.1);
   --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.12);
   --shadow-glow-accent: 0 0 24px rgba(232, 112, 58, 0.1);
+  --color-disabled-text: #5c6370;
+  --color-disabled-bg: rgba(0, 0, 0, 0.04);
   --focus-ring: 0 0 0 2px var(--color-bg-primary), 0 0 0 4px var(--color-accent);
 }
 
@@ -258,12 +272,8 @@ p {
 /* ===== DISABLED STATE (WCAG 1.4.3) ===== */
 button:disabled {
   opacity: 0.6;
-  color: #9da3ae;  /* 6.5:1 contrast on #1c2022 ✅ */
+  color: var(--color-disabled-text);
   cursor: not-allowed;
-}
-
-html.light-mode button:disabled {
-  color: #5c6370;  /* 5.5:1 contrast on #eef0f2 ✅ */
 }
 
 /* ===== PLACEHOLDER TEXT (WCAG 1.4.3) ===== */

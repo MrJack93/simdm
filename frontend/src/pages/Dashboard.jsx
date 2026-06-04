@@ -86,7 +86,7 @@ export default function Dashboard() {
         </div>
 
         {/* Quick actions */}
-        <div className="p-6 rounded-xl border mb-8" style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)' }}>
+        <section className="p-6 rounded-xl border mb-8" aria-label="Acțiuni rapide" style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)' }}>
           <h2 className="text-xl font-bold mb-4" style={{ color: 'var(--color-text-primary)' }}>Acțiuni rapide</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
             <a href="/devices/new" className="px-4 py-3 rounded-lg font-medium transition-all text-center text-sm" style={{ backgroundColor: 'var(--color-accent)', color: 'var(--color-bg-primary)' }}>
@@ -102,16 +102,16 @@ export default function Dashboard() {
               Consumabile
             </a>
           </div>
-        </div>
+        </section>
 
         {/* About */}
-        <div className="p-6 rounded-xl border" style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)', borderLeft: '4px solid var(--color-info)' }}>
+        <section className="p-6 rounded-xl border" aria-label="Despre SIMDM" style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)', borderLeft: '4px solid var(--color-info)' }}>
           <h3 className="font-bold mb-2" style={{ color: 'var(--color-text-primary)' }}>📋 Despre SIMDM</h3>
           <p className="text-sm leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
             SIMDM este sistemul informațional pentru gestionarea centralizată a dispozitivelor medicale
             conform Ghidului Bioinginerului (Ordinul MS nr. 889/2024, Republica Moldova).
           </p>
-        </div>
+        </section>
       </div>
     </div>
   );

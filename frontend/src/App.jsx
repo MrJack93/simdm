@@ -10,6 +10,7 @@ import AnnualInventoryPage from './pages/AnnualInventoryPage';
 import DeviceForm from './pages/DeviceForm';
 import SettingsPage from './pages/SettingsPage';
 import ProtectedRoute from './components/ProtectedRoute';
+import SkipLink from './components/SkipLink';
 import { Menu, X, Home, Warehouse, Package, Calendar, Cog, LogOut } from 'lucide-react';
 
 function Header({ user, logout, theme, toggleTheme, isMobileMenuOpen, setIsMobileMenuOpen }) {
@@ -172,6 +173,8 @@ function DashboardLayout({ logout, theme, toggleTheme }) {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: 'var(--color-bg-primary)' }}>
+      <SkipLink />
+
       <Header
         user={user}
         logout={logout}
