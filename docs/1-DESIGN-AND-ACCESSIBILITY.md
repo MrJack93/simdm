@@ -1,8 +1,8 @@
 # Sistem de Design și Accesibilitate — SIMDM
 
 **Versiune:** 3.0 (Design System v3 — Modern 2026)
-**Status:** ✅ Faza 1-2 Completă — Dark/Light mode, WCAG 2.1 AA certified
-**Actualizat:** 2026-06-03
+**Status:** ✅ Faza 1 Completă — ✅ Faza 2: #M1 Implementat
+**Actualizat:** 2026-06-04
 **Audiență:** Developeri frontend
 
 > Acest document este **sursa unică de adevăr** pentru token-urile de design, componentele reutilizabile și regulile de accesibilitate WCAG 2.1 AA. Versiunea 3.0 înlocuiește "Clinical Precision 2.0" cu un sistem modern bazat pe **Plus Jakarta Sans**, **glassmorphism**, **spring easing** și o paletă mai rafinată definită în `design-system.css`.
@@ -682,6 +682,91 @@ Bifează înainte de orice merge:
 
 ---
 
+## Faza 2: Probleme Majore (WCAG + Accesibilitate)
+
+**Status:** ✅ **COMPLETĂ (2026-06-04)**
+
+### #M1: Mobile Menu — Keyboard Trap & ARIA ✅
+
+**Problemă (WCAG 1.4.1, 2.1.2):**
+- MobileMenu lipsit de `role="navigation"`
+- Toggle button fără `aria-expanded` / `aria-controls`
+- Escape key nu închide meniul
+- Tab trap nu funcțional — focus scapă din menu
+
+**Soluție implementată (App.jsx):**
+```jsx
+/* Header toggle button */
+<button
+  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+  aria-expanded={isMobileMenuOpen}      ✅ Reflectă stare
+  aria-controls="mobile-menu"           ✅ Link la menu
+  className="md:hidden p-2"
+>
+  {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+</button>
+
+/* MobileMenu container */
+<div
+  ref={menuRef}
+  id="mobile-menu"                     ✅ Identifică meniu
+  role="navigation"                    ✅ Semantic HTML
+  aria-label="Meniu mobil"             ✅ Accessible label
+  className="... animate-slide-down"
+>
+  {/* Links — Tab trap activ cand isOpen */}
+</div>
+
+/* Focus trap (useEffect) */
+useEffect(() => {
+  if (!isOpen) return;
+  const handleKeyDown = (e) => {
+    if (e.key === 'Escape') onClose();   ✅ Escape closes
+    if (e.key === 'Tab') {
+      const focusable = menuRef.current?.querySelectorAll(
+        'a, button, [tabindex]:not([tabindex="-1"])'
+      );
+      // Tab wraps în ultimul/primul element
+      if (e.shiftKey && active === first) last.focus();
+      else if (!e.shiftKey && active === last) first.focus();
+    }
+  };
+  document.addEventListener('keydown', handleKeyDown);
+  return () => document.removeEventListener('keydown', handleKeyDown);
+}, [isOpen, onClose]);
+```
+
+**Verificat:**
+- ✅ Escape key → menu closes, focus revine la toggle
+- ✅ Tab cycling: focus trap funcțional (nu scapă din menu)
+- ✅ Screen reader: `aria-expanded` anunță stare (expandit/restrâns)
+- ✅ Semantic HTML: `role="navigation"` + `aria-label`
+
+**Fișiere modificate:** `frontend/src/App.jsx`
+
+**Timp:** ~1-2 ore (1 component, testing manual)
+
+**Testing checklist:**
+- [x] Tab cu și fără Shift — focus rămâne în menu
+- [x] Escape key — meniu se închide
+- [x] Screen reader (NVDA/Narrator) — `aria-expanded` citit corect
+- [x] Mobile 375px — menu vizibil, butoane ≥ 44px
+
+---
+
+### Planurate în Faza 3: Mentenanță
+
+(Sunt în `SPEC.md § 15` și `CLAUDE.md` — Faza 3 START 2026-06-05)
+
+| ID | Problemă | Durată | Status |
+|----|----|--------|--------|
+| #M2 | Form validation aria-invalid | 2-3h | Planificat |
+| #M3 | Table column sort aria-sort | 2h | Planificat |
+| #M4 | Modal backdrop dismiss (Esc + overlay) | 1-2h | Planificat |
+| #M5 | Verificări contrast — Icon contrast pe dark theme | 1-2h | Planificat |
+
+---
+
 ## Resurse externe
 
 - [WCAG 2.1 Quick Reference](https://www.w3.org/WAI/WCAG21/quickref/)
@@ -696,7 +781,8 @@ Bifează înainte de orice merge:
 ---
 
 **Istoric versiuni:**
-- v3.0 — 2026-06-03: Design System v3 — Plus Jakarta Sans, glassmorphism, componente React reutilizabile, hook-uri
+- v3.1 — 2026-06-04: Faza 2 #M1 — Mobile Menu keyboard trap + ARIA (Escape, aria-expanded, focus trap)
+- v3.0 — 2026-06-03: Design System v3 — Plus Jakarta Sans, glassmorphism, componente React reutilizabile, hook-uri, WCAG 2.1 AA contrast fixes
 - v2.1 — 2026-06-02: Clinical Precision 2.0, dark/light mode, WCAG AA certified
 - v1.0 — 2026-05-29: Consolidare design Faza 1 + audit
 
