@@ -47,7 +47,7 @@
 - ✅ **Component Library** — StatusBadge (6 statuses), DataGrid, Forms, Modals, Toasts, DeviceCard, Button, Input, Card
 - ✅ **Documentation Complete** — COMPONENT_LIBRARY.md (300+ lines), LIGHT_MODE_GUIDE.md (400+ lines), ACCESSIBILITY_GUIDE.md (500+ lines)
 
-**Module Quick-Win (implementate în sesiunea RESEARCH_SYNTHESIS_REPORT)** ✅
+**Module Quick-Win** ✅
 - ✅ **Înregistrări Mentenanță** — CRUD complet, 4 tipuri (Preventivă/Corectivă/Verificare/Calibrare), badge-uri vizuale
 - ✅ **Raportare Incidente** — CRUD + state machine status (Deschis → În lucru → Rezolvat → Închis / Escaladat AMDM), 5 niveluri severitate
 - ✅ **Jurnal Audit UI** — Pagina `/audit-logs` cu filtre, export CSV (UTF-8 BOM Excel), câmpuri JSON expandabile
