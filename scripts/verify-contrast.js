@@ -89,7 +89,7 @@ const tests = [
   },
   {
     name: 'Light mode: Accent on BG Primary',
-    fg: '#e8703a',
+    fg: '#b84621',
     bg: '#f4f5f7',
     expected: 'AA',
   },

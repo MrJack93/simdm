@@ -73,7 +73,7 @@ frontend/src/
 | Fundal pagină | `--color-bg-primary` | #f4f5f7 | — |
 | Fundal card | `--color-bg-secondary` | #ffffff | — |
 | Fundal input | `--color-bg-tertiary` | #eef0f2 | — |
-| **Accent principal** | `--color-accent` | #e8703a | 2.8:1 ⚠️ (TODO: fix) |
+| **Accent principal** | `--color-accent` | #b84621 | 4.9:1 ✅ AA |
 | Text principal | `--color-text-primary` | #111418 | 19.2:1 ✅ AAA |
 | Text secundar | `--color-text-secondary` | #5c6370 | 5.9:1 ✅ AA |
 | Text terțiar | `--color-text-tertiary` | #626d7d | 4.8:1 ✅ AA |
