@@ -1,401 +1,373 @@
-# Light Mode Adjustment Guide — SIMDM Design System
+# Ghid Modul Clar (Light Mode) — Sistem Design SIMDM
 
-**Version:** 1.0  
-**Date:** Iunie 2026  
-**Purpose:** Document how design tokens adjust between dark and light modes for developers and designers
-
----
-
-## Overview
-
-SIMDM implements a complete light/dark mode system using CSS variables. All colors, shadows, and effects automatically adjust when users toggle the theme. This guide explains the transformation patterns.
-
-### How It Works
-
-1. **Default:** Dark mode (`:root`)
-2. **Light Mode:** `html.light-mode` selector overrides specific tokens
-3. **No JavaScript Logic:** Pure CSS variable switching
-4. **Automatic UI Updates:** Components automatically use new colors
+**Versiune:** 2.0
+**Data:** 2026-06-05
+**Scop:** Documentează transformările token-urilor de design între modurile dark și light
 
 ---
 
-## Color Transformations
+## Prezentare generală
 
-### Primary Background Colors
+SIMDM implementează un sistem complet dark/light mode prin variabile CSS. Toate culorile, umbrele și efectele se ajustează automat când utilizatorul comută tema. Acest ghid explică tiparele de transformare.
 
-| Semantic | Dark Mode | Light Mode | Contrast Dark | Contrast Light | Ratio Change |
-|----------|-----------|-----------|--------------|---|---|
-| `--color-bg-primary` | `#0c0f10` | `#f4f5f7` | Perfect inverse | Perfect inverse | +180° hue |
-| `--color-bg-secondary` | `#141718` | `#ffffff` | Near-black to white | True white | Extreme |
-| `--color-bg-tertiary` | `#1c2022` | `#eef0f2` | Dark gray to light gray | Light background | Full inversion |
-| `--color-bg-elevated` | `#222628` | `#ffffff` | Dark to white | White (same) | High contrast |
+### Cum funcționează
 
-**Pattern:** Colors are near-perfect inverses. Dark = very dark gray, Light = very light gray/white.
-
-### Text Colors
-
-| Semantic | Dark Mode | Light Mode | Purpose | Contrast (dark) | Contrast (light) |
-|----------|-----------|-----------|---------|---|---|
-| `--color-text-primary` | `#f0f0f0` | `#111418` | Main text | 18:1 on bg-primary | 17:1 on bg-primary |
-| `--color-text-secondary` | `#8a9199` | `#5c6370` | Supporting text | 5.8:1 on bg-primary | 7.2:1 on bg-primary |
-| `--color-text-tertiary` | `#7a8290` | `#626d7d` | Muted text | 4.7:1 on bg-primary | 6.3:1 on bg-primary |
-| `--color-disabled-text` | `#9da3ae` | `#5c6370` | Disabled text | 6.5:1 on bg-tertiary | 5.5:1 on bg-tertiary |
-| `--color-placeholder` | `#a0a9b1` | `#a0a9b1` | Placeholder text | 6.9:1 on bg-tertiary | SAME (intentional) |
-
-**Pattern:** Text colors are inverted (light in dark mode, dark in light mode). Placeholder stays consistent because it needs to work in both.
-
-### Semantic Colors (Status, Alerts)
-
-| Color | Dark Mode | Light Mode | Note | Both Modes? |
-|-------|-----------|-----------|------|---|
-| `--color-success` | `#34d399` | `#34d399` | ✅ Green — same | YES |
-| `--color-error` | `#f87171` | `#f87171` | ❌ Red — same | YES |
-| `--color-warning` | `#fbbf24` | `#fbbf24` | ⚠️ Yellow — same | YES |
-| `--color-info` | `#60a5fa` | `#60a5fa` | ℹ️ Blue — same | YES |
-| `--color-error-hover` | `#d32f2f` | `#d32f2f` | Darker red — same | YES |
-
-**Pattern:** Status colors stay IDENTICAL in both modes. They're vibrant enough to pass contrast on both dark AND light backgrounds.
-
-### Semantic Color Backgrounds (with Opacity)
-
-| Color | Dark Mode | Light Mode | Alpha | Rendering |
-|-------|-----------|-----------|-------|-----------|
-| `--color-success-bg` | `rgba(52,211,153,0.1)` | (inherited) | 10% | Subtle tint |
-| `--color-error-bg` | `rgba(248,113,113,0.1)` | (inherited) | 10% | Pale red background |
-| `--color-warning-bg` | `rgba(251,191,36,0.1)` | (inherited) | 10% | Pale yellow background |
-| `--color-info-bg` | `rgba(96,165,250,0.1)` | (inherited) | 10% | Pale blue background |
-
-**Pattern:** Background colors are NOT overridden in light mode — they inherit from dark mode and work via opacity. This is intentional: the same tinted background works on both light and dark surfaces.
-
-### Accent Colors (Primary Brand)
-
-| Semantic | Dark Mode | Light Mode | Ratio | Usage |
-|----------|-----------|-----------|-------|-------|
-| `--color-accent` | `#ff9b6a` | `#b84621` | **1.5x lighter** in light | Primary button, headers, links |
-| `--color-accent-hover` | `#ff7a3d` | `#a03d1a` | **1.5x darker** in light | Hover state |
-| `--color-accent-subtle` | `rgba(255,155,106,0.08)` | `rgba(232,112,58,0.06)` | Faded tint | Backgrounds |
-| `--color-accent-muted` | `rgba(255,155,106,0.15)` | `rgba(232,112,58,0.12)` | More faded | Subtle highlights |
-
-**Pattern:** Accent color becomes DARKER in light mode (for contrast). Hex values are different but perceived brightness is optimized for each background.
-
-### Border Colors
-
-| Semantic | Dark Mode | Light Mode | Brightness | Usage |
-|----------|-----------|-----------|-----------|-------|
-| `--color-border` | `#2a2f33` | `#e2e5e9` | Opposite ends of spectrum | Card borders, input borders |
-| `--color-border-subtle` | `#1e2225` | `#eef0f2` | Even more opposite | Faint dividers |
-
-**Pattern:** Borders are almost perfect inverses. Dark = dark gray (barely visible on dark bg), Light = light gray (barely visible on light bg).
-
-### Device Status Colors
-
-| Status | Color | Dark Mode | Light Mode | Override? |
-|--------|-------|-----------|-----------|-----------|
-| Functional | Green | `#34d399` | NOT overridden | No — same in both |
-| In Repair | Yellow | `#fbbf24` | NOT overridden | No — same in both |
-| Defect | Red | `#f87171` | NOT overridden | No — same in both |
-| Decommissioned | Gray | `#6b7280` | NOT overridden | No — same in both |
-| Loaned | Blue | `#60a5fa` | NOT overridden | No — same in both |
-| Spare | Purple | `#a78bfa` | NOT overridden | No — same in both |
-
-**Note:** All device status colors are IDENTICAL in both modes. They're designed to work on any background.
+1. **Implicit:** Modul întunecat (`:root`)
+2. **Modul clar:** Selectorul `html.light-mode` suprascrie token-urile specifice
+3. **Fără logică JavaScript:** Comutare pură prin variabile CSS
+4. **Actualizare UI automată:** Componentele folosesc automat culorile noi
 
 ---
 
-## Shadow Transformations
+## Transformări culori
 
-### Drop Shadows
+### Culori fundal principale
 
-| Token | Dark Mode | Light Mode | Opacity Dark | Opacity Light | Reason |
-|-------|-----------|-----------|---|---|---|
-| `--shadow-xs` | `0 1px 2px rgba(0,0,0,0.2)` | `0 1px 2px rgba(0,0,0,0.04)` | 20% | 4% | Light mode = softer shadows |
-| `--shadow-sm` | `0 2px 8px rgba(0,0,0,0.15)` | `0 2px 8px rgba(0,0,0,0.06)` | 15% | 6% | Less dramatic |
-| `--shadow-md` | `0 4px 16px rgba(0,0,0,0.2)` | `0 4px 16px rgba(0,0,0,0.08)` | 20% | 8% | More subtle |
-| `--shadow-lg` | `0 8px 32px rgba(0,0,0,0.25)` | `0 8px 32px rgba(0,0,0,0.1)` | 25% | 10% | 2.5x lighter |
-| `--shadow-xl` | `0 16px 48px rgba(0,0,0,0.3)` | `0 16px 48px rgba(0,0,0,0.12)` | 30% | 12% | 2.5x lighter |
+| Semantic | Mod întunecat | Mod clar | Notă |
+|----------|--------------|----------|------|
+| `--color-bg-primary` | `#0c0f10` | `#f4f5f7` | Inversuri aproape perfecte |
+| `--color-bg-secondary` | `#141718` | `#ffffff` | Negru aproape → alb pur |
+| `--color-bg-tertiary` | `#1c2022` | `#eef0f2` | Gri închis → gri deschis |
+| `--color-bg-elevated` | `#222628` | `#ffffff` | Întunecat → alb |
 
-**Pattern:** Light mode shadows are 2.5–4x lighter (lower opacity). This prevents shadows from becoming harsh/dark on already-light backgrounds.
+**Tipar:** Culorile sunt inversuri aproape perfecte. Întunecat = gri foarte închis, Clar = gri deschis / alb.
 
-### Glow Effects (Accent Colors)
+### Culori text
 
-| Token | Dark Mode | Light Mode | Color | Opacity |
-|-------|-----------|-----------|-------|---------|
-| `--shadow-glow-accent` | `0 0 24px rgba(255,155,106,0.15)` | `0 0 24px rgba(232,112,58,0.1)` | Orange + darker hex | 10% |
-| `--shadow-glow-success` | `0 0 16px rgba(52,211,153,0.2)` | (not overridden) | Green | 20% (inherited) |
-| `--shadow-glow-error` | `0 0 16px rgba(248,113,113,0.2)` | (not overridden) | Red | 20% (inherited) |
+| Semantic | Mod întunecat | Mod clar | Contrast (dark) | Contrast (light) |
+|----------|--------------|----------|-----------------|-----------------|
+| `--color-text-primary` | `#f0f0f0` | `#111418` | 18:1 ✅ AAA | 17:1 ✅ AAA |
+| `--color-text-secondary` | `#8a9199` | `#5c6370` | 5.8:1 ✅ AA | 7.2:1 ✅ AA |
+| `--color-text-tertiary` | `#7a8290` | `#626d7d` | 4.7:1 ✅ AA | 6.3:1 ✅ AA |
+| `--color-disabled-text` | `#9da3ae` | `#5c6370` | 6.5:1 ✅ AA | 5.5:1 ✅ AA |
+| `--color-placeholder` | `#a0a9b1` | `#a0a9b1` | 6.9:1 ✅ AA | Același (intenționat) |
 
-**Pattern:** Glows are dimmer in light mode to avoid harsh, neon-like effects.
+**Tipar:** Culorile text sunt inversate (deschis în dark, închis în light). Placeholder-ul rămâne constant deoarece funcționează în ambele moduri.
+
+### Culori semantice (Status, Alerte)
+
+| Culoare | Mod întunecat | Mod clar | Notă |
+|---------|--------------|----------|------|
+| `--color-success` | `#34d399` | `#34d399` | Identic în ambele |
+| `--color-error` | `#f87171` | `#f87171` | Identic în ambele |
+| `--color-warning` | `#fbbf24` | `#fbbf24` | Identic în ambele |
+| `--color-info` | `#60a5fa` | `#60a5fa` | Identic în ambele |
+
+**Tipar:** Culorile de status rămân IDENTICE în ambele moduri. Sunt suficient de vii pentru a trece contrastul pe fundaluri dark ȘI light.
+
+### Fundaluri culori semantice (cu opacitate)
+
+| Culoare | Valoare | Alphă | Notă |
+|---------|---------|-------|------|
+| `--color-success-bg` | `rgba(52,211,153,0.1)` | 10% | Tentă subtilă — moștenit în light mode |
+| `--color-error-bg` | `rgba(248,113,113,0.1)` | 10% | Fundal roșu pal — moștenit |
+| `--color-warning-bg` | `rgba(251,191,36,0.1)` | 10% | Fundal galben pal — moștenit |
+| `--color-info-bg` | `rgba(96,165,250,0.1)` | 10% | Fundal albastru pal — moștenid |
+
+**Tipar:** Fundalurile semantice NU sunt suprascrise în light mode — funcționează via opacitate pe ambele suprafețe. Intenționat.
+
+### Culori accent (Brand principal)
+
+| Semantic | Mod întunecat | Mod clar | Rată | Utilizare |
+|----------|--------------|----------|------|-----------|
+| `--color-accent` | `#ff9b6a` | `#b84621` | Mai închis în light | Butoane, headere, linkuri |
+| `--color-accent-hover` | `#ff7a3d` | `#a03d1a` | Mai închis în light | Stare hover |
+| `--color-accent-subtle` | `rgba(255,155,106,0.08)` | `rgba(232,112,58,0.06)` | Tentă estompată | Fundaluri |
+
+**Tipar:** Culoarea accent devine MAI ÎNCHISĂ în light mode (pentru contrast). Valorile hex sunt diferite dar luminozitatea percepută este optimizată pentru fiecare fundal.
+
+### Culori border
+
+| Semantic | Mod întunecat | Mod clar | Notă |
+|----------|--------------|----------|------|
+| `--color-border` | `#2a2f33` | `#e2e5e9` | Aproape inversuri perfecte |
+| `--color-border-subtle` | `#1e2225` | `#eef0f2` | Chiar mai opuse |
+
+**Tipar:** Bordurile sunt inversuri aproape perfecte. Dark = gri închis (greu vizibil pe bg dark), Light = gri deschis (greu vizibil pe bg light).
+
+### Culori status dispozitive
+
+| Status | Culoare | Override light? |
+|--------|---------|----------------|
+| Funcțional | `#34d399` (verde) | Nu — identic în ambele |
+| În reparație | `#fbbf24` (galben) | Nu — identic în ambele |
+| Defect | `#f87171` (roșu) | Nu — identic în ambele |
+| Casat | `#6b7280` (gri) | Nu — identic în ambele |
+| Împrumutat | `#60a5fa` (albastru) | Nu — identic în ambele |
+| Rezervă | `#a78bfa` (violet) | Nu — identic în ambele |
 
 ---
 
-## Glass Effect Tokens
+## Transformări umbre
 
-| Token | Dark Mode | Light Mode | Effect |
-|-------|-----------|-----------|--------|
-| `--glass-bg` | `rgba(20,23,24,0.7)` | `rgba(255,255,255,0.8)` | Frosted background |
-| `--glass-border` | `rgba(255,255,255,0.06)` | `rgba(0,0,0,0.06)` | Subtle border tint |
-| `--glass-blur` | `20px` | `20px` | Same blur both modes |
+### Umbre drop
 
-**Pattern:** Glass effect inverts (dark tint in dark mode, white tint in light mode). Border changes from light edge highlight to subtle dark edge.
+| Token | Mod întunecat | Mod clar | Motiv |
+|-------|--------------|----------|-------|
+| `--shadow-xs` | `rgba(0,0,0,0.2)` | `rgba(0,0,0,0.04)` | Light = umbre mai soft |
+| `--shadow-sm` | `rgba(0,0,0,0.15)` | `rgba(0,0,0,0.06)` | Mai puțin dramatice |
+| `--shadow-md` | `rgba(0,0,0,0.2)` | `rgba(0,0,0,0.08)` | Mai subtile |
+| `--shadow-lg` | `rgba(0,0,0,0.25)` | `rgba(0,0,0,0.1)` | De 2.5× mai deschise |
+| `--shadow-xl` | `rgba(0,0,0,0.3)` | `rgba(0,0,0,0.12)` | De 2.5× mai deschise |
+
+**Tipar:** Umbrele în light mode sunt de 2.5–4× mai deschise (opacitate mai mică). Previne umbrele aspre pe fundaluri deja deschise.
+
+### Efecte glow (Culori accent)
+
+| Token | Mod întunecat | Mod clar | Notă |
+|-------|--------------|----------|------|
+| `--shadow-glow-accent` | `rgba(255,155,106,0.15)` | `rgba(232,112,58,0.1)` | Mai slab în light |
+| `--shadow-glow-success` | `rgba(52,211,153,0.2)` | (neschimbat) | Moștenire |
+| `--shadow-glow-error` | `rgba(248,113,113,0.2)` | (neschimbat) | Moștenire |
+
+---
+
+## Token-uri efect glass
+
+| Token | Mod întunecat | Mod clar | Efect |
+|-------|--------------|----------|-------|
+| `--glass-bg` | `rgba(20,23,24,0.7)` | `rgba(255,255,255,0.8)` | Fundal frosted |
+| `--glass-border` | `rgba(255,255,255,0.06)` | `rgba(0,0,0,0.06)` | Bordură subtilă |
+| `--glass-blur` | `20px` | `20px` | Același blur |
 
 ---
 
 ## Focus Ring
 
-| Mode | CSS |
-|------|-----|
+| Mod | CSS |
+|-----|-----|
 | Dark | `0 0 0 2px var(--color-bg-primary), 0 0 0 4px var(--color-accent)` |
 | Light | `0 0 0 2px var(--color-bg-primary), 0 0 0 4px var(--color-accent)` |
 
-**Note:** Focus ring is NOT overridden in light mode. The variables automatically adjust:
-- Inner ring = `--color-bg-primary` (dark gray in dark, light gray in light)
-- Outer ring = `--color-accent` (orange in both, but lighter orange in light)
+**Notă:** Focus ring-ul NU este suprascris în light mode. Variabilele se ajustează automat.
 
 ---
 
-## Typography
+## Tipografie
 
-| Token | Dark Mode | Light Mode | Note |
-|-------|-----------|-----------|------|
-| All `--font-*` tokens | (no override) | (no override) | Typography is IDENTICAL |
-| `--font-family-base` | 'Plus Jakarta Sans' | Same | No change |
-| `--font-size-*` | All preserved | Same | No change |
-| `--font-weight-*` | All preserved | Same | No change |
+**Tipografia NU se schimbă între moduri.** Doar culorile se modifică.
 
-**Pattern:** Typography doesn't change between modes. Only colors do.
-
----
-
-## Spacing & Layout
-
-| Token | Dark Mode | Light Mode | Note |
-|-------|-----------|-----------|------|
-| All `--space-*` | (no override) | (no override) | Spacing is IDENTICAL |
-| All `--radius-*` | (no override) | (no override) | Border radius unchanged |
-| All `--icon-size-*` | (no override) | (no override) | Icon sizes unchanged |
-
-**Pattern:** Spatial properties never change. Only color/shadow properties adjust.
+| Token | Mod întunecat | Mod clar |
+|-------|--------------|----------|
+| `--font-family-base` | 'Plus Jakarta Sans' | Identic |
+| `--font-size-*` | Toate păstrate | Identice |
+| `--font-weight-*` | Toate păstrate | Identice |
+| `--line-height-*` | Toate păstrate | Identice |
 
 ---
 
-## Implementation Examples
+## Spațiere și Layout
 
-### Component: Button
+**Proprietățile spațiale nu se schimbă niciodată.** Doar culorile/umbrele se ajustează.
 
-**Dark Mode:**
+| Token | Notă |
+|-------|------|
+| `--space-*` | Identic în ambele moduri |
+| `--radius-*` | Identic în ambele moduri |
+| `--icon-size-*` | Identic în ambele moduri |
+
+---
+
+## Exemple de implementare
+
+### Componentă: Button
+
+**Mod întunecat:**
 ```css
 .btn-primary {
-  background-color: var(--color-accent);        /* #ff9b6a */
-  color: var(--color-bg-primary);               /* #0c0f10 */
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);     /* shadow-md */
+  background-color: var(--color-accent);    /* #ff9b6a */
+  color: var(--color-bg-primary);           /* #0c0f10 */
+  box-shadow: var(--shadow-md);
 }
 ```
 
-**Light Mode (auto-adjusted):**
+**Mod clar (ajustat automat):**
 ```css
-html.light-mode .btn-primary {
-  background-color: var(--color-accent);        /* #b84621 (darker!) */
-  color: var(--color-bg-primary);               /* #f4f5f7 (light) */
-  /* shadow-md automatically becomes 0 4px 12px rgba(0,0,0,0.08) */
+/* html.light-mode */
+.btn-primary {
+  background-color: var(--color-accent);    /* #b84621 (mai închis!) */
+  color: var(--color-bg-primary);           /* #f4f5f7 (deschis) */
+  box-shadow: var(--shadow-md);             /* umbră mai soft automat */
 }
 ```
 
-**Result:** Button automatically becomes darker orange on light background for contrast.
+**Rezultat:** Butonul devine automat portocaliu mai închis pe fundal deschis pentru contrast.
 
-### Component: Input with Error
+### Componentă: Input cu eroare
 
-**Dark Mode:**
+**Mod întunecat:**
 ```css
 .input-base {
-  background-color: var(--color-bg-tertiary);   /* #1c2022 */
+  background-color: var(--color-bg-tertiary);  /* #1c2022 */
   color: var(--color-text-primary);             /* #f0f0f0 */
   border-color: var(--color-border);            /* #2a2f33 */
 }
-
-.input-base.error {
-  border-color: var(--color-error);             /* #f87171 (same) */
-}
 ```
 
-**Light Mode (auto-adjusted):**
+**Mod clar (ajustat automat):**
 ```css
 html.light-mode .input-base {
-  background-color: var(--color-bg-tertiary);   /* #eef0f2 */
+  background-color: var(--color-bg-tertiary);  /* #eef0f2 */
   color: var(--color-text-primary);             /* #111418 */
   border-color: var(--color-border);            /* #e2e5e9 */
 }
-
-/* .error state stays the same — #f87171 works on light too! */
+/* Starea de eroare rămâne aceeași — #f87171 funcționează și pe light! */
 ```
 
 ---
 
-## Testing Light Mode
+## Testare Light Mode
 
-### Manual Testing Checklist
+### Checklist testare manuală
 
-- [ ] Click theme toggle in Settings
-- [ ] Page flashes briefly while transitioning
-- [ ] All text is readable (contrast ≥4.5:1)
-- [ ] Buttons are clickable (colors distinct from backgrounds)
-- [ ] Shadows are visible but not harsh
-- [ ] Focus rings are visible
-- [ ] Status badges still make sense (color + icon, not just color)
-- [ ] Cards have visible borders
-- [ ] Inputs have visible borders and focus state
-- [ ] Links are distinct from regular text
+- [ ] Click toggle temă în header (🌙 / ☀️)
+- [ ] Toate textele sunt lizibile (contrast ≥4.5:1)
+- [ ] Butoanele sunt vizibile (culori distincte de fundaluri)
+- [ ] Umbrele sunt vizibile dar nu agresive
+- [ ] Focus ring-urile sunt vizibile
+- [ ] Badge-urile de status au sens (culoare + icoană)
+- [ ] Cardurile au borduri vizibile
+- [ ] Inputurile au borduri vizibile și stare focus
+- [ ] Linkurile se disting de textul normal
 
-### Browser DevTools Check
+### Verificare DevTools browser
 
 ```javascript
-// In browser console:
-// Check current mode
+// În consola browser:
+// Verifică modul curent
 document.documentElement.classList.contains('light-mode')
 
-// Manually toggle
+// Comutare manuală
 document.documentElement.classList.add('light-mode')
 document.documentElement.classList.remove('light-mode')
 ```
 
-### Contrast Verification
+### Verificare contrast
 
-Use axe DevTools or WAVE to verify:
-1. **Dark mode:** All contrast ratios ≥4.5:1
-2. **Light mode:** All contrast ratios ≥4.5:1
-3. **Both modes:** No broken contrast on toggle
-
----
-
-## Common Issues & Fixes
-
-### Issue: Text unreadable in light mode
-
-**Cause:** Text color not overridden in light mode  
-**Fix:** Add light mode override:
-```css
-html.light-mode {
-  --color-text-custom: #111418;  /* Dark text for light bg */
-}
-```
-
-### Issue: Border invisible in light mode
-
-**Cause:** Border color too close to background color  
-**Fix:** Use semantic border tokens:
-```css
-border-color: var(--color-border);  /* Automatically inverts */
-```
-
-### Issue: Shadow too harsh in light mode
-
-**Cause:** Shadow opacity same as dark mode  
-**Fix:** Light mode already has reduced opacity — use semantic shadow tokens:
-```css
-box-shadow: var(--shadow-md);  /* Automatically adjusts */
-```
-
-### Issue: Accent color not visible in light mode
-
-**Cause:** Accent color choice designed for dark only  
-**Fix:** Override in light mode:
-```css
-html.light-mode {
-  --color-accent: #b84621;  /* Darker shade for light mode */
-}
-```
+Folosește axe DevTools sau WAVE pentru a verifica:
+1. **Mod întunecat:** Toate rapoartele contrast ≥4.5:1
+2. **Mod clar:** Toate rapoartele contrast ≥4.5:1
+3. **Ambele moduri:** Fără contrast defect la comutare
 
 ---
 
-## Adding New Colors to Design System
+## Probleme frecvente și soluții
 
-When adding a new semantic color:
+### Text ilizibil în light mode
 
-1. **Define in dark mode `:root`:**
+**Cauza:** Culoarea textului nu este suprascrisă pentru light mode
+**Soluție:** Adaugă override:
+```css
+html.light-mode {
+  --color-text-custom: #111418;  /* Text închis pentru fundal deschis */
+}
+```
+
+### Border invizibil în light mode
+
+**Cauza:** Culoarea border-ului prea apropiată de fundalul deschis
+**Soluție:** Folosește token-uri semantice:
+```css
+border-color: var(--color-border);  /* Se inversează automat */
+```
+
+### Umbră agresivă în light mode
+
+**Cauza:** Opacitatea umbrei identică cu dark mode
+**Soluție:** Light mode are deja opacitate redusă — folosește token-uri semantice:
+```css
+box-shadow: var(--shadow-md);  /* Se ajustează automat */
+```
+
+### Culoare accent invizibilă în light mode
+
+**Cauza:** Culoarea accent aleasă pentru dark mode
+**Soluție:** Sistemul de design face asta automat:
+```css
+/* Deja implementat în design-system.css */
+html.light-mode {
+  --color-accent: #b84621;  /* Nuanță mai închisă pentru light mode */
+}
+```
+
+---
+
+## Adăugarea de culori noi în sistemul de design
+
+Când adaugi o culoare semantică nouă:
+
+1. **Definește în dark mode `:root`:**
    ```css
    :root {
      --color-custom: #abc123;
    }
    ```
 
-2. **Override in light mode if needed:**
+2. **Suprascrie în light mode dacă e necesar:**
    ```css
    html.light-mode {
-     --color-custom: #xyz789;  /* Light mode variant */
+     --color-custom: #xyz789;  /* Varianta light mode */
    }
    ```
 
-3. **Test both modes:**
+3. **Testează ambele moduri:**
    - Contrast ≥4.5:1
-   - Visually distinct from neighboring colors
-   - Consistent with design system
+   - Vizual distinct de culorile vecine
+   - Consistent cu sistemul de design
 
-4. **Document in COMPONENT_LIBRARY.md**
-
----
-
-## Quick Reference: What Changes vs. What Doesn't
-
-### CHANGES Between Modes ✅
-- Background colors
-- Text colors
-- Accent/semantic colors (accent specifically)
-- Border colors
-- Shadow opacity
-- Glass effect colors
-
-### STAYS THE SAME ❌
-- Typography (font family, size, weight, line-height)
-- Spacing (all `--space-*` tokens)
-- Border radius
-- Icon sizes
-- Transitions
-- Blur effects
-- Component structure
+4. **Documentează în `COMPONENT_LIBRARY.md`**
 
 ---
 
-## Performance
+## Referință rapidă: Ce se schimbă vs. ce rămâne
 
-Mode switching is instant (no JavaScript, pure CSS):
-- Time to toggle: <1ms
-- Paint operations: 1–2
-- No layout shift
-- No re-renders
+### SE SCHIMBĂ între moduri
 
-**Tip:** Store preference in `localStorage`:
+- Culori fundal
+- Culori text
+- Culori accent/semantice (accent în special)
+- Culori border
+- Opacitate umbre
+- Culori efect glass
+
+### RĂMÂNE NESCHIMBAT
+
+- Tipografie (familie font, mărime, grosime, line-height)
+- Spațiere (toți token-urile `--space-*`)
+- Rotunjire borduri
+- Dimensiuni icoane
+- Tranziții
+- Efecte blur
+- Structura componentelor
+
+---
+
+## Performanță
+
+Comutarea de mod este instantanee (fără JavaScript, CSS pur):
+- Timp comutare: <1ms
+- Operații de paint: 1–2
+- Fără layout shift
+- Fără re-randări
+
+**Tip:** Salvează preferința în `localStorage`:
 ```javascript
-// When user toggles
-localStorage.setItem('theme', 'light-mode')
+// La comutarea de utilizator
+localStorage.setItem('simdm_theme', 'light')
 document.documentElement.classList.add('light-mode')
+```
+
+Hook-ul `useTheme()` gestionează asta automat:
+```jsx
+import { useTheme } from '../hooks/useTheme';
+
+const { theme, toggleTheme } = useTheme();
+// theme = 'dark' | 'light'
+// toggleTheme() comută și salvează în localStorage
 ```
 
 ---
 
-## Future Enhancements
-
-1. **System Preference Detection:**
-   ```javascript
-   if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-     document.documentElement.classList.remove('light-mode')
-   }
-   ```
-
-2. **Auto-switching at Time of Day:**
-   - 6 AM–6 PM: Light mode
-   - 6 PM–6 AM: Dark mode
-
-3. **High Contrast Mode:**
-   ```css
-   html.high-contrast {
-     --color-text-primary: #000000;
-     --color-border: #000000;
-     /* ... */
-   }
-   ```
-
----
-
-**Version:** 1.0  
-**Last Updated:** Iunie 2026  
-**Status:** ✅ COMPLETE
-
+**Versiune:** 2.0
+**Actualizat:** 2026-06-05
+**Status:** ✅ COMPLET

@@ -1,7 +1,7 @@
 # Ghid de Contribuție — SIMDM
 
-**Versiune:** 2.1 (Faza 1-2 Complete + Faza 3 Ready)  
-**Actualizat:** 2026-06-02  
+**Versiune:** 2.2 (Faza 1-2 Complete + Module Quick-Win + Faza 3 Ready)
+**Actualizat:** 2026-06-05  
 **Audiență:** Toți contributorii (backend, frontend, docs, DevOps)  
 **Limbă:** Română (interfață + docs), Engleză (cod)
 
@@ -428,21 +428,27 @@ npm run db:studio  # http://localhost:5555
 
 ### Când Să Documentezi
 
-1. **Componentă nouă** → Adaugă exemplu în `docs/2-DEVELOPER-GUIDE.md`
-2. **Endpoint nou** → Adaugă în `docs/API.md` (Faza 3+)
-3. **Change API** → Update `SPEC.md`
-4. **Workflow nou** → Update `CONTRIBUTING.md`
-5. **Design token** → Update `docs/1-DESIGN-AND-ACCESSIBILITY.md`
+1. **Componentă nouă** → Adaugă exemplu în `docs/2-DEVELOPER-GUIDE.md` și `docs/COMPONENT_LIBRARY.md`
+2. **Endpoint nou** → Adaugă în `SPEC.md` (secțiunea API) și comentarii în cod
+3. **Schimbare API** → Actualizează `SPEC.md`
+4. **Workflow nou** → Actualizează `CONTRIBUTING.md`
+5. **Token design nou** → Actualizează `docs/1-DESIGN-AND-ACCESSIBILITY.md`
+6. **Componentă vizuală** → Actualizează `docs/COMPONENT_LIBRARY.md`
 
 ### Locuri Documentație
 
 | Document | Ce Conține | Unde |
 |----------|-----------|------|
-| **README.md** | Overview, setup rapid | Rădăcină |
-| **SPEC.md** | Arhitectură, stivă, faze | Rădăcină |
+| **README.md** | Overview, setup rapid, status faze | Rădăcină |
+| **SPEC.md** | Arhitectură, stivă, faze, schema DB | Rădăcină |
+| **INDEX.md** | Index toate documentele | Rădăcină |
 | **GETTING-STARTED.md** | Tutorial 5 min | Rădăcină |
-| **docs/1-DESIGN...** | Design tokens, WCAG | docs/ |
-| **docs/2-DEVELOPER...** | Tipare React, checklist | docs/ |
+| **docs/1-DESIGN...** | Design tokens, WCAG, arhitectura CSS | docs/ |
+| **docs/2-DEVELOPER...** | Tipare React/Express, checklist | docs/ |
+| **docs/COMPONENT_LIBRARY.md** | Referință completă componente | docs/ |
+| **docs/ACCESSIBILITY_GUIDE.md** | WCAG 2.1 AA patterns, testare | docs/ |
+| **docs/LIGHT_MODE_GUIDE.md** | Dark/light mode, token transformări | docs/ |
+| **docs/MOBILE_WORKFLOW_GUIDE.md** | Workflow pe teren, 5 scenarii | docs/ |
 | **docs/CONTRIBUTING.md** | Flux PR (acest fișier) | docs/ |
 | **CLAUDE.md** | Instrucțiuni AI | Rădăcină |
 

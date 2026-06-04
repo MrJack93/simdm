@@ -1,126 +1,128 @@
-# SIMDM Component Library — Complete Reference
+# Bibliotecă Componente SIMDM — Referință Completă
 
-**Version:** 3.0  
-**Last Updated:** Iunie 2026  
-**Status:** Production-Ready (WCAG 2.1 AA Compliant)
-
----
-
-## Table of Contents
-
-1. [Button Component](#button-component)
-2. [Input Component](#input-component)
-3. [Card Component](#card-component)
-4. [Badge Components](#badge-components)
-5. [Form Component](#form-component)
-6. [Navigation Components](#navigation-components)
-7. [Utility Components](#utility-components)
-8. [Design Tokens Reference](#design-tokens-reference)
+**Versiune:** 3.1
+**Actualizat:** 2026-06-05
+**Status:** Gata pentru producție (Conform WCAG 2.1 AA)
 
 ---
 
-## Button Component
+## Cuprins
 
-**File:** `frontend/src/components/Button.jsx`
+1. [Componenta Button](#componenta-button)
+2. [Componenta Input](#componenta-input)
+3. [Componenta Card](#componenta-card)
+4. [Componente Badge](#componente-badge)
+5. [Componenta Form (DeviceForm)](#componenta-form)
+6. [Componente Navigare](#componente-navigare)
+7. [Componente Utilitare](#componente-utilitare)
+8. [Referință Token-uri Design](#referință-token-uri-design)
 
-### Description
-Reusable button component with multiple variants, sizes, and states. Fully keyboard accessible with proper focus management.
+---
+
+## Componenta Button
+
+**Fișier:** `frontend/src/components/Button.jsx`
+
+### Descriere
+
+Componentă buton reutilizabilă cu mai multe variante, mărimi și stări. Complet accesibil de la tastatură cu gestionare corectă a focus-ului.
 
 ### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `variant` | `'primary'` \| `'secondary'` \| `'danger'` | `'primary'` | Visual style variant |
-| `size` | `'sm'` \| `'md'` \| `'lg'` | `'md'` | Button size |
-| `disabled` | `boolean` | `false` | Disable button state |
-| `loading` | `boolean` | `false` | Show loading spinner |
-| `type` | `'button'` \| `'submit'` \| `'reset'` | `'button'` | HTML type attribute |
-| `children` | `ReactNode` | — | Button text/content |
-| `onClick` | `function` | — | Click handler |
-| `className` | `string` | `''` | Additional CSS classes |
-| `aria-label` | `string` | — | Accessible label (required for icon-only buttons) |
+| Prop | Tip | Default | Descriere |
+|------|-----|---------|-----------|
+| `variant` | `'primary'` \| `'secondary'` \| `'danger'` | `'primary'` | Varianta vizuală |
+| `size` | `'sm'` \| `'md'` \| `'lg'` | `'md'` | Dimensiunea butonului |
+| `disabled` | `boolean` | `false` | Dezactivează butonul |
+| `loading` | `boolean` | `false` | Afișează spinner de încărcare |
+| `type` | `'button'` \| `'submit'` \| `'reset'` | `'button'` | Atribut HTML type |
+| `children` | `ReactNode` | — | Text / conținut buton |
+| `onClick` | `function` | — | Handler click |
+| `className` | `string` | `''` | Clase CSS suplimentare |
+| `aria-label` | `string` | — | Etichetă accesibilă (obligatorie pentru butoane icon-only) |
 
-### Variants
+### Variante
 
-#### Primary Button (Default)
+#### Buton primar (implicit)
 ```jsx
 <Button variant="primary">Adaugă dispozitiv</Button>
 ```
-**Styling:**
-- Background: `--color-accent`
+**Stilizare:**
+- Fundal: `--color-accent`
 - Text: `--color-bg-primary`
-- Hover: Shadow lift + color darken
-- Disabled: Opacity 60%
+- Hover: Ridicare umbră + întunecarea culorii
+- Dezactivat: Opacitate 60%
 
-#### Secondary Button
+#### Buton secundar
 ```jsx
-<Button variant="secondary">Anulează</Button>
+<Button variant="secondary">Anulare</Button>
 ```
-**Styling:**
-- Background: `--color-bg-tertiary`
+**Stilizare:**
+- Fundal: `--color-bg-tertiary`
 - Border: 1px `--color-border`
 - Text: `--color-text-primary`
-- Hover: Background `--color-bg-secondary`
+- Hover: Fundal `--color-bg-secondary`
 
-#### Danger Button
+#### Buton pericol
 ```jsx
 <Button variant="danger">Ștergere</Button>
 ```
-**Styling:**
-- Background: `--color-error`
-- Text: White
-- Hover: Darker red (`--color-error-hover`)
-- Used for: Delete/destructive actions
+**Stilizare:**
+- Fundal: `--color-error`
+- Text: alb
+- Hover: Roșu mai închis (`--color-error-hover`)
+- Utilizat pentru: acțiuni distructive / ștergere
 
-### Sizes
+### Mărimi
 
-| Size | Height | Usage |
-|------|--------|-------|
-| `sm` | 36px | Inline, compact actions |
-| `md` | 44px (touch target) | Default, forms |
-| `lg` | 52px | Primary CTAs |
+| Mărime | Înălțime | Utilizare |
+|--------|---------|-----------|
+| `sm` | 36px | Acțiuni inline, compacte |
+| `md` | 44px (țintă atingere) | Implicit, formulare |
+| `lg` | 52px | CTA-uri principale |
 
-### States
+### Stări
 
 ```jsx
-{/* Idle state */}
+{/* Stare normală */}
 <Button>Salvează</Button>
 
-{/* Disabled */}
+{/* Dezactivat */}
 <Button disabled>Salvează</Button>
 
-{/* Loading */}
+{/* În curs de încărcare */}
 <Button loading>Se salvează...</Button>
 
-{/* Icon-only (requires aria-label) */}
-<Button variant="secondary" size="sm" aria-label="Editare">
+{/* Icon-only — necesită aria-label */}
+<Button variant="secondary" size="sm" aria-label="Editare dispozitiv">
   <Edit2 size={16} />
 </Button>
 ```
 
-### Accessibility (WCAG 2.1 AA)
-- ✅ Keyboard focusable (Tab navigation)
-- ✅ Focus ring visible (`:focus-visible`)
-- ✅ Semantic `<button>` element
-- ✅ `aria-label` on icon-only buttons
-- ✅ `aria-busy` when loading
-- ✅ Touch target ≥44px
-- ✅ Contrast ratio ≥4.5:1
+### Accesibilitate (WCAG 2.1 AA)
 
-### Examples
+- ✅ Focusabil cu tastatura (navigare Tab)
+- ✅ Focus ring vizibil (`:focus-visible`)
+- ✅ Element semantic `<button>`
+- ✅ `aria-label` pe butoane icon-only
+- ✅ `aria-busy` în stare de încărcare
+- ✅ Țintă atingere ≥44px
+- ✅ Raport contrast ≥4.5:1
 
-**Submit Button in Form**
+### Exemple
+
+**Buton submit în formular**
 ```jsx
 <Button type="submit" variant="primary" loading={isLoading}>
   {isLoading ? 'Se salvează...' : 'Salvează modificări'}
 </Button>
 ```
 
-**Delete Action**
+**Acțiune ștergere**
 ```jsx
-<Button 
-  variant="danger" 
-  size="sm" 
+<Button
+  variant="danger"
+  size="sm"
   onClick={() => deleteDevice(id)}
   aria-label="Ștergere dispozitiv"
 >
@@ -130,111 +132,111 @@ Reusable button component with multiple variants, sizes, and states. Fully keybo
 
 ---
 
-## Input Component
+## Componenta Input
 
-**File:** `frontend/src/components/Input.jsx`
+**Fișier:** `frontend/src/components/Input.jsx`
 
-### Description
-Accessible form input with built-in label, error handling, and validation feedback.
+### Descriere
+
+Input de formular accesibil cu label integrat, gestionare erori și feedback de validare.
 
 ### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `label` | `string` | — | Input label |
-| `type` | `string` | `'text'` | HTML input type |
-| `placeholder` | `string` | `''` | Placeholder text |
-| `value` | `string` | `''` | Current value |
-| `onChange` | `function` | — | Change handler |
-| `error` | `string` | `null` | Error message |
-| `helpText` | `string` | — | Help text below input |
-| `required` | `boolean` | `false` | Mark as required |
-| `disabled` | `boolean` | `false` | Disable input |
-| `autoComplete` | `string` | — | HTML autocomplete attribute |
-| `aria-label` | `string` | — | Accessible label |
-| `aria-describedby` | `string` | — | Links to help/error text |
+| Prop | Tip | Default | Descriere |
+|------|-----|---------|-----------|
+| `label` | `string` | — | Eticheta inputului |
+| `type` | `string` | `'text'` | Tipul HTML al inputului |
+| `placeholder` | `string` | `''` | Text placeholder |
+| `value` | `string` | `''` | Valoarea curentă |
+| `onChange` | `function` | — | Handler modificare |
+| `error` | `string` | `null` | Mesaj de eroare |
+| `helpText` | `string` | — | Text ajutător sub input |
+| `required` | `boolean` | `false` | Marchează ca obligatoriu |
+| `disabled` | `boolean` | `false` | Dezactivează inputul |
+| `autoComplete` | `string` | — | Atribut HTML autocomplete |
 
-### Examples
+### Exemple
 
-**Basic Text Input**
+**Input text simplu**
 ```jsx
-<Input 
-  label="Denumire dispozitiv" 
-  placeholder="Ex: Defibrilator externe"
+<Input
+  label="Denumire dispozitiv"
+  placeholder="Ex: Defibrilator extern"
   value={name}
   onChange={(e) => setName(e.target.value)}
 />
 ```
 
-**Required Field with Error**
+**Câmp obligatoriu cu eroare**
 ```jsx
 <Input
-  label="Email"
-  type="email"
+  label="Număr inventar"
   required
-  error={errors.email?.message}
-  {...register('email')}
+  error={errors.inventoryNumber?.message}
+  {...register('inventoryNumber')}
 />
 ```
 
-**With Help Text**
+**Cu text ajutător**
 ```jsx
 <Input
   label="Parolă nouă"
   type="password"
-  helpText="Min 8 caractere"
+  helpText="Minimum 8 caractere"
   {...register('newPassword')}
 />
 ```
 
-### States
+### Stări
 
-| State | Appearance | Trigger |
-|-------|-----------|---------|
-| Idle | Border gray | Default |
-| Focus | Border accent, ring | Tab/Click |
-| Error | Border error (red) | Validation fail |
-| Disabled | Opacity 60% | `disabled={true}` |
-| Placeholder | Color secondary | No value |
+| Stare | Aspect | Declanșat de |
+|-------|--------|-------------|
+| Normal | Border gri | Implicit |
+| Focus | Border accent, ring | Tab / Click |
+| Eroare | Border roșu | Validare eșuată |
+| Dezactivat | Opacitate 60% | `disabled={true}` |
+| Placeholder | Culoare secundară | Fără valoare |
 
-### Accessibility
-- ✅ `<label>` connected via `htmlFor`
+### Accesibilitate
+
+- ✅ `<label>` conectat via `htmlFor`
 - ✅ `aria-invalid={hasError}`
-- ✅ `aria-describedby` on error/help text
-- ✅ `role="alert"` on error message
-- ✅ Placeholder color ≥6.9:1 contrast
-- ✅ Focus ring visible
-- ✅ Height 44px (touch target)
+- ✅ `aria-describedby` pe textul de eroare / ajutor
+- ✅ `role="alert"` pe mesajul de eroare
+- ✅ Contrast placeholder ≥6.9:1
+- ✅ Focus ring vizibil
+- ✅ Înălțime 44px (țintă atingere)
 
 ---
 
-## Card Component
+## Componenta Card
 
-**File:** `frontend/src/components/Card.jsx`
+**Fișier:** `frontend/src/components/Card.jsx`
 
-### Description
-Container component for grouping related content. Used across Dashboard, Inventory, and pages.
+### Descriere
+
+Componentă container pentru gruparea conținutului înrudit. Folosită în Dashboard, Inventar și alte pagini.
 
 ### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `children` | `ReactNode` | — | Card content |
-| `className` | `string` | `''` | Additional CSS classes |
-| `onClick` | `function` | — | Click handler (for clickable cards) |
-| `isLoading` | `boolean` | `false` | Show skeleton loading |
+| Prop | Tip | Default | Descriere |
+|------|-----|---------|-----------|
+| `children` | `ReactNode` | — | Conținut card |
+| `className` | `string` | `''` | Clase CSS suplimentare |
+| `onClick` | `function` | — | Handler click (pentru carduri clicabile) |
+| `isLoading` | `boolean` | `false` | Afișează skeleton loading |
 
-### Styling
+### Stilizare
 
-- **Background:** `--color-bg-secondary`
+- **Fundal:** `--color-bg-secondary`
 - **Border:** 1px `--color-border`
-- **Radius:** `--radius-lg` (14px)
+- **Rotunjire:** `--radius-lg` (14px)
 - **Padding:** `--card-padding` (24px)
-- **Hover:** Shadow lift, subtle scale
+- **Hover:** Ridicare umbră
 
-### Examples
+### Exemple
 
-**Basic Card**
+**Card simplu**
 ```jsx
 <Card>
   <h3>Dispozitive funcționale</h3>
@@ -242,163 +244,165 @@ Container component for grouping related content. Used across Dashboard, Invento
 </Card>
 ```
 
-**Stat Card with Loading**
+**Card cu stare de încărcare**
 ```jsx
 <Card isLoading={isLoading}>
   <div className="flex justify-between items-center">
     <span>Dispozitive:</span>
-    <span className="text-2xl font-bold">
-      {isLoading ? <Skeleton /> : totalDevices}
-    </span>
+    <span className="text-2xl font-bold">{totalDevices}</span>
   </div>
 </Card>
 ```
 
-**Clickable Card**
+**Card clicabil**
 ```jsx
-<Card onClick={() => navigate(`/device/${id}`)}>
+<Card onClick={() => navigate(`/devices/${id}/edit`)}>
   <p className="font-bold">{deviceName}</p>
-  <p className="text-sm text-secondary">{status}</p>
+  <p className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>{status}</p>
 </Card>
 ```
 
-### Responsive
-- Mobile: Full width, no side padding
-- Tablet+: `max-width: 90%` container
-- Desktop: Part of grid (2-3 columns)
+### Responsiv
+
+- Mobil: Lățime completă
+- Tabletă+: Container `max-width: 90%`
+- Desktop: Parte din grid (2–3 coloane)
 
 ---
 
-## Badge Components
+## Componente Badge
 
-**File:** `frontend/src/components/StatusBadge.jsx`
+**Fișier:** `frontend/src/components/StatusBadge.jsx`
 
-### Description
-Display status and urgency information with icon + text (accessible, not color-only).
+### Descriere
 
-### Status Badge
+Afișează informații despre status și urgență cu icoană + text (accesibil, nu doar culoare).
 
-**Props**
-| Prop | Type | Default | Options |
-|------|------|---------|---------|
-| `status` | `string` | — | `FUNCTIONAL`, `IN_REPARATIE`, `DEFECT`, `DECOMMISSIONED`, `IMPRUMUTAT`, `SPARE` |
+### Status Badge — Dispozitive
+
+**Props:**
+
+| Prop | Tip | Default | Opțiuni |
+|------|-----|---------|---------|
+| `status` | `string` | — | `FUNCTIONAL`, `IN_REPARATIE`, `DEFECT`, `CASAT`, `IMPRUMUTAT`, `REZERVA` |
 | `size` | `string` | `'md'` | `'sm'`, `'md'`, `'lg'` |
 
-**Display Rules**
-- **Icon + Label:** Always shown (not color-only) ✅ WCAG 1.4.1 compliant
-- **Color:** Semantically matched to status
-- **Example:** ✓ FUNCTIONAL (green) + icon checkmark
+**Afișare:**
 
-### Urgency Badge
+| Status | Simbol | Culoare |
+|--------|--------|---------|
+| FUNCTIONAL | ✓ Funcțional | Verde `#34d399` |
+| IN_REPARATIE | ⟳ În reparație | Galben `#fbbf24` |
+| DEFECT | ✗ Defect | Roșu `#f87171` |
+| CASAT | − Casat | Gri `#6b7280` |
+| IMPRUMUTAT | → Împrumutat | Albastru `#60a5fa` |
+| REZERVA | ◻ Rezervă | Violet `#a78bfa` |
 
-**Props**
-| Prop | Type | Options | Color |
-|------|------|---------|-------|
-| `urgency` | `string` | `DEPLIN`, `URGENT`, `CRITIC`, `REDUS`, `OK` | Custom per level |
+**Regulă:** Afișează întotdeauna **simbol + text + culoare** — niciodată culoarea singură (WCAG 1.4.1).
 
-**Levels**
-- 🔴 `CRITIC` — Red, highest priority
-- 🟠 `URGENT` — Orange
-- 🟡 `REDUS` — Yellow
-- 🟢 `OK` — Green
-- ⚪ `DEPLIN` — Gray, informational
+### Urgency Badge — Consumabile
 
-### Examples
+**Niveluri:**
+
+| Nivel | Culoare | Descriere |
+|-------|---------|-----------|
+| `CRITIC` | Roșu | Stoc epuizat sau critic |
+| `URGENT` | Portocaliu | Stoc foarte scăzut |
+| `REDUS` | Galben | Stoc redus |
+| `OK` | Verde | Stoc normal |
+| `DEPLIN` | Gri | Stoc deplin |
+
+### Exemple
 
 ```jsx
 <StatusBadge status="FUNCTIONAL" />
 <StatusBadge status="DEFECT" size="lg" />
-<StatusBadge urgency="CRITIC" />
+<StatusBadge status="IN_REPARATIE" size="sm" />
 ```
 
 ---
 
-## Form Component
+## Componenta Form
 
-**File:** `frontend/src/pages/DeviceForm.jsx`
+**Fișier:** `frontend/src/pages/DeviceForm.jsx`
 
-### Description
-Multi-step form for device creation/editing with validation and progress tracking.
+### Descriere
 
-### Architecture
+Formular multi-pas pentru crearea/editarea dispozitivelor medicale cu validare, urmărire progres și istoric modificări.
+
+### Arhitectură
 
 ```
-Form (3 steps)
-├── Step 1: Basic Info (Name, Model, Manufacturer)
-├── Step 2: Specifications (Category, Status, Serial)
-└── Step 3: Details (Location, Manual URL, Notes)
+Formular (3 pași)
+├── Pasul 1: Informații de bază (Denumire, Model, Producător)
+├── Pasul 2: Specificații tehnice (Categorie, Status, Serie, Clasă risc)
+└── Pasul 3: Detalii (Locație, URL manual, Note)
+
+Secțiune suplimentară (doar mod editare):
+└── DeviceTimeline — Istoricul modificărilor din Jurnal Audit
 ```
 
-### Props (Wrapper Context)
-
-| Prop | Type | Purpose |
-|------|------|---------|
-| `initialData` | `object` | Pre-fill form (edit mode) |
-| `onSubmit` | `function` | Submit handler |
-| `isLoading` | `boolean` | Show loading state |
-
-### Validation (Zod)
+### Validare (Zod)
 
 ```javascript
-// Each step has schema validation:
-Step1Schema = {
-  name: required string,
-  model: optional string,
-  manufacturer: optional string
+// Fiecare pas are validare de schemă:
+Pasul1Schema = {
+  name: string, minim 3 caractere (obligatoriu),
+  model: string (opțional),
+  manufacturer: string (opțional)
 }
 
-Step2Schema = {
-  category: required,
-  status: required,
-  serialNumber: optional
+Pasul2Schema = {
+  category: enum (obligatoriu),
+  status: enum (obligatoriu),
+  serialNumber: string (opțional)
 }
 
-Step3Schema = {
-  location: optional,
-  manualUrl: optional (URL format),
-  notes: optional
+Pasul3Schema = {
+  location: string (opțional),
+  manualUrl: format URL (opțional),
+  notes: string (opțional)
 }
 ```
 
-### Error Handling
+### Gestionare erori
 
-- Real-time validation feedback
-- Error messages below each field
-- Form cannot proceed if step validation fails
-- Submit button disabled until all required fields valid
+- Feedback validare în timp real
+- Mesaje de eroare sub fiecare câmp
+- Formularul nu poate avansa dacă validarea pasului eșuează
+- Butonul submit dezactivat până când câmpurile obligatorii sunt valide
 
-### Accessibility
-- ✅ Step indicator (1 of 3)
-- ✅ Semantic form structure
-- ✅ Keyboard navigation between fields
-- ✅ `aria-invalid` + `aria-describedby` on errors
-- ✅ Focus management on step change
+### Accesibilitate
+
+- ✅ Indicator pas (1 din 3)
+- ✅ Structură formular semantică
+- ✅ Navigare tastatură între câmpuri
+- ✅ `aria-invalid` + `aria-describedby` pe erori
+- ✅ Gestionare focus la schimbarea pasului
+- ✅ Istoric modificări în mod editare (DeviceTimeline)
 
 ---
 
-## Navigation Components
+## Componente Navigare
 
 ### ViewToggle
 
-**Purpose:** Switch between Table / Cards / Kanban views
+**Scop:** Comutare între vizualizările Tabel / Carduri
 
-**Props**
-```javascript
-{
-  currentView: 'table' | 'cards' | 'kanban',
-  onViewChange: (view) => void,
-  aria-label: "Comutare vizualizare"
-}
+```jsx
+// Variante active în InventoryPageV2:
+// - Tabel (implicit)
+// - Carduri (DeviceCard grid)
 ```
 
-**States**
-- Active tab: Highlighted with accent color
-- Inactive: Subtle background
-- Hover: Shadow lift
+**Accesibilitate:**
+- Grup de butoane cu `aria-label="Schimbă vizualizarea"`
+- Butonul activ: evidențiat cu culoarea accent
+- Tastatura: Tab + Enter pentru selectare
 
-### Pagination
+### Paginare
 
-**Props**
+**Props:**
 ```javascript
 {
   currentPage: number,
@@ -410,104 +414,128 @@ Step3Schema = {
 }
 ```
 
-**Render**
-```jsx
+**Redare:**
+```
 ← Pagina 1 din 3 →
 ```
 
 ---
 
-## Utility Components
+## Componente Utilitare
 
 ### Skeleton Loading
 
-**Usage**
+**Utilizare:**
 ```jsx
 {isLoading && <div className="skeleton skeleton-row" />}
 ```
 
-**Classes**
-- `.skeleton` — Pulse animation
-- `.skeleton-card` — Full card skeleton
-- `.skeleton-row` — Table row skeleton
-- `.skeleton-text` — Inline text skeleton
+**Clase disponibile:**
+- `.skeleton` — Animație pulsare
+- `.skeleton-card` — Skeleton card complet
+- `.skeleton-row` — Skeleton rând tabel
+- `.skeleton-text` — Skeleton text inline
 
-**Animation**
-- 2-second pulse cycle
-- Respects `prefers-reduced-motion`
+**Animație:**
+- Ciclu pulsare de 2 secunde
+- Respectă `prefers-reduced-motion`
 
 ### Loading Spinner
 
-**Usage**
+**Utilizare:**
 ```jsx
 {loading && <div className="loading-spinner loading-spinner-sm" />}
 ```
 
-**Sizes**
+**Mărimi:**
 - `loading-spinner-sm` — 16px
-- `loading-spinner-md` — 24px (default)
+- `loading-spinner-md` — 24px (implicit)
 - `loading-spinner-lg` — 32px
+
+### SkipLink
+
+**Fișier:** `frontend/src/components/SkipLink.jsx`
+
+Permite utilizatorilor de tastatură să sară direct la conținutul principal.
+
+```jsx
+<SkipLink />
+// → Randează: "Sari la conținut" (vizibil la focus, ascuns altfel)
+// → Leagă la <main id="main">
+```
+
+### DeviceTimeline
+
+**Fișier:** `frontend/src/components/DeviceTimeline.jsx`
+
+Afișează istoricul modificărilor unui dispozitiv din jurnalul de audit.
+
+```jsx
+<DeviceTimeline deviceId={id} />
+// → Fetches GET /api/audit-logs?entity=devices&entityId={id}
+// → Timeline vertical cu acțiuni, timestamp și modificări
+```
 
 ---
 
-## Design Tokens Reference
+## Referință Token-uri Design
 
-### Colors
+### Culori
 
-#### Semantic Colors
+#### Culori semantice
 ```css
---color-accent:        #ff9b6a  (dark) / #b84621 (light)
---color-success:       #34d399
---color-error:         #f87171
---color-warning:       #fbbf24
---color-info:          #60a5fa
+--color-accent:    #ff9b6a  (dark) / #b84621  (light)
+--color-success:   #34d399
+--color-error:     #f87171
+--color-warning:   #fbbf24
+--color-info:      #60a5fa
 ```
 
-#### Text Colors
+#### Culori text
 ```css
---color-text-primary:      #f0f0f0  (dark) / #111418 (light)
---color-text-secondary:    #8a9199  (dark) / #5c6370 (light)
---color-text-tertiary:     #7a8290
---color-disabled-text:     #9da3ae  (dark) / #5c6370 (light)
---color-placeholder:       #a0a9b1
+--color-text-primary:    #f0f0f0  (dark) / #111418  (light)
+--color-text-secondary:  #8a9199  (dark) / #5c6370  (light)
+--color-text-tertiary:   #7a8290
+--color-disabled-text:   #9da3ae  (dark) / #5c6370  (light)
+--color-placeholder:     #a0a9b1
 ```
 
-#### Background Colors
+#### Culori fundal
 ```css
---color-bg-primary:    #0c0f10  (dark) / #f4f5f7 (light)
---color-bg-secondary:  #141718  (dark) / #ffffff (light)
---color-bg-tertiary:   #1c2022  (dark) / #eef0f2 (light)
---color-bg-elevated:   #222628  (dark) / #ffffff (light)
+--color-bg-primary:    #0c0f10  (dark) / #f4f5f7  (light)
+--color-bg-secondary:  #141718  (dark) / #ffffff   (light)
+--color-bg-tertiary:   #1c2022  (dark) / #eef0f2   (light)
+--color-bg-elevated:   #222628  (dark) / #ffffff   (light)
 ```
 
-#### Border Colors
+#### Culori border
 ```css
---color-border:        #2a2f33  (dark) / #e2e5e9 (light)
---color-border-subtle: #1e2225  (dark) / #eef0f2 (light)
+--color-border:        #2a2f33  (dark) / #e2e5e9  (light)
+--color-border-subtle: #1e2225  (dark) / #eef0f2  (light)
 ```
 
-### Typography
+### Tipografie
 
 ```css
---font-family-base:     'Plus Jakarta Sans', sans-serif
---font-family-mono:     'JetBrains Mono', monospace
+--font-family-base:   'Plus Jakarta Sans', sans-serif
+--font-family-mono:   'JetBrains Mono', monospace
 
---font-size-display:    3rem    (48px)
---font-size-h1:         2rem    (32px)
---font-size-h2:         1.5rem  (24px)
---font-size-h3:         1.125rem (18px)
---font-size-base:       0.9375rem (15px)
---font-size-sm:         0.8125rem (13px)
---font-size-xs:         0.6875rem (11px)
+--font-size-display:  3rem     (48px)
+--font-size-h1:       2rem     (32px)
+--font-size-h2:       1.5rem   (24px)
+--font-size-h3:       1.125rem (18px)
+--font-size-base:     0.9375rem (15px)
+--font-size-sm:       0.8125rem (13px)
+--font-size-xs:       0.6875rem (11px)
 
---font-weight-regular:  400
---font-weight-medium:   500
---font-weight-semibold: 600
---font-weight-bold:     700
+--font-weight-regular:   400
+--font-weight-medium:    500
+--font-weight-semibold:  600
+--font-weight-bold:      700
 --font-weight-extrabold: 800
 ```
 
-### Spacing (8px Grid)
+### Spațiere (grilă 8px)
 
 ```css
 --space-1: 4px    --space-2: 8px    --space-3: 12px   --space-4: 16px
@@ -515,161 +543,161 @@ Step3Schema = {
 --space-12: 48px  --space-16: 64px
 ```
 
-### Icon Sizing
+### Dimensiuni icoane
 
 ```css
---icon-size-xs: 12px   (inline, minimal)
---icon-size-sm: 16px   (badges, small UI)
---icon-size-md: 20px   (default, UI elements)
---icon-size-lg: 24px   (prominent, buttons)
---icon-size-xl: 32px   (large, hero sections)
+--icon-size-xs: 12px  (inline, minimal)
+--icon-size-sm: 16px  (badge-uri, UI mic)
+--icon-size-md: 20px  (implicit, elemente UI)
+--icon-size-lg: 24px  (proeminent, butoane)
+--icon-size-xl: 32px  (mare, secțiuni hero)
 ```
 
-### Border Radius
+### Rotunjire borduri
 
 ```css
---radius-sm:  6px    (inputs, buttons)
---radius-md:  10px   (cards, buttons)
---radius-lg:  14px   (cards)
---radius-xl:  20px   (modals)
---radius-2xl: 28px   (large containers)
---radius-full: 9999px (circles, badges)
+--radius-sm:   6px     (badge-uri mici)
+--radius-md:   10px    (inputuri, butoane)
+--radius-lg:   14px    (carduri)
+--radius-xl:   20px    (modale)
+--radius-2xl:  28px    (containere mari)
+--radius-full: 9999px  (cercuri, badge-uri pill)
 ```
 
-### Shadows
+### Umbre
 
 ```css
---shadow-xs: 0 1px 2px rgba(0,0,0,0.2)    (subtle)
---shadow-sm: 0 2px 8px rgba(0,0,0,0.15)   (small)
---shadow-md: 0 4px 16px rgba(0,0,0,0.2)   (default)
---shadow-lg: 0 8px 32px rgba(0,0,0,0.25)  (elevated)
+--shadow-xs: 0 1px 2px rgba(0,0,0,0.2)    (subtil)
+--shadow-sm: 0 2px 8px rgba(0,0,0,0.15)   (mic)
+--shadow-md: 0 4px 16px rgba(0,0,0,0.2)   (implicit)
+--shadow-lg: 0 8px 32px rgba(0,0,0,0.25)  (ridicat)
 --shadow-xl: 0 16px 48px rgba(0,0,0,0.3)  (modal)
 
---shadow-glow-accent: 0 0 24px rgba(255,155,106,0.15)
+--shadow-glow-accent:  0 0 24px rgba(255,155,106,0.15)
 --shadow-glow-success: 0 0 16px rgba(52,211,153,0.2)
---shadow-glow-error: 0 0 16px rgba(248,113,113,0.2)
+--shadow-glow-error:   0 0 16px rgba(248,113,113,0.2)
 ```
 
-### Transitions
+### Tranziții
 
 ```css
 --transition-fast:   0.15s cubic-bezier(0.16,1,0.3,1)
---transition-normal: 0.3s cubic-bezier(0.16,1,0.3,1)
---transition-slow:   0.5s cubic-bezier(0.16,1,0.3,1)
+--transition-normal: 0.3s  cubic-bezier(0.16,1,0.3,1)
+--transition-slow:   0.5s  cubic-bezier(0.16,1,0.3,1)
 --ease-spring: cubic-bezier(0.34,1.56,0.64,1)
 ```
 
-### Component Tokens
+### Token-uri componente
 
 ```css
---btn-height:       44px (touch target)
---btn-height-sm:    36px
---btn-height-lg:    52px
---btn-radius:       var(--radius-md)
+--btn-height:    44px  (țintă atingere)
+--btn-height-sm: 36px
+--btn-height-lg: 52px
+--btn-radius:    var(--radius-md)
 
---input-height:     44px (touch target)
---input-radius:     var(--radius-md)
+--input-height:  44px  (țintă atingere)
+--input-radius:  var(--radius-md)
 
---card-radius:      var(--radius-lg)
---card-padding:     var(--space-6)
+--card-radius:   var(--radius-lg)
+--card-padding:  var(--space-6)
 
---modal-radius:     var(--radius-xl)
+--modal-radius:  var(--radius-xl)
 
---focus-ring: 0 0 0 2px var(--color-bg-primary), 
+--focus-ring: 0 0 0 2px var(--color-bg-primary),
               0 0 0 4px var(--color-accent)
 ```
 
 ---
 
-## Best Practices
+## Bune practici
 
-### Using Components
+### Utilizarea componentelor
 
-✅ **DO:**
-- Use semantic components (Button, Input, Card)
-- Leverage design tokens for consistency
-- Add `aria-label` to icon-only buttons
-- Handle loading states visually
-- Provide error feedback inline
+**DA:**
+- Folosește componente semantice (Button, Input, Card, StatusBadge)
+- Utilizează token-uri de design pentru consistență
+- Adaugă `aria-label` la butoane icon-only
+- Gestionează stările de încărcare vizual
+- Oferă feedback de eroare inline
 
-❌ **DON'T:**
-- Hardcode colors (use `--color-*` tokens)
-- Hardcode sizes (use `--space-*`, `--icon-size-*`)
-- Create custom button styles
-- Ignore accessibility attributes
-- Hide error messages
+**NU:**
+- Harcodezi culori (folosește token-uri `--color-*`)
+- Harcodezi dimensiuni (folosește `--space-*`, `--icon-size-*`)
+- Creezi stiluri personalizate pentru butoane
+- Ignori atributele de accesibilitate
+- Ascunzi mesajele de eroare
 
-### Responsive Design
+### Design responsiv
 
-- **Mobile-first:** Start with mobile, add `md:`, `lg:` breakpoints
-- **Touch targets:** Minimum 44px (buttons, inputs)
-- **Typography:** Scale with viewport
-- **Layout:** Use CSS Grid / Flexbox
+- **Mobile-first:** Începe cu mobilul, adaugă breakpoints `md:`, `lg:`
+- **Ținte atingere:** Minimum 44px (butoane, inputuri)
+- **Tipografie:** Se scalează cu viewport-ul
+- **Layout:** Folosește CSS Grid / Flexbox
 
 ### Dark/Light Mode
 
-- Colors automatically switch via CSS variables
-- No conditional rendering needed
-- Test both modes before shipping
+- Culorile se schimbă automat prin variabile CSS
+- Nu este nevoie de randare condiționată
+- Testează ambele moduri înainte de livrare
 
-### Accessibility Checklist
+### Checklist accesibilitate
 
-- [ ] Color contrast ≥4.5:1 (normal text), ≥3:1 (large text)
-- [ ] Keyboard navigation works (Tab, Shift+Tab, Enter, Escape)
-- [ ] Focus ring visible on all interactive elements
-- [ ] ARIA labels on icon-only buttons
-- [ ] Error messages linked to inputs (`aria-describedby`)
-- [ ] Form labels connected (`htmlFor`)
-- [ ] No focus traps
-- [ ] Touch targets ≥44px
+- [ ] Contrast culori ≥4.5:1 (text normal), ≥3:1 (text mare)
+- [ ] Navigare tastatură funcțională (Tab, Shift+Tab, Enter, Escape)
+- [ ] Focus ring vizibil pe toate elementele interactive
+- [ ] Label ARIA pe butoane icon-only
+- [ ] Mesaje eroare legate la inputuri (`aria-describedby`)
+- [ ] Label-uri formulare conectate (`htmlFor`)
+- [ ] Fără capturi focus
+- [ ] Ținte atingere ≥44px
 
 ---
 
-## Troubleshooting
+## Depanare
 
-### Button not showing spinner
+### Butonul nu afișează spinner
 
 ```jsx
-// ❌ Wrong
-<Button loading={isLoading}>Save</Button>
+// Greșit
+<Button loading={isLoading}>Salvează</Button>
 
-// ✅ Correct
+// Corect
 <Button loading={isLoading}>
-  {isLoading ? 'Loading...' : 'Save'}
+  {isLoading ? 'Se salvează...' : 'Salvează'}
 </Button>
 ```
 
-### Input showing error but no label
+### Inputul afișează eroare dar fără label
 
 ```jsx
-// ❌ Missing label
-<Input error="Required" value={value} />
+// Lipsă label
+<Input error="Câmp obligatoriu" value={value} />
 
-// ✅ Add label
-<Input label="Name" error="Required" value={value} />
+// Corect
+<Input label="Denumire" error="Câmp obligatoriu" value={value} />
 ```
 
-### Card not responsive on mobile
+### Cardul nu este responsiv pe mobil
 
 ```jsx
-// ✅ Use Tailwind breakpoints
-<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+// Folosește breakpoints Tailwind
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
   <Card>...</Card>
 </div>
 ```
 
 ---
 
-## Version History
+## Istoric versiuni
 
-| Version | Date | Changes |
-|---------|------|---------|
-| 3.0 | Iunie 2026 | Icon sizing tokens, disabled state refactor, complete docs |
-| 2.5 | Mai 2026 | Multi-step form, 3-step consolidation |
-| 2.0 | Aprilie 2026 | Dark/light mode, WCAG 2.1 AA compliance |
-| 1.0 | Martie 2026 | Initial component library |
+| Versiune | Data | Modificări |
+|----------|------|------------|
+| 3.1 | 2026-06-05 | Traducere completă în română, adăugare SkipLink și DeviceTimeline |
+| 3.0 | 2026-06-04 | Token-uri dimensiuni icoane, refactor stare dezactivată |
+| 2.5 | 2026-06-02 | Formular multi-pas, consolidare 3 pași |
+| 2.0 | 2026-06-01 | Dark/light mode, conformitate WCAG 2.1 AA |
+| 1.0 | 2026-05-29 | Bibliotecă componente inițială |
 
 ---
 
-**Status:** ✅ PRODUCTION READY — Last audited Iunie 2026
-
+**Status:** ✅ GATA PRODUCȚIE — Ultimul audit 2026-06-05

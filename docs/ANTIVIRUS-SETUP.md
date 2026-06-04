@@ -1,16 +1,16 @@
-# 🔒 Antivirus Setup & File Security — SIMDM
+# Securitate Fișiere și Antivirus — SIMDM
 
-**Dată:** 2026-06-02 (Updated for Faza 1-2 (Faza 3 inherited))  
-**Caracteristică:** Magic byte detection + ClamAV optional  
-**Status:** ✅ Implementat (Faza 2) + Production-ready
+**Dată:** 2026-06-05
+**Caracteristică:** Detectare magic bytes + ClamAV opțional
+**Status:** ✅ Implementat (Faza 2) + Gata producție
 
-**Descripție:** SIMDM implementează **siguritate multi-strat pentru documente medicale**, inclusiv detectare magic bytes, validare dimensiune fișier, și scanare cu antivirus (ClamAV-ready pentru producție). Documentele încărcate sunt validate și loggate complet în jurnal de audit.
+**Descriere:** SIMDM implementează **securitate multi-strat pentru documente medicale**, inclusiv detectare magic bytes, validare dimensiune fișier și scanare antivirus (ClamAV-ready pentru producție). Documentele încărcate sunt validate și înregistrate complet în jurnalul de audit.
 
 ---
 
-## 📋 Prezentare generală
+## Prezentare generală
 
-SIMDM implementează **siguritate multi-strat pentru documentele medicale**:
+SIMDM implementează **securitate multi-strat pentru documentele medicale**:
 
 1. **Validarea tipului de fișier** — Detectare magic bytes (nu doar MIME type)
 2. **Limite de dimensiune** — Maximum 10MB per fișier
@@ -19,7 +19,7 @@ SIMDM implementează **siguritate multi-strat pentru documentele medicale**:
 
 ---
 
-## �-️ Arhitectură
+## Arhitectură securitate
 
 ### Mediul de dezvoltare
 - ✅ Validarea tipului de fișier (magic bytes)
@@ -33,7 +33,7 @@ SIMDM implementează **siguritate multi-strat pentru documentele medicale**:
 
 ---
 
-## 🚀 Instalare și configurare
+## Instalare și configurare
 
 ### Pasul 1: Instalare pachete (deja efectuată)
 ```bash
@@ -120,7 +120,7 @@ npm start
 
 ---
 
-## 📝 Suport tipuri de fișiere
+## Tipuri de fișiere suportate
 
 ### MIME type-uri permise
 
@@ -156,7 +156,7 @@ npm start
 
 ---
 
-## 🧪 Testare
+## Testare
 
 ### Dezvoltare (fără ClamAV)
 
@@ -243,7 +243,7 @@ Response (400):
 
 ---
 
-## 📊 Logging în jurnal de audit
+## Înregistrare în jurnalul de audit
 
 Fiecare încărcare de fișier este logată:
 
@@ -273,7 +273,7 @@ Exemplu înregistrare audit:
 
 ---
 
-## 🔍 Depanare
+## Depanare
 
 ### ClamAV nu se conectează
 
@@ -306,7 +306,7 @@ Tip fișier nesuportat (nu s-a putut detecta)
 
 ---
 
-## 📚 Referințe
+## Referințe
 
 - **ClamAV Docs:** https://www.clamav.net/documents
 - **file-type NPM:** https://www.npmjs.com/package/file-type
@@ -314,7 +314,7 @@ Tip fișier nesuportat (nu s-a putut detecta)
 
 ---
 
-## ✅ Conformitate
+## Conformitate
 
 Această implementare satisface:
 - ✅ OWASP File Upload Security
@@ -324,6 +324,6 @@ Această implementare satisface:
 
 ---
 
-**Last Updated:** 2026-05-30  
-**Status:** Production-Ready ✅
+**Ultima actualizare:** 2026-06-05
+**Status:** ✅ Gata producție
 

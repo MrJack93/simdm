@@ -1,168 +1,163 @@
-# Accessibility Guide — SIMDM WCAG 2.1 AA Compliance
+# Ghid Accesibilitate — SIMDM Conformitate WCAG 2.1 AA
 
-**Version:** 1.0  
-**Date:** Iunie 2026  
-**Compliance Level:** WCAG 2.1 Level AA  
-**Status:** ✅ Fully Compliant
-
----
-
-## Table of Contents
-
-1. [Compliance Summary](#compliance-summary)
-2. [Accessibility Patterns](#accessibility-patterns)
-3. [Development Standards](#development-standards)
-4. [Testing Procedures](#testing-procedures)
-5. [Remediation Guide](#remediation-guide)
-6. [Tools & Resources](#tools--resources)
+**Versiune:** 2.0
+**Data:** 2026-06-05
+**Standard:** WCAG 2.1 Nivel AA
+**Status:** Conformitate 100% verificată
 
 ---
 
-## Compliance Summary
+## Cuprins
 
-### WCAG 2.1 AA Coverage
-
-| Guideline | Criterion | Status | Evidence |
-|-----------|-----------|--------|----------|
-| **1.4.3** | Contrast (Minimum) | ✅ PASS | All ratios ≥4.5:1 (large text 3:1) |
-| **1.4.11** | Non-text Contrast | ✅ PASS | All UI components ≥3:1 |
-| **2.1.1** | Keyboard | ✅ PASS | All functionality keyboard accessible |
-| **2.1.2** | No Keyboard Trap | ✅ PASS | Focus management in modals/menus |
-| **2.4.3** | Focus Order | ✅ PASS | Logical tab order throughout site |
-| **2.4.7** | Focus Visible | ✅ PASS | Focus rings visible on all elements |
-| **3.2.4** | Consistent Identification | ✅ PASS | Icons + labels, not color-only |
-| **3.3.1** | Error Identification | ✅ PASS | Error messages linked to inputs |
-| **3.3.3** | Error Suggestion | ✅ PASS | Clear error messages with hints |
-| **4.1.2** | Name, Role, Value | ✅ PASS | Semantic HTML + ARIA attributes |
-| **4.1.3** | Status Messages | ✅ PASS | Toast notifications with `role="alert"` |
-
-**Overall Score:** ✅ **100% Compliant — WCAG 2.1 Level AA**
+1. [Rezumat conformitate](#rezumat-conformitate)
+2. [Tipare de accesibilitate](#tipare-de-accesibilitate)
+3. [Standarde de dezvoltare](#standarde-de-dezvoltare)
+4. [Proceduri de testare](#proceduri-de-testare)
+5. [Ghid de remediere](#ghid-de-remediere)
+6. [Unelte și resurse](#unelte-și-resurse)
 
 ---
 
-## Accessibility Patterns
+## Rezumat conformitate
 
-### 1. Semantic HTML
+### Acoperire WCAG 2.1 AA
 
-**Pattern:** Always use semantic HTML over generic `<div>` elements.
+| Criteriu | Standard | Status | Dovadă |
+|----------|----------|--------|--------|
+| **1.4.3** | Contrast minim | ✅ PASS | Toate rapoartele ≥4.5:1 (text mare 3:1) |
+| **1.4.11** | Contrast non-text | ✅ PASS | Toate componentele UI ≥3:1 |
+| **2.1.1** | Tastatură | ✅ PASS | Toată funcționalitatea accesibilă cu tastatura |
+| **2.1.2** | Fără capcane de focus | ✅ PASS | Gestionare focus în modale și meniuri |
+| **2.4.3** | Ordine focus | ✅ PASS | Ordine Tab logică pe tot site-ul |
+| **2.4.7** | Focus vizibil | ✅ PASS | Focus ring vizibil pe toate elementele |
+| **3.2.4** | Identificare consistentă | ✅ PASS | Icoane + etichete, nu doar culoare |
+| **3.3.1** | Identificare erori | ✅ PASS | Mesaje de eroare legate la inputuri |
+| **3.3.3** | Sugestii eroare | ✅ PASS | Mesaje clare cu indicații |
+| **4.1.2** | Nume, Rol, Valoare | ✅ PASS | HTML semantic + atribute ARIA |
+| **4.1.3** | Mesaje de stare | ✅ PASS | Toast-uri cu `role="alert"` |
 
-#### ✅ GOOD — Semantic Elements
+**Scor global:** ✅ **100% Conform — WCAG 2.1 Nivel AA**
+
+---
+
+## Tipare de accesibilitate
+
+### 1. HTML Semantic
+
+**Regulă:** Folosește întotdeauna HTML semantic în locul elementelor generice `<div>`.
+
+#### Corect — Elemente semantice
 
 ```jsx
-{/* Headings */}
-<h1>Page Title</h1>
-<h2>Section Title</h2>
-<h3>Subsection Title</h3>
+{/* Titluri */}
+<h1>Titlu pagină</h1>
+<h2>Titlu secțiune</h2>
+<h3>Titlu subsecțiune</h3>
 
-{/* Content Structure */}
+{/* Structura conținutului */}
 <main id="main">
   <section aria-label="Acțiuni rapide">
     <h2>Acțiuni rapide</h2>
-    {/* content */}
+    {/* conținut */}
   </section>
 </main>
 
-{/* Navigation */}
+{/* Navigare */}
 <nav>
   <ul>
-    <li><a href="/">Home</a></li>
-    <li><a href="/about">About</a></li>
+    <li><a href="/">Acasă</a></li>
+    <li><a href="/about">Despre</a></li>
   </ul>
 </nav>
 
-{/* Form */}
+{/* Formular */}
 <form>
   <label htmlFor="email">Email:</label>
   <input id="email" type="email" />
 </form>
 
-{/* Table */}
+{/* Tabel */}
 <table>
   <thead>
     <tr>
-      <th scope="col">Name</th>
+      <th scope="col">Denumire</th>
       <th scope="col">Status</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td>Device 1</td>
-      <td>Active</td>
+      <td>Dispozitiv 1</td>
+      <td>Activ</td>
     </tr>
   </tbody>
 </table>
-
-{/* Articles/Cards */}
-<article className="card">
-  <h3>Title</h3>
-  <p>Content</p>
-</article>
 ```
 
-#### ❌ BAD — Generic Divs
+#### Greșit — Div-uri generice
 
 ```jsx
-{/* Don't use divs for headings */}
-<div className="heading">Page Title</div>
+{/* Nu folosi div-uri pentru titluri */}
+<div className="heading">Titlu pagină</div>
 
-{/* Don't use divs for navigation */}
+{/* Nu folosi div-uri pentru navigare */}
 <div className="nav">
-  <div className="link"><a href="/">Home</a></div>
+  <div className="link"><a href="/">Acasă</a></div>
 </div>
 
-{/* Don't use divs for form labels */}
+{/* Nu folosi div-uri pentru label-uri */}
 <div className="label">Email:</div>
 <input type="email" />
 ```
 
 ---
 
-### 2. ARIA Attributes
+### 2. Atribute ARIA
 
-**When to Use ARIA:** Only when semantic HTML is insufficient.
+**Când se folosesc:** Doar când HTML semantic este insuficient.
 
-#### Button States
+#### Stări buton
 
 ```jsx
-{/* Loading button */}
+{/* Buton în curs de încărcare */}
 <button aria-busy="true" disabled>
-  <span className="spinner"></span> Salvează...
+  <span className="loading-spinner-sm" aria-hidden="true"></span>
+  Se salvează...
 </button>
 
-{/* Toggle button */}
-<button aria-pressed="false" onClick={toggle}>
+{/* Buton toggle */}
+<button aria-pressed={isActive} onClick={toggle}>
   {isActive ? 'Activ' : 'Inactiv'}
 </button>
 
-{/* Button with visible label */}
-<button aria-label="Ștergere">
+{/* Buton cu etichetă vizibilă */}
+<button aria-label="Ștergere dispozitiv">
   <Trash2 size={16} />
 </button>
 ```
 
-#### Form Fields with Errors
+#### Câmpuri formular cu erori
 
 ```jsx
-{/* Error state with aria-invalid */}
-<label htmlFor="username">Username:</label>
+{/* Stare eroare cu aria-invalid */}
+<label htmlFor="username">Utilizator:</label>
 <input
   id="username"
   aria-invalid={hasError}
-  aria-describedby={hasError ? "error-username" : undefined}
+  aria-describedby={hasError ? "eroare-username" : undefined}
   value={username}
   onChange={handleChange}
 />
 {hasError && (
-  <p id="error-username" role="alert" className="error">
-    Username trebuie să aibă 3-20 caractere
+  <p id="eroare-username" role="alert" className="text-xs" style={{ color: 'var(--color-error)' }}>
+    Utilizatorul trebuie să aibă între 3 și 20 de caractere
   </p>
 )}
 ```
 
-#### Navigation with Active State
+#### Navigare cu stare activă
 
 ```jsx
-{/* Active navigation link */}
+{/* Link navigare activ */}
 <nav>
   <a href="/inventory" aria-current="page">
     Inventar
@@ -173,42 +168,46 @@
 </nav>
 ```
 
-#### Dialog/Modal
+#### Dialog / Modal
 
 ```jsx
-<dialog open aria-labelledby="dialog-title" aria-modal="true">
-  <h2 id="dialog-title">Confirm Delete?</h2>
-  <p>Ești sigur că vrei să ștergi?</p>
+<div
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="titlu-dialog"
+>
+  <h2 id="titlu-dialog">Confirmare ștergere</h2>
+  <p>Ești sigur că vrei să ștergi acest dispozitiv?</p>
   <button onClick={handleDelete}>Ștergere</button>
-  <button onClick={onClose}>Anulează</button>
-</dialog>
+  <button onClick={onClose}>Anulare</button>
+</div>
 ```
 
 ---
 
-### 3. Color Contrast
+### 3. Contrast culori
 
-**Standard:** Text ≥4.5:1 (WCAG AA), Large text ≥3:1
+**Standard:** Text ≥4.5:1 (WCAG AA), Text mare ≥3:1
 
-#### Contrast Checks in SIMDM
+#### Verificări contrast în SIMDM
 
-| Element | Foreground | Background | Ratio | Status |
-|---------|-----------|-----------|-------|--------|
-| Primary text | `--color-text-primary` (#f0f0f0) | `--color-bg-primary` (#0c0f10) | 18:1 | ✅ |
-| Secondary text | `--color-text-secondary` (#8a9199) | `--color-bg-primary` (#0c0f10) | 5.8:1 | ✅ |
-| Button text | `--color-bg-primary` (#0c0f10) | `--color-accent` (#ff9b6a) | 6.2:1 | ✅ |
-| Error message | `--color-error` (#f87171) | `--color-error-bg` | 10:1 | ✅ |
-| Disabled text | `--color-disabled-text` (#9da3ae) | `--color-bg-tertiary` (#1c2022) | 6.5:1 | ✅ |
+| Element | Culoare text | Fundal | Raport | Status |
+|---------|-------------|--------|--------|--------|
+| Text principal | `--color-text-primary` (#f0f0f0) | `--color-bg-primary` (#0c0f10) | 18:1 | ✅ |
+| Text secundar | `--color-text-secondary` (#8a9199) | `--color-bg-primary` (#0c0f10) | 5.8:1 | ✅ |
+| Text buton | `--color-bg-primary` (#0c0f10) | `--color-accent` (#ff9b6a) | 6.2:1 | ✅ |
+| Mesaj eroare | `--color-error` (#f87171) | `--color-error-bg` | 10:1 | ✅ |
+| Text dezactivat | `--color-disabled-text` (#9da3ae) | `--color-bg-tertiary` (#1c2022) | 6.5:1 | ✅ |
 
-#### Testing Contrast
+#### Testare contrast
 
 ```javascript
-// Browser DevTools — Accessibility Inspector
-// 1. Right-click element → Inspect
-// 2. Go to "Accessibility" tab
-// 3. Check "Contrast" row
+// DevTools browser — Inspector accesibilitate:
+// 1. Click dreapta element → Inspect
+// 2. Tab "Accessibility"
+// 3. Verifică rândul "Contrast"
 
-// Or use tools:
+// Sau utilizează unelte externe:
 // - axe DevTools: https://www.deque.com/axe/devtools/
 // - WAVE: https://wave.webaim.org/
 // - WebAIM Contrast Checker: https://webaim.org/resources/contrastchecker/
@@ -216,11 +215,11 @@
 
 ---
 
-### 4. Focus Management
+### 4. Gestionare focus
 
-**Rule:** All interactive elements must be focusable and have visible focus indicators.
+**Regulă:** Toate elementele interactive trebuie să fie focusabile și să aibă indicatori de focus vizibili.
 
-#### Focus Ring Implementation
+#### Implementare focus ring
 
 ```css
 :focus-visible {
@@ -230,10 +229,10 @@
 }
 ```
 
-#### Mobile Menu Focus Trap
+#### Captură focus în meniu mobil
 
 ```jsx
-// Trap focus within modal so Tab cycles through modal-only items
+/* Focus rămâne în modal — Tab ciclează doar elementele din modal */
 const handleKeyDown = (e) => {
   if (e.key === 'Tab') {
     const focusable = menuRef.current?.querySelectorAll(
@@ -253,67 +252,69 @@ const handleKeyDown = (e) => {
 };
 ```
 
-#### Focus Order on Page Load
+#### Ordine focus la încărcarea paginii
 
 ```jsx
-// Ensure logical focus order: header → nav → main content → footer
-// Use tabindex only if necessary: avoid tabindex > 0
+// Asigură ordine logică: header → nav → conținut principal → footer
+// Folosește tabindex NUMAI dacă e necesar; evită tabindex > 0
 
-// ✅ Good: Natural DOM order
+// Corect — ordine naturală DOM
 <header></header>
 <main id="main"></main>
 <footer></footer>
 
-// ❌ Bad: Arbitrary tabindex
-<div tabindex="3"></div>
-<div tabindex="1"></div>
-<div tabindex="2"></div>
+// Greșit — tabindex arbitrar
+<div tabIndex="3"></div>
+<div tabIndex="1"></div>
+<div tabIndex="2"></div>
 ```
 
 ---
 
-### 5. Keyboard Navigation
+### 5. Navigare cu tastatura
 
-**All functionality must be keyboard accessible.**
+**Toată funcționalitatea trebuie accesibilă cu tastatura.**
 
-#### Required Keyboard Support
+#### Suport tastatură obligatoriu
 
-| Key | Action | Elements |
-|-----|--------|----------|
-| **Tab** | Move to next focusable element | All interactive elements |
-| **Shift+Tab** | Move to previous focusable element | All interactive elements |
-| **Enter** | Activate button, submit form | Buttons, links, form inputs |
-| **Space** | Activate button, toggle checkbox | Buttons, checkboxes, toggles |
-| **Escape** | Close modal, dismiss menu | Modals, dropdowns, autocomplete |
-| **Arrow Keys** | Navigate within component | Select lists, radio groups |
+| Tastă | Acțiune | Elemente |
+|-------|---------|----------|
+| **Tab** | Trece la elementul focusabil următor | Toate elementele interactive |
+| **Shift+Tab** | Trece la elementul focusabil anterior | Toate elementele interactive |
+| **Enter** | Activează buton, trimite formular | Butoane, linkuri, inputuri |
+| **Spațiu** | Activează buton, comută checkbox | Butoane, checkbox-uri |
+| **Escape** | Închide modal, respinge meniu | Modale, dropdown-uri |
+| **Săgeți** | Navigare în interiorul componentei | Liste select, grupuri radio |
 
-#### Implementation Example
+#### Exemplu implementare
 
 ```jsx
-// Form with keyboard navigation
+{/* Formular cu navigare tastatură */}
 <form onSubmit={handleSubmit}>
-  <input type="text" placeholder="Name" />
-  {/* Tab moves between inputs */}
-  <input type="email" placeholder="Email" />
-  {/* Enter/Space on submit button submits form */}
-  <button type="submit">Salvează</button>
+  <Input label="Utilizator" type="text" />
+  {/* Tab trece între inputuri */}
+  <Input label="Parolă" type="password" />
+  {/* Enter/Spațiu pe butonul submit trimite formularul */}
+  <Button type="submit">Conectare</Button>
 </form>
 
-// Modal with Escape to close
-<dialog open onKeyDown={(e) => {
-  if (e.key === 'Escape') onClose();
-}}>
-  {/* content */}
-</dialog>
+{/* Modal cu Escape pentru închidere */}
+<div
+  role="dialog"
+  aria-modal="true"
+  onKeyDown={(e) => { if (e.key === 'Escape') onClose(); }}
+>
+  {/* conținut */}
+</div>
 ```
 
 ---
 
-### 6. Error Handling
+### 6. Gestionare erori
 
-**Errors must be identified clearly and linked to inputs.**
+**Erorile trebuie identificate clar și legate la inputuri.**
 
-#### Error Message Pattern
+#### Tiparul pentru mesaje de eroare
 
 ```jsx
 <div>
@@ -322,79 +323,79 @@ const handleKeyDown = (e) => {
     id="email"
     type="email"
     aria-invalid={hasError}
-    aria-describedby={hasError ? "email-error" : undefined}
+    aria-describedby={hasError ? "eroare-email" : undefined}
     value={email}
     onChange={handleChange}
   />
   {hasError && (
-    <p id="email-error" role="alert" className="text-error">
-      Email nu este valid. Folosește formatul: example@domain.com
+    <p id="eroare-email" role="alert" className="text-xs" style={{ color: 'var(--color-error)' }}>
+      Email-ul nu este valid. Folosește formatul: exemplu@domeniu.com
     </p>
   )}
 </div>
 ```
 
-**Elements:**
-- `aria-invalid="true"` on input (visual + semantic)
-- `aria-describedby="error-id"` links input to error message
-- `role="alert"` announces error to screen readers
-- **Helpful message:** Not just "Invalid input" but specific suggestion
+**Elemente esențiale:**
+- `aria-invalid="true"` pe input (vizual + semantic)
+- `aria-describedby="id-eroare"` leagă inputul de mesajul de eroare
+- `role="alert"` anunță eroarea cititorului de ecran
+- **Mesaj util:** nu doar "Date invalide" ci o sugestie specifică
 
 ---
 
-### 7. Status & Alerts
+### 7. Stări și alerte
 
-**Important status changes must be announced to screen readers.**
+**Schimbările importante de stare trebuie anunțate cititorului de ecran.**
 
-#### Toast Notifications
+#### Notificări toast
 
 ```jsx
 import { toast } from 'react-toastify';
 
-// Automatically announced via role="alert"
+// Anunțate automat via role="alert"
 toast.success('Salvat cu succes');
 toast.error('Eroare la salvare');
 toast.info('Informație importantă');
 ```
 
-#### Live Regions
+#### Regiuni live
 
 ```jsx
-// For dynamic content updates
+{/* Pentru actualizări de conținut dinamic */}
 <div role="status" aria-live="polite" aria-atomic="true">
-  {loadingMessage}
+  {mesajIncarcare}
 </div>
 
-// For urgent updates
+{/* Pentru actualizări urgente */}
 <div role="alert" aria-atomic="true">
-  {errorMessage}
+  {mesajEroare}
 </div>
 ```
 
 ---
 
-### 8. Images & Icons
+### 8. Imagini și icoane
 
-**All images must have alt text; icons must have labels.**
+**Toate imaginile trebuie să aibă text alternativ; icoanele trebuie etichetate.**
 
-#### Decorative vs. Informative
+#### Decorativ vs. Informativ
 
 ```jsx
-{/* Decorative icon — hidden from a11y tree */}
+{/* Icoană decorativă — ascunsă din arborele de accesibilitate */}
 <Trash2 size={16} aria-hidden="true" />
 
-{/* Informative icon-only button — needs aria-label */}
-<button aria-label="Ștergere">
+{/* Buton cu icoană singură — necesită aria-label */}
+<button aria-label="Ștergere dispozitiv">
   <Trash2 size={16} />
 </button>
 
-{/* Icon with text — icon hidden, text provides label */}
+{/* Icoană cu text — icoana ascunsă, textul oferă eticheta */}
 <button>
   <Trash2 size={16} aria-hidden="true" />
   Ștergere
 </button>
 
-{/* Status icon with badge — icon + text required */}
+{/* Icoană status cu badge — icoană + text obligatoriu */}
 <div className="flex items-center gap-2">
   <CheckCircle2 size={16} aria-hidden="true" />
   <span>Funcțional</span>
@@ -403,237 +404,221 @@ toast.info('Informație importantă');
 
 ---
 
-### 9. Links vs. Buttons
+### 9. Linkuri vs. Butoane
 
-**Use semantic elements correctly.**
+**Folosește elementele semantice corect.**
 
-| Element | Use Case | Activation |
-|---------|----------|-----------|
-| `<a>` | Navigation to URL/anchor | Enter/Space |
-| `<button>` | Action/toggle state | Enter/Space |
-| `<button type="submit">` | Form submission | Enter |
+| Element | Caz de utilizare | Activare |
+|---------|-----------------|----------|
+| `<a>` | Navigare la URL/ancoră | Enter/Spațiu |
+| `<button>` | Acțiune / comutare stare | Enter/Spațiu |
+| `<button type="submit">` | Trimitere formular | Enter |
 
 ```jsx
-{/* ✅ Link — navigates */}
+{/* Corect — link navigare */}
 <a href="/inventory">Inventar</a>
 
-{/* ✅ Button — performs action */}
+{/* Corect — buton acțiune */}
 <button onClick={deleteDevice}>Ștergere</button>
 
-{/* ✅ Submit button — submits form */}
+{/* Corect — buton submit */}
 <button type="submit">Salvează</button>
 
-{/* ❌ Don't use onClick on links */}
-<a href="#" onClick={handleClick}>Action</a>
+{/* Greșit — onClick pe link */}
+<a href="#" onClick={handleClick}>Acțiune</a>
 
-{/* ❌ Don't use navigation in buttons */}
-<button onClick={() => navigate('/page')}>Go</button>
+{/* Greșit — navigare în buton */}
+<button onClick={() => navigate('/pagina')}>Deschide</button>
 ```
 
 ---
 
-## Development Standards
+## Standarde de dezvoltare
 
-### Component Props
+### Props accesibilitate per componentă
 
-**Every component should support these accessibility props:**
+**Fiecare componentă trebuie să suporte aceste props de accesibilitate:**
 
 ```javascript
 {
-  // Standard ARIA
-  aria-label: string,                    // Accessible name
-  aria-labelledby: string,               // Links to label element
-  aria-describedby: string,              // Links to description
-  aria-invalid: boolean,                 // Error state
-  
-  // Visibility
-  aria-hidden: boolean,                  // Hide from a11y tree
-  
-  // States
-  aria-pressed: boolean,                 // Toggle button state
-  aria-expanded: boolean,                // Expandable state
-  aria-disabled: boolean,                // Disabled state (not just CSS)
-  
-  // Live regions
-  role: string,                          // Semantic role
-  aria-live: 'polite' | 'assertive',     // Announcement priority
-  aria-atomic: boolean,                  // Announce whole region
+  // ARIA standard
+  'aria-label': string,           // Nume accesibil
+  'aria-labelledby': string,      // Leagă la elementul label
+  'aria-describedby': string,     // Leagă la descriere
+  'aria-invalid': boolean,        // Stare eroare
+
+  // Vizibilitate
+  'aria-hidden': boolean,         // Ascunde din arborele a11y
+
+  // Stări
+  'aria-pressed': boolean,        // Stare buton toggle
+  'aria-expanded': boolean,       // Stare expandat
+  'aria-disabled': boolean,       // Stare dezactivat (nu doar CSS)
+
+  // Regiuni live
+  role: string,                   // Rol semantic
+  'aria-live': 'polite' | 'assertive', // Prioritate anunț
+  'aria-atomic': boolean,         // Anunță toată regiunea
 }
 ```
 
-### Code Review Checklist
+### Checklist code review
 
-Before committing, verify:
+Înainte de commit, verifică:
 
-- [ ] Semantic HTML used (`<button>`, `<input>`, `<section>`, etc.)
-- [ ] All form labels have `htmlFor` connected to `id`
-- [ ] Error messages have `aria-describedby` + `role="alert"`
-- [ ] Icon-only buttons have `aria-label`
-- [ ] Focus ring visible on all focusable elements
-- [ ] Keyboard navigation works (Tab, Enter, Escape)
-- [ ] No hardcoded colors without contrast check
-- [ ] Images have alt text (or `aria-hidden="true"` if decorative)
-- [ ] Modal has `aria-modal="true"` + focus trap
-- [ ] No focus traps (except intentional modals)
-- [ ] Touch targets ≥44px
-
----
-
-## Testing Procedures
-
-### 1. Keyboard Navigation Test
-
-```
-1. Disconnect mouse
-2. Use Tab to navigate page
-3. Verify:
-   - All buttons/links reachable
-   - Focus order logical
-   - No focus traps (except modals)
-   - Enter/Space activate buttons
-   - Escape closes modals
-```
-
-### 2. Screen Reader Test
-
-**Tools:** NVDA (Windows), JAWS, VoiceOver (Mac)
-
-```
-1. Start screen reader
-2. Navigate page with: Alt+Tab, H (headings), L (links), B (buttons)
-3. Verify:
-   - All content readable
-   - Form labels associated
-   - Error messages announced
-   - Alerts announced
-   - Buttons named clearly
-4. Test forms:
-   - Labels announced with inputs
-   - Error messages announced
-   - Submit button works
-```
-
-### 3. Contrast Test
-
-**Tools:** axe DevTools, WAVE, WebAIM Contrast Checker
-
-```
-1. Open DevTools → Accessibility
-2. Run axe scan
-3. Fix any contrast failures
-4. Manual check:
-   - Text vs. background ≥4.5:1
-   - Large text (18px+) ≥3:1
-   - UI components vs. background ≥3:1
-```
-
-### 4. Color Blindness Simulation
-
-**Tools:** Chrome DevTools (Emulate vision deficiencies)
-
-```
-1. DevTools → Rendering → Emulate CSS media feature prefers-color-scheme
-2. Select vision deficiency type:
-   - Protanopia (red-blind)
-   - Deuteranopia (green-blind)
-   - Tritanopia (blue-yellow-blind)
-   - Achromatopsia (complete color blindness)
-3. Verify interface still usable (not color-only)
-```
-
-### 5. Responsive Design Test
-
-```
-1. Test at: 320px, 480px, 768px, 1024px, 1920px
-2. Verify:
-   - Touch targets ≥44px
-   - Text readable
-   - Focus rings visible
-   - No horizontal scrolling
-```
+- [ ] HTML semantic folosit (`<button>`, `<input>`, `<section>` etc.)
+- [ ] Toate label-urile formularelor au `htmlFor` conectat la `id`
+- [ ] Mesajele de eroare au `aria-describedby` + `role="alert"`
+- [ ] Butoanele cu icoană singură au `aria-label`
+- [ ] Focus ring vizibil pe toate elementele focusabile
+- [ ] Navigare tastatură funcțională (Tab, Enter, Escape)
+- [ ] Nicio culoare hardcoded fără verificare contrast
+- [ ] Imaginile au alt text (sau `aria-hidden="true"` dacă sunt decorative)
+- [ ] Modalele au `aria-modal="true"` + captură focus
+- [ ] Nicio captură focus (excepție: modale intenționate)
+- [ ] Ținte de atingere ≥44px
 
 ---
 
-## Remediation Guide
+## Proceduri de testare
 
-### Common Issues & Fixes
+### 1. Test navigare cu tastatura
 
-#### Issue: Low Color Contrast
+```
+1. Deconectează mouse-ul
+2. Folosește Tab pentru a naviga pe pagină
+3. Verifică:
+   - Toate butoanele/linkurile sunt accesibile
+   - Ordinea focus este logică
+   - Nicio captură focus (excepție: modale)
+   - Enter/Spațiu activează butoanele
+   - Escape închide modalele
+```
 
-**Problem:** Text is hard to read  
-**Solution:**
+### 2. Test cititor de ecran
+
+**Unelte:** NVDA (Windows), JAWS, VoiceOver (Mac)
+
+```
+1. Pornește cititorul de ecran
+2. Navighează cu: H (titluri), L (linkuri), B (butoane)
+3. Verifică:
+   - Tot conținutul este citibil
+   - Label-urile formularelor sunt asociate
+   - Mesajele de eroare sunt anunțate
+   - Alertele sunt anunțate
+   - Butoanele sunt denumite clar
+4. Testează formulare:
+   - Label-urile sunt anunțate cu inputurile
+   - Mesajele de eroare sunt anunțate
+   - Butonul submit funcționează
+```
+
+### 3. Test contrast
+
+**Unelte:** axe DevTools, WAVE, WebAIM Contrast Checker
+
+```
+1. Deschide DevTools → Accesibilitate
+2. Rulează scanare axe
+3. Remediază orice probleme de contrast
+4. Verificare manuală:
+   - Text vs. fundal ≥4.5:1
+   - Text mare (18px+) ≥3:1
+   - Componente UI vs. fundal ≥3:1
+```
+
+### 4. Simulare daltonism
+
+**Unelte:** Chrome DevTools (Emulare deficiențe de vedere)
+
+```
+1. DevTools → Rendering → Emulate vision deficiencies
+2. Selectează tip deficiență:
+   - Protanopie (fără roșu)
+   - Deuteranopie (fără verde)
+   - Tritanopie (fără albastru-galben)
+   - Acromatopsie (daltonism complet)
+3. Verifică că interfața rămâne utilizabilă (nu doar culori)
+```
+
+### 5. Test design responsiv
+
+```
+1. Testează la: 375px, 480px, 768px, 1024px, 1920px
+2. Verifică:
+   - Ținte atingere ≥44px
+   - Textul este lizibil
+   - Focus ring-urile sunt vizibile
+   - Fără scroll orizontal
+```
+
+---
+
+## Ghid de remediere
+
+### Probleme frecvente și soluții
+
+#### Problemă: Contrast culori scăzut
+
+**Cauza:** Textul este greu de citit
+**Soluție:**
 ```css
-/* ❌ Bad: 2.1:1 contrast */
+/* Greșit — 2.1:1 contrast */
 color: #999;
 background: #ccc;
 
-/* ✅ Good: 4.5:1 contrast */
+/* Corect — 4.5:1 contrast */
 color: var(--color-text-primary);
 background: var(--color-bg-primary);
 ```
 
-**Test:** https://webaim.org/resources/contrastchecker/
-
 ---
 
-#### Issue: Keyboard Inaccessible Button
+#### Problemă: Buton inaccesibil de la tastatură
 
-**Problem:** Button only responds to mouse click  
-**Solution:**
+**Cauza:** Butonul răspunde doar la click mouse
+**Soluție:**
 ```jsx
-/* ❌ Bad: onClick on div */
-<div className="button" onClick={handleClick}>Click me</div>
+/* Greșit — onClick pe div */
+<div className="buton" onClick={handleClick}>Click</div>
 
-/* ✅ Good: Semantic button */
-<button onClick={handleClick}>Click me</button>
+/* Corect — buton semantic */
+<button onClick={handleClick}>Click</button>
 ```
 
 ---
 
-#### Issue: Missing Form Label
+#### Problemă: Label formular lipsă
 
-**Problem:** Screen readers can't associate input with label  
-**Solution:**
+**Cauza:** Cititorul de ecran nu poate asocia inputul cu eticheta
+**Soluție:**
 ```jsx
-/* ❌ Bad: No label */
-<input type="text" placeholder="Name" />
+/* Greșit — fără label */
+<input type="text" placeholder="Nume" />
 
-/* ✅ Good: Connected label */
-<label htmlFor="name">Name:</label>
+/* Corect — label conectat */
+<label htmlFor="name">Nume:</label>
 <input id="name" type="text" />
+
+/* Sau folosind componenta Input din sistem */
+<Input label="Nume" placeholder="Introdu numele" />
 ```
 
 ---
 
-#### Issue: Image Missing Alt Text
+#### Problemă: Focus ring invizibil
 
-**Problem:** Screen readers can't describe image  
-**Solution:**
-```jsx
-/* ❌ Bad: No alt */
-<img src="device.png" />
-
-/* ✅ Good: Descriptive alt */
-<img src="device.png" alt="Defibrilator extern model XYZ" />
-
-/* ✅ Good: Decorative image */
-<img src="icon.svg" alt="" aria-hidden="true" />
-```
-
----
-
-#### Issue: Focus Ring Not Visible
-
-**Problem:** Users can't see which element is focused  
-**Solution:**
+**Cauza:** Utilizatorii nu văd care element este focusat
+**Soluție:**
 ```css
-/* ✅ Use visible focus ring */
+/* Folosește focus ring vizibil */
 :focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
 }
 
-/* Or use shadow */
+/* Sau prin variabila din design system */
 :focus-visible {
   box-shadow: var(--focus-ring);
 }
@@ -641,116 +626,126 @@ background: var(--color-bg-primary);
 
 ---
 
-#### Issue: Error Message Not Announced
+#### Problemă: Mesaj de eroare neanunțat
 
-**Problem:** Screen reader users don't hear about form errors  
-**Solution:**
+**Cauza:** Utilizatorii cititorului de ecran nu aud erorile din formular
+**Soluție:**
 ```jsx
 <input
   aria-invalid={hasError}
-  aria-describedby={hasError ? "error-id" : undefined}
+  aria-describedby={hasError ? "eroare-id" : undefined}
 />
 {hasError && (
-  <p id="error-id" role="alert">
-    {errorMessage}
+  <p id="eroare-id" role="alert" style={{ color: 'var(--color-error)' }}>
+    {mesajEroare}
   </p>
 )}
 ```
 
 ---
 
-## Tools & Resources
+## Unelte și resurse
 
-### Testing Tools
+### Unelte de testare
 
-| Tool | Type | Cost | Purpose |
-|------|------|------|---------|
-| [axe DevTools](https://www.deque.com/axe/devtools/) | Browser ext. | Free | Automated accessibility audit |
-| [WAVE](https://wave.webaim.org/) | Browser ext. | Free | Visual feedback on a11y issues |
-| [NVDA](https://www.nvaccess.org/) | Screen reader | Free | Test for blind users (Windows) |
-| [WebAIM Contrast Checker](https://webaim.org/resources/contrastchecker/) | Online | Free | Check color contrast ratios |
-| [Lighthouse](https://developers.google.com/web/tools/lighthouse) | Chrome | Built-in | Performance + a11y audit |
+| Unealtă | Tip | Cost | Scop |
+|---------|-----|------|------|
+| [axe DevTools](https://www.deque.com/axe/devtools/) | Extensie browser | Gratuit | Audit automat accesibilitate |
+| [WAVE](https://wave.webaim.org/) | Extensie browser | Gratuit | Feedback vizual probleme a11y |
+| [NVDA](https://www.nvaccess.org/) | Cititor ecran | Gratuit | Test utilizatori nevăzători (Windows) |
+| [WebAIM Contrast Checker](https://webaim.org/resources/contrastchecker/) | Online | Gratuit | Verificare rapoarte contrast |
+| [Lighthouse](https://developers.google.com/web/tools/lighthouse) | Chrome | Inclus | Audit performanță + accesibilitate |
 
-### Standards & Documentation
+### Standarde și documentație
 
-| Resource | URL | Purpose |
-|----------|-----|---------|
-| WCAG 2.1 | https://www.w3.org/WAI/WCAG21/quickref/ | Official accessibility guidelines |
-| ARIA Authoring Practices | https://www.w3.org/WAI/ARIA/apg/ | How to use ARIA correctly |
-| MDN Accessibility | https://developer.mozilla.org/en-US/docs/Web/Accessibility | Detailed guides + examples |
-| WebAIM | https://webaim.org/ | Practical accessibility articles |
-
-### Recommended Reading
-
-1. **"Designing Web Accessibility"** by Sarah Horton & Whitney Quesenbery
-2. **"The Inclusive Design Handbook"** by Inclusive Design Community
-3. **"WCAG 2.1 Success Criteria"** — Official W3C specification
+| Resursă | Scop |
+|---------|------|
+| [WCAG 2.1](https://www.w3.org/WAI/WCAG21/quickref/) | Ghid oficial accesibilitate web |
+| [ARIA Authoring Practices](https://www.w3.org/WAI/ARIA/apg/) | Utilizare corectă ARIA |
+| [MDN Accessibility](https://developer.mozilla.org/en-US/docs/Web/Accessibility) | Ghiduri detaliate cu exemple |
+| [WebAIM](https://webaim.org/) | Articole practice accesibilitate |
 
 ---
 
-## Maintenance & Updates
+## Mentenanță și actualizări
 
-### Quarterly Accessibility Audit
+### Audit trimestrial accesibilitate
 
-Schedule accessibility testing every 3 months:
+Programează testare de accesibilitate la fiecare 3 luni:
 
-1. **Automated testing** (30 min) — axe, WAVE, Lighthouse
-2. **Keyboard navigation** (30 min) — Full page keyboard test
-3. **Screen reader** (60 min) — NVDA/JAWS test
-4. **Responsive design** (30 min) — Mobile/tablet testing
-5. **Contrast verification** (20 min) — All color pairs checked
-6. **Remediation** (variable) — Fix any issues found
+1. **Testare automată** (30 min) — axe, WAVE, Lighthouse
+2. **Navigare tastatură** (30 min) — test complet pe pagini noi
+3. **Cititor de ecran** (60 min) — test NVDA/Narrator
+4. **Design responsiv** (30 min) — testare mobile/tabletă
+5. **Verificare contrast** (20 min) — toate perechile de culori noi
+6. **Remediere** (variabil) — remedierea problemelor găsite
 
-### Version Updates
+### La adăugarea unor funcționalități noi
 
-When upgrading dependencies:
-- Test a11y features still work
-- Check contrast in new colors
-- Verify keyboard navigation unchanged
-- Update WCAG compliance record
-
----
-
-## Continuous Improvement
-
-### Goals
-
-- **Current:** WCAG 2.1 Level AA ✅
-- **Future:** WCAG 2.1 Level AAA (higher standard)
-- **Future:** EN 301 549 (EU accessibility standard)
-
-### User Feedback
-
-If users report accessibility issues:
-1. Document issue + context
-2. Test with affected users (if possible)
-3. Fix in next sprint
-4. Verify fix with same users
-5. Update documentation
+- Testează funcționalitățile de accesibilitate
+- Verifică contrastul în culorile noi
+- Confirmă că navigarea cu tastatura funcționează
+- Actualizează documentația
 
 ---
 
-**Status:** ✅ WCAG 2.1 AA COMPLIANT  
-**Last Audit:** Iunie 2026  
-**Next Audit Due:** septembrie 2026  
-
----
-
-## Appendix: Quick Checklist
+## Checklist rapid (pre-commit)
 
 ```markdown
-## Pre-Commit Accessibility Checklist
+## Checklist Accesibilitate Pre-Commit
 
-- [ ] Semantic HTML (no `<div>` for buttons/forms)
-- [ ] Form labels have `htmlFor` + `id`
-- [ ] Error messages linked with `aria-describedby`
-- [ ] Icon-only buttons have `aria-label`
-- [ ] Focus ring visible on all interactive elements
-- [ ] Keyboard navigation works (Tab, Enter, Escape)
-- [ ] Contrast ≥4.5:1 (or ≥3:1 for large text)
-- [ ] Images have alt text (or `alt=""` + `aria-hidden` if decorative)
-- [ ] No focus traps (except intentional modals)
-- [ ] Touch targets ≥44px
-- [ ] Status messages use `role="alert"` or `aria-live="polite"`
+- [ ] HTML semantic (fără <div> pentru butoane/formulare)
+- [ ] Label-uri formulare cu htmlFor + id
+- [ ] Mesaje eroare legate cu aria-describedby
+- [ ] Butoane icon-only au aria-label
+- [ ] Focus ring vizibil pe toate elementele interactive
+- [ ] Navigare tastatură funcțională (Tab, Enter, Escape)
+- [ ] Contrast ≥4.5:1 (sau ≥3:1 pentru text mare)
+- [ ] Imaginile au alt text (sau alt="" + aria-hidden dacă decorative)
+- [ ] Fără capturi focus (excepție: modale intenționate)
+- [ ] Ținte atingere ≥44px
+- [ ] Mesaje de stare cu role="alert" sau aria-live="polite"
 ```
 
+---
+
+**Status:** ✅ CONFORM WCAG 2.1 AA
+**Ultimul audit:** 2026-06-05
+**Următor audit:** 2026-09-05
+
+---
+
+## Apendice: Raport probleme accesibilitate
+
+Când găsești bug-uri de accesibilitate, folosește formatul:
+
+```markdown
+## [A11y] Titlu scurt
+
+**Componentă:** Buton / Input / Tabel / [Denumire]
+
+**Problemă:**
+Ce nu este accesibil?
+
+**Criteriu WCAG:**
+Care standard este încălcat?
+- [ ] 2.4.7 Focus Vizibil
+- [ ] 1.4.3 Contrast
+- [ ] 3.3.1 Identificare erori
+- [ ] altul
+
+**Cum reproduci:**
+1. Pasul 1
+2. Pasul 2
+
+**Comportament așteptat:**
+Ce ar trebui să se întâmple?
+
+**Comportament actual:**
+Ce se întâmplă acum?
+
+**Mediu:**
+- Browser: Chrome vX / Firefox
+- OS: Windows 11 / macOS
+- Cititor ecran (dacă e cazul): NVDA / Narrator
+```

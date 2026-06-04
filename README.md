@@ -1,8 +1,8 @@
 # SIMDM — Sistem Informațional de Management al Dispozitivelor Medicale
 
-**Versiune:** 2.4 Faza 1-2 Complete + Design System 100/100  
-**Status:** ✅ **Faza 1 & 2 COMPLETĂ 100%** | ✅ **Design System PERFECT 100/100** | ⏳ **Faza 3 Start 2026-06-05**  
-**Actualizat:** 2026-06-04  
+**Versiune:** 2.5 — Faza 1-2 Complete + Design System 100/100 + Module Quick-Win  
+**Status:** ✅ **Faza 1 & 2 COMPLETĂ 100%** | ✅ **Design System PERFECT 100/100** | ✅ **Module quick-win** | ⏳ **Faza 3 Start 2026-06-05**  
+**Actualizat:** 2026-06-05  
 **Licență:** Privat (Spital privat Moldova)
 
 ---
@@ -19,8 +19,9 @@
 |------|-------|--------|-------|----------|
 | **1** | Fundație (Auth, DB, Login) | ✅ COMPLETĂ | 30+ | 100% |
 | **2** | Inventar DM (CRUD, export) | ✅ COMPLETĂ | 103+ | 95.36% backend / 91.99% frontend |
-| **3** | Mentenanță (Plan, Exec, Ticketing) | ⏳ PLANNED (16 zile) | TBD | Target ≥95% |
-| **4-8** | Documente, Incidente, Procurement, Dashboard, QA | ⬜ PLANNED | — | — |
+| **QW** | Module quick-win (Mentenanță basic, Incidente, Audit Logs UI, Timeline) | ✅ COMPLETĂ | — | — |
+| **3** | Mentenanță completă (Calendar, Semnătură, Formular Nr. 5-6-8-9) | ⏳ PLANNED (16 zile) | TBD | Target ≥95% |
+| **4-8** | Documente, Procurement, Dashboard, QA | ⬜ PLANNED | — | — |
 
 ### ✅ Caracteristici Implementate (Faza 1+2+Design System)
 
@@ -45,6 +46,13 @@
 - ✅ **Design System 100/100** — Complete token coverage, zero hardcoded values, glassmorphism, SkipLink accessibility pattern
 - ✅ **Component Library** — StatusBadge (6 statuses), DataGrid, Forms, Modals, Toasts, DeviceCard, Button, Input, Card
 - ✅ **Documentation Complete** — COMPONENT_LIBRARY.md (300+ lines), LIGHT_MODE_GUIDE.md (400+ lines), ACCESSIBILITY_GUIDE.md (500+ lines)
+
+**Module Quick-Win (implementate în sesiunea RESEARCH_SYNTHESIS_REPORT)** ✅
+- ✅ **Înregistrări Mentenanță** — CRUD complet, 4 tipuri (Preventivă/Corectivă/Verificare/Calibrare), badge-uri vizuale
+- ✅ **Raportare Incidente** — CRUD + state machine status (Deschis → În lucru → Rezolvat → Închis / Escaladat AMDM), 5 niveluri severitate
+- ✅ **Jurnal Audit UI** — Pagina `/audit-logs` cu filtre, export CSV (UTF-8 BOM Excel), câmpuri JSON expandabile
+- ✅ **Timeline Dispozitiv** — Istoricul modificărilor pe fișa DM (DevForm edit mode)
+- ✅ **Ghid Workflow Mobil** — Documentație utilizare pe teren (`docs/MOBILE_WORKFLOW_GUIDE.md`)
 
 **Hardening de Securitate**
 - ✅ **Antivirus Scanning** — Magic byte detection + optional ClamAV (production-ready)
@@ -93,7 +101,10 @@
 | **docs/CONTRIBUTING.md** | ✅ v2.1 | Toți | PR workflow + standards |
 | **docs/ANTIVIRUS-SETUP.md** | ✅ v2.1 | DevOps | Magic bytes + ClamAV |
 | **docs/DOCKER-OPTIMIZATION.md** | ✅ v2.1 | DevOps | WSL + resource limits |
-| **frontend/README.md** | ✅ v2.1 | Frontend dev | Setup + structure |
+| **docs/MOBILE_WORKFLOW_GUIDE.md** | ✅ v1.0 | Bioinginer (teren) | 5 workflow-uri mobile + breakpoints |
+| **docs/ACCESSIBILITY_GUIDE.md** | ✅ v2.0 | Frontend + QA | WCAG 2.1 AA patterns, testare |
+| **docs/COMPONENT_LIBRARY.md** | ✅ v3.1 | Frontend dev | Ref. completă componente + token-uri |
+| **docs/LIGHT_MODE_GUIDE.md** | ✅ v2.0 | Frontend dev | Transformări dark/light mode |
 
 ---
 
@@ -260,16 +271,16 @@ npx playwright show       # HTML report
 
 ## 📋 Roadmap
 
-`
-Faza 1  ✅ DONE               (2026-05-30) — Fundație + Auth
-Faza 2  ✅ DONE               (2026-06-02) — Inventar DM
-Faza 3  ⏳ PLANNED 16 days    (2026-06-05 — 2026-06-26) — Mentenanță
-Faza 4  ⬜ PLANNED 2-3 weeks  (2026-06-26 — 2026-07-12) — Documente
-Faza 5  ⬜ PLANNED 2-3 weeks  (2026-07-12 — 2026-07-28) — Incidente
-Faza 6  ⬜ PLANNED 2-3 weeks  (2026-07-28 — 2026-08-13) — Procurement
-Faza 7  ⬜ PLANNED 2-3 weeks  (2026-08-13 — 2026-08-29) — Dashboard
-Faza 8  ⬜ PLANNED 1-2 weeks  (2026-08-29 — 2026-09-12) — QA & Go-Live
-`
+```
+Faza 1   ✅ DONE              (2026-05-30) — Fundație + Auth
+Faza 2   ✅ DONE              (2026-06-02) — Inventar DM
+QW       ✅ DONE              (2026-06-05) — Module quick-win (Mentenanță basic, Incidente, AuditLogs)
+Faza 3   ⏳ PLANNED 16 zile  (2026-06-05 — 2026-06-26) — Mentenanță completă (calendar, semnătură)
+Faza 4   ⬜ PLANNED 2-3 săpt (2026-06-26 — 2026-07-12) — Documente
+Faza 5   ⬜ PLANNED 2-3 săpt (2026-07-12 — 2026-07-28) — Procurement
+Faza 6   ⬜ PLANNED 2-3 săpt (2026-07-28 — 2026-08-13) — Dashboard
+Faza 7   ⬜ PLANNED 1-2 săpt (2026-08-13 — 2026-09-12) — QA & Go-Live
+```
 
 **MVP (Faza 1-2):** 2026-06-02 ✅ DONE
 **Core (Faza 1-3):** 2026-06-26 (projected)

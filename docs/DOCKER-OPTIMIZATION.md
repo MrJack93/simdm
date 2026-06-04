@@ -1,7 +1,7 @@
 # Docker Optimization Guide — SIMDM 2026
 
-**Versiune:** 2.1 (Faza 1-2 Complete + Faza 3 Ready + Production Hardening)  
-**Dată:** 2026-06-02  
+**Versiune:** 2.1 (Faza 1-2 Complete + Module Quick-Win + Production Hardening)
+**Dată:** 2026-06-05  
 **Status:** ✅ Fully Optimized (cache_from removed, healthcheck fixed, USER node ready)
 
 Această documentație descrie optimizările Docker implementate pentru a preveni hang-uri, îmbunătăți performance și a urma best practices 2026.
@@ -269,6 +269,6 @@ docker-compose build --no-cache
 
 ---
 
-**Last Updated:** 2025-05-30  
-**Version:** 1.0 (Faza 2 optimization)
+**Ultima actualizare:** 2026-06-05
+**Versiune:** 2.1
 
