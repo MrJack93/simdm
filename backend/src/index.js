@@ -19,6 +19,7 @@ const authMiddleware = require('./middleware/auth');
 const { cleanupExpiredTokens } = require('./jobs/cleanupTokens');
 
 let authRoutes, sectionsRoutes, deviceRoutes, consumableRoutes, annualInventoryRoutes;
+let auditLogsRoutes, maintenanceRoutes, incidentRoutes;
 try {
   authRoutes = require('./routes/auth');
   console.log('✅ Auth routes loaded');
@@ -30,6 +31,12 @@ try {
   console.log('✅ Consumables routes loaded');
   annualInventoryRoutes = require('./routes/annualInventory');
   console.log('✅ Annual inventory routes loaded');
+  auditLogsRoutes = require('./routes/auditLogs');
+  console.log('✅ Audit logs routes loaded');
+  maintenanceRoutes = require('./routes/maintenance');
+  console.log('✅ Maintenance routes loaded');
+  incidentRoutes = require('./routes/incidents');
+  console.log('✅ Incidents routes loaded');
 } catch (e) {
   console.error('❌ Error loading routes:', e.message);
   process.exit(1);
@@ -81,11 +88,10 @@ app.use('/api/sections', authMiddleware, sectionsRoutes);
 app.use('/api/devices', deviceRoutes);
 app.use('/api/consumables', consumableRoutes);
 app.use('/api/annual-inventory', annualInventoryRoutes);
-
-// Viitoarele rute se adaugă în fazele 2-8:
-// app.use('/api/maintenance', authMiddleware, maintenanceRoutes);
-// app.use('/api/incidents',   authMiddleware, incidentRoutes);
-// app.use('/api/documents',   authMiddleware, documentRoutes);
+app.use('/api/audit-logs', authMiddleware, auditLogsRoutes);
+app.use('/api/maintenance', authMiddleware, maintenanceRoutes);
+app.use('/api/incidents', authMiddleware, incidentRoutes);
+// app.use('/api/documents', authMiddleware, documentRoutes);
 
 app.use((err, req, res, next) => {
   log('ERROR HANDLER: ' + err.message);

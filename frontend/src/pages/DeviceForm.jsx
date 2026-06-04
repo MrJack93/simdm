@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import DeviceTimeline from '../components/DeviceTimeline';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -717,6 +718,12 @@ export default function DeviceForm() {
             Anulare
           </button>
         </form>
+
+        {isEditMode && id && (
+          <div className="max-w-2xl mt-2 pb-8">
+            <DeviceTimeline deviceId={id} />
+          </div>
+        )}
       </div>
     </div>
   );

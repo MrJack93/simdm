@@ -9,9 +9,12 @@ import ConsumablesPage from './pages/ConsumablesPage';
 import AnnualInventoryPage from './pages/AnnualInventoryPage';
 import DeviceForm from './pages/DeviceForm';
 import SettingsPage from './pages/SettingsPage';
+import MaintenancePage from './pages/MaintenancePage';
+import IncidentsPage from './pages/IncidentsPage';
+import AuditLogsPage from './pages/AuditLogsPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import SkipLink from './components/SkipLink';
-import { Menu, X, Home, Warehouse, Package, Calendar, Cog, LogOut } from 'lucide-react';
+import { Menu, X, Home, Warehouse, Package, Calendar, Cog, LogOut, Wrench, AlertTriangle, FileText } from 'lucide-react';
 
 function Header({ user, logout, theme, toggleTheme, isMobileMenuOpen, setIsMobileMenuOpen }) {
   const location = useLocation();
@@ -34,15 +37,19 @@ function Header({ user, logout, theme, toggleTheme, isMobileMenuOpen, setIsMobil
           {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
 
-        <a href="/" className="flex items-center gap-2" style={{ textDecoration: 'none' }}>
-          <h1 className="text-2xl font-bold" style={{ color: 'var(--color-accent)' }}>SIMDM</h1>
+        <a href="/" className="flex items-center gap-1.5" style={{ textDecoration: 'none', color: 'var(--color-accent)' }}>
+          <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1", fontSize: '20px' }}>flare</span>
+          <span className="text-2xl font-bold tracking-tight" style={{ fontFamily: 'var(--font-family-headline)', color: 'var(--color-accent)' }}>SIMDM</span>
         </a>
 
         <nav className="hidden md:flex gap-6 ml-8">
           {[
-            { href: '/inventory',        Icon: Warehouse, label: 'Inventar' },
-            { href: '/inventory/annual', Icon: Calendar,  label: 'Inventariere' },
-            { href: '/consumables',      Icon: Package,   label: 'Consumabile' },
+            { href: '/inventory',        Icon: Warehouse,     label: 'Inventar' },
+            { href: '/inventory/annual', Icon: Calendar,      label: 'Inventariere' },
+            { href: '/consumables',      Icon: Package,       label: 'Consumabile' },
+            { href: '/maintenance',      Icon: Wrench,        label: 'Mentenanță' },
+            { href: '/incidents',        Icon: AlertTriangle, label: 'Incidente' },
+            { href: '/audit-logs',       Icon: FileText,      label: 'Jurnal' },
           ].map(({ href, Icon, label }) => (
             <a
               key={href}
@@ -134,11 +141,14 @@ function MobileMenu({ isOpen, onClose }) {
   }, [isOpen, onClose]);
 
   const links = [
-    { href: '/',                 Icon: Home,      label: 'Dashboard' },
-    { href: '/inventory',        Icon: Warehouse, label: 'Inventar' },
-    { href: '/inventory/annual', Icon: Calendar,  label: 'Inventariere' },
-    { href: '/consumables',      Icon: Package,   label: 'Consumabile' },
-    { href: '/settings',         Icon: Cog,       label: 'Setări' },
+    { href: '/',                 Icon: Home,          label: 'Dashboard' },
+    { href: '/inventory',        Icon: Warehouse,     label: 'Inventar' },
+    { href: '/inventory/annual', Icon: Calendar,      label: 'Inventariere' },
+    { href: '/consumables',      Icon: Package,       label: 'Consumabile' },
+    { href: '/maintenance',      Icon: Wrench,        label: 'Mentenanță' },
+    { href: '/incidents',        Icon: AlertTriangle, label: 'Incidente' },
+    { href: '/audit-logs',       Icon: FileText,      label: 'Jurnal Audit' },
+    { href: '/settings',         Icon: Cog,           label: 'Setări' },
   ];
 
   if (!isOpen) return null;
@@ -192,6 +202,9 @@ function DashboardLayout({ logout, theme, toggleTheme }) {
           <Route path="/inventory"         element={<ProtectedRoute><InventoryPageV2 /></ProtectedRoute>} />
           <Route path="/inventory/annual"  element={<ProtectedRoute><AnnualInventoryPage /></ProtectedRoute>} />
           <Route path="/consumables"       element={<ProtectedRoute><ConsumablesPage /></ProtectedRoute>} />
+          <Route path="/maintenance"       element={<ProtectedRoute><MaintenancePage /></ProtectedRoute>} />
+          <Route path="/incidents"         element={<ProtectedRoute><IncidentsPage /></ProtectedRoute>} />
+          <Route path="/audit-logs"        element={<ProtectedRoute><AuditLogsPage /></ProtectedRoute>} />
           <Route path="/devices/new"       element={<ProtectedRoute><DeviceForm /></ProtectedRoute>} />
           <Route path="/devices/:id/edit"  element={<ProtectedRoute><DeviceForm /></ProtectedRoute>} />
           <Route path="/settings"          element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
