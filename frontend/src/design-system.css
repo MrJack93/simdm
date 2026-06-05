@@ -38,17 +38,21 @@
   --color-status-loaned: #60a5fa;
   --color-status-spare: #a78bfa;
 
-  /* ===== HEALTHCARE COLORS (UI Pro Max #9) ===== */
-  /* Alternative palette for medical UI context */
-  --healthcare-primary: #0891B2;
+  /* ===== HEALTHCARE COLORS (UI Pro Max #9) - ACTIV ===== */
+  /* Medical palette pentru aplicații sanitare - Faza 3 */
+  --healthcare-primary: #0891B2;        /* Cyan calm pentru încredere medicală */
   --healthcare-primary-light: #22D3EE;
-  --healthcare-success: #059669;
+  --healthcare-success: #059669;        /* Verde sănătate pentru acțiuni pozitive */
   --healthcare-success-light: #10B981;
-  --healthcare-bg-primary: #ECFEFF;
+  --healthcare-bg-primary: #ECFEFF;     /* Fundal cyan foarte ușor */
   --healthcare-bg-secondary: #F0F9FF;
-  --healthcare-text-primary: #164E63;
+  --healthcare-text-primary: #164E63;   /* Cyan închis pentru contrast maxim */
   --healthcare-text-secondary: #0C4A6E;
-  --healthcare-border: #A5F3FC;
+  --healthcare-border: #A5F3FC;         /* Border cyan ușor */
+
+  /* Activare partial healthcare pentru mentenanță (Phase 3) */
+  --color-success-medical: var(--healthcare-success);        /* Verde medical */
+  --color-primary-medical: var(--healthcare-primary);        /* Cyan medical */
 
   /* Glass effect */
   --glass-bg: rgba(20, 23, 24, 0.7);

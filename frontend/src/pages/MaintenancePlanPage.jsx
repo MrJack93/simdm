@@ -113,13 +113,19 @@ export default function MaintenancePlanPage() {
       {/* Antet */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold mb-2">Plan de mentenanță</h1>
-          <p className="text-secondary-foreground">Gestionați mentenanța preventivă și corectivă</p>
+          <h1 className="text-3xl font-bold mb-2" style={{ color: 'var(--healthcare-primary)' }}>
+            Plan de mentenanță
+          </h1>
+          <p className="text-secondary-foreground">Gestionați mentenanța preventivă și corectivă conform standardelor medicale</p>
         </div>
         <div className="flex gap-2">
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
-              <Button className="gap-2" style={{ backgroundColor: 'var(--color-success)' }}>
+              <Button
+                className="gap-2"
+                style={{ backgroundColor: 'var(--healthcare-success)', color: '#fff' }}
+                aria-label="Adăugați plan de mentenanță nou"
+              >
                 <Plus size={20} />
                 Adaugă plan
               </Button>
@@ -209,8 +215,9 @@ export default function MaintenancePlanPage() {
                 <Button
                   type="submit"
                   className="w-full"
-                  style={{ backgroundColor: 'var(--color-success)' }}
+                  style={{ backgroundColor: 'var(--healthcare-success)', color: '#fff' }}
                   disabled={createPlanMutation.isPending}
+                  aria-label="Creare plan de mentenanță"
                 >
                   {createPlanMutation.isPending ? 'Se creează...' : 'Creare'}
                 </Button>
