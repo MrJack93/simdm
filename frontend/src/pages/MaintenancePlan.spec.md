@@ -1,103 +1,103 @@
-# Спецификация: План менте (Maintenance Plan Module)
+# Specificație: Plan de mentenanță (Modulul Mentenanță)
 
-**Модуль:** Plan Mentenanță Preventivă  
-**Статус:** SPEC (Недели 2-3, Фаза 3)  
-**Версия:** 1.0 (2026-06-05)
-
----
-
-## 📋 Требования
-
-### Функционал
-
-1. **Просмотр плана менте**
-   - Календарь на год (Jan-Dec)
-   - Каждое событие = устройство + дата + тип менте
-   - Цвет события = статус (готово/запланировано/просрочено)
-
-2. **Создание плана**
-   - Выбрать устройство из инвентаря
-   - Выбрать тип менте (профилактична/коректуюча)
-   - Выбрать периодичность (месячно/квартально/годово)
-   - Система автоматически генерирует даты на год
-
-3. **Редактирование**
-   - Изменить дату события
-   - Изменить статус (запланировано/готово/просрочено)
-   - Удалить событие
-
-4. **Отчёт (Formular Nr. 5)**
-   - Экспортировать план в PDF
-   - Подтверждение главного биоинженера
+**Modul:** Plan de mentenanță preventivă  
+**Status:** SPEC (Săptămânile 2-3, Faza 3)  
+**Versiune:** 1.0 (2026-06-05)
 
 ---
 
-## 🎨 UI компоненты (Shadcn)
+## 📋 Cerințe
+
+### Funcționalitate
+
+1. **Vizualizare plan de mentenanță**
+   - Calendar pe an (Ianuarie-Decembrie)
+   - Fiecare eveniment = dispozitiv + dată + tip mentenanță
+   - Culoare eveniment = status (finalizat/planificat/datorat)
+
+2. **Creare plan**
+   - Selectare dispozitiv din inventar
+   - Selectare tip mentenanță (preventivă/corectivă)
+   - Selectare frecvență (lunar/trimestrial/anual)
+   - Sistem generează automat datele pe 12 luni
+
+3. **Editare**
+   - Schimbare dată eveniment
+   - Schimbare status (planificat/finalizat/datorat)
+   - Ștergere eveniment
+
+4. **Raport (Formular Nr. 5)**
+   - Exportare plan în PDF
+   - Confirmare inginer biomed
+
+---
+
+## 🎨 Componente UI (Shadcn)
 
 ```
 MaintenancePlan
-├── <Card> — контейнер страницы
-├── <Tabs> — выбор месяца (Jan-Dec)
-│   ├── <TabsList> — 12 вкладок
-│   └── <TabsContent> — календарь + события
-├── <Dialog> — создание/редактирование плана
-│   ├── <Form>
-│   ├── <FormField> × 4 (device, type, frequency, date)
-│   ├── <Select> — device picker
-│   ├── <Button> — "Создать"/"Сохранить"
-│   └── <Button variant="outline"> — "Отмена"
-├── <Table> — список всех событий менте
-│   ├── Устройство (с иконкой типа)
-│   ├── Дата
-│   ├── Статус (<Badge> colour-coded)
-│   ├── Действие (редактировать/удалить)
-└── <Button> — "Экспортировать план"
+├── <Card> — container pagină
+├── <Tabs> — selectare lună (Ian-Dec)
+│   ├── <TabsList> — 12 file
+│   └── <TabsContent> — calendar + evenimente
+├── <Dialog> — creare/editare plan
+│   ├── Formular
+│   ├── <FormField> × 4 (dispozitiv, tip, frecvență, dată)
+│   ├── <Select> — selector dispozitiv
+│   ├── <Button> — "Creare"/"Salvare"
+│   └── <Button variant="outline"> — "Anulare"
+├── <Table> — listă toate evenimentele mentenanță
+│   ├── Dispozitiv (cu pictogramă tip)
+│   ├── Dată
+│   ├── Status (<Badge> color-coded)
+│   ├── Acțiune (editare/ștergere)
+└── <Button> — "Exportă plan"
 ```
 
 ---
 
-## 🎯 Пользовательский поток
+## 🎯 Flux utilizator
 
-### Сценарий 1: Просмотр плана на месяц
-
-```
-1. Открыть MaintenancePlan page
-2. Видит текущий месяц (Tabs с June выбранным)
-3. В календаре видит события:
-   - УЗД апарат → 2026-06-10 → Профилактична ✅
-   - Дефибриллятор → 2026-06-15 → Коректуюча ⏳
-   - Кислородный концентратор → 2026-06-20 → Просрочено ❌
-4. Может кликнуть на событие → открыть деталі
-```
-
-### Сценарий 2: Создать новый план менте
+### Scenariu 1: Vizualizare plan pe o lună
 
 ```
-1. Кликнуть "Додати план менте"
-2. Форма:
-   - Оберіть пристрій: [Dropdown списък]
-   - Тип менте: [Профилактична / Коректуюча]
-   - Періодичність: [Щомісячно / Щоквартально / Щорічно]
-   - Перша дата: [Date picker]
-3. Кликнути "Створити"
-4. Система генерирует даты на 12 месяцев вперёд
-5. События появляются в календаре
+1. Deschide pagina MaintenancePlan
+2. Vede luna curentă (Tab-ul Iunie selectat)
+3. În calendar vede evenimente:
+   - Aparat USG → 2026-06-10 → Preventivă ✅
+   - Defibrillator → 2026-06-15 → Corectivă ⏳
+   - Concentrator oxigen → 2026-06-20 → Datorat ❌
+4. Poate da click pe eveniment → deschide detalii
+```
+
+### Scenariu 2: Creare plan mentenanță nou
+
+```
+1. Dă click "Adaugă plan mentenanță"
+2. Formular:
+   - Selectare dispozitiv: [Dropdown]
+   - Tip mentenanță: [Preventivă / Corectivă]
+   - Frecvență: [Lunar / Trimestrial / Anual]
+   - Prima dată: [Date picker]
+3. Dă click "Creare"
+4. Sistem generează datele pe 12 luni
+5. Evenimente apar în calendar
 ```
 
 ---
 
-## 🌍 Медицинский контекст
+## 🏥 Context medical
 
-**По стандарту:** Ghid Bioinginerului — каждое устройство требует профилактической менте (МПП) раз в 3-12 месяцев в зависимости от типа.
+**Conform ghidului:** Fiecare dispozitiv necesită mentenanță preventivă (MPP) la 3-12 luni în funcție de tip.
 
-**Цвета статусов (healthcare palette):**
-- ✅ Готово (зелёный #059669)
-- ⏳ Запланировано (голубой #0891B2)
-- ❌ Просрочено (красный #DC2626)
+**Culori status (paleta healthcare):**
+- ✅ Finalizat (verde #059669)
+- ⏳ Planificat (albastru #0891B2)
+- ❌ Datorat (roșu #DC2626)
 
 ---
 
-## 📊 Данные (Backend API)
+## 📊 Date (Backend API)
 
 ### GET `/api/maintenance-plans`
 ```json
@@ -105,7 +105,7 @@ MaintenancePlan
   {
     "id": "plan-001",
     "deviceId": "dev-001",
-    "deviceName": "УЗД апарат A12",
+    "deviceName": "Aparat USG A12",
     "type": "preventive",
     "scheduledDate": "2026-06-10",
     "frequency": "monthly",
@@ -128,84 +128,84 @@ MaintenancePlan
 
 ---
 
-## ♿ Доступность (WCAG AA)
+## ♿ Accesibilitate (WCAG AA)
 
-- [ ] Таблица имеет th/td с правильными ролями
-- [ ] Dialog имеет правильный role="dialog" и aria-labelledby
-- [ ] Form имеет labels для каждого input (for attribute)
-- [ ] Кнопки имеют aria-label если только иконка
-- [ ] Календарь имеет логический порядок табуляции
-- [ ] Цвета статусов + иконки (не только цвет)
-- [ ] Focus visible на всех interactive элементах
+- [ ] Tabel are th/td cu roluri corecte
+- [ ] Dialog are role="dialog" și aria-labelledby
+- [ ] Formular are labels pentru fiecare input (atribut for)
+- [ ] Butoane au aria-label dacă doar pictogramă
+- [ ] Calendar are ordine logică tabulation
+- [ ] Culori status + pictograme (nu doar culoare)
+- [ ] Focus vizibil pe toate elementele interactive
 
 ---
 
 ## 📱 Responsive
 
-- **Mobile (320px):** Таблица → Card layout (stack columns)
-- **Tablet (768px):** 2 колонны
-- **Desktop (1024px):** 3 колонны + боковая панель
+- **Mobil (320px):** Tabel → Layout card (coloane stivuite)
+- **Tablă (768px):** 2 coloane
+- **Desktop (1024px):** 3 coloane + panou lateral
 
 ---
 
-## 🧪 Acceptance Criteria
+## 🧪 Criterii de acceptare
 
-### AC1: Создание плана
+### CA1: Creare plan
 ```gherkin
-Given: Биоинженер на странице MaintenancePlan
-When: Нажимает "Додати план менте"
-Then: Открывается Dialog с формой
-And: Форма содержит поля: device, type, frequency, date
-And: После submit события появляются в календаре
+Dat: Inginer pe pagina MaintenancePlan
+Când: Apasă "Adaugă plan mentenanță"
+Atunci: Se deschide Dialog cu formular
+Și: Formular conține câmpuri: dispozitiv, tip, frecvență, dată
+Și: După submit evenimente apar în calendar
 ```
 
-### AC2: Просмотр календаря
+### CA2: Vizualizare calendar
 ```gherkin
-Given: План менте существует на 2026-06-10
-When: Открыть June tab
-Then: Событие видно в правильной дате
-And: Цвет соответствует статусу (зелёный/голубой/красный)
-And: Клик открывает деталі события
+Dat: Plan mentenanță există pe 2026-06-10
+Când: Deschide file Iunie
+Atunci: Eveniment vizibil pe data corectă
+Și: Culoare se potrivește statusului (verde/albastru/roșu)
+Și: Click deschide detalii eveniment
 ```
 
-### AC3: Контрастность
+### CA3: Contrast culori
 ```gherkin
-Given: Статусы отображаются в календаре
-Then: Зелёный (#059669 на #ECFEFF) = 6.8:1 ✅ AA
-And: Голубой (#0891B2 на #ECFEFF) = 5.3:1 ✅ AA
-And: Красный (#DC2626 на #ECFEFF) = 7.1:1 ✅ AA
+Dat: Status-uri afișate în calendar
+Atunci: Verde (#059669 pe #ECFEFF) = 6.8:1 ✅ AA
+Și: Albastru (#0891B2 pe #ECFEFF) = 5.3:1 ✅ AA
+Și: Roșu (#DC2626 pe #ECFEFF) = 7.1:1 ✅ AA
 ```
 
 ---
 
-## 🚀 Реализация
+## 🚀 Implementare
 
-### Фаза 1: Структура (День 1)
+### Faza 1: Structură (Ziua 1)
 ```
 src/pages/MaintenancePlan.jsx
 ├── Hooks: useMaintenancePlans(), useDialog()
-├── Components: PlanCalendar, PlanDialog, PlanTable
+├── Componente: PlanCalendar, PlanDialog, PlanTable
 └── API: maintenanceApi.js
 ```
 
-### Фаза 2: Компоненты (День 2)
-- `<PlanCalendar>` с Tabs + Card layout
-- `<PlanDialog>` с Form
-- `<PlanTable>` с Action buttons
+### Faza 2: Componente (Ziua 2)
+- `<PlanCalendar>` cu Tabs + Card layout
+- `<PlanDialog>` cu Form
+- `<PlanTable>` cu Action buttons
 
-### Фаза 3: API интеграция (День 3)
+### Faza 3: Integrare API (Ziua 3)
 - POST /maintenance-plans
 - GET /maintenance-plans
 - PATCH /maintenance-plans/:id
 - DELETE /maintenance-plans/:id
 
-### Фаза 4: Тестирование (День 4)
-- Keyboard navigation
+### Faza 4: Testare (Ziua 4)
+- Navigare tastatură
 - Screen reader
-- Contrast validation
+- Validare contrast
 
 ---
 
-**Статус:** ✅ Ready for implementation  
-**Приоритет:** HIGH (Неделя 2, День 1-4)  
-**Ответственный:** Claude Code
+**Status:** ✅ Gata pentru implementare  
+**Prioritate:** ÎNALTĂ (Săptămâna 2, Zile 1-4)  
+**Responsabil:** Claude Code
