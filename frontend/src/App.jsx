@@ -10,6 +10,7 @@ import AnnualInventoryPage from './pages/AnnualInventoryPage';
 import DeviceForm from './pages/DeviceForm';
 import SettingsPage from './pages/SettingsPage';
 import MaintenancePage from './pages/MaintenancePage';
+import MaintenancePlanPage from './pages/MaintenancePlanPage';
 import IncidentsPage from './pages/IncidentsPage';
 import AuditLogsPage from './pages/AuditLogsPage';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -203,6 +204,7 @@ function DashboardLayout({ logout, theme, toggleTheme }) {
           <Route path="/inventory/annual"  element={<ProtectedRoute><AnnualInventoryPage /></ProtectedRoute>} />
           <Route path="/consumables"       element={<ProtectedRoute><ConsumablesPage /></ProtectedRoute>} />
           <Route path="/maintenance"       element={<ProtectedRoute><MaintenancePage /></ProtectedRoute>} />
+          <Route path="/maintenance/plan"  element={<ProtectedRoute><MaintenancePlanPage /></ProtectedRoute>} />
           <Route path="/incidents"         element={<ProtectedRoute><IncidentsPage /></ProtectedRoute>} />
           <Route path="/audit-logs"        element={<ProtectedRoute><AuditLogsPage /></ProtectedRoute>} />
           <Route path="/devices/new"       element={<ProtectedRoute><DeviceForm /></ProtectedRoute>} />
