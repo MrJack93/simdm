@@ -48,9 +48,11 @@ describe('Shadcn Components - Unit Tests', () => {
     });
 
     it('has proper focus styles for keyboard navigation', () => {
-      const { container } = render(<Button>Focus Test</Button>);
+      render(<Button>Focus Test</Button>);
       const button = screen.getByRole('button');
-      expect(button).toHaveClass('focus-visible');
+      // Shadcn Button aplică focus-visible ca pseudo-class CSS, nu clasă statică
+      expect(button).toBeInTheDocument();
+      expect(button.className).toMatch(/focus-visible/);
     });
   });
 
@@ -100,7 +102,9 @@ describe('Shadcn Components - Unit Tests', () => {
     it('has proper focus styles', () => {
       const { container } = render(<Input />);
       const input = container.querySelector('input');
-      expect(input).toHaveClass('focus-visible');
+      // Shadcn Input aplică focus-visible ca pseudo-class CSS, nu clasă statică
+      expect(input).toBeInTheDocument();
+      expect(input.className).toMatch(/focus-visible/);
     });
   });
 

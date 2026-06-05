@@ -88,8 +88,8 @@ describe('DeviceForm', () => {
     await goToStep(user, 1);
     await user.selectOptions(await screen.findByTestId('select-sectionId'), '1');
 
-    // Navighează până la ultimul pas și salvează
-    await goToStep(user, 4);
+    // Navighează până la ultimul pas (pasul 2 din 3) și salvează
+    await goToStep(user, 1);
     await user.click(screen.getByRole('button', { name: /Salvare/ }));
 
     await waitFor(() => {
@@ -143,7 +143,8 @@ describe('DeviceForm', () => {
     renderWithProviders(<DeviceForm />, { route: '/devices/7/edit' });
 
     await screen.findByLabelText(/Numărul inventarului/);
-    await goToStep(user, 5);
+    // Pasul de confirmare e pasul 2 (ultimul din 3)
+    await goToStep(user, 2);
 
     expect(await screen.findByLabelText(/Atașează Document/)).toBeInTheDocument();
   });

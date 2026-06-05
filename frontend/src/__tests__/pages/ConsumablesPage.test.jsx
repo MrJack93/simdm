@@ -29,13 +29,13 @@ describe('ConsumablesPage', () => {
     expect(screen.getByRole('table')).toBeInTheDocument();
   });
 
-  it('marchează rândurile sub stoc minim cu badge-ul "Sub minim"', async () => {
+  it('marchează rândurile sub stoc minim cu badge de urgență', async () => {
     renderWithProviders(<ConsumablesPage />);
     await screen.findByText('Mănuși nitril');
-    // Mănuși: 5 < 100 -> sub minim; Seringă: 500 >= 50 -> OK
-    // Badge-ul afișează icoană + etichetă în același element (ex: "❌ Sub minim").
-    expect(screen.getByText(/Sub minim/)).toBeInTheDocument();
-    expect(screen.getByText(/✅ OK/)).toBeInTheDocument();
+    // Mănuși: 5/100 = 5% -> ⚠️ URGENT (sub 10%)
+    // Seringă: 500/50 = 1000% -> ✅ Normal
+    expect(screen.getByText(/URGENT/)).toBeInTheDocument();
+    expect(screen.getByText(/Normal/)).toBeInTheDocument();
   });
 
   it('butonul "+ Adaugă Consumabil" deschide formularul de adăugare', async () => {

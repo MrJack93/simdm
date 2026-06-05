@@ -1,10 +1,14 @@
 import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
+import path from 'path';
 
-// Configurație Vitest pentru testele frontend SIMDM.
-// Mediu jsdom + React Testing Library; setup global în src/__tests__/setup.js.
 export default defineConfig({
   plugins: [react()],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
+  },
   esbuild: {
     jsx: 'automatic',
   },
