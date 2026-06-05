@@ -1,36 +1,36 @@
-# Shadcn/UI + UI Pro Max Skill Integration
+# Shadcn/UI + UI Pro Max Skill - Configurare
 
-## Что было установлено (2026-06-05)
+## Ce a fost instalat (2026-06-05)
 
-### Shadcn/UI (новое)
-- **Версия:** Latest (v2.x)
-- **Компоненты инсталированы:**
-  - `button` — кнопки с несколькими вариантами стиля
-  - `card` — карточки (контейнеры с padding + shadow)
-  - `dialog` — модальні вікна (на основі Radix UI Dialog)
-  - `input` — текстові поля
-  - `select` — выпадающие списки
-  - `table` — таблиці (для інвентару и списків)
-  - `badge` — етикетки і статуси
-  - `tabs` — вкладки (для переключения меж розділами)
-  - `tooltip` — підказки (настройка: нужна TooltipProvider в корні)
-  - `form` — обгортка для React Hook Form (спрощує роботу з формами)
+### Shadcn/UI (nou)
+- **Versiune:** Latest (v2.x)
+- **Componente instalate:**
+  - `button` — butoane cu mai multe variante de stil
+  - `card` — carduri (containere cu padding + shadow)
+  - `dialog` — ferestre modale (pe baza Radix UI Dialog)
+  - `input` — câmpuri de text
+  - `select` — liste dropdown
+  - `table` — tabele (pentru inventar și liste)
+  - `badge` — etichete și status-uri
+  - `tabs` — file (pentru comutare între secțiuni)
+  - `tooltip` — sugestii (necesită TooltipProvider)
+  - `form` — wrapper pentru React Hook Form (simplifică lucrul cu formulare)
 
 ### UI Pro Max Skill CLI
-- **Пакет:** `uipro-cli`
-- **Призначение:** Генерація дизайн-систем для UI на базі AI
-- **Використання:** `npx uipro-cli` або `npm run design-system`
+- **Pachet:** `uipro-cli`
+- **Scop:** Generare sistem de design pentru UI pe bază de AI
+- **Utilizare:** `npx uipro-cli` sau `npm run design-system`
 
-### Конфігурація
-- **jsconfig.json** — добавлен для path aliases (`@/components`, `@/lib`)
-- **components.json** — конфиг shadcn/ui (стиль: `base-nova`, иконки: `lucide`)
-- **index.css** — обновлена с shadcn/ui стилями
+### Configurație
+- **jsconfig.json** — adăugat pentru path aliases (`@/components`, `@/lib`)
+- **components.json** — config shadcn/ui (stil: `base-nova`, pictograme: `lucide`)
+- **index.css** — actualizat cu stiluri shadcn/ui
 
 ---
 
-## Як використовувати Shadcn компоненти
+## Cum să folosiți componente Shadcn
 
-### 1. Импорт компонента
+### 1. Import component
 ```jsx
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -38,59 +38,54 @@ import { Input } from "@/components/ui/input"
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 ```
 
-### 2. Простой приклад (кнопка)
+### 2. Exemplu simplu (Buton)
 ```jsx
 <Button variant="default" size="lg">
-  Додати пристрій
+  Adaugă dispozitiv
 </Button>
 ```
 
-**Варіанти:** `default`, `secondary`, `destructive`, `outline`, `ghost`  
-**Розміри:** `sm`, `default`, `lg`
+**Variante:** `default`, `secondary`, `destructive`, `outline`, `ghost`  
+**Dimensiuni:** `sm`, `default`, `lg`
 
-### 3. Карточка для блоків даних
+### 3. Card pentru blocuri de date
 ```jsx
 <Card>
   <CardHeader>
-    <CardTitle>Інвентар</CardTitle>
+    <CardTitle>Inventar</CardTitle>
   </CardHeader>
   <CardContent>
-    {/* Вміст карточки */}
+    {/* Conținut card */}
   </CardContent>
 </Card>
 ```
 
-### 4. Форма с React Hook Form
+### 4. Formular cu React Hook Form
 ```jsx
 import { useForm } from "react-hook-form"
-import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
 
 function DeviceForm() {
   const form = useForm()
   
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-        <FormField
-          control={form.control}
-          name="deviceName"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Назва пристрою</FormLabel>
-              <FormControl>
-                <Input placeholder="УЗД апарат" {...field} />
-              </FormControl>
-            </FormItem>
-          )}
+    <form onSubmit={form.handleSubmit(onSubmit)}>
+      <div className="space-y-2">
+        <label htmlFor="name">Nume dispozitiv</label>
+        <Input 
+          id="name"
+          placeholder="Aparat USG" 
+          {...form.register('name')} 
         />
-      </form>
-    </Form>
+      </div>
+      <Button type="submit">Salvare</Button>
+    </form>
   )
 }
 ```
 
-### 5. Таблиця для списків
+### 5. Tabel pentru liste
 ```jsx
 import {
   Table,
@@ -104,9 +99,9 @@ import {
 <Table>
   <TableHeader>
     <TableRow>
-      <TableHead>Назва</TableHead>
-      <TableHead>Серійний номер</TableHead>
-      <TableHead>Статус</TableHead>
+      <TableHead>Nume</TableHead>
+      <TableHead>Număr serial</TableHead>
+      <TableHead>Status</TableHead>
     </TableRow>
   </TableHeader>
   <TableBody>
@@ -123,9 +118,9 @@ import {
 
 ---
 
-## Додавання нових компонентів
+## Adăugare componente noi
 
-Shadowcn реестр містить сотні компонентів. Щоб додати новий:
+Shadcn registry-ul conține sute de componente. Pentru a adăuga una nouă:
 
 ```bash
 npm run add-component checkbox
@@ -133,63 +128,63 @@ npm run add-component progress
 npm run add-component alert
 ```
 
-Або прямо:
+Sau direct:
 ```bash
-npx shadcn@latest add checkbox -y
+npx shadcn add checkbox -y
 ```
 
-Список доступних: https://ui.shadcn.com/docs/components/
+Lista disponibilă: https://ui.shadcn.com/docs/components/
 
 ---
 
 ## UI Pro Max Skill
 
-### Призначение
-Генерує рекомендації дизайн-систем на основі:
-- Типу приложения (медичне)
-- Інших параметрів (accessibility, контрастність)
-- AI-аналізу лучших практик
+### Scop
+Generează recomandări de sistem de design pe bază de:
+- Tip de aplicație (medicală)
+- Alți parametri (accesibilitate, contrast)
+- Analiza AI a celor mai bune practici
 
-### Як використовувати
+### Cum să folosiți
 
-1. **Отримати рекомендації для SIMDM:**
+1. **Obțineți recomandări pentru SIMDM:**
    ```bash
    npm run design-system -- --type healthcare
    ```
 
-2. **Інтегрувати з Shadcn:**
-   Вибрати з 161 кольорової палітри ту, що підходить медичному додатку, і оновити `components.json`
+2. **Integrare cu Shadcn:**
+   Din 161 palete de culori, selectați cea care se potrivește aplicației medicale și actualizați `components.json`
 
-3. **Застосувати типографію:**
-   З 57 пар шрифтів обрати дві для題問 та body text
+3. **Aplicare tipografie:**
+   Din 57 perechi de fonturi, selectați două pentru titluri și text de corp
 
 ---
 
-## Інтеграція з существуючими компонентами
+## Integrare cu componente existente
 
-SIMDM вже має собственні компоненти:
+SIMDM are deja componente proprii:
 - `frontend/src/components/Button.jsx`
 - `frontend/src/components/Card.jsx`
 - `frontend/src/components/Input.jsx`
 
-**План переходу:**
-1. **Фаза 1** (поточна): Обидва набори компонентів сосуществуют
-2. **Фаза 2** (Менте, неделя 3): Замінити власні на shadcn у нових сторінках
-3. **Фаза 3** (Менте, неделя 4): Мігрувати старі сторінки на shadcn
+**Plan de migrare:**
+1. **Faza 1** (curentă): Ambele seturi coexistă
+2. **Faza 2** (Mentenanță, săptămâna 3): Înlocuiți cu shadcn pe pagini noi
+3. **Faza 3** (Mentenanță, săptămâna 4): Migrați pagini vechi la shadcn
 
 ---
 
-## Theming & Customization
+## Teme & Personalizare
 
-### Текущий дизайн (база-nova)
-- **Темные цвета:** Совместимы с существующей темой SIMDM
-- **CSS переменные:** Могут быть переопределены в `design-system.css`
+### Tema curentă (base-nova)
+- **Culori întunecat:** Compatibile cu tema existentă SIMDM
+- **CSS variabile:** Pot fi redefinite în `design-system.css`
 
-### Кастомизирать палітру
-Создай перемінні в `design-system.css`:
+### Personalizare paletă
+Definiți variabile în `design-system.css`:
 ```css
 :root {
-  --primary: #2563eb;
+  --primary: #0891B2;
   --secondary: #64748b;
   --destructive: #ef4444;
 }
@@ -197,46 +192,47 @@ SIMDM вже має собственні компоненти:
 
 ---
 
-## Возможные проблемы
+## Probleme posibile
 
-### 1. TooltipProvider не импортируется
-Если нужен компонент Tooltip в приложении (к примеру, для подказок):
+### 1. TooltipProvider nu se importă
+Dacă aveți nevoie de componenta Tooltip pe pagină (de ex., pentru sfaturi):
 ```jsx
 // main.jsx
 import { TooltipProvider } from "@/components/ui/tooltip"
 
-// Оберни весь контент
+// Înconjurați tot conținutul
 <TooltipProvider>
   <App />
 </TooltipProvider>
 ```
 
-### 2. Конфликты стилей
-Если есть конфликты между Shadcn и существующей CSS:
-- Проверь `design-system.css`
-- Удали дублюючи утилиты
-- Используй CSS specificity, если нужно переопределить
+### 2. Conflicte de stil
+Dacă apar conflicte între Shadcn și CSS existentă:
+- Verificați `design-system.css`
+- Ștergeți utilități duplicate
+- Folosiți CSS specificity dacă trebuie să suprascrieți
 
-### 3. Bundle size
-Текущий размер бандла: **828.90 kB (239.93 kB gzipped)**
+### 3. Dimensiune bundle
+Dimensiune curentă: **828.90 kB (239.93 kB gzipped)**
 
-Для оптимизации (если потребуется):
-- Используй `npm run build` с флагом `--analyze`
-- Включи dynamic imports для больших роутов
-
----
-
-## Наступні кроки
-
-1. **Фаза 3 Менте (2026-06-05):** Использовать Shadcn для новых компонентов форм
-2. **Формы:** Device, Maintenance, Incident используют `shadcn/form`
-3. **Таблиці:** Inventory, Consumables используют `shadcn/table`
-4. **Дизайн-систем:** Запустити UI Pro Max Skill для медичной тематики
+Pentru optimizare (dacă necesar):
+- Folosiți `npm run build` cu flag `--analyze`
+- Activați dynamic imports pentru rute mari
+- Verificați code splitting
 
 ---
 
-## Ссилки
+## Următorii pași
+
+1. **Faza 3 Mentenanță (2026-06-05):** Folosiți Shadcn pentru noi formulare
+2. **Formulare:** Device, Maintenance, Incident folosesc input/select
+3. **Tabele:** Inventory, Consumables folosesc `shadcn/table`
+4. **Sistem de design:** Lansați UI Pro Max Skill pentru tema medicală
+
+---
+
+## Link-uri
 
 - Shadcn/UI: https://ui.shadcn.com
 - UI Pro Max Skill: https://github.com/nextlevelbuilder/ui-ux-pro-max-skill
-- Radix UI (основа Shadcn): https://www.radix-ui.com
+- Radix UI (bază Shadcn): https://www.radix-ui.com

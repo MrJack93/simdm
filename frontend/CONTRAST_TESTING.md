@@ -1,60 +1,60 @@
-# Контрастность цветов — SIMDM
+# Testare contrast - SIMDM
 
-**Стандарт:** WCAG 2.1 AA требует минимум **4.5:1** для нормального текста
+**Standard:** WCAG 2.1 AA necesită minim **4.5:1** pentru text normal
 
 ---
 
-## ✅ Проверенные комбинации
+## ✅ Combinații testate
 
-### Основные комбинации (Dark Mode — текущий)
+### Combinații principale (Mod Întunecat — curent)
 
-| Комбинация | Foreground | Background | Контраст | Статус | Стандарт |
+| Combinație | Foreground | Background | Contrast | Status | Standard |
 |-----------|-----------|-----------|----------|--------|----------|
-| Text on Primary | #f0f0f0 | #0c0f10 | 15.1:1 | ✅ | AA+ |
-| Error Text | #f87171 | #0c0f10 | 5.8:1 | ✅ | AA |
-| Success Text | #34d399 | #0c0f10 | 6.2:1 | ✅ | AA |
-| Warning Text | #fbbf24 | #0c0f10 | 7.3:1 | ✅ | AA |
-| Info Text | #60a5fa | #0c0f10 | 5.2:1 | ✅ | AA |
-| Secondary Text | #8a9199 | #0c0f10 | 4.6:1 | ✅ | AA |
+| Text pe Primar | #f0f0f0 | #0c0f10 | 15.1:1 | ✅ | AA+ |
+| Text de eroare | #f87171 | #0c0f10 | 5.8:1 | ✅ | AA |
+| Text succes | #34d399 | #0c0f10 | 6.2:1 | ✅ | AA |
+| Text avertisment | #fbbf24 | #0c0f10 | 7.3:1 | ✅ | AA |
+| Text info | #60a5fa | #0c0f10 | 5.2:1 | ✅ | AA |
+| Text secundar | #8a9199 | #0c0f10 | 4.6:1 | ✅ | AA |
 
-### Медицинские цвета (Healthcare — будущий light mode)
+### Culori medicale (Healthcare — mod viitor clar)
 
-| Комбинация | Foreground | Background | Контраст | Статус | Стандарт |
+| Combinație | Foreground | Background | Contrast | Status | Standard |
 |-----------|-----------|-----------|----------|--------|----------|
-| Primary Text | #164E63 | #ECFEFF | 10.2:1 | ✅ | AAA |
-| Healthcare Primary | #0891B2 | #ECFEFF | 5.3:1 | ✅ | AA |
-| Healthcare Success | #059669 | #ECFEFF | 6.8:1 | ✅ | AA |
-| Healthcare Error | #DC2626 | #ECFEFF | 7.1:1 | ✅ | AA |
+| Text primar | #164E63 | #ECFEFF | 10.2:1 | ✅ | AAA |
+| Primar healthcare | #0891B2 | #ECFEFF | 5.3:1 | ✅ | AA |
+| Succes healthcare | #059669 | #ECFEFF | 6.8:1 | ✅ | AA |
+| Eroare healthcare | #DC2626 | #ECFEFF | 7.1:1 | ✅ | AA |
 
-### Статусные цвета (Device Status)
+### Culori status dispozitiv
 
-| Статус | Цвет | На Primary | Контраст | Статус |
+| Status | Culoare | Pe Primar | Contrast | Status |
 |--------|------|-----------|----------|--------|
-| Functional | #34d399 (зелёный) | #0c0f10 | 6.2:1 | ✅ AA |
-| In Repair | #fbbf24 (жёлтый) | #0c0f10 | 7.3:1 | ✅ AA |
-| Defect | #f87171 (красный) | #0c0f10 | 5.8:1 | ✅ AA |
-| Decommissioned | #6b7280 (серый) | #0c0f10 | 4.6:1 | ✅ AA |
-| Loaned | #60a5fa (голубой) | #0c0f10 | 5.2:1 | ✅ AA |
-| Spare | #a78bfa (фиолетовый) | #0c0f10 | 5.9:1 | ✅ AA |
+| Funcțional | #34d399 (verde) | #0c0f10 | 6.2:1 | ✅ AA |
+| În reparație | #fbbf24 (galben) | #0c0f10 | 7.3:1 | ✅ AA |
+| Defect | #f87171 (roșu) | #0c0f10 | 5.8:1 | ✅ AA |
+| Dezafectat | #6b7280 (gri) | #0c0f10 | 4.6:1 | ✅ AA |
+| Împrumutat | #60a5fa (albastru) | #0c0f10 | 5.2:1 | ✅ AA |
+| Piese de schimb | #a78bfa (violet) | #0c0f10 | 5.9:1 | ✅ AA |
 
 ---
 
-## 🧪 Как тестировать контраст
+## 🧪 Cum să testați contrast-ul
 
-### Метод 1: WebAIM Contrast Checker (онлайн)
-1. Зайти на https://webaim.org/resources/contrastchecker/
-2. Ввести цвет текста (Foreground)
-3. Ввести цвет фона (Background)
-4. Проверить результат >= 4.5:1
+### Metoda 1: WebAIM Contrast Checker (online)
+1. Mergeți la https://webaim.org/resources/contrastchecker/
+2. Introduceți culoarea textului (Foreground)
+3. Introduceți culoarea fundalului (Background)
+4. Verificați rezultatul >= 4.5:1
 
-**Пример:**
+**Exemplu:**
 ```
-Foreground: #164E63 (healthcare text)
-Background: #ECFEFF (healthcare bg)
-Result: 10.2:1 ✅ PASS WCAG AAA
+Foreground: #164E63 (text healthcare)
+Background: #ECFEFF (fundal healthcare)
+Rezultat: 10.2:1 ✅ PASS WCAG AAA
 ```
 
-### Метод 2: Локально с Node.js
+### Metoda 2: Local cu Node.js
 ```bash
 npm install contrast-ratio
 ```
@@ -62,67 +62,67 @@ npm install contrast-ratio
 ```js
 import { ratio } from 'contrast-ratio';
 
-// Проверка контраста
+// Verificare contrast
 const contrast = ratio('#164E63', '#ECFEFF');
-console.log(`Контраст: ${contrast.toFixed(2)}:1`); // 10.2:1
+console.log(`Contrast: ${contrast.toFixed(2)}:1`); // 10.2:1
 ```
 
-### Метод 3: Browser DevTools
-1. Открыть DevTools (F12)
-2. Inspect элемент с текстом
-3. В Styles найти "Contrast ratio"
-4. Система покажет WCAG уровень (AA/AAA)
+### Metoda 3: Browser DevTools
+1. Deschideți DevTools (F12)
+2. Inspecționa element cu text
+3. În Styles găsați "Contrast ratio"
+4. Sistemul va arăta nivelul WCAG (AA/AAA)
 
 ---
 
-## 📋 Чек-лист для Недели 1
+## 📋 Checklist pentru Săptămâna 1
 
-- [x] Google Fonts добавлены (Figtree, Noto Sans, Fira Code)
-- [x] CSS переменные обновлены
-- [ ] Протестировать контраст на всех страницах:
-  - [ ] Login page
+- [x] Google Fonts adăugate (Figtree, Noto Sans, Fira Code)
+- [x] CSS variabile actualizate
+- [ ] Testare contrast pe toate paginile:
+  - [ ] Pagina Login
   - [ ] Dashboard
-  - [ ] Inventory table
-  - [ ] Forms
-  - [ ] Modal dialogs
-- [ ] Убедиться что все цвета >= 4.5:1
-- [ ] Проверить фокус-состояния
-- [ ] Запустить dev сервер и визуально проверить шрифты
+  - [ ] Tabel inventar
+  - [ ] Formulare
+  - [ ] Dialog-uri modale
+- [ ] Asigurare că toate culori >= 4.5:1
+- [ ] Verificare stări de focus
+- [ ] Lansare server dev și verificare vizuală a fonturilor
 
 ---
 
-## 🔄 Если контраст не прошёл
+## 🔄 Dacă contrast-ul nu trece
 
-**Решение:** Выбрать более тёмный/светлый вариант цвета
+**Soluție:** Selectați varianta mai închisă/deschisă a culorii
 
 ```css
-/* Если цвет не проходит, осветлить фон или затемнить текст */
+/* Dacă culoare nu trece, mai deschis/mai închis */
 :root {
-  --color-text-secondary: #8a9199; /* Текущий: 4.6:1 */
-  /* Если < 4.5, то: */
-  --color-text-secondary: #7a8290; /* Более тёмный: 5.1:1 ✅ */
+  --color-text-secondary: #8a9199; /* Curent: 4.6:1 */
+  /* Dacă < 4.5, atunci: */
+  --color-text-secondary: #7a8290; /* Mai închis: 5.1:1 ✅ */
 }
 ```
 
 ---
 
-## 📊 Минимум требования
+## 📊 Minime cerințe
 
-| Уровень | Норм. текст | Крупный текст | UI Components |
-|---------|-----------|-------------|----------------|
+| Nivel | Text normal | Text mare | Componente UI |
+|------|-----------|----------|--------------|
 | **AA** | 4.5:1 | 3:1 | 3:1 |
 | **AAA** | 7:1 | 4.5:1 | N/A |
 
-**SIMDM использует:** AA (4.5:1) — стандарт для медицинского ПО
+**SIMDM folosește:** AA (4.5:1) — standard pentru software medical
 
 ---
 
-## ✅ Статус
+## ✅ Status
 
-- **Тёмный режим (текущий):** ✅ Все цвета >= 4.5:1
-- **Светлый режим (healthcare):** ✅ Все цвета >= 5.3:1
-- **Статусные иконки:** ✅ Все >= 4.6:1
-- **Фокус-состояния:** ✅ Ring 4.5:1 на фоне
+- **Mod întunecat (curent):** ✅ Toate culori >= 4.5:1
+- **Mod deschis (healthcare):** ✅ Toate culori >= 5.3:1
+- **Pictograme status:** ✅ Toate >= 4.6:1
+- **Stări focus:** ✅ Ring 4.5:1 pe fundal
 
-**Дата проверки:** 2026-06-05  
-**Статус:** READY FOR WEEK 1 ✅
+**Dată verificare:** 2026-06-05  
+**Status:** GATA PENTRU SĂPTĂMÂNA 1 ✅

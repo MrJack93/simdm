@@ -1,36 +1,36 @@
-# SIMDM Design System v1.0
-## Healthcare + Shadcn/UI + UI Pro Max Skill
+# Sistem de design SIMDM v1.0
+## Medical + Shadcn/UI + UI Pro Max Skill
 
-**Дата:** 2026-06-05  
-**Автор:** Claude Code + UI Pro Max Skill  
-**Статус:** ✅ Активен (Фаза 3: Менте)
+**Dată:** 2026-06-05  
+**Autor:** Claude Code + UI Pro Max Skill  
+**Status:** ✅ Activ (Faza 3: Mentenanță)
 
 ---
 
-## 📐 Система цветов
+## 📐 Paleta de culori
 
-### Основные палітра (Healthcare App)
-Рекомендована палітра `#9` з 161 варіанту UI Pro Max Skill:
+### Paleta principală (Aplicații medicale)
+Recomandare UI Pro Max Skill - paleta #9 din 161 variante:
 
 ```css
 :root {
-  /* Primary: Calm Cyan - Trust & Medical */
+  /* Principal: Cyan calm - Încredere medicală */
   --primary: #0891B2;
   --primary-light: #22D3EE;
   
-  /* CTA: Health Green - Positive Actions */
+  /* CTA: Verde sănătate - Acțiuni pozitive */
   --success: #059669;
   --success-light: #10B981;
   
-  /* Backgrounds: Very Light Cyan */
+  /* Fundal: Cyan foarte ușor */
   --bg-primary: #ECFEFF;
   --bg-secondary: #F0F9FF;
   
-  /* Text: Dark Cyan - High Contrast */
+  /* Text: Cyan închis - Contrast maxim */
   --text-primary: #164E63;
   --text-secondary: #0C4A6E;
   
-  /* Borders: Light Cyan */
+  /* Borduri: Cyan ușor */
   --border: #A5F3FC;
   
   /* Semantic */
@@ -40,9 +40,9 @@
 }
 ```
 
-### CSS Variables в `design-system.css`
+### CSS Variabile în `design-system.css`
 ```css
-/* Обновить существующие переменные */
+/* Actualizare variabile existente */
 :root {
   --color-bg-primary: var(--bg-primary);      /* ECFEFF */
   --color-accent: var(--primary);              /* 0891B2 */
@@ -52,9 +52,9 @@
 }
 ```
 
-### Tailwind Config
+### Config Tailwind
 ```js
-// tailwind.config.js (если потребуется создать)
+// tailwind.config.js (dacă va fi necesar)
 module.exports = {
   theme: {
     colors: {
@@ -62,7 +62,7 @@ module.exports = {
       secondary: '#22D3EE',
       success: '#059669',
       danger: '#DC2626',
-      // ... остальные
+      // ... restul
     }
   }
 }
@@ -70,61 +70,61 @@ module.exports = {
 
 ---
 
-## 🔤 Типографія
+## 🔤 Tipografie
 
-### Рекомендована: Medical Clean (Паiring #30)
+### Recomandare: Medical Clean (Pairing #30)
 
-| Роль | Шрифт | Вес | Використання |
-|------|-------|-----|--------------|
-| **Заголовки (H1-H6)** | Figtree | 600-700 | Сторінки, модалі, секції |
-| **Основний текст** | Noto Sans | 400-500 | Body text, описи, labels |
-| **Code / Data** | Fira Code | 400-500 | Таблиці, серійні номери, коди |
+| Rol | Font | Greutate | Utilizare |
+|-----|------|----------|-----------|
+| **Titluri (H1-H6)** | Figtree | 600-700 | Pagini, modal-uri, secții |
+| **Text principal** | Noto Sans | 400-500 | Conținut, descrieri, etichete |
+| **Code / Date** | Fira Code | 400-500 | Tabele, numere seriale, coduri |
 
-### Варіанти розміру
+### Variante de mărime
 ```css
-/* Оновити в design-system.css */
+/* Actualizare în design-system.css */
 h1 { font-size: 32px; font-weight: 700; line-height: 1.2; font-family: Figtree; }
 h2 { font-size: 24px; font-weight: 600; line-height: 1.3; font-family: Figtree; }
 h3 { font-size: 20px; font-weight: 600; line-height: 1.4; font-family: Figtree; }
 p  { font-size: 16px; font-weight: 400; line-height: 1.6; font-family: 'Noto Sans'; }
 ```
 
-### Google Fonts Import
+### Import Google Fonts
 ```html
-<!-- Додати в frontend/index.html -->
+<!-- Adaugă în frontend/index.html -->
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700&family=Noto+Sans:wght@300;400;500;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
 ```
 
 ---
 
-## ♿ Accessibility (WCAG AA)
+## ♿ Accesibilitate (WCAG AA)
 
-### 1. Color Contrast (Priority: CRITICAL)
-- ✅ **4.5:1** для body text (вимога)
-- ✅ **3:1** для UI components
-- ✅ **Колір + Іконка** для статусів (не лише колір)
+### 1. Contrast de culoare (Prioritate: CRITIC)
+- ✅ **4.5:1** pentru text (cerință)
+- ✅ **3:1** pentru componente UI
+- ✅ **Culoare + Pictogramă** pentru status (nu doar culoare)
 
-**Тест контрастності:**
+**Testare contrast:**
 ```
-#164E63 (text) на #ECFEFF (bg) = ✅ 10.2:1 (PASS)
-#0891B2 (primary) на #ECFEFF (bg) = ✅ 5.3:1 (PASS)
+#164E63 (text) pe #ECFEFF (fundal) = ✅ 10.2:1 (PASS)
+#0891B2 (primary) pe #ECFEFF (fundal) = ✅ 5.3:1 (PASS)
 ```
 
-### 2. Touch Targets (Priority: CRITICAL)
-- ✅ **44x44px minimum** для кнопок
-- ✅ **8px gap** між сусідніми цілями
-- ✅ **Не трапи на клавіатуру** (Tab повинен працювати)
+### 2. Ținte de atingere (Prioritate: CRITIC)
+- ✅ **44x44px minim** pentru butoane
+- ✅ **8px spațiu** între ținte adiacente
+- ✅ **Niciun pictor de tastatură** (Tab funcționează)
 
-**Shadcn Button:**
+**Buton Shadcn:**
 ```jsx
-<Button className="min-h-[44px] min-w-[44px]">Дія</Button>
+<Button className="min-h-[44px] min-w-[44px]">Acțiune</Button>
 ```
 
-### 3. Focus States (Priority: CRITICAL)
-- ✅ **Видимий focus ring** на всіх інтерактивних елементах
-- ✅ **Контраст focus ring >= 3:1**
+### 3. Stări de Focus (Prioritate: CRITIC)
+- ✅ **Inel focus vizibil** pe toate elementele interactive
+- ✅ **Contrast inel focus >= 3:1**
 
-**Tailwind utility:**
+**Utility Tailwind:**
 ```css
 .focusable {
   @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2;
@@ -132,31 +132,23 @@ p  { font-size: 16px; font-weight: 400; line-height: 1.6; font-family: 'Noto San
 }
 ```
 
-### 4. Form Labels (Priority: HIGH)
-- ✅ **Завжди видимі labels** (не placeholder-only)
-- ✅ **Label linked to input** (for attribute)
-- ✅ **Required indicator** (*)
+### 4. Etichete de formular (Prioritate: ÎNALTĂ)
+- ✅ **Etichete întotdeauna vizibile** (nu placeholder-only)
+- ✅ **Etichetă conectată la input** (atribut for)
+- ✅ **Indicator obligatoriu** (*)
 
-**Shadcn Form:**
+**Formular Shadcn:**
 ```jsx
-<FormField
-  control={form.control}
-  name="deviceName"
-  render={({ field }) => (
-    <FormItem>
-      <FormLabel>Назва пристрою *</FormLabel>
-      <FormControl>
-        <Input {...field} />
-      </FormControl>
-    </FormItem>
-  )}
-/>
+<div className="space-y-2">
+  <label htmlFor="device" className="text-sm font-medium">Dispozitiv *</label>
+  <Input id="device" {...field} />
+</div>
 ```
 
-### 5. Error Feedback (Priority: HIGH)
-- ✅ **Помилка рядом із input**
-- ✅ **Red + Icon + Text**
-- ✅ **role=alert** для анонсування
+### 5. Feedback de eroare (Prioritate: ÎNALTĂ)
+- ✅ **Mesaj de eroare lângă input**
+- ✅ **Roșu + Pictogramă + Text**
+- ✅ **role=alert** pentru anunț
 
 ```jsx
 {error && (
@@ -168,53 +160,53 @@ p  { font-size: 16px; font-weight: 400; line-height: 1.6; font-family: 'Noto San
 
 ---
 
-## 🎯 Component Library (Shadcn Integration)
+## 🎯 Biblioteca de componente (Shadcn Integration)
 
-### Button Variants для медицини
+### Variante de buton pentru medic
 
 ```jsx
-// Primary Action (зелена - позитивна)
-<Button variant="default" className="bg-success">Зберегти</Button>
+// Acțiune principală (verde - pozitivă)
+<Button className="bg-success">Salvare</Button>
 
-// Danger/Delete (червона - небезпека)
-<Button variant="destructive">Видалити</Button>
+// Ștergere/Pericol (roșu - pericol)
+<Button variant="destructive">Ștergere</Button>
 
-// Secondary/Cancel
-<Button variant="outline">Скасувати</Button>
+// Anulare/Secundar
+<Button variant="outline">Anulare</Button>
 
-// Icon Button + aria-label
+// Buton pictogramă + aria-label
 <Button 
   variant="ghost" 
   size="icon" 
-  aria-label="Зберегти"
+  aria-label="Salvare"
 >
   <SaveIcon />
 </Button>
 ```
 
-### Card для інвентаря
+### Card pentru inventar
 
 ```jsx
 <Card>
   <CardHeader>
-    <CardTitle>УЗД Апарат A12</CardTitle>
-    <CardDescription>Серійний №: 2024-001</CardDescription>
+    <CardTitle>Aparat USG A12</CardTitle>
+    <CardDescription>Număr serial: 2024-001</CardDescription>
   </CardHeader>
   <CardContent>
-    <StatusBadge status="active" /> Активний
+    <StatusBadge status="active" /> Activ
   </CardContent>
 </Card>
 ```
 
-### Table для списків
+### Tabel pentru liste
 
 ```jsx
 <Table>
   <TableHeader>
     <TableRow>
-      <TableHead>Назва</TableHead>
-      <TableHead>Статус</TableHead>
-      <TableHead>Дії</TableHead>
+      <TableHead>Nume</TableHead>
+      <TableHead>Status</TableHead>
+      <TableHead>Acțiuni</TableHead>
     </TableRow>
   </TableHeader>
   <TableBody>
@@ -227,8 +219,8 @@ p  { font-size: 16px; font-weight: 400; line-height: 1.6; font-family: 'Noto San
           </Badge>
         </TableCell>
         <TableCell>
-          <Button size="sm" aria-label={`Редагувати ${device.name}`}>
-            Редагувати
+          <Button size="sm" aria-label={`Editare ${device.name}`}>
+            Editare
           </Button>
         </TableCell>
       </TableRow>
@@ -237,119 +229,111 @@ p  { font-size: 16px; font-weight: 400; line-height: 1.6; font-family: 'Noto San
 </Table>
 ```
 
-### Form для менте
+### Formular pentru mentenanță
 
 ```jsx
-<Form {...form}>
-  <form onSubmit={form.handleSubmit(onSubmit)}>
-    <FormField
-      control={form.control}
-      name="type"
-      render={({ field }) => (
-        <FormItem>
-          <FormLabel>Тип менте *</FormLabel>
-          <Select onValueChange={field.onChange}>
-            <SelectTrigger>
-              <SelectValue placeholder="Оберіть тип" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="preventive">Профілактична</SelectItem>
-              <SelectItem value="corrective">Коректуюча</SelectItem>
-            </SelectContent>
-          </Select>
-        </FormItem>
-      )}
-    />
-    
-    <Button type="submit" className="mt-6">
-      Запланувати менте
-    </Button>
-  </form>
-</Form>
+<form onSubmit={handleSubmit} className="space-y-4">
+  <div className="space-y-2">
+    <label className="text-sm font-medium">Tip mentenanță *</label>
+    <Select onValueChange={setType} defaultValue="preventive">
+      <SelectTrigger>
+        <SelectValue placeholder="Selectați tip" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value="preventive">Preventivă (MPP)</SelectItem>
+        <SelectItem value="corrective">Corectivă</SelectItem>
+      </SelectContent>
+    </Select>
+  </div>
+  
+  <Button type="submit" className="mt-6">
+    Planificare mentenanță
+  </Button>
+</form>
 ```
 
 ---
 
-## 🎨 Design Guidelines (99 правил UI Pro Max)
+## 🎨 Ghiduri de design (99 reguli UI Pro Max)
 
-### Найважливіші для SIMDM (Medical + Healthcare)
+### Cel mai important pentru SIMDM (Medical + Healthcare)
 
-#### 1️⃣ CRITICAL (обов'язкові)
-- [ ] Color contrast >= 4.5:1 для text
-- [ ] Touch targets >= 44x44px
-- [ ] Visible focus states на всіх interactive elements
-- [ ] Form labels завжди видимі
-- [ ] Error messages з aria-live
-- [ ] Loading states для async операцій
-- [ ] Smooth scroll на anchor links
-- [ ] Keyboard navigation працює
+#### 1️⃣ CRITIC (obligatoriu)
+- [ ] Contrast culoare >= 4.5:1 pentru text
+- [ ] Ținte >= 44x44px
+- [ ] Stări de focus vizibile pe toate elementele interactive
+- [ ] Etichete de formular întotdeauna vizibile
+- [ ] Mesaje de eroare cu aria-live
+- [ ] Stări de încărcare pentru operații async
+- [ ] Scroll ușor pe anchor link-uri
+- [ ] Navigare cu tastatură funcționează
 
-#### 2️⃣ HIGH (дуже важливі)
-- [ ] Disabled button не дозволяє double-submit
-- [ ] Confirmation dialog для delete операцій
-- [ ] Success feedback після дій
-- [ ] Hover + Active states
-- [ ] Viewport meta tag правильний
-- [ ] Z-index management систематичний
-- [ ] Content jumping запобіжено
+#### 2️⃣ ÎNALTĂ (foarte important)
+- [ ] Butoane dezactivate nu permit double-submit
+- [ ] Dialog de confirmare pentru ștergeri
+- [ ] Feedback de succes după acțiuni
+- [ ] Stări hover + active
+- [ ] Meta tag viewport corect
+- [ ] Z-index management sistematic
+- [ ] Prevenire content jumping
 
-#### 3️⃣ MEDIUM (важливі)
-- [ ] Smooth animations (150-300ms)
+#### 3️⃣ MEDIU (important)
+- [ ] Animații ușoare (150-300ms)
 - [ ] Respect prefers-reduced-motion
-- [ ] Readable font size (min 16px)
+- [ ] Mărime font lizibilă (min 16px)
 - [ ] Line height 1.5-1.75
-- [ ] Line length 65-75ch
-- [ ] Image optimization (WebP, srcset)
-- [ ] Empty states з помічниками
+- [ ] Lungime linie 65-75ch
+- [ ] Optimizare imagini (WebP, srcset)
+- [ ] Stări goale cu ajutoare
 
 ---
 
-## 📱 Responsive Design
+## 📱 Design responsive
 
 ### Breakpoints (Tailwind)
 ```css
-sm: 640px   /* Планшет в портреті */
-md: 768px   /* Планшет в ландшафті */
-lg: 1024px  /* Desktop мікро */
+sm: 640px   /* Tablă în portret */
+md: 768px   /* Tablă în peisaj */
+lg: 1024px  /* Desktop mic */
 xl: 1280px  /* Desktop */
-2xl: 1536px /* Desktop широкий */
+2xl: 1536px /* Desktop lat */
 ```
 
 ### Mobile First
 ```jsx
-/* За замовчуванням: мобільний */
+/* Implicit: mobil */
 <div className="text-sm md:text-base lg:text-lg">
-  Резервний текст
+  Text responsive
 </div>
 
-/* Мобільні кнопки більші */
-<Button className="w-full md:w-auto">Дія</Button>
+/* Butoane mai mari pe mobil */
+<Button className="w-full md:w-auto">Acțiune</Button>
 ```
 
 ---
 
-## 🧪 Testing Checklist
+## 🧪 Checklist testare
 
-### Visual Testing
-- [ ] Colors правильні на світлому & темному фоні
-- [ ] Typography ієрархія ясна
-- [ ] Spacing консистентний (4px grid)
-- [ ] Icons 24x24px мінімум
+### Testare vizuală
+- [ ] Culori corecte pe fundal deschis & închis
+- [ ] Ierarhie de tipografie clară
+- [ ] Spațiere consistentă (grilă 4px)
+- [ ] Pictograme 24x24px minim
 
-### Accessibility Testing
-- [ ] Keyboard navigation: Tab, Shift+Tab, Enter, Escape
-- [ ] Screen reader: headings, labels, roles, alerts
-- [ ] Color contrast: WebAIM checker
-- [ ] Focus visible на всіх interactive
+### Testare accesibilitate
+- [ ] Navigare tastatură: Tab, Shift+Tab, Enter, Escape
+- [ ] Screen reader: titluri, etichete, roluri, alerte
+- [ ] Contrast culoare: checker WebAIM
+- [ ] Focus vizibil pe toate elementele interactive
 
-### Responsive Testing
-- [ ] 320px (мобіль)
+### Testare responsiv
+- [ ] 320px (mobil)
 - [ ] 375px (iPhone)
-- [ ] 768px (планшет)
+- [ ] 768px (tablă)
 - [ ] 1024px (desktop)
-- [ ] 1440px (desktop wide)
+- [ ] 1440px (desktop lat)
 
-### Performance Testing
+### Testare performanță
 - [ ] Bundle size < 300KB (gzip)
 - [ ] FCP < 1.5s
 - [ ] LCP < 2.5s
@@ -357,73 +341,73 @@ xl: 1280px  /* Desktop */
 
 ---
 
-## 🔄 Implementation Roadmap
+## 🔄 Foaie de parcurs implementare
 
-### Неділя 1 (2026-06-05 — 2026-06-12): Фундамент
-- [x] Shadcn/UI інстальована
-- [ ] design-system.css оновлена з colors
-- [ ] Google Fonts додані (Figtree, Noto Sans)
-- [ ] CSS переменні задані
+### Săptămâna 1 (2026-06-05 — 2026-06-12): Fundament
+- [x] Shadcn/UI instalat
+- [x] design-system.css actualizat cu culori
+- [x] Google Fonts adăugate (Figtree, Noto Sans)
+- [x] CSS variabile definite
 
-### Неділя 2-3 (2026-06-12 — 2026-06-26): Менте модулі
-- [ ] План менте: Card + Tabs + Form
-- [ ] Виконання МПП: Dialog + Button + Signature
-- [ ] Менте корективна: Table + Dialog
-- [ ] Перевірки періодичні: Badge + Progress
-- [ ] Контракти: Form + Table
+### Săptămânile 2-3 (2026-06-12 — 2026-06-26): Module mentenanță
+- [ ] Plan mentenanță: Card + Tabs + Formular
+- [ ] Execuție MPP: Dialog + Buton + Semnătură
+- [ ] Mentenanță corectivă: Tabel + Dialog
+- [ ] Verificări periodice: Badge + Progress
+- [ ] Contracte: Formular + Tabel
 
-### Неділя 4 (2026-06-26 — 2026-07-03): Покращення
-- [ ] Міграція старих компонентів
-- [ ] Accessibility аудит
-- [ ] Performance оптимізація
-- [ ] Тестування на реальних пристроях
+### Săptămâna 4 (2026-06-26 — 2026-07-03): Îmbunătățiri
+- [ ] Migrare componente vechi
+- [ ] Audit accesibilitate
+- [ ] Optimizare performanță
+- [ ] Testare pe dispozitive reale
 
 ---
 
-## 📚 Resources
+## 📚 Resurse
 
-### Встановлена база даних
+### Bază de date instalată
 ```
 frontend/.claude/skills/ui-ux-pro-max/
 ├── data/
-│   ├── colors.csv         (161 палітра)
-│   ├── typography.csv     (57 парів)
-│   ├── ux-guidelines.csv  (99 guideline-ів)
+│   ├── colors.csv         (161 palete)
+│   ├── typography.csv     (57 perechi)
+│   ├── ux-guidelines.csv  (99 ghiduri)
 │   └── stacks/
-│       └── shadcn.csv     (Shadcn recommendations)
-└── SKILL.md               (Документація)
+│       └── shadcn.csv     (Recomandări Shadcn)
+└── SKILL.md               (Documentație)
 ```
 
-### Посилання
+### Link-uri
 - **Shadcn/UI:** https://ui.shadcn.com
 - **WCAG 2.1:** https://www.w3.org/WAI/WCAG21/quickref/
-- **Accessibility:** https://www.a11y-101.com
+- **Accesibilitate:** https://www.a11y-101.com
 - **WebAIM Contrast:** https://webaim.org/resources/contrastchecker/
 
 ---
 
-## 🎬 Quick Start
+## 🎬 Start rapid
 
-### Додати новий компонент
+### Adaugă component nou
 ```bash
 npm run add-component <name>
-# Приклад:
+# Exemplu:
 npm run add-component checkbox progress alert
 ```
 
-### Використовувати Form
+### Folosire formular
 ```jsx
-import { Form, FormField, FormItem, FormLabel, FormControl } from "@/components/ui/form"
-// See implementation examples above
+import { Input, Select, Button } from "@/components/ui/*"
+// Vezi exemple de implementare mai sus
 ```
 
-### Перевірити контраст
-1. Відкрити WebAIM Contrast Checker
-2. Ввести #164E63 (text) та #ECFEFF (bg)
-3. Перевірити >= 4.5:1
+### Verifica contrast
+1. Deschide WebAIM Contrast Checker
+2. Introdu #164E63 (text) și #ECFEFF (fundal)
+3. Verifica >= 4.5:1
 
 ---
 
-**Статус:** ✅ Готовий до реалізації  
-**Контролер:** claude@anthropic.com  
-**Версія:** 1.0 (2026-06-05)
+**Status:** ✅ Gata pentru implementare  
+**Controlor:** claude@anthropic.com  
+**Versiune:** 1.0 (2026-06-05)
