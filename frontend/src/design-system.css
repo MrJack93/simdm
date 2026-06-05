@@ -38,6 +38,18 @@
   --color-status-loaned: #60a5fa;
   --color-status-spare: #a78bfa;
 
+  /* ===== HEALTHCARE COLORS (UI Pro Max #9) ===== */
+  /* Alternative palette for medical UI context */
+  --healthcare-primary: #0891B2;
+  --healthcare-primary-light: #22D3EE;
+  --healthcare-success: #059669;
+  --healthcare-success-light: #10B981;
+  --healthcare-bg-primary: #ECFEFF;
+  --healthcare-bg-secondary: #F0F9FF;
+  --healthcare-text-primary: #164E63;
+  --healthcare-text-secondary: #0C4A6E;
+  --healthcare-border: #A5F3FC;
+
   /* Glass effect */
   --glass-bg: rgba(20, 23, 24, 0.7);
   --glass-border: rgba(255, 255, 255, 0.06);
