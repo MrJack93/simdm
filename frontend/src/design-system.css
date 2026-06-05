@@ -62,9 +62,10 @@
   --transition-normal: 0.3s var(--ease-out);
   --transition-slow: 0.5s var(--ease-out);
 
-  /* ===== TYPOGRAPHY ===== */
-  --font-family-base: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-  --font-family-mono: 'JetBrains Mono', ui-monospace, 'Cascadia Code', monospace;
+  /* ===== TYPOGRAPHY (Medical Design System) ===== */
+  --font-family-heading: 'Figtree', system-ui, -apple-system, sans-serif;
+  --font-family-base: 'Noto Sans', system-ui, -apple-system, sans-serif;
+  --font-family-mono: 'Fira Code', 'JetBrains Mono', ui-monospace, monospace;
 
   /* Type scale — modular 1.25 ratio */
   --font-size-display: 3rem;    /* 48px */

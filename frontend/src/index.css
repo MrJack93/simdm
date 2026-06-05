@@ -8,36 +8,52 @@
 @custom-variant dark (&:is(.dark *));
 
 @layer base {
+  html {
+    font-family: var(--font-family-base);
+  }
+
   body {
     @apply transition-colors bg-background text-foreground;
     background-color: var(--color-bg-primary);
     color: var(--color-text-primary);
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-base);
+    line-height: 1.6;
   }
 
   h1 {
     @apply text-4xl font-bold mb-6 leading-tight;
+    font-family: var(--font-family-heading);
+    font-weight: 700;
     color: var(--color-accent);
   }
 
   h2 {
     @apply text-2xl font-bold mb-4 leading-tight;
+    font-family: var(--font-family-heading);
+    font-weight: 600;
     color: var(--color-accent);
   }
 
   h3 {
     @apply text-xl font-bold mb-3;
+    font-family: var(--font-family-heading);
+    font-weight: 600;
     color: var(--color-text-primary);
   }
 
   p {
     @apply leading-relaxed;
     color: var(--color-text-primary);
+    font-family: var(--font-family-base);
   }
+
+  code, pre {
+    font-family: var(--font-family-mono);
+  }
+
   * {
     @apply border-border outline-ring/50;
-  }
-  html {
-    @apply font-sans;
   }
 }
 
