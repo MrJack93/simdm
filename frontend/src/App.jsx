@@ -1,22 +1,39 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, Suspense, lazy } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { useAuth } from './hooks/useAuth';
 import { useTheme } from './hooks/useTheme';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import Login from './pages/Login';
-import Dashboard from './pages/Dashboard';
-import InventoryPageV2 from './pages/InventoryPageV2';
-import ConsumablesPage from './pages/ConsumablesPage';
-import AnnualInventoryPage from './pages/AnnualInventoryPage';
-import DeviceForm from './pages/DeviceForm';
-import SettingsPage from './pages/SettingsPage';
-import MaintenancePage from './pages/MaintenancePage';
-import MaintenancePlanPage from './pages/MaintenancePlanPage';
-import MaintenanceExecutionPage from './pages/MaintenanceExecutionPage';
-import IncidentsPage from './pages/IncidentsPage';
-import AuditLogsPage from './pages/AuditLogsPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import SkipLink from './components/SkipLink';
 import { Menu, X, Home, Warehouse, Package, Calendar, Cog, LogOut, Wrench, AlertTriangle, FileText } from 'lucide-react';
+
+// Lazy-loaded pages - code splitting pentru perf boost
+const Dashboard = lazy(() => import('./pages/Dashboard'));
+const InventoryPageV2 = lazy(() => import('./pages/InventoryPageV2'));
+const ConsumablesPage = lazy(() => import('./pages/ConsumablesPage'));
+const AnnualInventoryPage = lazy(() => import('./pages/AnnualInventoryPage'));
+const DeviceForm = lazy(() => import('./pages/DeviceForm'));
+const SettingsPage = lazy(() => import('./pages/SettingsPage'));
+const MaintenancePage = lazy(() => import('./pages/MaintenancePage'));
+const MaintenancePlanPage = lazy(() => import('./pages/MaintenancePlanPage'));
+const MaintenanceExecutionPage = lazy(() => import('./pages/MaintenanceExecutionPage'));
+const IncidentsPage = lazy(() => import('./pages/IncidentsPage'));
+const AuditLogsPage = lazy(() => import('./pages/AuditLogsPage'));
+
+// Loading fallback component
+function LoadingFallback() {
+  return (
+    <div className="flex items-center justify-center min-h-screen" style={{ backgroundColor: 'var(--color-bg-primary)' }}>
+      <div className="text-center">
+        <div className="inline-block" style={{ color: 'var(--healthcare-primary)' }}>
+          <div className="animate-spin h-8 w-8 border-4 border-current border-t-transparent rounded-full mb-4"></div>
+          <p style={{ color: 'var(--color-text-secondary)' }}>Se încarcă...</p>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function Header({ user, logout, theme, toggleTheme, isMobileMenuOpen, setIsMobileMenuOpen }) {
   const location = useLocation();
@@ -199,20 +216,22 @@ function DashboardLayout({ logout, theme, toggleTheme }) {
       <MobileMenu isOpen={isMobileMenuOpen} onClose={() => setIsMobileMenuOpen(false)} />
 
       <main id="main">
-        <Routes>
-          <Route path="/"                  element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-          <Route path="/inventory"         element={<ProtectedRoute><InventoryPageV2 /></ProtectedRoute>} />
-          <Route path="/inventory/annual"  element={<ProtectedRoute><AnnualInventoryPage /></ProtectedRoute>} />
-          <Route path="/consumables"       element={<ProtectedRoute><ConsumablesPage /></ProtectedRoute>} />
-          <Route path="/maintenance"       element={<ProtectedRoute><MaintenancePage /></ProtectedRoute>} />
-          <Route path="/maintenance/plan"  element={<ProtectedRoute><MaintenancePlanPage /></ProtectedRoute>} />
-          <Route path="/maintenance/execution" element={<ProtectedRoute><MaintenanceExecutionPage /></ProtectedRoute>} />
-          <Route path="/incidents"         element={<ProtectedRoute><IncidentsPage /></ProtectedRoute>} />
-          <Route path="/audit-logs"        element={<ProtectedRoute><AuditLogsPage /></ProtectedRoute>} />
-          <Route path="/devices/new"       element={<ProtectedRoute><DeviceForm /></ProtectedRoute>} />
-          <Route path="/devices/:id/edit"  element={<ProtectedRoute><DeviceForm /></ProtectedRoute>} />
-          <Route path="/settings"          element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
-        </Routes>
+        <Suspense fallback={<LoadingFallback />}>
+          <Routes>
+            <Route path="/"                  element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+            <Route path="/inventory"         element={<ProtectedRoute><InventoryPageV2 /></ProtectedRoute>} />
+            <Route path="/inventory/annual"  element={<ProtectedRoute><AnnualInventoryPage /></ProtectedRoute>} />
+            <Route path="/consumables"       element={<ProtectedRoute><ConsumablesPage /></ProtectedRoute>} />
+            <Route path="/maintenance"       element={<ProtectedRoute><MaintenancePage /></ProtectedRoute>} />
+            <Route path="/maintenance/plan"  element={<ProtectedRoute><MaintenancePlanPage /></ProtectedRoute>} />
+            <Route path="/maintenance/execution" element={<ProtectedRoute><MaintenanceExecutionPage /></ProtectedRoute>} />
+            <Route path="/incidents"         element={<ProtectedRoute><IncidentsPage /></ProtectedRoute>} />
+            <Route path="/audit-logs"        element={<ProtectedRoute><AuditLogsPage /></ProtectedRoute>} />
+            <Route path="/devices/new"       element={<ProtectedRoute><DeviceForm /></ProtectedRoute>} />
+            <Route path="/devices/:id/edit"  element={<ProtectedRoute><DeviceForm /></ProtectedRoute>} />
+            <Route path="/settings"          element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
+          </Routes>
+        </Suspense>
       </main>
     </div>
   );
@@ -232,5 +251,9 @@ export default function App() {
 
   if (!user) return <Login />;
 
-  return <DashboardLayout logout={logout} theme={theme} toggleTheme={toggleTheme} />;
+  return (
+    <ErrorBoundary onReset={() => window.location.href = '/'}>
+      <DashboardLayout logout={logout} theme={theme} toggleTheme={toggleTheme} />
+    </ErrorBoundary>
+  );
 }
