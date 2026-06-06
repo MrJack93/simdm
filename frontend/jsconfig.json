@@ -1,6 +1,9 @@
 {
   "compilerOptions": {
     "ignoreDeprecations": "6.0",
+    "checkJs": true,
+    "strict": true,
+    "noImplicitAny": true,
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]

@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, Suspense, lazy } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, Link, NavLink } from 'react-router-dom';
 import { useAuth } from './hooks/useAuth';
 import { useTheme } from './hooks/useTheme';
 import { ErrorBoundary } from './components/ErrorBoundary';
@@ -35,9 +35,7 @@ function LoadingFallback() {
   );
 }
 
-function Header({ user, logout, theme, toggleTheme, isMobileMenuOpen, setIsMobileMenuOpen }) {
-  const location = useLocation();
-  const isActive = (path) => location.pathname === path;
+function Header({ user, logout, theme, toggleTheme, isMobileMenuOpen, setIsMobileMenuOpen, menuTriggerRef }) {
 
   return (
     <header
@@ -46,6 +44,7 @@ function Header({ user, logout, theme, toggleTheme, isMobileMenuOpen, setIsMobil
     >
       <div className="flex items-center gap-4">
         <button
+          ref={menuTriggerRef}
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           className="md:hidden p-2 hover:opacity-70 transition-opacity"
           aria-label="Meniu"
@@ -56,35 +55,34 @@ function Header({ user, logout, theme, toggleTheme, isMobileMenuOpen, setIsMobil
           {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
 
-        <a href="/" className="flex items-center gap-1.5" style={{ textDecoration: 'none', color: 'var(--color-accent)' }}>
+        <Link to="/" className="flex items-center gap-1.5" style={{ textDecoration: 'none', color: 'var(--color-accent)' }}>
           <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1", fontSize: '20px' }}>flare</span>
           <span className="text-2xl font-bold tracking-tight" style={{ fontFamily: 'var(--font-family-headline)', color: 'var(--color-accent)' }}>SIMDM</span>
-        </a>
+        </Link>
 
         <nav className="hidden md:flex gap-6 ml-8">
           {[
-            { href: '/inventory',        Icon: Warehouse,     label: 'Inventar' },
-            { href: '/inventory/annual', Icon: Calendar,      label: 'Inventariere' },
-            { href: '/consumables',      Icon: Package,       label: 'Consumabile' },
-            { href: '/maintenance',      Icon: Wrench,        label: 'Mentenanță' },
-            { href: '/incidents',        Icon: AlertTriangle, label: 'Incidente' },
-            { href: '/audit-logs',       Icon: FileText,      label: 'Jurnal' },
-          ].map(({ href, Icon, label }) => (
-            <a
-              key={href}
-              href={href}
-              aria-current={isActive(href) ? 'page' : undefined}
-              className={`text-sm font-medium hover:opacity-70 transition-opacity flex items-center gap-1.5 pb-2 ${
-                isActive(href) ? 'border-b-2' : ''
-              }`}
-              style={{
+            { to: '/inventory',        Icon: Warehouse,     label: 'Inventar' },
+            { to: '/inventory/annual', Icon: Calendar,      label: 'Inventariere' },
+            { to: '/consumables',      Icon: Package,       label: 'Consumabile' },
+            { to: '/maintenance',      Icon: Wrench,        label: 'Mentenanță' },
+            { to: '/incidents',        Icon: AlertTriangle, label: 'Incidente' },
+            { to: '/audit-logs',       Icon: FileText,      label: 'Jurnal' },
+          ].map(({ to, Icon, label }) => (
+            <NavLink
+              key={to}
+              to={to}
+              className={({ isActive }) =>
+                `text-sm font-medium hover:opacity-70 transition-opacity flex items-center gap-1.5 pb-2 ${isActive ? 'border-b-2' : ''}`
+              }
+              style={({ isActive }) => ({
                 color: 'var(--color-text-primary)',
                 textDecoration: 'none',
-                borderColor: isActive(href) ? 'var(--color-accent)' : 'transparent',
-              }}
+                borderColor: isActive ? 'var(--color-accent)' : 'transparent',
+              })}
             >
               <Icon size={15} /> {label}
-            </a>
+            </NavLink>
           ))}
         </nav>
       </div>
@@ -99,33 +97,39 @@ function Header({ user, logout, theme, toggleTheme, isMobileMenuOpen, setIsMobil
           {theme === 'dark' ? '☀️' : '🌙'}
         </button>
 
-        <a
-          href="/settings"
+        <Link
+          to="/settings"
           className="p-2 rounded-lg hover:opacity-70 transition-opacity hidden sm:inline-flex"
           aria-label="Setări"
           style={{ color: 'var(--color-text-secondary)', textDecoration: 'none' }}
         >
           <Cog size={20} />
-        </a>
+        </Link>
 
         <button
           onClick={logout}
-          className="px-4 py-2 rounded-lg font-medium transition-all text-sm flex items-center gap-2"
-          style={{ backgroundColor: 'var(--color-error)', color: '#ffffff' }}
+          className="px-3 py-2 rounded-lg font-medium transition-all text-sm flex items-center gap-2
+                     hover:bg-[var(--color-error-bg)] hover:text-[var(--color-error)]"
+          style={{ color: 'var(--color-text-secondary)' }}
+          aria-label="Deconectare din sistem"
         >
           <LogOut size={16} />
-          <span>Deconectare</span>
+          <span className="hidden sm:inline">Deconectare</span>
         </button>
       </div>
     </header>
   );
 }
 
-function MobileMenu({ isOpen, onClose }) {
+function MobileMenu({ isOpen, onClose, triggerRef }) {
   const menuRef = useRef(null);
 
   useEffect(() => {
     if (!isOpen) return;
+
+    // Move focus into menu on open
+    const first = menuRef.current?.querySelector('a, button');
+    first?.focus();
 
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') {
@@ -156,18 +160,22 @@ function MobileMenu({ isOpen, onClose }) {
     };
 
     document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, onClose]);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      // Restore focus to trigger button on close
+      triggerRef?.current?.focus();
+    };
+  }, [isOpen, onClose, triggerRef]);
 
   const links = [
-    { href: '/',                 Icon: Home,          label: 'Dashboard' },
-    { href: '/inventory',        Icon: Warehouse,     label: 'Inventar' },
-    { href: '/inventory/annual', Icon: Calendar,      label: 'Inventariere' },
-    { href: '/consumables',      Icon: Package,       label: 'Consumabile' },
-    { href: '/maintenance',      Icon: Wrench,        label: 'Mentenanță' },
-    { href: '/incidents',        Icon: AlertTriangle, label: 'Incidente' },
-    { href: '/audit-logs',       Icon: FileText,      label: 'Jurnal Audit' },
-    { href: '/settings',         Icon: Cog,           label: 'Setări' },
+    { to: '/',                 Icon: Home,          label: 'Dashboard' },
+    { to: '/inventory',        Icon: Warehouse,     label: 'Inventar' },
+    { to: '/inventory/annual', Icon: Calendar,      label: 'Inventariere' },
+    { to: '/consumables',      Icon: Package,       label: 'Consumabile' },
+    { to: '/maintenance',      Icon: Wrench,        label: 'Mentenanță' },
+    { to: '/incidents',        Icon: AlertTriangle, label: 'Incidente' },
+    { to: '/audit-logs',       Icon: FileText,      label: 'Jurnal Audit' },
+    { to: '/settings',         Icon: Cog,           label: 'Setări' },
   ];
 
   if (!isOpen) return null;
@@ -181,16 +189,16 @@ function MobileMenu({ isOpen, onClose }) {
       aria-label="Meniu mobil"
       style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)' }}
     >
-      {links.map(({ href, Icon, label }) => (
-        <a
-          key={href}
-          href={href}
+      {links.map(({ to, Icon, label }) => (
+        <Link
+          key={to}
+          to={to}
           onClick={onClose}
           className="flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-all"
           style={{ backgroundColor: 'var(--color-bg-tertiary)', color: 'var(--color-text-primary)', textDecoration: 'none' }}
         >
           <Icon size={18} /> {label}
-        </a>
+        </Link>
       ))}
     </div>
   );
@@ -199,6 +207,7 @@ function MobileMenu({ isOpen, onClose }) {
 function DashboardLayout({ logout, theme, toggleTheme }) {
   const { user } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const menuTriggerRef = useRef(null);
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: 'var(--color-bg-primary)' }}>
@@ -211,9 +220,10 @@ function DashboardLayout({ logout, theme, toggleTheme }) {
         toggleTheme={toggleTheme}
         isMobileMenuOpen={isMobileMenuOpen}
         setIsMobileMenuOpen={setIsMobileMenuOpen}
+        menuTriggerRef={menuTriggerRef}
       />
 
-      <MobileMenu isOpen={isMobileMenuOpen} onClose={() => setIsMobileMenuOpen(false)} />
+      <MobileMenu isOpen={isMobileMenuOpen} onClose={() => setIsMobileMenuOpen(false)} triggerRef={menuTriggerRef} />
 
       <main id="main">
         <Suspense fallback={<LoadingFallback />}>

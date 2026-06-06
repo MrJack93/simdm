@@ -1,15 +1,53 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import DeviceTimeline from '../components/DeviceTimeline';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import Select from 'react-select';
 import DatePicker from 'react-datepicker';
 import { toast } from 'react-toastify';
 import { deviceSchema } from '../schemas/deviceSchema';
+import { useDevice } from '../hooks/useDevices';
+import { useSections } from '../hooks/useSections';
+import { createDevice, updateDevice, deviceKeys } from '../api/devices';
 import api from '../api/axios';
 import 'react-datepicker/dist/react-datepicker.css';
+
+// Stilurile pentru react-select sunt extrase la nivel de modul.
+// Anterior erau definite inline de 3 ori — câte un obiect nou la fiecare render
+// pentru riskClass, status și sectionId. Acum este un singur obiect refolosit.
+const SELECT_STYLES = {
+  control: (base) => ({
+    ...base,
+    backgroundColor: 'var(--color-bg-tertiary)',
+    borderColor: 'var(--color-border)',
+    color: 'var(--color-text-primary)',
+  }),
+  menu: (base) => ({
+    ...base,
+    backgroundColor: 'var(--color-bg-secondary)',
+    color: 'var(--color-text-primary)',
+  }),
+  option: (base, state) => ({
+    ...base,
+    backgroundColor: state.isSelected ? 'var(--color-accent)' : 'transparent',
+    color: state.isSelected ? '#1a1a1a' : 'var(--color-text-primary)',
+  }),
+  singleValue: (base) => ({
+    ...base,
+    color: 'var(--color-text-primary)',
+  }),
+};
+
+/**
+ * Câmpurile validate la fiecare pas al wizard-ului.
+ * Cheile corespund exact cu name-urile înregistrate în useForm / deviceSchema.
+ */
+const STEP_FIELDS = {
+  0: ['inventoryNumber', 'name', 'model', 'serialNumber', 'manufacturer', 'yearMade'],
+  1: ['riskClass', 'status', 'sectionId', 'acquisitionDate', 'warrantyExpiry'],
+};
 
 const RISK_CLASSES = [
   { value: 'I', label: 'I' },
@@ -27,41 +65,69 @@ const STATUSES = [
   { value: 'REZERVA', label: 'Rezervă' },
 ];
 
-function StepIndicator({ currentStep, totalSteps, steps }) {
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
-
+/**
+ * @param {{ currentStep: number, totalSteps: number, steps: string[] }} props
+ */
+/**
+ * @param {{
+ *   currentStep: number,
+ *   totalSteps: number,
+ *   steps: string[],
+ *   stepErrors: boolean[]
+ * }} props
+ * stepErrors[i] = true dacă pasul i a fost validat și are erori
+ */
+function StepIndicator({ currentStep, totalSteps, steps, stepErrors = [] }) {
   return (
     <div className="mb-8">
       {/* Desktop: Full visual indicator */}
       <div className="hidden md:flex gap-2 items-center">
-        {steps.map((step, idx) => (
-          <div key={idx} className="flex items-center flex-1">
-            <div
-              className="flex items-center justify-center w-10 h-10 rounded-full font-bold transition-all flex-shrink-0"
-              style={{
-                backgroundColor:
-                  idx < currentStep
-                    ? 'var(--color-success)'
-                    : idx === currentStep
-                    ? 'var(--color-accent)'
-                    : 'var(--color-bg-tertiary)',
-                color: idx < currentStep || idx === currentStep ? '#1a1a1a' : 'var(--color-text-secondary)',
-                border: '1px solid',
-                borderColor: idx <= currentStep ? 'transparent' : 'var(--color-border)',
-              }}
-            >
-              {idx < currentStep ? '✓' : idx + 1}
-            </div>
-            {idx < steps.length - 1 && (
+        {steps.map((step, idx) => {
+          const isCompleted = idx < currentStep;
+          const isCurrent   = idx === currentStep;
+          const hasError    = stepErrors[idx];
+
+          let bgColor      = 'var(--color-bg-tertiary)';
+          let borderColor  = 'var(--color-border)';
+          let textColor    = 'var(--color-text-secondary)';
+          let label        = String(idx + 1);
+
+          if (hasError && isCompleted) {
+            bgColor     = 'var(--color-error)';
+            borderColor = 'transparent';
+            textColor   = '#ffffff';
+            label       = '✗';
+          } else if (isCompleted) {
+            bgColor     = 'var(--color-success)';
+            borderColor = 'transparent';
+            textColor   = '#1a1a1a';
+            label       = '✓';
+          } else if (isCurrent) {
+            bgColor     = 'var(--color-accent)';
+            borderColor = 'transparent';
+            textColor   = '#1a1a1a';
+          }
+
+          const connectorColor = isCompleted
+            ? hasError ? 'var(--color-error)' : 'var(--color-success)'
+            : 'var(--color-border)';
+
+          return (
+            <div key={idx} className="flex items-center flex-1">
               <div
-                className="flex-1 h-1 mx-2"
-                style={{
-                  backgroundColor: idx < currentStep ? 'var(--color-success)' : 'var(--color-border)',
-                }}
-              />
-            )}
-          </div>
-        ))}
+                className="flex items-center justify-center w-10 h-10 rounded-full font-bold transition-all flex-shrink-0"
+                style={{ backgroundColor: bgColor, color: textColor, border: '1px solid', borderColor }}
+                aria-current={isCurrent ? 'step' : undefined}
+                aria-label={`Pasul ${idx + 1}: ${step}${hasError ? ' — are erori' : isCompleted ? ' — completat' : ''}`}
+              >
+                {label}
+              </div>
+              {idx < steps.length - 1 && (
+                <div className="flex-1 h-1 mx-2 transition-colors" style={{ backgroundColor: connectorColor }} />
+              )}
+            </div>
+          );
+        })}
       </div>
 
       {/* Mobile: Simple counter */}
@@ -84,7 +150,10 @@ function StepIndicator({ currentStep, totalSteps, steps }) {
 
       {/* Desktop label */}
       <div className="hidden md:block mt-4 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
-        Pasul {currentStep + 1} din {totalSteps}: <span style={{ color: 'var(--color-accent)' }} className="font-bold">{steps[currentStep]}</span>
+        Pasul {currentStep + 1} din {totalSteps}:{' '}
+        <span style={{ color: 'var(--color-accent)' }} className="font-bold">
+          {steps[currentStep]}
+        </span>
       </div>
     </div>
   );
@@ -99,10 +168,12 @@ export default function DeviceForm() {
   const [uploadingDoc, setUploadingDoc] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
   const [showAdvanced, setShowAdvanced] = useState(false);
+  // stepErrors[i] = true dacă utilizatorul a încercat să avanseze de pe pasul i cu erori
+  const [stepErrors, setStepErrors] = useState([false, false, false]);
 
   const steps = ['Identificare', 'Clasificare', 'Confirmă'];
 
-  const { control, register, handleSubmit, reset, getValues, formState: { errors } } = useForm({
+  const { control, register, handleSubmit, reset, getValues, trigger, formState: { errors } } = useForm({
     resolver: zodResolver(deviceSchema),
     mode: 'onBlur',
     defaultValues: {
@@ -113,35 +184,29 @@ export default function DeviceForm() {
   });
 
   // Query sections
-  const { data: sectionsData = [] } = useQuery({
-    queryKey: ['sections'],
-    queryFn: () => api.get('/sections').then((r) => r.data),
-  });
-
+  const { data: sectionsData = [] } = useSections();
   const sectionOptions = sectionsData.map((s) => ({ value: s.id, label: s.name }));
 
   // Query device in edit mode
-  const { isLoading: deviceLoading } = useQuery({
-    queryKey: ['device', id],
-    queryFn: () => api.get(`/devices/${id}`).then((r) => r.data),
-    enabled: !!id,
-    onSuccess: (data) => {
-      reset({
-        ...data,
-        riskClass: data.riskClass || 'IIb',
-        status: data.status || 'FUNCTIONAL',
-        currency: data.currency || 'MDL',
-        sectionId: data.sectionId || '',
-      });
-    },
-  });
+  const { isLoading: deviceLoading, data: deviceData } = useDevice(id);
 
-  // Mutations
+  useEffect(() => {
+    if (!deviceData) return;
+    reset({
+      ...deviceData,
+      riskClass: deviceData.riskClass || 'IIb',
+      status: deviceData.status || 'FUNCTIONAL',
+      currency: deviceData.currency || 'MDL',
+      sectionId: deviceData.sectionId || '',
+    });
+  }, [deviceData, reset]);
+
+  // Mutations (using API functions)
   const createMutation = useMutation({
-    mutationFn: (formData) => api.post('/devices', formData),
+    mutationFn: createDevice,
     onSuccess: () => {
       toast.success('Dispozitiv adăugat cu succes');
-      queryClient.invalidateQueries({ queryKey: ['devices'] });
+      queryClient.invalidateQueries({ queryKey: deviceKeys.all });
       navigate('/inventory');
     },
     onError: (error) => {
@@ -150,11 +215,11 @@ export default function DeviceForm() {
   });
 
   const updateMutation = useMutation({
-    mutationFn: (formData) => api.put(`/devices/${id}`, formData),
+    mutationFn: (formData) => updateDevice(id, formData),
     onSuccess: () => {
       toast.success('Dispozitiv actualizat cu succes');
-      queryClient.invalidateQueries({ queryKey: ['devices'] });
-      queryClient.invalidateQueries({ queryKey: ['device', id] });
+      queryClient.invalidateQueries({ queryKey: deviceKeys.all });
+      queryClient.invalidateQueries({ queryKey: deviceKeys.detail(id) });
       navigate('/inventory');
     },
     onError: (error) => {
@@ -200,7 +265,7 @@ export default function DeviceForm() {
       queryClient.invalidateQueries({ queryKey: ['device', id] });
       setTimeout(() => setUploadSuccess(false), 3000);
     } catch (error) {
-      toast.error('Eroare la upload: ' + error.message);
+      toast.error(error.response?.data?.error ?? 'Eroare la încărcarea documentului');
     } finally {
       setUploadingDoc(false);
       e.target.value = '';
@@ -216,10 +281,23 @@ export default function DeviceForm() {
     );
   }
 
-  const handleNext = () => {
-    if (currentStep < steps.length - 1) {
-      setCurrentStep(currentStep + 1);
+  const handleNext = async () => {
+    if (currentStep >= steps.length - 1) return;
+
+    const fields = STEP_FIELDS[currentStep];
+    const isValid = await trigger(fields);
+
+    // Actualizează indicatorul vizual de eroare pentru pasul curent
+    setStepErrors(prev => {
+      const next = [...prev];
+      next[currentStep] = !isValid;
+      return next;
+    });
+
+    if (isValid) {
+      setCurrentStep(s => s + 1);
     }
+    // Dacă NU e valid, RHF a setat deja errors → câmpurile din step arată mesajele
   };
 
   const handlePrev = () => {
@@ -246,7 +324,12 @@ export default function DeviceForm() {
           Completează formularul pas cu pas
         </p>
 
-        <StepIndicator currentStep={currentStep} totalSteps={steps.length} steps={steps} />
+        <StepIndicator
+          currentStep={currentStep}
+          totalSteps={steps.length}
+          steps={steps}
+          stepErrors={stepErrors}
+        />
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           {/* STEP 0: IDENTIFICARE */}
@@ -352,24 +435,7 @@ export default function DeviceForm() {
                         value={RISK_CLASSES.find((r) => r.value === field.value)}
                         onChange={(opt) => field.onChange(opt?.value)}
                         isSearchable={false}
-                        styles={{
-                          control: (base) => ({
-                            ...base,
-                            backgroundColor: 'var(--color-bg-tertiary)',
-                            borderColor: 'var(--color-border)',
-                            color: 'var(--color-text-primary)',
-                          }),
-                          menu: (base) => ({
-                            ...base,
-                            backgroundColor: 'var(--color-bg-secondary)',
-                            color: 'var(--color-text-primary)',
-                          }),
-                          option: (base, state) => ({
-                            ...base,
-                            backgroundColor: state.isSelected ? 'var(--color-accent)' : 'transparent',
-                            color: state.isSelected ? '#1a1a1a' : 'var(--color-text-primary)',
-                          }),
-                        }}
+                        styles={SELECT_STYLES}
                       />
                     )}
                   />
@@ -390,24 +456,7 @@ export default function DeviceForm() {
                         value={STATUSES.find((s) => s.value === field.value)}
                         onChange={(opt) => field.onChange(opt?.value)}
                         isSearchable={false}
-                        styles={{
-                          control: (base) => ({
-                            ...base,
-                            backgroundColor: 'var(--color-bg-tertiary)',
-                            borderColor: 'var(--color-border)',
-                            color: 'var(--color-text-primary)',
-                          }),
-                          menu: (base) => ({
-                            ...base,
-                            backgroundColor: 'var(--color-bg-secondary)',
-                            color: 'var(--color-text-primary)',
-                          }),
-                          option: (base, state) => ({
-                            ...base,
-                            backgroundColor: state.isSelected ? 'var(--color-accent)' : 'transparent',
-                            color: state.isSelected ? '#1a1a1a' : 'var(--color-text-primary)',
-                          }),
-                        }}
+                        styles={SELECT_STYLES}
                       />
                     )}
                   />
@@ -429,24 +478,7 @@ export default function DeviceForm() {
                       value={sectionOptions.find((s) => s.value === field.value)}
                       onChange={(opt) => field.onChange(opt?.value)}
                       placeholder="Selectează secție"
-                      styles={{
-                        control: (base) => ({
-                          ...base,
-                          backgroundColor: 'var(--color-bg-tertiary)',
-                          borderColor: 'var(--color-border)',
-                          color: 'var(--color-text-primary)',
-                        }),
-                        menu: (base) => ({
-                          ...base,
-                          backgroundColor: 'var(--color-bg-secondary)',
-                          color: 'var(--color-text-primary)',
-                        }),
-                        option: (base, state) => ({
-                          ...base,
-                          backgroundColor: state.isSelected ? 'var(--color-accent)' : 'transparent',
-                          color: state.isSelected ? '#1a1a1a' : 'var(--color-text-primary)',
-                        }),
-                      }}
+                      styles={SELECT_STYLES}
                     />
                   )}
                 />
@@ -539,6 +571,12 @@ export default function DeviceForm() {
                     Status:
                   </span>{' '}
                   {STATUSES.find((s) => s.value === getValues('status'))?.label}
+                </div>
+                <div>
+                  <span style={{ color: 'var(--color-accent)' }} className="font-bold">
+                    Secție:
+                  </span>{' '}
+                  {sectionOptions.find((s) => s.value === getValues('sectionId'))?.label || '—'}
                 </div>
               </div>
 
