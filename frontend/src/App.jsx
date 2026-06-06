@@ -248,7 +248,7 @@ function DashboardLayout({ logout, theme, toggleTheme }) {
 }
 
 export default function App() {
-  const { user, loading, logout } = useAuth();
+  const { loading, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
 
   if (loading) {
@@ -259,11 +259,12 @@ export default function App() {
     );
   }
 
-  if (!user) return <Login />;
-
   return (
     <ErrorBoundary onReset={() => window.location.href = '/'}>
-      <DashboardLayout logout={logout} theme={theme} toggleTheme={toggleTheme} />
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/*" element={<ProtectedRoute><DashboardLayout logout={logout} theme={theme} toggleTheme={toggleTheme} /></ProtectedRoute>} />
+      </Routes>
     </ErrorBoundary>
   );
 }
