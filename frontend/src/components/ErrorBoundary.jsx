@@ -53,7 +53,10 @@ export class ErrorBoundary extends React.Component {
 
   render() {
     if (this.state.hasError) {
-      const isDevelopment = process.env.NODE_ENV === 'development';
+      // import.meta.env.DEV este API-ul standard Vite (boolean).
+      // process.env.NODE_ENV este sintaxa Node.js/webpack — funcționează accidental
+      // în Vite dar nu este garantat și poate fi undefined în anumite configurații.
+      const isDevelopment = import.meta.env.DEV;
 
       return (
         <div

@@ -84,13 +84,13 @@ describe('ConsumablesPage', () => {
 
   it('șterge un consumabil după confirmare (DELETE)', async () => {
     const user = userEvent.setup();
-    window.confirm.mockReturnValue(true);
     api.delete.mockResolvedValue({ data: {} });
     renderWithProviders(<ConsumablesPage />);
     await screen.findByText('Mănuși nitril');
 
     const deleteButtons = screen.getAllByRole('button', { name: '✕' });
     await user.click(deleteButtons[0]);
+    await user.click(await screen.findByRole('button', { name: 'Șterge' }));
     await waitFor(() => {
       expect(api.delete).toHaveBeenCalledWith('/consumables/1');
     });

@@ -4,16 +4,9 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
 const prisma = require('./db');
-const fs = require('fs');
-const path = require('path');
-const LOG_FILE = '/tmp/backend.log';
 
-function log(msg) {
-  const timestamp = new Date().toISOString();
-  const line = `[${timestamp}] ${msg}\n`;
-  console.log(line.trim());
-  fs.appendFileSync(LOG_FILE, line, { flag: 'a' });
-}
+// L3 Fix: Use async logger (Pino) instead of synchronous appendFileSync
+const { log } = require('./utils/logger');
 
 const authMiddleware = require('./middleware/auth');
 const { cleanupExpiredTokens } = require('./jobs/cleanupTokens');
@@ -47,16 +40,17 @@ const PORT = process.env.PORT || 3001;
 
 // Security middleware
 app.use(helmet());
+// L4 Fix: CORS origin from .env for flexible deployment
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
   credentials: true,
 }));
 app.use(express.json());
 app.use(cookieParser());
 
-// Static files for uploads
-const uploadsDir = path.join(__dirname, '../uploads');
-app.use('/uploads', express.static(uploadsDir));
+// M3 Fix: Remove public /uploads serving — medical documents require authentication
+// const uploadsDir = path.join(__dirname, '../uploads');
+// app.use('/uploads', express.static(uploadsDir));
 
 // Debug middleware
 app.use((req, res, next) => {
@@ -83,11 +77,12 @@ app.get('/api/health', async (req, res) => {
   }
 });
 
-app.use('/api/auth', authRoutes);
+// L1 Fix: Standardized auth middleware application (all protected routes in index.js)
+app.use('/api/auth', authRoutes); // Public - login/refresh
 app.use('/api/sections', authMiddleware, sectionsRoutes);
-app.use('/api/devices', deviceRoutes);
-app.use('/api/consumables', consumableRoutes);
-app.use('/api/annual-inventory', annualInventoryRoutes);
+app.use('/api/devices', authMiddleware, deviceRoutes);
+app.use('/api/consumables', authMiddleware, consumableRoutes);
+app.use('/api/annual-inventory', authMiddleware, annualInventoryRoutes);
 app.use('/api/audit-logs', authMiddleware, auditLogsRoutes);
 app.use('/api/maintenance', authMiddleware, maintenanceRoutes);
 app.use('/api/incidents', authMiddleware, incidentRoutes);
@@ -99,10 +94,12 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Eroare interna de server' });
 });
 
-// Catch all unhandled errors
+// L2 Fix: Exit process on uncaught exception (let Docker/PM2 restart)
 process.on('uncaughtException', (err) => {
   console.error('UNCAUGHT EXCEPTION:', err.message);
   console.error(err.stack);
+  log('FATAL: Exiting process due to uncaught exception');
+  process.exit(1); // Exit so supervisor can restart
 });
 
 process.on('unhandledRejection', (reason, promise) => {

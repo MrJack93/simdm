@@ -24,6 +24,23 @@ async function main() {
   });
   console.log(`✅ Utilizator: ${admin.username} (ID: ${admin.id})`);
 
+  // Test user for E2E tests
+  const testUserPassword = await bcrypt.hash('Test123!', 12);
+  const testUser = await prisma.users.upsert({
+    where: { username: 'testuser' },
+    update: { passwordHash: testUserPassword },
+    create: {
+      email: 'testuser@spital.md',
+      username: 'testuser',
+      passwordHash: testUserPassword,
+      fullName: 'Test User',
+      role: 'BIOINGINER',
+      isActive: true,
+      updatedAt: new Date(),
+    },
+  });
+  console.log(`✅ Test User: ${testUser.username} (ID: ${testUser.id})`);
+
   // ============================================
   // 2. SECȚII SPITALULUI (8 secții)
   // ============================================

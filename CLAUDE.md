@@ -9,18 +9,22 @@ Citește-l complet înainte de a scrie sau modifica cod.
 
 **SIMDM** = Sistem Informațional de Management al Dispozitivelor Medicale.
 
-Este o aplicație web personală pentru un **bioinginer medical** dintr-un **spital privat**,
+Este o aplicație web pentru **bioinginerul medical** din **instituții de medicină privată**,
 folosită pentru a gestiona dispozitivele medicale (DM) conform **Ghidului Bioinginerului
 în domeniul dispozitivelor medicale** (Republica Moldova, Ordinul MS nr. 889 din 31.10.2024).
+
+**Viziune:** un SIMDM propriu pentru medicina privată — alternativă locală, independentă față de
+SIMDM-ul național al AMDM (care deservește mai ales IMSP publice). Ghidul rămâne referința normativă.
 
 ### Scop
 Înlocuiește evidența pe hârtie / Excel cu o bază de date centralizată care acoperă:
 inventarul DM, mentenanța (preventivă și corectivă), incidentele, documentele și raportarea.
 
 ### Context critic
-- **UTILIZATOR UNIC.** Aplicația este folosită de o singură persoană (bioinginerul).
-  NU implementa RBAC, roluri multiple, înregistrare sau gestiune de utilizatori.
-  Autentificarea este un login simplu cu username + parolă, credențialele fiind în .env.
+- **UTILIZATOR UNIC (MVP).** Momentan aplicația e folosită de o singură persoană (bioinginerul).
+  NU implementa RBAC sau înregistrare de utilizatori în această fază. Login simplu username + parolă,
+  credențiale în .env. *Notă:* schema are deja `enum UserRole` (ADMIN/BIOINGINER/MANAGER/MEDIC/VIEWER)
+  — câmp vestigial, neutilizat acum; un eventual multi-user pentru clinici private se va decide explicit ulterior.
 - **RULEAZĂ LOCAL.** Hosting pe localhost sau rețea locală a spitalului. Fără cloud, fără deploy extern.
 - **DATE MEDICALE.** Datele sunt importante. Tratează integritatea datelor cu seriozitate
   (validare, tranzacții unde e cazul, backup).
@@ -55,7 +59,7 @@ NU adăuga alte framework-uri sau librării fără a fi cerute explicit. Păstre
 simdm/
 ├── backend/
 │   ├── prisma/
-│   │   ├── schema.prisma     # definiția bazei de date (sursa de adevăr)
+│   │   ├── schema/schema.prisma  # definiția bazei de date (SURSA DE ADEVĂR)
 │   │   ├── migrations/       # migrațiile generate de Prisma
 │   │   └── seed.js           # date inițiale (secții spital etc.)
 │   ├── src/
@@ -79,10 +83,13 @@ simdm/
 │   └── package.json
 │
 ├── docs/                     # documentație tehnică
-│   ├── 1-DESIGN-AND-ACCESSIBILITY.md
+│   ├── DESIGN-SYSTEM.md       # design + accesibilitate (consolidat)
 │   ├── 2-DEVELOPER-GUIDE.md
 │   ├── 3-AUDIT-LOG.md
-│   └── CONTRIBUTING.md
+│   ├── CONTRIBUTING.md
+│   ├── ANTIVIRUS-SETUP.md
+│   ├── DOCKER-OPTIMIZATION.md
+│   └── MOBILE_WORKFLOW_GUIDE.md
 │
 ├── .gitignore
 ├── CLAUDE.md                 # acest fișier
@@ -93,7 +100,10 @@ simdm/
 
 ---
 
-## Faza 3: Mentenanță (PLANNED - START 2026-06-05)
+## Faza 3: Mentenanță (ÎN LUCRU - START 2026-06-05)
+
+> Faza 1-2 sunt complete și **auditate** (securitate + integritate date), remedierile aplicate.
+> Plan pas-cu-pas complet: **[tasks/PLAN-FAZA3-DETALIAT.md](tasks/PLAN-FAZA3-DETALIAT.md)** (citește §0 — regulile obligatorii din lecțiile auditului).
 
 **Durată:** 16 zile (3-4 săptămâni) | **Termin:** 2026-06-26
 
@@ -108,21 +118,28 @@ Implementează sistemul complet de mentenanță cu 5 module:
 - Frontend: react-big-calendar, date-fns, react-signature-canvas
 - Backend: node-cron
 
-**Vezi detalii complete:** [tasks/plan.md](tasks/plan.md) | [tasks/todo.md](tasks/todo.md) | [SPEC.md § 15](SPEC.md)
+**Vezi detalii complete:** [tasks/PLAN-FAZA3-DETALIAT.md](tasks/PLAN-FAZA3-DETALIAT.md) | [tasks/todo.md](tasks/todo.md) | [SPEC.md § 15](SPEC.md)
 
 ---
 
 ## Reguli de cod
 
-1. **Citește schema.prisma înainte de orice operație cu date** - este sursa de adevăr
-2. **NU introduce roluri sau RBAC** - proiectul are un singur utilizator
+1. **Citește `backend/prisma/schema/schema.prisma` înainte de orice operație cu date** - sursa de adevăr
+2. **NU introduce roluri sau RBAC** - MVP cu un singur utilizator (vezi nota despre UserRole mai sus)
 3. **Păstrează stiva simplă** - nu adăuga librării noi fără cerere explicită
-4. **Confirmă înainte de ștergeri** - nu rula prisma migrate reset fără confirmare
-5. **După modificarea schemei** - rulează 
-px prisma migrate dev + 
-px prisma generate
+4. **Confirmă înainte de ștergeri** - nu rula `prisma migrate reset` fără confirmare
+5. **După modificarea schemei** - rulează `npx prisma migrate dev` + `npx prisma generate`
 6. **Mesajele pentru utilizator în română**, codul în engleză
 7. **Referință la Ghid** - când un câmp corespunde unui Formular MDM, păstrează acea corespondență
+
+### Reguli de securitate/integritate (din auditul Fazei 1-2 — OBLIGATORII pentru cod nou)
+
+8. **`req.user.sub`** pentru id-ul utilizatorului din JWT (NU `req.user.id` — nu există în token)
+9. **Validare id cu Zod** (`z.coerce.number().int().positive()`) → 400 la id invalid, nu 500
+10. **`prisma.$transaction([...])`** pentru operații + audit log (atomicitate)
+11. **Audit log** la fiecare CREATE/UPDATE/DELETE (`userId = req.user.sub`, ne-null)
+12. **Secrete reale în .env** (niciodată valori placeholder); fișiere servite autentificat, nu static public
+13. **Export CSV** cu `escapeCSVField` (anti formula-injection)
 
 ---
 

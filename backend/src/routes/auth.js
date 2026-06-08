@@ -15,7 +15,6 @@ const loginLimiter = rateLimit({
   max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS || 5),
   message: { error: 'Prea multe încercări. Încearcă peste 15 minute.' },
   standardHeaders: true,
-  trust: true, // Trust X-Forwarded-For header for correct IP
   skip: (req) => {
     // Skip rate limiting în development cu flag sau în test environment
     if (process.env.NODE_ENV === 'development' && req.query.skip_ratelimit) return true;
@@ -140,7 +139,7 @@ router.patch('/change-password', authMiddleware, async (req, res) => {
     // Obțineți utilizatorul curent
     const user = await prisma.users.findUnique({
       where: { id: userId },
-      select: { id: true, password_hash: true },
+      select: { id: true, passwordHash: true },
     });
 
     if (!user) {
@@ -148,7 +147,7 @@ router.patch('/change-password', authMiddleware, async (req, res) => {
     }
 
     // Verificați parola curentă
-    const isPasswordValid = await bcryptjs.compare(currentPassword, user.password_hash);
+    const isPasswordValid = await bcryptjs.compare(currentPassword, user.passwordHash);
     if (!isPasswordValid) {
       return res.status(400).json({ error: 'Parolă curentă incorectă' });
     }
@@ -156,28 +155,31 @@ router.patch('/change-password', authMiddleware, async (req, res) => {
     // Hash parola nouă
     const newPasswordHash = await bcryptjs.hash(newPassword, 12);
 
-    // Update parola în baza de date
-    await prisma.users.update({
-      where: { id: userId },
-      data: { password_hash: newPasswordHash },
-    });
-
-    // Log audit
-    try {
-      await prisma.audit_logs.create({
+    // Update parola în baza de date și revocă toate sesiunile existente
+    await prisma.$transaction([
+      // Update password
+      prisma.users.update({
+        where: { id: userId },
+        data: { passwordHash: newPasswordHash },
+      }),
+      // Revoke all existing refresh tokens (L7 fix: invalidate all sessions)
+      prisma.refresh_tokens.updateMany({
+        where: { userId, revokedAt: null },
+        data: { revokedAt: new Date() },
+      }),
+      // Log audit
+      prisma.audit_logs.create({
         data: {
           userId,
           action: 'UPDATE',
           entity: 'auth',
           entityId: userId.toString(),
-          changes: { action: 'password_changed' },
+          changes: { action: 'password_changed', sessionsRevoked: true },
         },
-      });
-    } catch (auditError) {
-      console.error('Error logging audit:', auditError.message);
-    }
+      }),
+    ]);
 
-    res.json({ message: 'Parolă schimbată cu succes' });
+    res.json({ message: 'Parolă schimbată cu succes. Toate sesiunile au fost revocate. Conectează-te din nou.' });
   } catch (error) {
     console.error('[Change Password Error]', error.message);
     res.status(500).json({ error: 'Eroare la schimbarea parolei' });

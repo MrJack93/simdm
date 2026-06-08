@@ -1,8 +1,11 @@
 import { useState, useMemo, useRef } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import api from '../api/axios';
 import { Plus } from 'lucide-react';
+import { DeleteConfirmDialog } from '../components/DeleteConfirmDialog';
+import { useConsumablesWithFilters } from '../hooks/useConsumables';
+import { deleteConsumable, consumableKeys } from '../api/consumables';
 
 function AddStockModal({ consumable, onClose, onSave }) {
   const [quantity, setQuantity] = useState('');
@@ -232,36 +235,26 @@ export default function ConsumablesPage() {
   const [page, setPage] = useState(1);
   const [limit] = useState(50);
 
-  const queryParams = useMemo(() => {
-    const params = new URLSearchParams();
-    if (search) params.append('search', search);
-    if (filters.minQuantity) params.append('minQuantity', filters.minQuantity);
-    params.append('page', page);
-    params.append('limit', limit);
-    return params.toString();
-  }, [search, filters, page, limit]);
-
-  const { data: consumablesData, isLoading: consumablesLoading, error: consumablesError } = useQuery({
-    queryKey: ['consumables', search, filters, page, limit],
-    queryFn: () => api.get(`/consumables?${queryParams}`).then(res => res.data),
-    keepPreviousData: true,
-  });
+  const { data: consumablesData, isLoading: consumablesLoading, error: consumablesError } = useConsumablesWithFilters(
+    search,
+    filters,
+    page,
+    limit
+  );
 
   const deleteMutation = useMutation({
-    mutationFn: (id) => api.delete(`/consumables/${id}`),
+    mutationFn: deleteConsumable,
     onSuccess: () => {
       toast.success('Consumabil șters cu succes');
-      queryClient.invalidateQueries({ queryKey: ['consumables'] });
+      queryClient.invalidateQueries({ queryKey: consumableKeys.all });
     },
     onError: () => {
       toast.error('Eroare la ștergere consumabil');
     },
   });
 
-  const handleDelete = (id, name) => {
-    if (window.confirm(`Ștergi "${name}"? Acțiunea este reversibilă.`)) {
-      deleteMutation.mutate(id);
-    }
+  const handleDelete = (id) => {
+    deleteMutation.mutate(id);
   };
 
   const handleExportCsv = () => {
@@ -571,17 +564,19 @@ export default function ConsumablesPage() {
                         >
                           ✎ Edit
                         </button>
-                        <button
-                          onClick={() => handleDelete(consumable.id, consumable.name)}
-                          disabled={deleteMutation.isPending}
-                          className="px-3 py-1 rounded text-xs font-semibold focusable-danger hover:opacity-70 transition disabled:opacity-50"
-                          style={{
-                            backgroundColor: '#dc2626',
-                            color: 'white',
-                          }}
-                        >
-                          {deleteMutation.isPending ? '...' : '✕'}
-                        </button>
+                        <DeleteConfirmDialog
+                          name={consumable.name}
+                          onConfirm={() => handleDelete(consumable.id)}
+                          trigger={
+                            <button
+                              disabled={deleteMutation.isPending}
+                              className="px-3 py-1 rounded text-xs font-semibold focusable-danger hover:opacity-70 transition disabled:opacity-50"
+                              style={{ backgroundColor: '#dc2626', color: 'white' }}
+                            >
+                              {deleteMutation.isPending ? '...' : '✕'}
+                            </button>
+                          }
+                        />
                       </td>
                     </tr>
                   );

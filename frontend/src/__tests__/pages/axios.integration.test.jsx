@@ -50,20 +50,29 @@ beforeAll(async () => {
   await vi.importActual('../../api/axios.js');
 });
 
+// Importăm tokenStore pentru a gestiona starea tokenului în teste.
+// Aceeași instanță de modul este folosită de axios.js, deci setToken/clearToken
+// afectează direct comportamentul interceptorilor.
+let tokenStore;
+beforeAll(async () => {
+  tokenStore = await vi.importActual('../../api/tokenStore.js');
+});
+
 beforeEach(() => {
   vi.clearAllMocks();
-  sessionStorage.clear();
+  tokenStore?.clearToken();
   fakeInstance.mockImplementation((config) => Promise.resolve({ data: { retried: true }, config }));
   axiosPost.mockImplementation(() => Promise.resolve({ data: { accessToken: 'refreshed-token' } }));
 });
 
 afterEach(() => {
   vi.restoreAllMocks();
+  tokenStore?.clearToken();
 });
 
 describe('axios — interceptor de request (injectare Bearer)', () => {
   it('adaugă antetul Authorization când există un accessToken', () => {
-    sessionStorage.setItem('accessToken', 'abc123');
+    tokenStore.setToken('abc123');
     const config = { headers: {} };
     const result = captured.request(config);
     expect(result.headers.Authorization).toBe('Bearer abc123');
@@ -110,13 +119,13 @@ describe('axios — interceptor de response', () => {
       {},
       expect.objectContaining({ withCredentials: true })
     );
-    expect(sessionStorage.getItem('accessToken')).toBe('refreshed-token');
+    expect(tokenStore.getToken()).toBe('refreshed-token');
     expect(error.config.headers.Authorization).toBe('Bearer refreshed-token');
     expect(retryResult.data.retried).toBe(true);
   });
 
   it('când refresh-ul eșuează, șterge token-ul și redirecționează către "/"', async () => {
-    sessionStorage.setItem('accessToken', 'expirat');
+    tokenStore.setToken('expirat');
     axiosPost.mockRejectedValueOnce(new Error('refresh failed'));
 
     const hrefSetter = vi.fn();
@@ -132,7 +141,7 @@ describe('axios — interceptor de response', () => {
     };
 
     await expect(captured.responseError(error)).rejects.toThrow('refresh failed');
-    expect(sessionStorage.getItem('accessToken')).toBeNull();
+    expect(tokenStore.getToken()).toBeNull();
     expect(hrefSetter).toHaveBeenCalledWith('/');
 
     Object.defineProperty(window, 'location', {

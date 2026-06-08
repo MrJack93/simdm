@@ -67,7 +67,7 @@ describe('App (entry point + router)', () => {
   it('randează Dashboard-ul cu numele utilizatorului când este autentificat', async () => {
     renderApp({ user: { id: 1, username: 'bioinginer' }, loading: false, logout: vi.fn() });
     expect(await screen.findByText('bioinginer')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Deconectare' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Deconectare/ })).toBeInTheDocument();
   });
 
   it('butonul Deconectare apelează logout din context', async () => {
@@ -75,7 +75,7 @@ describe('App (entry point + router)', () => {
     const logout = vi.fn();
     renderApp({ user: { id: 1, username: 'bioinginer' }, loading: false, logout });
 
-    await user.click(screen.getByRole('button', { name: 'Deconectare' }));
+    await user.click(screen.getByRole('button', { name: /Deconectare/ }));
     expect(logout).toHaveBeenCalledTimes(1);
   });
 

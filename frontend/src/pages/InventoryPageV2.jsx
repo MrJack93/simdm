@@ -146,11 +146,26 @@ function TableView({ devices, isLoading, onDelete }) {
   );
 }
 
-/** @param {{ devices: Device[], onDelete: (id: number) => void }} props */
-function CardView({ devices, onDelete }) {
+/** @param {{ devices: Device[], isLoading: boolean, onDelete: (id: number) => void }} props */
+function CardView({ devices, isLoading, onDelete }) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      {devices.map(device => (
+      {isLoading && Array.from({ length: 6 }).map((_, i) => (
+        <div
+          key={`skeleton-${i}`}
+          className="p-6 rounded-xl border"
+          style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)' }}
+        >
+          <div className="skeleton skeleton-text mb-2"></div>
+          <div className="skeleton skeleton-text mb-4 w-3/4"></div>
+          <div className="skeleton skeleton-row mb-4"></div>
+          <div className="flex gap-2 justify-end">
+            <div className="skeleton skeleton-button"></div>
+            <div className="skeleton skeleton-button"></div>
+          </div>
+        </div>
+      ))}
+      {!isLoading && devices.map(device => (
         <div
           key={device.id}
           className="p-6 rounded-xl border card-hover animate-bounce-in"
@@ -198,43 +213,58 @@ function CardView({ devices, onDelete }) {
 /** @param {{ devices: Device[] }} props */
 function KanbanView({ devices }) {
   const STATUS_ORDER = ['FUNCTIONAL', 'REZERVA', 'IN_REPARATIE', 'DEFECT', 'IMPRUMUTAT', 'CASAT'];
+  const KANBAN_LIMIT = 10;
   const grouped = Object.fromEntries(
     STATUS_ORDER.map(s => [s, devices.filter(d => d.status === s)])
   );
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-4">
-      {STATUS_ORDER.map(status => (
-        <div key={status}>
-          <div
-            className="p-3 rounded-lg mb-3 font-bold text-sm"
-            style={{ backgroundColor: STATUS_COLORS[status], color: status === 'CASAT' ? '#fff' : '#1a1a1a' }}
-          >
-            {STATUS_ICONS[status]} {STATUS_LABELS[status]} ({grouped[status].length})
-          </div>
-          <div className="space-y-2">
-            {grouped[status].map(device => (
-              <div
-                key={device.id}
-                className="p-4 rounded-lg border"
-                style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)' }}
-              >
-                <p className="font-semibold text-sm" style={{ color: 'var(--color-text-primary)' }}>{device.name}</p>
-                <p className="text-xs mt-1" style={{ color: 'var(--color-text-secondary)' }}>{device.inventoryNumber}</p>
-                <div className="flex gap-2 mt-3">
-                  <Link
-                    to={`/devices/${device.id}/edit`}
-                    className="flex-1 py-1 px-2 rounded text-xs font-medium text-center"
-                    style={{ backgroundColor: 'var(--color-accent)', color: 'var(--color-bg-primary)' }}
-                  >
-                    Editare
-                  </Link>
+      {STATUS_ORDER.map(status => {
+        const allItems = grouped[status];
+        const visibleItems = allItems.slice(0, KANBAN_LIMIT);
+        const hiddenCount = Math.max(0, allItems.length - KANBAN_LIMIT);
+
+        return (
+          <div key={status}>
+            <div
+              className="p-3 rounded-lg mb-3 font-bold text-sm"
+              style={{ backgroundColor: STATUS_COLORS[status], color: status === 'CASAT' ? '#fff' : '#1a1a1a' }}
+            >
+              {STATUS_ICONS[status]} {STATUS_LABELS[status]} ({allItems.length})
+            </div>
+            <div className="space-y-2">
+              {visibleItems.map(device => (
+                <div
+                  key={device.id}
+                  className="p-4 rounded-lg border"
+                  style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)' }}
+                >
+                  <p className="font-semibold text-sm" style={{ color: 'var(--color-text-primary)' }}>{device.name}</p>
+                  <p className="text-xs mt-1" style={{ color: 'var(--color-text-secondary)' }}>{device.inventoryNumber}</p>
+                  <div className="flex gap-2 mt-3">
+                    <Link
+                      to={`/devices/${device.id}/edit`}
+                      className="flex-1 py-1 px-2 rounded text-xs font-medium text-center"
+                      style={{ backgroundColor: 'var(--color-accent)', color: 'var(--color-bg-primary)' }}
+                    >
+                      Editare
+                    </Link>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+              {hiddenCount > 0 && (
+                <div
+                  className="p-3 rounded-lg border text-center text-xs font-medium"
+                  style={{ backgroundColor: 'var(--color-bg-tertiary)', borderColor: 'var(--color-border)', color: 'var(--color-text-secondary)' }}
+                >
+                  +{hiddenCount} mai mult{hiddenCount === 1 ? '' : 'e'}
+                </div>
+              )}
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
@@ -376,11 +406,8 @@ export default function InventoryPage() {
               placeholder="Căuta după nume, inv. nr., model…"
               value={searchTerm}
               onChange={e => handleSearch(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 rounded-lg border text-sm"
+              className="input-base w-full pl-9"
               style={{
-                backgroundColor: 'var(--color-bg-secondary)',
-                borderColor: 'var(--color-border)',
-                color: 'var(--color-text-primary)',
                 opacity: isPending ? 0.7 : 1,
                 transition: 'opacity 0.15s',
               }}
@@ -390,12 +417,7 @@ export default function InventoryPage() {
           <select
             value={filterStatus}
             onChange={e => setFilterStatus(e.target.value)}
-            className="px-4 py-2 rounded-lg border text-sm"
-            style={{
-              backgroundColor: 'var(--color-bg-secondary)',
-              borderColor: 'var(--color-border)',
-              color: 'var(--color-text-primary)',
-            }}
+            className="input-base"
             aria-label="Filtru status"
           >
             <option value="all">Toate statusurile</option>
@@ -407,12 +429,7 @@ export default function InventoryPage() {
           <select
             value={filterSection}
             onChange={e => setFilterSection(e.target.value)}
-            className="px-4 py-2 rounded-lg border text-sm"
-            style={{
-              backgroundColor: 'var(--color-bg-secondary)',
-              borderColor: 'var(--color-border)',
-              color: 'var(--color-text-primary)',
-            }}
+            className="input-base"
             aria-label="Filtru secție"
           >
             <option value="all">Toate secțiile</option>
@@ -422,19 +439,14 @@ export default function InventoryPage() {
           <ViewToggle view={view} setView={setView} />
         </div>
 
-        <p className="text-xs" style={{ color: 'var(--color-text-tertiary)' }}>
-          Pagina {currentPage} din {totalPages || 1} • {paginatedDevices.length} din {filteredDevices.length} dispozitive pe această pagină
+        <p className="text-xs" role="status" aria-live="polite" style={{ color: 'var(--color-text-tertiary)' }}>
+          Pagina {currentPage} din {totalPages || 1} • {filteredDevices.length} dispozitive găsite
         </p>
       </div>
 
       {/* Content */}
-      <div className="p-8">
-        {isLoading ? (
-          <div className="flex flex-col items-center justify-center gap-4 py-16">
-            <div className="loading-spinner"></div>
-            <p style={{ color: 'var(--color-text-secondary)' }}>Se încarcă dispozitivele…</p>
-          </div>
-        ) : filteredDevices.length === 0 ? (
+      <div className="p-8" style={{ minHeight: '500px' }}>
+        {!isLoading && filteredDevices.length === 0 ? (
           <div className="text-center py-16">
             <p className="text-lg mb-4" style={{ color: 'var(--color-text-secondary)' }}>Niciun dispozitiv găsit</p>
             <Link
@@ -448,7 +460,7 @@ export default function InventoryPage() {
         ) : view === 'table' ? (
           <TableView devices={paginatedDevices} isLoading={isLoading} onDelete={handleDelete} />
         ) : view === 'cards' ? (
-          <CardView devices={paginatedDevices} onDelete={handleDelete} />
+          <CardView devices={isLoading ? [] : paginatedDevices} isLoading={isLoading} onDelete={handleDelete} />
         ) : (
           <KanbanView devices={filteredDevices} />
         )}

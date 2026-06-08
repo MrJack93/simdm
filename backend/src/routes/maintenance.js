@@ -118,7 +118,7 @@ router.post('/', async (req, res) => {
         externalService: Boolean(externalService),
         serviceProvider: serviceProvider?.trim() || null,
         reportUrl: reportUrl?.trim() || null,
-        performedById: req.user.id,
+        performedById: req.user.sub,
         notes: notes?.trim() || null,
         updatedAt: new Date(),
       },
@@ -127,7 +127,7 @@ router.post('/', async (req, res) => {
       },
     });
 
-    await logAudit(req.user.id, 'CREATE', record.id, { deviceId: record.deviceId, type: record.type });
+    await logAudit(req.user.sub, 'CREATE', record.id, { deviceId: record.deviceId, type: record.type });
 
     // Actualizare lastMaintenanceAt pe dispozitiv
     await prisma.devices.update({
@@ -182,7 +182,7 @@ router.put('/:id', async (req, res) => {
       },
     });
 
-    await logAudit(req.user.id, 'UPDATE', id, { type: updated.type });
+    await logAudit(req.user.sub, 'UPDATE', id, { type: updated.type });
 
     res.json(updated);
   } catch (error) {
@@ -201,7 +201,7 @@ router.delete('/:id', async (req, res) => {
     if (!existing) return res.status(404).json({ error: 'Înregistrare nu găsită' });
 
     await prisma.maintenance_records.delete({ where: { id } });
-    await logAudit(req.user.id, 'DELETE', id, { deviceId: existing.deviceId });
+    await logAudit(req.user.sub, 'DELETE', id, { deviceId: existing.deviceId });
 
     res.json({ message: 'Înregistrare ștearsă cu succes' });
   } catch (error) {

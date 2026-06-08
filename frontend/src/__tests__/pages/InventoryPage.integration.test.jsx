@@ -1,119 +1,184 @@
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import InventoryPage from '../../pages/InventoryPage';
+import InventoryPage from '../../pages/InventoryPageV2';
 import { renderWithProviders } from '../helpers/renderWithProviders.jsx';
 import api from '../../api/axios';
 
-// Teste de integrare pentru InventoryPage — paginare și combinații de filtre.
+// Generează N dispozitive de test cu atribute unice.
+function makeDevices(n) {
+  return Array.from({ length: n }, (_, i) => ({
+    id: i + 1,
+    inventoryNumber: `DM-${String(i + 1).padStart(3, '0')}`,
+    name: `Dispozitiv ${i + 1}`,
+    model: `Model-${i + 1}`,
+    manufacturer: 'TestCo',
+    riskClass: 'IIa',
+    status: i % 2 === 0 ? 'FUNCTIONAL' : 'DEFECT',
+    section: i < 10 ? 'ATI' : 'Bloc Operator',
+  }));
+}
 
-const DEVICE = {
-  id: 1,
-  inventoryNumber: 'DM-2024-001',
-  name: 'Defibrilator',
-  model: 'X100',
-  manufacturer: 'Philips',
-  riskClass: 'IIb',
-  status: 'FUNCTIONAL',
-  sections: { name: 'ATI' },
-};
-
-// Router pe URL cu paginare configurabilă (total pagini).
-function mockApiRouter({ devices = [DEVICE], pages = 1, total = 1 } = {}) {
+function mockApiRouter(devices) {
   api.get.mockImplementation((url) => {
-    if (url.startsWith('/devices/dropdown/sections')) {
-      return Promise.resolve({ data: [{ id: 1, name: 'ATI' }, { id: 2, name: 'Bloc Operator' }] });
-    }
-    if (url.startsWith('/consumables')) {
-      return Promise.resolve({ data: { consumables: [] } });
-    }
     if (url.startsWith('/devices')) {
-      return Promise.resolve({ data: { devices, pagination: { total, pages } } });
+      return Promise.resolve({
+        data: { devices, pagination: { total: devices.length, pages: 1 } },
+      });
     }
     return Promise.resolve({ data: {} });
   });
 }
 
-describe('InventoryPage — paginare și combinații de filtre', () => {
+describe('InventoryPage — paginare client-side', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it('butonul de pagină Înapoi este dezactivat pe prima pagină', async () => {
-    mockApiRouter({ pages: 3, total: 120 });
+  it('paginatorul se afișează când există mai mult de 20 de dispozitive', async () => {
+    const devices = makeDevices(21);
+    mockApiRouter(devices);
     renderWithProviders(<InventoryPage />);
-    await screen.findByText('DM-2024-001');
+    await screen.findByText('Dispozitiv 1');
 
-    const prevBtn = screen.getByRole('button', { name: /← Înapoi/ });
-    expect(prevBtn).toBeDisabled();
+    expect(screen.getByRole('button', { name: /← Înapoi/ })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Înainte →/ })).toBeInTheDocument();
   });
 
-  it('butonul Înainte avansează pagina și declanșează fetch cu page=2', async () => {
-    const user = userEvent.setup();
-    mockApiRouter({ pages: 3, total: 120 });
+  it('butonul de pagină Înapoi este dezactivat pe prima pagină', async () => {
+    const devices = makeDevices(21);
+    mockApiRouter(devices);
     renderWithProviders(<InventoryPage />);
-    await screen.findByText('DM-2024-001');
+    await screen.findByText('Dispozitiv 1');
+
+    expect(screen.getByRole('button', { name: /← Înapoi/ })).toBeDisabled();
+  });
+
+  it('butonul Înainte avansează pagina', async () => {
+    const user = userEvent.setup();
+    const devices = makeDevices(21);
+    mockApiRouter(devices);
+    renderWithProviders(<InventoryPage />);
+    await screen.findByText('Dispozitiv 1');
 
     await user.click(screen.getByRole('button', { name: /Înainte →/ }));
 
     await waitFor(() => {
-      const call = api.get.mock.calls.find(
-        ([url]) => url.includes('/devices?') && url.includes('page=2')
-      );
-      expect(call).toBeTruthy();
+      expect(screen.queryByText('Dispozitiv 1')).not.toBeInTheDocument();
+      expect(screen.getByText('Dispozitiv 21')).toBeInTheDocument();
     });
-    // Indicatorul de pagină reflectă pagina 2.
-    expect(await screen.findByText('2')).toBeInTheDocument();
   });
 
-  it('butonul Înainte este dezactivat când există o singură pagină', async () => {
-    mockApiRouter({ pages: 1, total: 1 });
+  it('butonul Înainte este dezactivat pe ultima pagină', async () => {
+    const user = userEvent.setup();
+    const devices = makeDevices(21);
+    mockApiRouter(devices);
     renderWithProviders(<InventoryPage />);
-    await screen.findByText('DM-2024-001');
+    await screen.findByText('Dispozitiv 1');
+
+    await user.click(screen.getByRole('button', { name: /Înainte →/ }));
+    await waitFor(() => expect(screen.getByText('Dispozitiv 21')).toBeInTheDocument());
 
     expect(screen.getByRole('button', { name: /Înainte →/ })).toBeDisabled();
   });
 
-  it('combinația căutare + status + clasă de risc trimite toți parametrii într-un singur query', async () => {
-    const user = userEvent.setup();
-    mockApiRouter({ pages: 1, total: 1 });
+  it('indicatorul de pagini arată total corect', async () => {
+    const devices = makeDevices(21);
+    mockApiRouter(devices);
     renderWithProviders(<InventoryPage />);
-    await screen.findByText('DM-2024-001');
+    await screen.findByText('Dispozitiv 1');
 
-    await user.type(screen.getByLabelText('Căutare'), 'Defib');
-    await user.selectOptions(screen.getByLabelText('Status'), 'FUNCTIONAL');
-    await user.selectOptions(screen.getByLabelText('Clasa Risc'), 'IIb');
+    expect(screen.getByText(/21 dispozitive găsite/)).toBeInTheDocument();
+  });
 
-    await waitFor(() => {
-      const call = api.get.mock.calls.find(
-        ([url]) =>
-          url.includes('search=Defib') &&
-          url.includes('status=FUNCTIONAL') &&
-          url.includes('riskClass=IIb')
-      );
-      expect(call).toBeTruthy();
+  it('paginatorul nu se afișează când sunt maxim 20 de dispozitive', async () => {
+    const devices = makeDevices(20);
+    mockApiRouter(devices);
+    renderWithProviders(<InventoryPage />);
+    await screen.findByText('Dispozitiv 1');
+
+    expect(screen.queryByRole('button', { name: /Înainte →/ })).not.toBeInTheDocument();
+  });
+
+  it('paginatorul nu se afișează când lista este goală', async () => {
+    mockApiRouter([]);
+    renderWithProviders(<InventoryPage />);
+    await screen.findByText('Niciun dispozitiv găsit');
+
+    expect(screen.queryByRole('button', { name: /Înainte →/ })).not.toBeInTheDocument();
+  });
+});
+
+describe('InventoryPage — combinații de filtre (client-side)', () => {
+  const devices = [
+    { id: 1, inventoryNumber: 'DM-001', name: 'Defibrilator', model: 'X1', manufacturer: 'A', riskClass: 'IIb', status: 'FUNCTIONAL', section: 'ATI' },
+    { id: 2, inventoryNumber: 'DM-002', name: 'Monitor pacient', model: 'M1', manufacturer: 'B', riskClass: 'IIa', status: 'DEFECT', section: 'Bloc Operator' },
+    { id: 3, inventoryNumber: 'DM-003', name: 'Ventilator', model: 'V1', manufacturer: 'C', riskClass: 'IIb', status: 'FUNCTIONAL', section: 'ATI' },
+  ];
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    api.get.mockImplementation((url) => {
+      if (url.startsWith('/devices')) {
+        return Promise.resolve({ data: { devices, pagination: { total: 3, pages: 1 } } });
+      }
+      return Promise.resolve({ data: {} });
     });
   });
 
-  it('butonul Resetare readuce statusul la valoarea implicită și refetch fără filtre', async () => {
+  it('filtrarea după status și secție returnează intersecția corectă', async () => {
     const user = userEvent.setup();
-    mockApiRouter({ pages: 1, total: 1 });
     renderWithProviders(<InventoryPage />);
-    await screen.findByText('DM-2024-001');
+    await screen.findByText('DM-001');
 
-    const statusSelect = screen.getByLabelText('Status');
-    await user.selectOptions(statusSelect, 'DEFECT');
-    await user.click(screen.getByRole('button', { name: 'Resetare' }));
+    await user.selectOptions(screen.getByLabelText('Filtru status'), 'FUNCTIONAL');
+    await user.selectOptions(screen.getByLabelText('Filtru secție'), 'ATI');
 
-    // După resetare, selectul de status revine la "" (toate).
-    expect(statusSelect).toHaveValue('');
+    await waitFor(() => {
+      expect(screen.getByText('Defibrilator')).toBeInTheDocument();
+      expect(screen.getByText('Ventilator')).toBeInTheDocument();
+      expect(screen.queryByText('Monitor pacient')).not.toBeInTheDocument();
+    });
+    expect(screen.getByText(/2 dispozitive găsite/)).toBeInTheDocument();
   });
 
-  it('paginatorul nu se afișează când lista de dispozitive este goală', async () => {
-    mockApiRouter({ devices: [], pages: 1, total: 0 });
+  it('căutarea + filtrul de status funcționează împreună', async () => {
+    const user = userEvent.setup();
     renderWithProviders(<InventoryPage />);
-    await screen.findByText('Nu sunt dispozitive în baza de date.');
+    await screen.findByText('DM-001');
 
-    expect(screen.queryByRole('button', { name: /Înainte →/ })).not.toBeInTheDocument();
+    await user.type(screen.getByLabelText(/Căutare/), 'Defib');
+    await user.selectOptions(screen.getByLabelText('Filtru status'), 'FUNCTIONAL');
+
+    await waitFor(() => {
+      expect(screen.getByText('Defibrilator')).toBeInTheDocument();
+      expect(screen.queryByText('Monitor pacient')).not.toBeInTheDocument();
+      expect(screen.queryByText('Ventilator')).not.toBeInTheDocument();
+    });
+  });
+
+  it('selectarea "Toate statusurile" readuce toate dispozitivele', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<InventoryPage />);
+    await screen.findByText('DM-001');
+
+    await user.selectOptions(screen.getByLabelText('Filtru status'), 'DEFECT');
+    await waitFor(() => expect(screen.queryByText('Defibrilator')).not.toBeInTheDocument());
+
+    await user.selectOptions(screen.getByLabelText('Filtru status'), 'all');
+    await waitFor(() => {
+      expect(screen.getByText('Defibrilator')).toBeInTheDocument();
+      expect(screen.getByText('Monitor pacient')).toBeInTheDocument();
+      expect(screen.getByText('Ventilator')).toBeInTheDocument();
+    });
+  });
+
+  it('filtrarea după secție populează opțiunile din dispozitivele existente', async () => {
+    renderWithProviders(<InventoryPage />);
+    await screen.findByText('DM-001');
+
+    const sectionSelect = screen.getByLabelText('Filtru secție');
+    expect(sectionSelect).toContainElement(screen.getByRole('option', { name: 'ATI' }));
+    expect(sectionSelect).toContainElement(screen.getByRole('option', { name: 'Bloc Operator' }));
   });
 });

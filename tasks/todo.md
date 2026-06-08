@@ -1,31 +1,49 @@
 ﻿# ✅ Task Tracking — SIMDM All Phases
 
-**Versiune:** 2.2 (Faza 1-2 Complete + Faza 3 Detailed Tasks)  
-**Actualizat:** 2026-06-02  
+**Versiune:** 3.0 (Faza 1-2 auditate & remediate · Faza 3 = plan detaliat separat)  
+**Actualizat:** 2026-06-08  
 **Format:** Checkbox tracking per phase
 
 ---
 
 ## ✅ FAZA 1: Fundație & Infrastructură — COMPLETĂ
 
-**Status:** ✅ 100% DONE (2026-05-30)  
-**Audit Score:** 104/104 (100%)
+**Status:** ✅ DONE (2026-05-30) + **auditată** (2026-06-06)
 
-All infrastructure, authentication, and foundational components complete.
+Infrastructură, autentificare și componentele fundaționale complete. Audit de securitate trecut,
+remedieri aplicate (secrete JWT reale, atribuire audit-log corectă, validări). Confirmare finală: `npm test` local.
 
 ---
 
 ## ✅ FAZA 2: Inventar DM — COMPLETĂ
 
-**Status:** ✅ 100% DONE (2026-06-02)  
-**Audit Score:** 130/130 (100%)  
-**Test Coverage:** 95.36% backend + 91.99% frontend + 15 E2E tests
+**Status:** ✅ DONE (2026-06-02) + **auditată** (2026-06-06)
 
-All device management CRUD, export, PDF, forms, and UI components complete.
+CRUD dispozitive, export (CSV anti-injection / XLSX / PDF), upload cu antivirus, forms, UI complete.
+Audit trecut, remedieri aplicate (vezi CLAUDE.md §Reguli de securitate). Confirmare finală: `npm test` local.
 
 ---
 
-## 🔧 FAZA 3: Mentenanță — DETAILED TASK BREAKDOWN
+## 🔧 FAZA 3: Mentenanță — ÎN LUCRU
+
+**Status:** ÎN LUCRU · **Start:** 2026-06-05 · **Durată:** 16 zile
+
+> **Planul pas-cu-pas, complet și verificat față de Ghid, este în [PLAN-FAZA3-DETALIAT.md](PLAN-FAZA3-DETALIAT.md).**
+> Acolo găsești: schema DB per modul, endpoint-uri, frontend, formularele PDF (Nr. 5/6/7/8/9), cron jobs,
+> teste, secvențierea pe 16 zile și „Definiția lui 100%". Checklist-ul de mai jos e rezumatul de progres.
+
+**Rezumat progres (bifează pe măsură ce avansezi):**
+
+- [ ] Pre-requisite: dependințe + câmpuri verificare pe `devices` + migrare
+- [ ] Modul 1 — Plan MPP + calendar + Formular Nr. 5
+- [ ] Modul 2 — Execuție MPP + semnătură + Formular Nr. 6
+- [ ] Modul 3 — Corectiv + state machine + Formular Nr. 7 + Nr. 8
+- [ ] Modul 4 — Verificări periodice + metrologie + raport conformitate
+- [ ] Modul 5 — Contracte externe + rating + Formular Nr. 9
+- [ ] Cron jobs (MPP/verificări/contracte) + integrare finală
+- [ ] Teste ≥95% + 1 scenariu E2E + `npm test` verde
+
+<details><summary>Arhivă: breakdown detaliat vechi (superseded de PLAN-FAZA3-DETALIAT.md)</summary>
 
 **Status:** READY TO START  
 **Start Date:** 2026-06-05 (provisional)  
@@ -321,6 +339,8 @@ All device management CRUD, export, PDF, forms, and UI components complete.
 - [ ] Formular Nr. 9 PDF (Act predare-primire extern)
 - [ ] Tests: ≥6 teste
 
+</details>
+
 ---
 
 ## 🔔 NOTIFICĂRI AUTOMATE (Backend)
@@ -363,14 +383,13 @@ All device management CRUD, export, PDF, forms, and UI components complete.
 
 | Fază | Status | Completion | Tests |
 |------|--------|-----------|-------|
-| **1** | ✅ DONE | 100% | Auth: 14 suites |
-| **2** | ✅ DONE | 100% | 95.36% backend / 91.99% frontend |
-| **3** | ⭕ PLANNED | 0% | Target: ≥95% |
+| **1** | ✅ DONE + auditată | 100% | rulează `npm test` local |
+| **2** | ✅ DONE + auditată | 100% | rulează `npm test` local |
+| **3** | 🔧 ÎN LUCRU | 0% | Target: ≥95% |
 | **4-8** | ⬜ PLANNED | 0% | — |
-| **TOTAL** | ✅ 25% | 25% | All tests passing |
 
 ---
 
-**Last Updated:** 2026-06-02  
-**Ready for Faza 3:** YES — All planning complete, ready to start 2026-06-05  
-**Plan Based On:** Ordinul MS nr. 889/2024 (Ghidul Bioinginerului)
+**Actualizat:** 2026-06-08  
+**Faza 3:** plan detaliat pas-cu-pas în [PLAN-FAZA3-DETALIAT.md](PLAN-FAZA3-DETALIAT.md)  
+**Bază normativă:** Ordinul MS nr. 889/2024 (Ghidul Bioinginerului)

@@ -1,8 +1,22 @@
-import { useQuery } from '@tanstack/react-query';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-import api from '../api/axios';
+import { useDevices } from '../hooks/useDevices';
+import { useConsumableStats } from '../hooks/useConsumables';
 import { Activity, Wrench, AlertCircle, Package, Calendar, TrendingUp } from 'lucide-react';
 
+/** @typedef {import('../types').DevicesResponse} DevicesResponse */
+/** @typedef {import('../types').ConsumablesResponse} ConsumablesResponse */
+
+/**
+ * @param {{
+ *   icon: React.ComponentType<{ size: number, style?: object }>,
+ *   label: string,
+ *   value: number | string,
+ *   color?: 'accent'|'success'|'error'|'warning'|'info',
+ *   href: string,
+ *   isLoading?: boolean
+ * }} props
+ */
 function StatCard({ icon: Icon, label, value, color = 'accent', href, isLoading = false }) {
   const colorMap = {
     accent:  { bg: 'var(--color-accent-subtle)',  icon: 'var(--color-accent)' },
@@ -14,8 +28,8 @@ function StatCard({ icon: Icon, label, value, color = 'accent', href, isLoading 
   const c = colorMap[color] || colorMap.accent;
 
   return (
-    <a
-      href={href}
+    <Link
+      to={href}
       aria-label={`${label}: ${isLoading ? 'Se încarcă' : value}`}
       className="group p-6 rounded-xl border transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 block"
       style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)', textDecoration: 'none', color: 'inherit' }}
@@ -29,38 +43,30 @@ function StatCard({ icon: Icon, label, value, color = 'accent', href, isLoading 
       <p className="text-3xl font-bold" style={{ color: 'var(--color-text-primary)' }}>
         {isLoading ? <span className="skeleton skeleton-text" style={{width:'40px', display: 'inline-block'}} /> : value}
       </p>
-    </a>
+    </Link>
   );
 }
 
 export default function Dashboard() {
   const { user } = useAuth();
 
-  const { data: stats, isLoading: statsLoading } = useQuery({
-    queryKey: ['dashboard-stats'],
-    queryFn: async () => {
-      const { data } = await api.get('/devices');
+  // Reutilizează același queryKey ['devices'] ca InventoryPageV2.
+  // Dacă utilizatorul a vizitat deja Inventarul, datele sunt deja în cache
+  // și Dashboard-ul nu mai face un request suplimentar.
+  const { data: stats, isLoading: statsLoading } = useDevices({}, {
+    select: (data) => {
       const devices = data.devices || [];
       return {
-        total: devices.length,
+        total:      devices.length,
         functional: devices.filter(d => d.status === 'FUNCTIONAL').length,
         inRepair:   devices.filter(d => d.status === 'IN_REPARATIE').length,
         defect:     devices.filter(d => d.status === 'DEFECT').length,
         loaned:     devices.filter(d => d.status === 'IMPRUMUTAT').length,
       };
     },
-    staleTime: 5 * 60 * 1000,
   });
 
-  const { data: consumableStats, isLoading: consumableLoading } = useQuery({
-    queryKey: ['consumable-stats'],
-    queryFn: async () => {
-      const { data } = await api.get('/consumables');
-      const consumables = data.consumables || [];
-      return { lowStock: consumables.filter(c => c.currentQuantity <= c.minimumQuantity).length };
-    },
-    staleTime: 5 * 60 * 1000,
-  });
+  const { data: consumableStats, isLoading: consumableLoading } = useConsumableStats();
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: 'var(--color-bg-primary)' }}>
@@ -75,32 +81,34 @@ export default function Dashboard() {
       </div>
 
       <div className="container mx-auto p-8">
-        {/* Stats grid */}
+        {/* Stats grid
+            href-urile cu ?status= pre-populează filtrul din InventoryPageV2
+            astfel încât click pe „Defecte: 3" deschide inventarul deja filtrat. */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          <StatCard icon={Package}      label="Total dispozitive"          value={stats?.total    ?? '—'} href="/inventory" color="accent" isLoading={statsLoading} />
-          <StatCard icon={Activity}     label="Funcționale"                value={stats?.functional ?? '—'} href="/inventory" color="success" isLoading={statsLoading} />
-          <StatCard icon={AlertCircle}  label="Defecte"                    value={stats?.defect   ?? '—'} href="/inventory" color="error" isLoading={statsLoading} />
-          <StatCard icon={Wrench}       label="În reparație"               value={stats?.inRepair ?? '—'} href="/inventory" color="warning" isLoading={statsLoading} />
-          <StatCard icon={Package}      label="Consumabile stoc scăzut"    value={consumableStats?.lowStock ?? '—'} href="/consumables" color="warning" isLoading={consumableLoading} />
-          <StatCard icon={Calendar}     label="Împrumutate"                value={stats?.loaned   ?? '—'} href="/inventory" color="info" isLoading={statsLoading} />
+          <StatCard icon={Package}      label="Total dispozitive"       value={stats?.total        ?? '—'} href="/inventory"                       color="accent"  isLoading={statsLoading} />
+          <StatCard icon={Activity}     label="Funcționale"             value={stats?.functional   ?? '—'} href="/inventory?status=FUNCTIONAL"      color="success" isLoading={statsLoading} />
+          <StatCard icon={AlertCircle}  label="Defecte"                 value={stats?.defect       ?? '—'} href="/inventory?status=DEFECT"           color="error"   isLoading={statsLoading} />
+          <StatCard icon={Wrench}       label="În reparație"            value={stats?.inRepair     ?? '—'} href="/inventory?status=IN_REPARATIE"     color="warning" isLoading={statsLoading} />
+          <StatCard icon={Package}      label="Consumabile stoc scăzut" value={consumableStats?.lowStock ?? '—'} href="/consumables"               color="warning" isLoading={consumableLoading} />
+          <StatCard icon={Calendar}     label="Împrumutate"             value={stats?.loaned       ?? '—'} href="/inventory?status=IMPRUMUTAT"      color="info"    isLoading={statsLoading} />
         </div>
 
         {/* Quick actions */}
         <section className="p-6 rounded-xl border mb-8" aria-label="Acțiuni rapide" style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)' }}>
           <h2 className="text-xl font-bold mb-4" style={{ color: 'var(--color-text-primary)' }}>Acțiuni rapide</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
-            <a href="/devices/new" className="px-4 py-3 rounded-lg font-medium transition-all text-center text-sm" style={{ backgroundColor: 'var(--color-accent)', color: 'var(--color-bg-primary)' }}>
+            <Link to="/devices/new" className="px-4 py-3 rounded-lg font-medium transition-all text-center text-sm" style={{ backgroundColor: 'var(--color-accent)', color: 'var(--color-bg-primary)', textDecoration: 'none' }}>
               + Adaugă dispozitiv
-            </a>
-            <a href="/inventory" className="px-4 py-3 rounded-lg font-medium transition-all text-center border text-sm" style={{ backgroundColor: 'var(--color-bg-tertiary)', borderColor: 'var(--color-border)', color: 'var(--color-text-primary)' }}>
+            </Link>
+            <Link to="/inventory" className="px-4 py-3 rounded-lg font-medium transition-all text-center border text-sm" style={{ backgroundColor: 'var(--color-bg-tertiary)', borderColor: 'var(--color-border)', color: 'var(--color-text-primary)', textDecoration: 'none' }}>
               Inventar
-            </a>
-            <a href="/inventory/annual" className="px-4 py-3 rounded-lg font-medium transition-all text-center border text-sm" style={{ backgroundColor: 'var(--color-bg-tertiary)', borderColor: 'var(--color-border)', color: 'var(--color-text-primary)' }}>
+            </Link>
+            <Link to="/inventory/annual" className="px-4 py-3 rounded-lg font-medium transition-all text-center border text-sm" style={{ backgroundColor: 'var(--color-bg-tertiary)', borderColor: 'var(--color-border)', color: 'var(--color-text-primary)', textDecoration: 'none' }}>
               Inventariere anuală
-            </a>
-            <a href="/consumables" className="px-4 py-3 rounded-lg font-medium transition-all text-center border text-sm" style={{ backgroundColor: 'var(--color-bg-tertiary)', borderColor: 'var(--color-border)', color: 'var(--color-text-primary)' }}>
+            </Link>
+            <Link to="/consumables" className="px-4 py-3 rounded-lg font-medium transition-all text-center border text-sm" style={{ backgroundColor: 'var(--color-bg-tertiary)', borderColor: 'var(--color-border)', color: 'var(--color-text-primary)', textDecoration: 'none' }}>
               Consumabile
-            </a>
+            </Link>
           </div>
         </section>
 

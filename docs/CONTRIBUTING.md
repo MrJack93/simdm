@@ -428,12 +428,12 @@ npm run db:studio  # http://localhost:5555
 
 ### Când Să Documentezi
 
-1. **Componentă nouă** → Adaugă exemplu în `docs/2-DEVELOPER-GUIDE.md` și `docs/COMPONENT_LIBRARY.md`
+1. **Componentă nouă** → Adaugă exemplu în `docs/2-DEVELOPER-GUIDE.md` și `docs/DESIGN-SYSTEM.md`
 2. **Endpoint nou** → Adaugă în `SPEC.md` (secțiunea API) și comentarii în cod
 3. **Schimbare API** → Actualizează `SPEC.md`
 4. **Workflow nou** → Actualizează `CONTRIBUTING.md`
-5. **Token design nou** → Actualizează `docs/1-DESIGN-AND-ACCESSIBILITY.md`
-6. **Componentă vizuală** → Actualizează `docs/COMPONENT_LIBRARY.md`
+5. **Token design nou** → Actualizează `docs/DESIGN-SYSTEM.md`
+6. **Componentă vizuală** → Actualizează `docs/DESIGN-SYSTEM.md`
 
 ### Locuri Documentație
 
@@ -445,9 +445,9 @@ npm run db:studio  # http://localhost:5555
 | **GETTING-STARTED.md** | Tutorial 5 min | Rădăcină |
 | **docs/1-DESIGN...** | Design tokens, WCAG, arhitectura CSS | docs/ |
 | **docs/2-DEVELOPER...** | Tipare React/Express, checklist | docs/ |
-| **docs/COMPONENT_LIBRARY.md** | Referință completă componente | docs/ |
-| **docs/ACCESSIBILITY_GUIDE.md** | WCAG 2.1 AA patterns, testare | docs/ |
-| **docs/LIGHT_MODE_GUIDE.md** | Dark/light mode, token transformări | docs/ |
+| **docs/DESIGN-SYSTEM.md** | Referință completă componente | docs/ |
+| **docs/DESIGN-SYSTEM.md** | WCAG 2.1 AA patterns, testare | docs/ |
+| **docs/DESIGN-SYSTEM.md** | Dark/light mode, token transformări | docs/ |
 | **docs/MOBILE_WORKFLOW_GUIDE.md** | Workflow pe teren, 5 scenarii | docs/ |
 | **docs/CONTRIBUTING.md** | Flux PR (acest fișier) | docs/ |
 | **CLAUDE.md** | Instrucțiuni AI | Rădăcină |

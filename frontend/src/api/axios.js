@@ -1,4 +1,13 @@
 import axios from 'axios';
+import { getToken, setToken, clearToken } from './tokenStore';
+
+/**
+ * Instanța Axios centralizată cu interceptoare pentru:
+ * - Injectarea automată a Bearer token-ului din in-memory tokenStore
+ * - Auto-refresh la 401 TOKEN_EXPIRED cu queue pentru requesturi paralele
+ *
+ * @type {import('axios').AxiosInstance}
+ */
 
 const api = axios.create({
   baseURL: '/api',
@@ -6,9 +15,9 @@ const api = axios.create({
   timeout: 10000,
 });
 
-// Adauga access token la requests (din sessionStorage)
+// Adauga access token la requests (din tokenStore în memorie)
 api.interceptors.request.use((config) => {
-  const token = sessionStorage.getItem('accessToken');
+  const token = getToken();
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -47,7 +56,7 @@ api.interceptors.response.use(
       try {
         const { data } = await axios.post('/api/auth/refresh', {}, { withCredentials: true });
         const newToken = data.accessToken;
-        sessionStorage.setItem('accessToken', newToken);
+        setToken(newToken);
 
         // Procesează queue-ul
         refreshQueue.forEach((p) => p.resolve(newToken));
@@ -59,7 +68,7 @@ api.interceptors.response.use(
         // Refresh failed — logout
         refreshQueue.forEach((p) => p.reject(refreshError));
         refreshQueue = [];
-        sessionStorage.removeItem('accessToken');
+        clearToken();
         window.location.href = '/';
         return Promise.reject(refreshError);
       } finally {

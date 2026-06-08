@@ -1,66 +1,61 @@
-const fs = require('fs');
-const path = require('path');
+/**
+ * L3 Fix: Async logger cu Pino
+ * Înlocuiește appendFileSync (blocant) cu queue async
+ * Suportă console + file transport cu níveluri
+ */
 
-// Create logs directory if it doesn't exist
-const logsDir = path.join(__dirname, '../../logs');
-if (!fs.existsSync(logsDir)) {
-  fs.mkdirSync(logsDir, { recursive: true });
-}
+const pino = require('pino');
 
-// Simple logger without external dependencies
-class Logger {
-  constructor() {
-    this.logLevel = process.env.LOG_LEVEL || 'info';
-    this.levels = { error: 0, warn: 1, info: 2, debug: 3 };
-  }
+// Transport multiplu: console + file
+const transport = pino.transport({
+  targets: [
+    {
+      level: 'info',
+      target: 'pino-pretty',
+      options: {
+        colorize: true,
+        translateTime: 'SYS:standard',
+        ignore: 'pid,hostname',
+      },
+    },
+    {
+      level: 'debug',
+      target: 'pino/file',
+      options: { destination: '/tmp/backend.log' },
+    },
+  ],
+});
 
-  log(level, message, meta = {}) {
-    if (this.levels[level] > this.levels[this.logLevel]) return;
+const logger = pino(
+  {
+    level: process.env.LOG_LEVEL || 'info',
+    base: {
+      service: 'simdm-backend',
+      environment: process.env.NODE_ENV || 'development',
+    },
+  },
+  transport
+);
 
-    const timestamp = new Date().toISOString();
-    const logEntry = {
-      timestamp,
-      level,
-      message,
-      ...meta,
-    };
+/**
+ * Log function — API compatibility
+ */
+function log(msg, level = 'info') {
+  // Sanitizare: elimină căi sensibile din logs
+  const sanitized = msg
+    .replace(/\/sessions\/[^/]+/g, '/***')
+    .replace(/\/var\/lib\/[^/]+/g, '/***')
+    .replace(/password[=:]\S+/gi, 'password=***');
 
-    const logString = JSON.stringify(logEntry);
-
-    // Console output with color
-    const colors = {
-      error: '\x1b[31m', // Red
-      warn: '\x1b[33m',  // Yellow
-      info: '\x1b[36m',  // Cyan
-      debug: '\x1b[35m', // Magenta
-      reset: '\x1b[0m',
-    };
-
-    console.log(`${colors[level]}[${level.toUpperCase()}]${colors.reset} ${message}`, meta);
-
-    // File output
-    const logFile = level === 'error'
-      ? path.join(logsDir, 'error.log')
-      : path.join(logsDir, 'combined.log');
-
-    fs.appendFileSync(logFile, logString + '\n', { encoding: 'utf8' });
-  }
-
-  error(message, meta) {
-    this.log('error', message, meta);
-  }
-
-  warn(message, meta) {
-    this.log('warn', message, meta);
-  }
-
-  info(message, meta) {
-    this.log('info', message, meta);
-  }
-
-  debug(message, meta) {
-    this.log('debug', message, meta);
+  if (level === 'error') {
+    logger.error(sanitized);
+  } else if (level === 'warn') {
+    logger.warn(sanitized);
+  } else if (level === 'debug') {
+    logger.debug(sanitized);
+  } else {
+    logger.info(sanitized);
   }
 }
 
-module.exports = new Logger();
+module.exports = { logger, log };

@@ -65,12 +65,13 @@ vi.mock('react-select', () => {
   // eslint-disable-next-line global-require
   const React = require('react');
   return {
-    default: ({ options = [], value, onChange, placeholder, id }) => {
+    default: ({ options = [], value, onChange, placeholder, id, inputId }) => {
+      const resolvedId = inputId || id;
       return React.createElement(
         'select',
         {
-          'data-testid': id ? `select-${id}` : 'react-select',
-          id,
+          'data-testid': resolvedId ? `select-${resolvedId}` : 'react-select',
+          id: resolvedId,
           value: value?.value ?? '',
           onChange: (e) => {
             const opt = options.find((o) => String(o.value) === e.target.value);

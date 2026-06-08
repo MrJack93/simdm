@@ -4,7 +4,6 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -12,9 +11,8 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Calendar, Plus, Edit, Trash2, Download } from 'lucide-react';
-import axios from 'axios';
-
-const api = axios.create({ baseURL: '/api' });
+import { toast } from 'react-toastify';
+import api from '../api/axios';
 
 // Validare schema
 const maintenancePlanSchema = z.object({
@@ -29,10 +27,15 @@ const MONTHS = [
   'Iulie', 'August', 'Septembrie', 'Octombrie', 'Noiembrie', 'Decembrie'
 ];
 
-const STATUS_COLORS = {
-  scheduled: 'bg-blue-100 text-blue-800',
-  completed: 'bg-green-100 text-green-800',
-  overdue: 'bg-red-100 text-red-800',
+/**
+ * Culori pentru badge-uri status — folosesc CSS variables pentru a respecta
+ * automat theme toggle-ul (dark/light). Anterior erau clase Tailwind hardcodate
+ * (bg-blue-100 text-blue-800) care ignorau modul întunecat al aplicației.
+ */
+const STATUS_STYLES = {
+  scheduled: { bg: 'var(--color-info-bg)',    color: 'var(--color-info)'    },
+  completed: { bg: 'var(--color-success-bg)', color: 'var(--color-success)' },
+  overdue:   { bg: 'var(--color-error-bg)',   color: 'var(--color-error)'   },
 };
 
 const STATUS_LABELS = {
@@ -66,14 +69,18 @@ export default function MaintenancePlanPage() {
     },
   });
 
-  // Obțineți dispozitivele
-  const { data: devices = [] } = useQuery({
+  // Obțineți dispozitivele — reutilizează același queryKey ['devices'] ca InventoryPageV2.
+  // API răspunde cu { devices: [...] }, NU cu un array direct.
+  // Anterior: res.data era un obiect → devices.map() itera pe undefined → select gol.
+  const { data: devicesData } = useQuery({
     queryKey: ['devices'],
     queryFn: async () => {
       const res = await api.get('/devices');
-      return res.data;
+      return res.data; // { devices: [...], total: N }
     },
+    staleTime: 2 * 60 * 1000,
   });
+  const devices = devicesData?.devices ?? [];
 
   // Creare plan
   const createPlanMutation = useMutation({
@@ -85,11 +92,15 @@ export default function MaintenancePlanPage() {
     },
   });
 
-  // Ștergere plan
+  // Ștergere plan — cu toast feedback (anterior: onSuccess fără notificare utilizator)
   const deletePlanMutation = useMutation({
     mutationFn: (id) => api.delete(`/maintenance-plans/${id}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['maintenancePlans'] });
+      toast.success('Plan de mentenanță șters');
+    },
+    onError: () => {
+      toast.error('Eroare la ștergerea planului. Încearcă din nou.');
     },
   });
 
@@ -105,7 +116,15 @@ export default function MaintenancePlanPage() {
   });
 
   if (isLoading) {
-    return <div className="flex items-center justify-center min-h-screen">Se încarcă...</div>;
+    return (
+      <div
+        className="flex flex-col items-center justify-center min-h-screen gap-4"
+        style={{ backgroundColor: 'var(--color-bg-primary)' }}
+      >
+        <div className="loading-spinner" />
+        <p style={{ color: 'var(--color-text-secondary)' }}>Se încarcă planurile…</p>
+      </div>
+    );
   }
 
   return (
@@ -267,9 +286,15 @@ export default function MaintenancePlanPage() {
                                 {new Date(event.scheduledDate).toLocaleDateString('ro-RO')}
                               </p>
                             </div>
-                            <Badge className={STATUS_COLORS[event.status]}>
+                            <span
+                              className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold"
+                              style={{
+                                backgroundColor: STATUS_STYLES[event.status]?.bg   ?? 'var(--color-bg-tertiary)',
+                                color:           STATUS_STYLES[event.status]?.color ?? 'var(--color-text-primary)',
+                              }}
+                            >
                               {STATUS_LABELS[event.status]}
-                            </Badge>
+                            </span>
                           </div>
 
                           <div className="text-sm">
@@ -283,6 +308,7 @@ export default function MaintenancePlanPage() {
                               variant="outline"
                               onClick={() => setEditingId(event.id)}
                               className="gap-1"
+                              aria-label={`Editare plan ${event.deviceName}`}
                             >
                               <Edit size={16} />
                             </Button>
@@ -290,10 +316,13 @@ export default function MaintenancePlanPage() {
                               size="sm"
                               variant="destructive"
                               onClick={() => deletePlanMutation.mutate(event.id)}
-                              disabled={deletePlanMutation.isPending}
+                              disabled={deletePlanMutation.isPending && deletePlanMutation.variables === event.id}
+                              aria-label={`Ștergere plan ${event.deviceName}`}
                               className="gap-1"
                             >
-                              <Trash2 size={16} />
+                              {deletePlanMutation.isPending && deletePlanMutation.variables === event.id
+                                ? <span className="loading-spinner loading-spinner-sm" />
+                                : <Trash2 size={16} />}
                             </Button>
                           </div>
                         </CardContent>
@@ -335,9 +364,15 @@ export default function MaintenancePlanPage() {
                     {new Date(plan.scheduledDate).toLocaleDateString('ro-RO')}
                   </TableCell>
                   <TableCell>
-                    <Badge className={STATUS_COLORS[plan.status]}>
+                    <span
+                      className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold"
+                      style={{
+                        backgroundColor: STATUS_STYLES[plan.status]?.bg   ?? 'var(--color-bg-tertiary)',
+                        color:           STATUS_STYLES[plan.status]?.color ?? 'var(--color-text-primary)',
+                      }}
+                    >
                       {STATUS_LABELS[plan.status]}
-                    </Badge>
+                    </span>
                   </TableCell>
                   <TableCell className="text-right space-x-2">
                     <Button
@@ -351,9 +386,12 @@ export default function MaintenancePlanPage() {
                       size="sm"
                       variant="ghost"
                       onClick={() => deletePlanMutation.mutate(plan.id)}
-                      disabled={deletePlanMutation.isPending}
+                      disabled={deletePlanMutation.isPending && deletePlanMutation.variables === plan.id}
+                      aria-label={`Ștergere plan ${plan.deviceName}`}
                     >
-                      <Trash2 size={16} />
+                      {deletePlanMutation.isPending && deletePlanMutation.variables === plan.id
+                        ? <span className="loading-spinner loading-spinner-sm" />
+                        : <Trash2 size={16} />}
                     </Button>
                   </TableCell>
                 </TableRow>

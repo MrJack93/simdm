@@ -1,7 +1,13 @@
 /* SIMDM Design System v3 — Modern 2026 */
 /* Plus Jakarta Sans, glassmorphism, spring easing, WCAG 2.1 AA */
 
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+/*
+ * Import Plus Jakarta Sans cu toate greutățile necesare + varianta italic
+ * pentru eventuale texte em/cite. display=swap asigură FOUT în loc de FOIT.
+ * Anterior: importul exista dar variabilele declarau Figtree/Noto Sans
+ * (nedescărcate) → browserul fallback-a la Arial/Times necontrolat.
+ */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&display=swap');
 
 :root {
   /* ===== COLORS — DARK MODE (DEFAULT) ===== */
@@ -67,9 +73,13 @@
   --transition-slow: 0.5s var(--ease-out);
 
   /* ===== TYPOGRAPHY (Medical Design System) ===== */
-  --font-family-heading: 'Figtree', system-ui, -apple-system, sans-serif;
-  --font-family-base: 'Noto Sans', system-ui, -apple-system, sans-serif;
-  --font-family-mono: 'Fira Code', 'JetBrains Mono', ui-monospace, monospace;
+  /*
+   * Aliniat cu importul Google Fonts de mai sus.
+   * Anterior: Figtree și Noto Sans nu erau importate → fallback la system fonts.
+   */
+  --font-family-heading: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-family-base:    'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-family-mono:    'Fira Code', 'JetBrains Mono', ui-monospace, monospace;
 
   /* Type scale — modular 1.25 ratio */
   --font-size-display: 3rem;    /* 48px */

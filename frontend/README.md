@@ -87,7 +87,7 @@ npm run test:e2e:ui      # Interactive UI
 
 **Accessibility:** WCAG 2.1 AA certified
 
-See [docs/1-DESIGN-AND-ACCESSIBILITY.md](../docs/1-DESIGN-AND-ACCESSIBILITY.md) for full design system.
+See [docs/DESIGN-SYSTEM.md](../docs/DESIGN-SYSTEM.md) for full design system.
 
 ---
 
@@ -146,7 +146,7 @@ npm run test:e2e
 
 ## 📚 Resources
 
-- [docs/1-DESIGN-AND-ACCESSIBILITY.md](../docs/1-DESIGN-AND-ACCESSIBILITY.md)
+- [docs/DESIGN-SYSTEM.md](../docs/DESIGN-SYSTEM.md)
 - [docs/2-DEVELOPER-GUIDE.md](../docs/2-DEVELOPER-GUIDE.md)
 - [docs/CONTRIBUTING.md](../docs/CONTRIBUTING.md)
 - [CLAUDE.md](../CLAUDE.md)
@@ -165,7 +165,7 @@ Frontend components:
 
 Dependencies: react-big-calendar, date-fns, react-signature-canvas
 
-See [tasks/plan.md](../tasks/plan.md) for details.
+See [tasks/PLAN-FAZA3-DETALIAT.md](../tasks/PLAN-FAZA3-DETALIAT.md) for details.
 
 ---
 

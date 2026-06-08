@@ -17,18 +17,25 @@
     line-height: 1.6;
   }
 
+  /*
+   * Titlurile moștenesc --color-text-primary implicit.
+   * Culoarea accent se aplică SELECTIV cu clasa utilitară .heading-accent,
+   * evitând portocaliul strident în contexte neutre (dialoguri, carduri info,
+   * secțiuni de eroare). Paginile care aveau style={{ color: '...' }} explicit
+   * rămân neschimbate — inline style are specificitate mai mare oricum.
+   */
   h1 {
     @apply text-4xl font-bold mb-6 leading-tight;
     font-family: var(--font-family-heading);
     font-weight: 700;
-    color: var(--color-accent);
+    color: var(--color-text-primary);
   }
 
   h2 {
     @apply text-2xl font-bold mb-4 leading-tight;
     font-family: var(--font-family-heading);
     font-weight: 600;
-    color: var(--color-accent);
+    color: var(--color-text-primary);
   }
 
   h3 {
@@ -54,6 +61,29 @@
 }
 
 @layer utilities {
+  /* Titlu cu accent explicit — aplică pe h1/h2 când contextul o cere */
+  .heading-accent {
+    color: var(--color-accent);
+  }
+
+  /*
+   * Efect hover valid pentru carduri.
+   * CORECTARE: hover:shadow-[var(--color-accent)] este sintaxă greșită în Tailwind —
+   * `box-shadow` cere o declarație completă, nu doar o culoare.
+   * --shadow-glow-accent din design-system.css conține declarația completă.
+   */
+  .card-hover {
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  }
+  .card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-glow-accent);
+  }
+  .card-hover:active {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+  }
+
   .focusable {
     @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2;
     --tw-ring-color: var(--color-accent);
@@ -165,29 +195,31 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   }
 
+  /*
+   * CORECTARE: opacity: 0.15 era aplicat pe ÎNTREGUL element, făcând textul
+   * practic invizibil. Fundalurile --color-*-bg au deja alpha 10% incorporat.
+   * role: alert nu există ca proprietate CSS — se pune ca atribut HTML pe element.
+   * Utilizare corectă: <div role="alert" className="alert-error">...</div>
+   */
   .alert-error {
-    @apply px-4 py-3 rounded-lg text-sm;
-    background-color: var(--color-error);
-    opacity: 0.15;
+    @apply px-4 py-3 rounded-lg text-sm flex items-start gap-2;
+    background-color: var(--color-error-bg);
     color: var(--color-error);
     border: 1px solid var(--color-error);
-    role: alert;
   }
 
   .alert-success {
-    @apply px-4 py-3 rounded-lg text-sm;
-    background-color: var(--color-success);
-    opacity: 0.15;
+    @apply px-4 py-3 rounded-lg text-sm flex items-start gap-2;
+    background-color: var(--color-success-bg);
     color: var(--color-success);
     border: 1px solid var(--color-success);
   }
 
   .alert-info {
-    @apply px-4 py-3 rounded-lg text-sm;
-    background-color: #3b82f6;
-    opacity: 0.15;
-    color: #3b82f6;
-    border: 1px solid #3b82f6;
+    @apply px-4 py-3 rounded-lg text-sm flex items-start gap-2;
+    background-color: var(--color-info-bg);
+    color: var(--color-info);
+    border: 1px solid var(--color-info);
   }
 
   /* Icon Sizing Utilities */
@@ -281,8 +313,9 @@
 }
 
 @theme inline {
-  --font-heading: var(--font-sans);
-  --font-sans: 'Geist Variable', sans-serif;
+  /* Aliniat cu design-system.css — ambele folosesc Plus Jakarta Sans */
+  --font-heading: var(--font-family-heading);
+  --font-sans: var(--font-family-base);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -323,71 +356,69 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/*
+ * Bridge shadcn/Radix tokens → SIMDM design system tokens.
+ * Shadcn consumă --background, --foreground, --primary etc.
+ * Le mapăm la variabilele noastre custom astfel încât componentele
+ * shadcn (Card, Badge, Button, Dialog, Tabs) să respecte automat
+ * theme toggle-ul (dark/light) al aplicației.
+ */
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
+  /* ── Fundal & text ── */
+  --background:        var(--color-bg-primary);
+  --foreground:        var(--color-text-primary);
+
+  /* ── Card & Popover ── */
+  --card:              var(--color-bg-secondary);
+  --card-foreground:   var(--color-text-primary);
+  --popover:           var(--color-bg-secondary);
+  --popover-foreground:var(--color-text-primary);
+
+  /* ── Acțiuni primare ── */
+  --primary:           var(--color-accent);
+  --primary-foreground:#1a1a1a;
+
+  /* ── Acțiuni secundare / muted ── */
+  --secondary:         var(--color-bg-tertiary);
+  --secondary-foreground: var(--color-text-primary);
+  --muted:             var(--color-bg-tertiary);
+  --muted-foreground:  var(--color-text-secondary);
+
+  /* ── Accent (Radix hover states) ── */
+  --accent:            var(--color-accent-subtle);
+  --accent-foreground: var(--color-accent);
+
+  /* ── Pericol / eroare ── */
+  --destructive:       var(--color-error);
+
+  /* ── Borduri & inputs ── */
+  --border:            var(--color-border);
+  --input:             var(--color-bg-tertiary);
+  --ring:              var(--color-accent);
+
+  /* ── Raze (aliniate cu SIMDM) ── */
   --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+
+  /* ── Sidebar ── */
+  --sidebar:                   var(--color-bg-secondary);
+  --sidebar-foreground:        var(--color-text-primary);
+  --sidebar-primary:           var(--color-accent);
+  --sidebar-primary-foreground:#1a1a1a;
+  --sidebar-accent:            var(--color-accent-subtle);
+  --sidebar-accent-foreground: var(--color-accent);
+  --sidebar-border:            var(--color-border);
+  --sidebar-ring:              var(--color-accent);
+
+  /* ── Chart colors (mapate la statusuri DM) ── */
+  --chart-1: var(--color-status-functional);
+  --chart-2: var(--color-status-in-repair);
+  --chart-3: var(--color-status-defect);
+  --chart-4: var(--color-status-loaned);
+  --chart-5: var(--color-status-decommissioned);
 }
 
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
-}
+/*
+ * În light mode, html.light-mode actualizează --color-* din design-system.css,
+ * iar bridge-ul de mai sus propagă automat valorile corecte. Nu e nevoie de
+ * un bloc .dark separat.
+ */

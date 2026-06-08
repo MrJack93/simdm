@@ -1,9 +1,11 @@
 # SIMDM — Sistem Informațional de Management al Dispozitivelor Medicale
 
-**Versiune:** 2.5 — Faza 1-2 Complete + Design System 100/100 + Module Quick-Win  
-**Status:** ✅ **Faza 1 & 2 COMPLETĂ 100%** | ✅ **Design System PERFECT 100/100** | ✅ **Module quick-win** | ⏳ **Faza 3 Start 2026-06-05**  
-**Actualizat:** 2026-06-05  
-**Licență:** Privat (Spital privat Moldova)
+**Versiune:** 3.0 — Faza 1-2 auditate & remediate + documentație consolidată  
+**Status:** ✅ **Faza 1 & 2 COMPLETĂ** (audit de securitate trecut, remedieri aplicate) | ⏳ **Faza 3 în lucru**  
+**Actualizat:** 2026-06-08  
+**Licență:** Privat (instituții de medicină privată, Moldova)
+
+> **Viziune:** SIMDM propriu pentru instituțiile de **medicină privată** — alternativă locală, independentă față de SIMDM-ul național al AMDM (care deservește mai ales IMSP publice). Ghidul bioinginerului (Ordin MS 889/2024) rămâne referința normativă pentru conformitate.
 
 ---
 
@@ -17,11 +19,13 @@
 
 | Fază | Modul | Status | Tests | Coverage |
 |------|-------|--------|-------|----------|
-| **1** | Fundație (Auth, DB, Login) | ✅ COMPLETĂ | 30+ | 100% |
-| **2** | Inventar DM (CRUD, export) | ✅ COMPLETĂ | 103+ | 95.36% backend / 91.99% frontend |
+| **1** | Fundație (Auth, DB, Login) | ✅ COMPLETĂ + auditată | da | rulează local (`npm test`) |
+| **2** | Inventar DM (CRUD, export) | ✅ COMPLETĂ + auditată | da | rulează local (`npm test`) |
 | **QW** | Module quick-win (Mentenanță basic, Incidente, Audit Logs UI, Timeline) | ✅ COMPLETĂ | — | — |
-| **3** | Mentenanță completă (Calendar, Semnătură, Formular Nr. 5-6-8-9) | ⏳ PLANNED (16 zile) | TBD | Target ≥95% |
+| **3** | Mentenanță completă (Calendar, Semnătură, Formular Nr. 5-6-8-9) | ⏳ ÎN LUCRU (16 zile) | TBD | Target ≥95% |
 | **4-8** | Documente, Procurement, Dashboard, QA | ⬜ PLANNED | — | — |
+
+> **Audit Faza 1-2 (2026-06-06):** s-a efectuat un audit independent la nivel de cod (securitate + integritate date). Toate problemele critice și high au fost remediate: secrete JWT reale, `change-password` reparat, atribuire corectă în audit-log (`req.user.sub`), anti-injection la export CSV, validare id, tranzacții atomice, servire fișiere autentificată. Confirmarea finală „verde" se face rulând suita de teste local (`npm test`).
 
 ### ✅ Caracteristici Implementate (Faza 1+2+Design System)
 
@@ -45,7 +49,7 @@
 - ✅ **WCAG 2.1 AA Level AA Certified** — Keyboard navigation, focus rings, semantic HTML, aria attributes
 - ✅ **Design System 100/100** — Complete token coverage, zero hardcoded values, glassmorphism, SkipLink accessibility pattern
 - ✅ **Component Library** — StatusBadge (6 statuses), DataGrid, Forms, Modals, Toasts, DeviceCard, Button, Input, Card
-- ✅ **Documentation Complete** — COMPONENT_LIBRARY.md (300+ lines), LIGHT_MODE_GUIDE.md (400+ lines), ACCESSIBILITY_GUIDE.md (500+ lines)
+- ✅ **Documentație consolidată** — [docs/DESIGN-SYSTEM.md](docs/DESIGN-SYSTEM.md) (token-uri, componente, WCAG AA, light/dark)
 
 **Module Quick-Win** ✅
 - ✅ **Înregistrări Mentenanță** — CRUD complet, 4 tipuri (Preventivă/Corectivă/Verificare/Calibrare), badge-uri vizuale
@@ -82,29 +86,26 @@
 
 **Dependințe:** react-big-calendar, date-fns, react-signature-canvas, node-cron
 
-**Vezi detalii:** [tasks/plan.md](tasks/plan.md) | [tasks/todo.md](tasks/todo.md) | [SPEC.md § 15](SPEC.md#15-faza-3-mentenanță--plan-detaliat-100)
+**Vezi planul pas-cu-pas:** [tasks/PLAN-FAZA3-DETALIAT.md](tasks/PLAN-FAZA3-DETALIAT.md) | [tasks/todo.md](tasks/todo.md) | [SPEC.md § 15](SPEC.md)
 
 ---
 
 ## 📚 Documentație Completă
 
-| Document | Status | Audiență | Link |
-|----------|--------|----------|------|
-| **SPEC.md** | ✅ v2.2 | Arhitecți, DevOps | Stivă tech locked, Faza 3 spec |
-| **GETTING-STARTED.md** | ✅ v2.1 | Bioinginer, dev nou | Setup rapid (5 min Docker) |
-| **CLAUDE.md** | ✅ v2.2 | AI + dev | Instrucțiuni proiect detailed |
-| **tasks/plan.md** | ✅ v2.2 | PM | 8-phase roadmap + Faza 3 detaliat |
-| **tasks/todo.md** | ✅ v2.2 | Dev | Task breakdown per pas (47+ subtasks) |
-| **docs/1-DESIGN.md** | ✅ v2.1 | Frontend dev | Design tokens + WCAG AA |
-| **docs/2-DEVELOPER-GUIDE.md** | ✅ v2.1 | Backend + frontend | Patterns, testing, Docker |
-| **docs/3-AUDIT-LOG.md** | ✅ v2.1 | Referință | Snapshot Faza 1-2 audit |
-| **docs/CONTRIBUTING.md** | ✅ v2.1 | Toți | PR workflow + standards |
-| **docs/ANTIVIRUS-SETUP.md** | ✅ v2.1 | DevOps | Magic bytes + ClamAV |
-| **docs/DOCKER-OPTIMIZATION.md** | ✅ v2.1 | DevOps | WSL + resource limits |
-| **docs/MOBILE_WORKFLOW_GUIDE.md** | ✅ v1.0 | Bioinginer (teren) | 5 workflow-uri mobile + breakpoints |
-| **docs/ACCESSIBILITY_GUIDE.md** | ✅ v2.0 | Frontend + QA | WCAG 2.1 AA patterns, testare |
-| **docs/COMPONENT_LIBRARY.md** | ✅ v3.1 | Frontend dev | Ref. completă componente + token-uri |
-| **docs/LIGHT_MODE_GUIDE.md** | ✅ v2.0 | Frontend dev | Transformări dark/light mode |
+| Document | Audiență | Conținut |
+|----------|----------|----------|
+| **SPEC.md** | Arhitecți, DevOps | Stivă tech locked, schema, Faza 3 overview |
+| **GETTING-STARTED.md** | Bioinginer, dev nou | Setup rapid (Docker / local) |
+| **CLAUDE.md** | AI + dev | Instrucțiuni proiect + reguli cod |
+| **tasks/PLAN-FAZA3-DETALIAT.md** | PM + dev | Plan pas-cu-pas Faza 3 (5 module) |
+| **tasks/todo.md** | Dev | Checklist live per fază |
+| **docs/DESIGN-SYSTEM.md** | Frontend dev | Token-uri, componente, WCAG AA, light/dark (consolidat) |
+| **docs/2-DEVELOPER-GUIDE.md** | Backend + frontend | Patterns, testing, Docker |
+| **docs/3-AUDIT-LOG.md** | Referință | Documentația funcției de audit-log |
+| **docs/CONTRIBUTING.md** | Toți | PR workflow + standarde |
+| **docs/ANTIVIRUS-SETUP.md** | DevOps | Magic bytes + ClamAV |
+| **docs/DOCKER-OPTIMIZATION.md** | DevOps | WSL + resource limits |
+| **docs/MOBILE_WORKFLOW_GUIDE.md** | Bioinginer (teren) | Workflow-uri mobile + breakpoints |
 
 ---
 
@@ -196,15 +197,16 @@ simdm/
 │   │   └── __tests__/
 │   └── package.json
 ├── docs/
-│   ├── 1-DESIGN-AND-ACCESSIBILITY.md
+│   ├── DESIGN-SYSTEM.md         # Design + accesibilitate (consolidat)
 │   ├── 2-DEVELOPER-GUIDE.md
 │   ├── 3-AUDIT-LOG.md
 │   ├── ANTIVIRUS-SETUP.md
 │   ├── CONTRIBUTING.md
-│   └── DOCKER-OPTIMIZATION.md
+│   ├── DOCKER-OPTIMIZATION.md
+│   └── MOBILE_WORKFLOW_GUIDE.md
 ├── tasks/
-│   ├── plan.md                 # 8-phase roadmap
-│   └── todo.md                 # Task breakdown
+│   ├── PLAN-FAZA3-DETALIAT.md   # Plan pas-cu-pas Faza 3
+│   └── todo.md                 # Checklist live
 ├── CLAUDE.md                   # AI instructions
 ├── SPEC.md                     # Technical spec
 ├── README.md                   # This file
@@ -288,4 +290,4 @@ Faza 7   ⬜ PLANNED 1-2 săpt (2026-08-13 — 2026-09-12) — QA & Go-Live
 
 ---
 
-**Următor:** Start Faza 3 — [Citește plan detaliat](tasks/plan.md)
+**Următor:** Start Faza 3 — [Citește planul detaliat pas-cu-pas](tasks/PLAN-FAZA3-DETALIAT.md)

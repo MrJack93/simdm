@@ -59,6 +59,8 @@ describe('DeviceForm', () => {
     const user = userEvent.setup();
     renderWithProviders(<DeviceForm />);
     await screen.findByLabelText(/Numărul inventarului/);
+    await user.type(screen.getByLabelText(/Numărul inventarului/), 'DM-001');
+    await user.type(screen.getByLabelText('Denumire *'), 'Test Device');
     await goToStep(user, 1);
 
     const sectionSelect = await screen.findByTestId('select-sectionId');
@@ -70,6 +72,8 @@ describe('DeviceForm', () => {
     const user = userEvent.setup();
     renderWithProviders(<DeviceForm />);
     await screen.findByLabelText(/Numărul inventarului/);
+    await user.type(screen.getByLabelText(/Numărul inventarului/), 'DM-001');
+    await user.type(screen.getByLabelText('Denumire *'), 'Test Device');
     await goToStep(user, 1);
 
     expect(await screen.findByTestId('select-riskClass')).toBeInTheDocument();

@@ -1,33 +1,41 @@
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import { FileText, Download, ChevronLeft, ChevronRight, ChevronDown, ChevronUp } from 'lucide-react';
 import api from '../api/axios';
 
+/**
+ * @typedef {import('../types').AuditLog} AuditLog
+ * @typedef {import('../types').PaginatedResponse<AuditLog>} AuditLogPage
+ */
+
+// Paginare server-side: fiecare pagină face un request distinct cu `page` și `limit`.
+// Am eliminat fetch-ul de 500 rânduri + paginarea client-side (useMemo pe logs.slice).
 const ITEMS_PER_PAGE = 50;
 
 const ACTION_LABELS = {
-  CREATE: 'Creare',
-  UPDATE: 'Actualizare',
-  DELETE: 'Ștergere',
-  LOGIN: 'Autentificare',
-  LOGOUT: 'Deconectare',
+  CREATE:       'Creare',
+  UPDATE:       'Actualizare',
+  DELETE:       'Ștergere',
+  LOGIN:        'Autentificare',
+  LOGOUT:       'Deconectare',
   LOGIN_FAILED: 'Autentificare eșuată',
-  FILE_UPLOAD: 'Încărcare fișier',
+  FILE_UPLOAD:  'Încărcare fișier',
   STOCK_UPDATE: 'Actualizare stoc',
 };
 
 const ACTION_COLORS = {
-  CREATE: 'var(--color-success)',
-  UPDATE: 'var(--color-accent)',
-  DELETE: 'var(--color-error)',
-  LOGIN: 'var(--color-text-secondary)',
-  LOGOUT: 'var(--color-text-secondary)',
+  CREATE:       'var(--color-success)',
+  UPDATE:       'var(--color-accent)',
+  DELETE:       'var(--color-error)',
+  LOGIN:        'var(--color-text-secondary)',
+  LOGOUT:       'var(--color-text-secondary)',
   LOGIN_FAILED: 'var(--color-warning)',
-  FILE_UPLOAD: 'var(--color-accent)',
+  FILE_UPLOAD:  'var(--color-accent)',
   STOCK_UPDATE: 'var(--color-success)',
 };
 
+/** @param {{ changes: AuditLog['changes'] }} props */
 function ChangesCell({ changes }) {
   const [expanded, setExpanded] = useState(false);
   if (!changes) return <span style={{ color: 'var(--color-text-muted)' }}>—</span>;
@@ -49,7 +57,11 @@ function ChangesCell({ changes }) {
       {expanded && (
         <pre
           className="mt-1 text-xs p-2 rounded overflow-auto max-h-32"
-          style={{ backgroundColor: 'var(--color-bg-tertiary)', color: 'var(--color-text-primary)', maxWidth: '280px' }}
+          style={{
+            backgroundColor: 'var(--color-bg-tertiary)',
+            color: 'var(--color-text-primary)',
+            maxWidth: '280px',
+          }}
         >
           {text}
         </pre>
@@ -62,45 +74,48 @@ export default function AuditLogsPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [filters, setFilters] = useState({ entity: '', action: '', dateFrom: '', dateTo: '' });
 
-  const { data, isLoading } = useQuery({
-    queryKey: ['audit-logs', filters],
+  // Paginare server-side: queryKey include `currentPage` și `filters`,
+  // astfel React Query cache-uiește fiecare pagină separat și prefetch-ează automat.
+  const { data, isLoading, isPlaceholderData } = useQuery({
+    queryKey: ['audit-logs', filters, currentPage],
     queryFn: async () => {
-      const params = new URLSearchParams({ page: 1, limit: 500 });
-      if (filters.entity) params.set('entity', filters.entity);
-      if (filters.action) params.set('action', filters.action);
+      const params = new URLSearchParams({
+        page:  currentPage,
+        limit: ITEMS_PER_PAGE,
+      });
+      if (filters.entity)   params.set('entity',   filters.entity);
+      if (filters.action)   params.set('action',   filters.action);
       if (filters.dateFrom) params.set('dateFrom', filters.dateFrom);
-      if (filters.dateTo) params.set('dateTo', filters.dateTo);
+      if (filters.dateTo)   params.set('dateTo',   filters.dateTo);
+
       const res = await api.get(`/audit-logs?${params}`);
-      return res.data;
+      return res.data; // { data: AuditLog[], total: number, page: number, totalPages: number }
     },
     staleTime: 30_000,
+    placeholderData: (prev) => prev, // păstrează datele anterioare vizibile la schimbarea paginii
   });
 
-  const logs = data?.data ?? [];
-
-  const totalPages = Math.ceil(logs.length / ITEMS_PER_PAGE);
-  const paginated = useMemo(
-    () => logs.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE),
-    [logs, currentPage]
-  );
+  const logs      = data?.data       ?? [];
+  const total     = data?.total      ?? 0;
+  const totalPages = data?.totalPages ?? Math.ceil(total / ITEMS_PER_PAGE);
 
   const handleFilterChange = (key, value) => {
     setFilters((f) => ({ ...f, [key]: value }));
-    setCurrentPage(1);
+    setCurrentPage(1); // resetează la pagina 1 când filtrele se schimbă
   };
 
   const handleExportCSV = async () => {
     try {
       const params = new URLSearchParams();
-      if (filters.entity) params.set('entity', filters.entity);
-      if (filters.action) params.set('action', filters.action);
+      if (filters.entity)   params.set('entity',   filters.entity);
+      if (filters.action)   params.set('action',   filters.action);
       if (filters.dateFrom) params.set('dateFrom', filters.dateFrom);
-      if (filters.dateTo) params.set('dateTo', filters.dateTo);
+      if (filters.dateTo)   params.set('dateTo',   filters.dateTo);
 
       const res = await api.get(`/audit-logs/export/csv?${params}`, { responseType: 'blob' });
       const url = window.URL.createObjectURL(new Blob([res.data]));
-      const a = document.createElement('a');
-      a.href = url;
+      const a   = document.createElement('a');
+      a.href     = url;
       a.download = `audit-log-${new Date().toISOString().slice(0, 10)}.csv`;
       a.click();
       window.URL.revokeObjectURL(url);
@@ -109,9 +124,6 @@ export default function AuditLogsPage() {
       toast.error('Eroare la exportul CSV');
     }
   };
-
-  const entities = [...new Set(logs.map((l) => l.entity))].sort();
-  const actions = [...new Set(logs.map((l) => l.action))].sort();
 
   return (
     <section className="p-4 md:p-8" aria-label="Jurnal de audit">
@@ -123,7 +135,7 @@ export default function AuditLogsPage() {
               Jurnal de Audit
             </h1>
             <p className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>
-              {logs.length} înregistrări
+              {total > 0 ? `${total} înregistrări total` : 'Se încarcă…'}
             </p>
           </div>
         </div>
@@ -136,15 +148,13 @@ export default function AuditLogsPage() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
         <div>
           <label className="label-base" htmlFor="filter-entity">Entitate</label>
-          <select
+          <input
             id="filter-entity"
             className="input-base w-full"
+            placeholder="ex: Device"
             value={filters.entity}
             onChange={(e) => handleFilterChange('entity', e.target.value)}
-          >
-            <option value="">Toate</option>
-            {entities.map((e) => <option key={e} value={e}>{e}</option>)}
-          </select>
+          />
         </div>
         <div>
           <label className="label-base" htmlFor="filter-action">Acțiune</label>
@@ -155,7 +165,9 @@ export default function AuditLogsPage() {
             onChange={(e) => handleFilterChange('action', e.target.value)}
           >
             <option value="">Toate</option>
-            {actions.map((a) => <option key={a} value={a}>{ACTION_LABELS[a] || a}</option>)}
+            {Object.entries(ACTION_LABELS).map(([k, v]) => (
+              <option key={k} value={k}>{v}</option>
+            ))}
           </select>
         </div>
         <div>
@@ -181,13 +193,24 @@ export default function AuditLogsPage() {
       </div>
 
       {/* Tabel */}
-      <div className="rounded-xl overflow-hidden border" style={{ borderColor: 'var(--color-border)' }}>
+      <div
+        className="rounded-xl overflow-hidden border"
+        style={{
+          borderColor: 'var(--color-border)',
+          opacity: isPlaceholderData ? 0.6 : 1,
+          transition: 'opacity 0.15s',
+        }}
+      >
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr style={{ backgroundColor: 'var(--color-bg-tertiary)' }}>
                 {['Data/Ora', 'Utilizator', 'Acțiune', 'Entitate', 'ID', 'Modificări', 'IP'].map((h) => (
-                  <th key={h} className="text-left px-4 py-3 font-semibold" style={{ color: 'var(--color-text-secondary)' }}>
+                  <th
+                    key={h}
+                    className="text-left px-4 py-3 font-semibold"
+                    style={{ color: 'var(--color-text-secondary)' }}
+                  >
                     {h}
                   </th>
                 ))}
@@ -202,14 +225,14 @@ export default function AuditLogsPage() {
                     </td>
                   </tr>
                 ))
-              ) : paginated.length === 0 ? (
+              ) : logs.length === 0 ? (
                 <tr>
                   <td colSpan={7} className="px-4 py-12 text-center" style={{ color: 'var(--color-text-secondary)' }}>
                     Nu există înregistrări pentru filtrele selectate
                   </td>
                 </tr>
               ) : (
-                paginated.map((log) => (
+                logs.map((log) => (
                   <tr
                     key={log.id}
                     style={{ borderTop: '1px solid var(--color-border)' }}
@@ -234,9 +257,7 @@ export default function AuditLogsPage() {
                     </td>
                     <td className="px-4 py-3" style={{ color: 'var(--color-text-primary)' }}>{log.entity}</td>
                     <td className="px-4 py-3" style={{ color: 'var(--color-text-secondary)' }}>{log.entityId || '—'}</td>
-                    <td className="px-4 py-3">
-                      <ChangesCell changes={log.changes} />
-                    </td>
+                    <td className="px-4 py-3"><ChangesCell changes={log.changes} /></td>
                     <td className="px-4 py-3 text-xs" style={{ color: 'var(--color-text-muted)' }}>
                       {log.ipAddress || '—'}
                     </td>
@@ -252,19 +273,19 @@ export default function AuditLogsPage() {
       {totalPages > 1 && (
         <div className="flex items-center justify-between mt-4">
           <p className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>
-            Pagina {currentPage} din {totalPages} ({logs.length} total)
+            Pagina {currentPage} din {totalPages} ({total} total)
           </p>
           <div className="flex gap-2">
             <button
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-              disabled={currentPage === 1}
+              disabled={currentPage === 1 || isLoading}
               className="btn-secondary flex items-center gap-1 text-sm"
             >
               <ChevronLeft size={14} /> Înapoi
             </button>
             <button
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-              disabled={currentPage === totalPages}
+              disabled={currentPage === totalPages || isLoading || isPlaceholderData}
               className="btn-secondary flex items-center gap-1 text-sm"
             >
               Înainte <ChevronRight size={14} />

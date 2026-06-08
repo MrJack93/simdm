@@ -23,8 +23,8 @@ const upload = multer({
   },
 });
 
-// Apply auth middleware to all routes
-router.use(authMiddleware);
+// L1 Fix: Auth middleware now applied in index.js for consistency
+// router.use(authMiddleware); // REMOVED - auth is applied in index.js
 
 // [ORD-889-SEC-2.1] Annual Inventory Procedures (Procedura MDM Nr. 1)
 // Yearly verification of medical devices against inventory records.
@@ -174,10 +174,11 @@ router.post('/:year/section/:sectionId', async (req, res) => {
       });
     }
 
-    // Update items based on request
+    // M4 Fix: Update items in a transaction for atomicity
     if (items && Array.isArray(items)) {
-      for (const itemUpdate of items) {
-        await prisma.inventory_check_items.updateMany({
+      // Build array of all update operations
+      const updateOps = items.map(itemUpdate =>
+        prisma.inventory_check_items.updateMany({
           where: {
             inventoryId: inventory.id,
             deviceId: itemUpdate.deviceId,
@@ -186,8 +187,11 @@ router.post('/:year/section/:sectionId', async (req, res) => {
             found: itemUpdate.found,
             locationFound: itemUpdate.locationFound || null,
           },
-        });
-      }
+        })
+      );
+
+      // Execute all updates atomically
+      await prisma.$transaction(updateOps);
     }
 
     // Check if all items are found, if so mark as completed
@@ -204,7 +208,7 @@ router.post('/:year/section/:sectionId', async (req, res) => {
       });
     }
 
-    await logAudit(req.user.id, 'UPDATE', 'annual_inventories', inventory.id, {
+    await logAudit(req.user.sub, 'UPDATE', 'annual_inventories', inventory.id, {
       year: yearNum,
       sectionId: sectionIdNum,
     });
@@ -275,7 +279,7 @@ router.post('/:year/discrepancies/:id/verify', async (req, res) => {
       },
     });
 
-    await logAudit(req.user.id, 'UPDATE', 'inventory_check_items', itemId, {
+    await logAudit(req.user.sub, 'UPDATE', 'inventory_check_items', itemId, {
       status: 'VERIFIED',
     });
 
@@ -447,7 +451,7 @@ router.post('/import-fixed-assets', upload.single('file'), async (req, res) => {
       }
     }
 
-    await logAudit(req.user.id, 'CREATE', 'devices_import', null, {
+    await logAudit(req.user.sub, 'CREATE', 'devices_import', null, {
       createdCount,
       updatedCount,
       totalRows: data.length,

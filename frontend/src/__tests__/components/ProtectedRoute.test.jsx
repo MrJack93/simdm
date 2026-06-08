@@ -12,7 +12,7 @@ function renderGuard(authValue, { children = <div>Conținut protejat</div> } = {
     <AuthContext.Provider value={authValue}>
       <MemoryRouter initialEntries={['/protected']}>
         <Routes>
-          <Route path="/" element={<div>Pagina de login</div>} />
+          <Route path="/login" element={<div>Pagina de login</div>} />
           <Route
             path="/protected"
             element={<ProtectedRoute>{children}</ProtectedRoute>}
@@ -24,7 +24,7 @@ function renderGuard(authValue, { children = <div>Conținut protejat</div> } = {
 }
 
 describe('ProtectedRoute', () => {
-  it('redirecționează către "/" când nu există utilizator autentificat', () => {
+  it('redirecționează către "/login" când nu există utilizator autentificat', () => {
     renderGuard({ user: null, loading: false });
     expect(screen.getByText('Pagina de login')).toBeInTheDocument();
     expect(screen.queryByText('Conținut protejat')).not.toBeInTheDocument();

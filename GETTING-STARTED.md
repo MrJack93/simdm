@@ -135,7 +135,7 @@ Odată ce serverele sunt pornite:
 | **Cum să adaug un dispozitiv?** | [SPEC.md - Faza 2 Endpoints](SPEC.md#52-faza-2--inventar-dm-) |
 | **Arhitectura proiectului** | [CLAUDE.md](CLAUDE.md) |
 | **Ghid developer complet** | [docs/2-DEVELOPER-GUIDE.md](docs/2-DEVELOPER-GUIDE.md) |
-| **Design & Accesibilitate** | [docs/1-DESIGN-AND-ACCESSIBILITY.md](docs/1-DESIGN-AND-ACCESSIBILITY.md) |
+| **Design & Accesibilitate** | [docs/DESIGN-SYSTEM.md](docs/DESIGN-SYSTEM.md) |
 
 ---
 

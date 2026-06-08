@@ -1,13 +1,17 @@
 const express = require('express');
+const { z } = require('zod');
 const prisma = require('../db');
 const authMiddleware = require('../middleware/auth');
 
 const router = express.Router();
 
-// Apply auth middleware to all routes
-router.use(authMiddleware);
+// Zod schema for ID validation
+const idSchema = z.coerce.number().int().positive();
 
-// Helper: Log audit trail
+// L1 Fix: Auth middleware now applied in index.js for consistency
+// router.use(authMiddleware); // REMOVED - auth is applied in index.js
+
+// Helper: Log audit trail (for non-transactional use only)
 async function logAudit(userId, action, entity, entityId, changes = null) {
   try {
     await prisma.audit_logs.create({
@@ -22,6 +26,17 @@ async function logAudit(userId, action, entity, entityId, changes = null) {
   } catch (error) {
     console.error('Error logging audit:', error.message);
   }
+}
+
+// Helper: Create audit log data (for use in transactions)
+function createAuditLogData(userId, action, entity, entityId, changes = null) {
+  return {
+    userId,
+    action,
+    entity,
+    entityId: entityId?.toString(),
+    changes,
+  };
 }
 
 // GET /api/consumables — lista cu paginare + filtre
@@ -104,25 +119,28 @@ router.post('/', async (req, res) => {
       return res.status(400).json({ error: 'Cantitatea nu poate fi negativă' });
     }
 
-    const consumable = await prisma.consumables.create({
-      data: {
-        name: name.trim(),
-        model: model?.trim() || null,
-        manufacturer: manufacturer?.trim() || null,
-        unitOfMeasure: unitOfMeasure?.trim() || 'buc',
-        quantity: q,
-        minQuantity: minQ,
-        expiryDate: expiryDate ? new Date(expiryDate) : null,
-        location: location?.trim() || null,
-        notes: notes?.trim() || null,
-        updatedAt: new Date(),
-      },
-    });
-
-    await logAudit(req.user.id, 'CREATE', 'consumables', consumable.id, {
-      name: consumable.name,
-      quantity: consumable.quantity,
-    });
+    const [consumable] = await prisma.$transaction([
+      prisma.consumables.create({
+        data: {
+          name: name.trim(),
+          model: model?.trim() || null,
+          manufacturer: manufacturer?.trim() || null,
+          unitOfMeasure: unitOfMeasure?.trim() || 'buc',
+          quantity: q,
+          minQuantity: minQ,
+          expiryDate: expiryDate ? new Date(expiryDate) : null,
+          location: location?.trim() || null,
+          notes: notes?.trim() || null,
+          updatedAt: new Date(),
+        },
+      }),
+      prisma.audit_logs.create({
+        data: createAuditLogData(req.user.sub, 'CREATE', 'consumables', null, {
+          name: name.trim(),
+          quantity: q,
+        }),
+      }),
+    ]);
 
     res.status(201).json(consumable);
   } catch (error) {
@@ -134,13 +152,12 @@ router.post('/', async (req, res) => {
 // PUT /api/consumables/:id — update
 router.put('/:id', async (req, res) => {
   try {
-    const { id } = req.params;
-    const { name, model, manufacturer, unitOfMeasure, quantity, minQuantity, expiryDate, location, notes } = req.body;
-
-    const consumableId = parseInt(id);
-    if (!consumableId) {
-      return res.status(400).json({ error: 'ID consumabil invalid' });
+    const idParse = idSchema.safeParse(req.params.id);
+    if (!idParse.success) {
+      return res.status(400).json({ error: 'ID consumabil invalid', details: idParse.error.flatten().fieldErrors });
     }
+    const consumableId = idParse.data;
+    const { name, model, manufacturer, unitOfMeasure, quantity, minQuantity, expiryDate, location, notes } = req.body;
 
     const existing = await prisma.consumables.findUnique({ where: { id: consumableId } });
     if (!existing || existing.isDeleted) {
@@ -158,25 +175,28 @@ router.put('/:id', async (req, res) => {
       return res.status(400).json({ error: 'Cantitatea nu poate fi negativă' });
     }
 
-    const updated = await prisma.consumables.update({
-      where: { id: consumableId },
-      data: {
-        ...(name !== undefined && { name: name.trim() }),
-        ...(model !== undefined && { model: model?.trim() || null }),
-        ...(manufacturer !== undefined && { manufacturer: manufacturer?.trim() || null }),
-        ...(unitOfMeasure !== undefined && { unitOfMeasure: unitOfMeasure?.trim() || 'buc' }),
-        ...(quantity !== undefined && { quantity: q }),
-        ...(minQuantity !== undefined && { minQuantity: minQ }),
-        ...(expiryDate !== undefined && { expiryDate: expiryDate ? new Date(expiryDate) : null }),
-        ...(location !== undefined && { location: location?.trim() || null }),
-        ...(notes !== undefined && { notes: notes?.trim() || null }),
-      },
-    });
-
-    await logAudit(req.user.id, 'UPDATE', 'consumables', consumableId, {
-      name: updated.name,
-      quantity: updated.quantity,
-    });
+    const [updated] = await prisma.$transaction([
+      prisma.consumables.update({
+        where: { id: consumableId },
+        data: {
+          ...(name !== undefined && { name: name.trim() }),
+          ...(model !== undefined && { model: model?.trim() || null }),
+          ...(manufacturer !== undefined && { manufacturer: manufacturer?.trim() || null }),
+          ...(unitOfMeasure !== undefined && { unitOfMeasure: unitOfMeasure?.trim() || 'buc' }),
+          ...(quantity !== undefined && { quantity: q }),
+          ...(minQuantity !== undefined && { minQuantity: minQ }),
+          ...(expiryDate !== undefined && { expiryDate: expiryDate ? new Date(expiryDate) : null }),
+          ...(location !== undefined && { location: location?.trim() || null }),
+          ...(notes !== undefined && { notes: notes?.trim() || null }),
+        },
+      }),
+      prisma.audit_logs.create({
+        data: createAuditLogData(req.user.sub, 'UPDATE', 'consumables', consumableId, {
+          name: updated.name,
+          quantity: updated.quantity,
+        }),
+      }),
+    ]);
 
     res.json(updated);
   } catch (error) {
@@ -188,25 +208,28 @@ router.put('/:id', async (req, res) => {
 // DELETE /api/consumables/:id — soft delete
 router.delete('/:id', async (req, res) => {
   try {
-    const { id } = req.params;
-    const consumableId = parseInt(id);
-    if (!consumableId) {
+    const idParse = idSchema.safeParse(req.params.id);
+    if (!idParse.success) {
       return res.status(400).json({ error: 'ID consumabil invalid' });
     }
+    const consumableId = idParse.data;
 
     const existing = await prisma.consumables.findUnique({ where: { id: consumableId } });
     if (!existing) {
       return res.status(404).json({ error: 'Consumabil nu găsit' });
     }
 
-    const updated = await prisma.consumables.update({
-      where: { id: consumableId },
-      data: { isDeleted: true },
-    });
-
-    await logAudit(req.user.id, 'DELETE', 'consumables', consumableId, {
-      name: existing.name,
-    });
+    const [updated] = await prisma.$transaction([
+      prisma.consumables.update({
+        where: { id: consumableId },
+        data: { isDeleted: true },
+      }),
+      prisma.audit_logs.create({
+        data: createAuditLogData(req.user.sub, 'DELETE', 'consumables', consumableId, {
+          name: existing.name,
+        }),
+      }),
+    ]);
 
     res.json({ message: 'Consumabil șters cu succes', consumable: updated });
   } catch (error) {
@@ -218,13 +241,12 @@ router.delete('/:id', async (req, res) => {
 // POST /api/consumables/:id/stock — adaugă stoc
 router.post('/:id/stock', async (req, res) => {
   try {
-    const { id } = req.params;
-    const { quantity } = req.body;
-
-    const consumableId = parseInt(id);
-    if (!consumableId) {
+    const idParse = idSchema.safeParse(req.params.id);
+    if (!idParse.success) {
       return res.status(400).json({ error: 'ID consumabil invalid' });
     }
+    const consumableId = idParse.data;
+    const { quantity } = req.body;
 
     const addedQty = parseInt(quantity);
     if (isNaN(addedQty) || addedQty <= 0) {
@@ -236,19 +258,22 @@ router.post('/:id/stock', async (req, res) => {
       return res.status(404).json({ error: 'Consumabil nu găsit' });
     }
 
-    const updated = await prisma.consumables.update({
-      where: { id: consumableId },
-      data: {
-        quantity: { increment: addedQty },
-        updatedAt: new Date(),
-      },
-    });
-
-    await logAudit(req.user.id, 'UPDATE', 'consumables', consumableId, {
-      name: updated.name,
-      quantityAdded: addedQty,
-      newQuantity: updated.quantity,
-    });
+    const [updated] = await prisma.$transaction([
+      prisma.consumables.update({
+        where: { id: consumableId },
+        data: {
+          quantity: { increment: addedQty },
+          updatedAt: new Date(),
+        },
+      }),
+      prisma.audit_logs.create({
+        data: createAuditLogData(req.user.sub, 'UPDATE', 'consumables', consumableId, {
+          name: existing.name,
+          quantityAdded: addedQty,
+          newQuantity: existing.quantity + addedQty,
+        }),
+      }),
+    ]);
 
     res.json(updated);
   } catch (error) {

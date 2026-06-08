@@ -1,7 +1,11 @@
 const express = require('express');
+const { z } = require('zod');
 const prisma = require('../db');
 
 const router = express.Router();
+
+// Zod schema for ID validation
+const idSchema = z.coerce.number().int().positive();
 
 const VALID_SEVERITIES = ['NEAR_MISS', 'MINOR', 'MODERAT', 'GRAV', 'CRITIC'];
 const VALID_STATUSES = ['DESCHIS', 'IN_LUCRU', 'REZOLVAT', 'INCHIS', 'ESCALADAT_AMDM'];
@@ -20,6 +24,17 @@ async function logAudit(userId, action, entityId, changes = null) {
   } catch (e) {
     console.error('Audit log error:', e.message);
   }
+}
+
+// Helper: Create audit log data for transactions
+function createAuditLogData(userId, action, entityId, changes = null) {
+  return {
+    userId,
+    action,
+    entity: 'incidents',
+    entityId: entityId?.toString(),
+    changes,
+  };
 }
 
 // GET /api/incidents
@@ -62,8 +77,9 @@ router.get('/', async (req, res) => {
 // GET /api/incidents/:id
 router.get('/:id', async (req, res) => {
   try {
-    const id = parseInt(req.params.id);
-    if (!id) return res.status(400).json({ error: 'ID invalid' });
+    const idParse = idSchema.safeParse(req.params.id);
+    if (!idParse.success) return res.status(400).json({ error: 'ID invalid' });
+    const id = idParse.data;
 
     const incident = await prisma.incidents.findUnique({
       where: { id },
@@ -98,32 +114,38 @@ router.post('/', async (req, res) => {
     const deviceExists = await prisma.devices.findUnique({ where: { id: parseInt(deviceId) } });
     if (!deviceExists) return res.status(404).json({ error: 'Dispozitivul nu există' });
 
-    const incident = await prisma.incidents.create({
-      data: {
-        deviceId: parseInt(deviceId),
-        sectionId: sectionId ? parseInt(sectionId) : null,
-        occurredAt: new Date(occurredAt),
-        description: description.trim(),
-        severity,
-        status: 'DESCHIS',
-        patientAffected: Boolean(patientAffected),
-        patientHarm: patientAffected ? (patientHarm?.trim() || null) : null,
-        rootCause: rootCause?.trim() || null,
-        correctiveAction: correctiveAction?.trim() || null,
-        preventiveAction: preventiveAction?.trim() || null,
-        reportedToAmdm: Boolean(reportedToAmdm),
-        amdmReportDate: reportedToAmdm && amdmReportDate ? new Date(amdmReportDate) : null,
-        amdmReportRef: reportedToAmdm ? (amdmReportRef?.trim() || null) : null,
-        reportedById: req.user.id,
-        updatedAt: new Date(),
-      },
-      include: {
-        devices: { select: { id: true, name: true, inventoryNumber: true } },
-        sections: { select: { id: true, name: true } },
-      },
-    });
-
-    await logAudit(req.user.id, 'CREATE', incident.id, { deviceId: incident.deviceId, severity: incident.severity });
+    const [incident] = await prisma.$transaction([
+      prisma.incidents.create({
+        data: {
+          deviceId: parseInt(deviceId),
+          sectionId: sectionId ? parseInt(sectionId) : null,
+          occurredAt: new Date(occurredAt),
+          description: description.trim(),
+          severity,
+          status: 'DESCHIS',
+          patientAffected: Boolean(patientAffected),
+          patientHarm: patientAffected ? (patientHarm?.trim() || null) : null,
+          rootCause: rootCause?.trim() || null,
+          correctiveAction: correctiveAction?.trim() || null,
+          preventiveAction: preventiveAction?.trim() || null,
+          reportedToAmdm: Boolean(reportedToAmdm),
+          amdmReportDate: reportedToAmdm && amdmReportDate ? new Date(amdmReportDate) : null,
+          amdmReportRef: reportedToAmdm ? (amdmReportRef?.trim() || null) : null,
+          reportedById: req.user.sub,
+          updatedAt: new Date(),
+        },
+        include: {
+          devices: { select: { id: true, name: true, inventoryNumber: true } },
+          sections: { select: { id: true, name: true } },
+        },
+      }),
+      prisma.audit_logs.create({
+        data: createAuditLogData(req.user.sub, 'CREATE', null, {
+          deviceId: parseInt(deviceId),
+          severity
+        }),
+      }),
+    ]);
 
     res.status(201).json(incident);
   } catch (error) {
@@ -135,8 +157,9 @@ router.post('/', async (req, res) => {
 // PUT /api/incidents/:id
 router.put('/:id', async (req, res) => {
   try {
-    const id = parseInt(req.params.id);
-    if (!id) return res.status(400).json({ error: 'ID invalid' });
+    const idParse = idSchema.safeParse(req.params.id);
+    if (!idParse.success) return res.status(400).json({ error: 'ID invalid' });
+    const id = idParse.data;
 
     const existing = await prisma.incidents.findUnique({ where: { id } });
     if (!existing) return res.status(404).json({ error: 'Incident nu găsit' });
@@ -150,31 +173,37 @@ router.put('/:id', async (req, res) => {
     if (severity && !VALID_SEVERITIES.includes(severity)) return res.status(400).json({ error: 'Severitatea este invalidă' });
     if (status && !VALID_STATUSES.includes(status)) return res.status(400).json({ error: 'Statusul este invalid' });
 
-    const updated = await prisma.incidents.update({
-      where: { id },
-      data: {
-        ...(occurredAt && { occurredAt: new Date(occurredAt) }),
-        ...(description !== undefined && { description: description.trim() }),
-        ...(severity && { severity }),
-        ...(status && { status }),
-        ...(patientAffected !== undefined && { patientAffected: Boolean(patientAffected) }),
-        ...(patientHarm !== undefined && { patientHarm: patientHarm?.trim() || null }),
-        ...(rootCause !== undefined && { rootCause: rootCause?.trim() || null }),
-        ...(correctiveAction !== undefined && { correctiveAction: correctiveAction?.trim() || null }),
-        ...(preventiveAction !== undefined && { preventiveAction: preventiveAction?.trim() || null }),
-        ...(resolvedAt !== undefined && { resolvedAt: resolvedAt ? new Date(resolvedAt) : null }),
-        ...(reportedToAmdm !== undefined && { reportedToAmdm: Boolean(reportedToAmdm) }),
-        ...(amdmReportDate !== undefined && { amdmReportDate: amdmReportDate ? new Date(amdmReportDate) : null }),
-        ...(amdmReportRef !== undefined && { amdmReportRef: amdmReportRef?.trim() || null }),
-        updatedAt: new Date(),
-      },
-      include: {
-        devices: { select: { id: true, name: true, inventoryNumber: true } },
-        sections: { select: { id: true, name: true } },
-      },
-    });
-
-    await logAudit(req.user.id, 'UPDATE', id, { status: updated.status, severity: updated.severity });
+    const [updated] = await prisma.$transaction([
+      prisma.incidents.update({
+        where: { id },
+        data: {
+          ...(occurredAt && { occurredAt: new Date(occurredAt) }),
+          ...(description !== undefined && { description: description.trim() }),
+          ...(severity && { severity }),
+          ...(status && { status }),
+          ...(patientAffected !== undefined && { patientAffected: Boolean(patientAffected) }),
+          ...(patientHarm !== undefined && { patientHarm: patientHarm?.trim() || null }),
+          ...(rootCause !== undefined && { rootCause: rootCause?.trim() || null }),
+          ...(correctiveAction !== undefined && { correctiveAction: correctiveAction?.trim() || null }),
+          ...(preventiveAction !== undefined && { preventiveAction: preventiveAction?.trim() || null }),
+          ...(resolvedAt !== undefined && { resolvedAt: resolvedAt ? new Date(resolvedAt) : null }),
+          ...(reportedToAmdm !== undefined && { reportedToAmdm: Boolean(reportedToAmdm) }),
+          ...(amdmReportDate !== undefined && { amdmReportDate: amdmReportDate ? new Date(amdmReportDate) : null }),
+          ...(amdmReportRef !== undefined && { amdmReportRef: amdmReportRef?.trim() || null }),
+          updatedAt: new Date(),
+        },
+        include: {
+          devices: { select: { id: true, name: true, inventoryNumber: true } },
+          sections: { select: { id: true, name: true } },
+        },
+      }),
+      prisma.audit_logs.create({
+        data: createAuditLogData(req.user.sub, 'UPDATE', id, {
+          status: status || existing.status,
+          severity: severity || existing.severity
+        }),
+      }),
+    ]);
 
     res.json(updated);
   } catch (error) {
@@ -186,14 +215,19 @@ router.put('/:id', async (req, res) => {
 // DELETE /api/incidents/:id
 router.delete('/:id', async (req, res) => {
   try {
-    const id = parseInt(req.params.id);
-    if (!id) return res.status(400).json({ error: 'ID invalid' });
+    const idParse = idSchema.safeParse(req.params.id);
+    if (!idParse.success) return res.status(400).json({ error: 'ID invalid' });
+    const id = idParse.data;
 
     const existing = await prisma.incidents.findUnique({ where: { id } });
     if (!existing) return res.status(404).json({ error: 'Incident nu găsit' });
 
-    await prisma.incidents.delete({ where: { id } });
-    await logAudit(req.user.id, 'DELETE', id, { deviceId: existing.deviceId });
+    await prisma.$transaction([
+      prisma.incidents.delete({ where: { id } }),
+      prisma.audit_logs.create({
+        data: createAuditLogData(req.user.sub, 'DELETE', id, { deviceId: existing.deviceId }),
+      }),
+    ]);
 
     res.json({ message: 'Incident șters cu succes' });
   } catch (error) {

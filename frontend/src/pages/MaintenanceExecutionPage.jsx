@@ -12,9 +12,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Wrench, Save, Download, Edit, Trash2 } from 'lucide-react';
-import axios from 'axios';
-
-const api = axios.create({ baseURL: '/api' });
+import api from '../api/axios';
 
 // Schema validare
 const executionSchema = z.object({

@@ -296,13 +296,36 @@ export default function DeviceForm() {
 
     if (isValid) {
       setCurrentStep(s => s + 1);
+      return;
     }
-    // Dacă NU e valid, RHF a setat deja errors → câmpurile din step arată mesajele
+
+    // Focus pe primul câmp cu eroare
+    const firstErrorField = fields.find(f => errors[f]);
+    if (firstErrorField) {
+      const el = document.getElementById(firstErrorField);
+      if (el) {
+        // Pentru Select-uri, focusează pe inputul real
+        const selectInput = el.querySelector('input');
+        if (selectInput) {
+          selectInput.focus();
+        } else {
+          el.focus();
+        }
+      }
+    }
   };
 
   const handlePrev = () => {
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
+    }
+  };
+
+  const handleFormKeyDown = (e) => {
+    const isLastStep = currentStep === steps.length - 1;
+    if (e.key === 'Enter' && !isLastStep && e.target.tagName !== 'TEXTAREA') {
+      e.preventDefault();
+      handleNext();
     }
   };
 
@@ -331,7 +354,13 @@ export default function DeviceForm() {
           stepErrors={stepErrors}
         />
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <p className="sr-only" role="status" aria-live="polite" aria-atomic="true">
+          {Object.keys(errors).length > 0
+            ? `${Object.keys(errors).length} câmpuri necesită corectare în pasul curent`
+            : ''}
+        </p>
+
+        <form onSubmit={handleSubmit(onSubmit)} onKeyDown={handleFormKeyDown} className="space-y-6">
           {/* STEP 0: IDENTIFICARE */}
           {currentStep === 0 && (
             <div className="card-base p-6 animate-slide-up space-y-4">
@@ -427,16 +456,24 @@ export default function DeviceForm() {
                   <Controller
                     control={control}
                     name="riskClass"
-                    render={({ field }) => (
-                      <Select
-                        {...field}
-                        id="riskClass"
-                        options={RISK_CLASSES}
-                        value={RISK_CLASSES.find((r) => r.value === field.value)}
-                        onChange={(opt) => field.onChange(opt?.value)}
-                        isSearchable={false}
-                        styles={SELECT_STYLES}
-                      />
+                    render={({ field, fieldState }) => (
+                      <>
+                        <Select
+                          inputId="riskClass"
+                          options={RISK_CLASSES}
+                          value={RISK_CLASSES.find((r) => r.value === field.value) ?? null}
+                          onChange={(opt) => field.onChange(opt?.value)}
+                          onBlur={field.onBlur}
+                          isSearchable={false}
+                          styles={SELECT_STYLES}
+                          aria-invalid={!!fieldState.error}
+                        />
+                        {fieldState.error && (
+                          <p style={{ color: 'var(--color-error)' }} className="text-sm mt-1" role="alert">
+                            {fieldState.error.message}
+                          </p>
+                        )}
+                      </>
                     )}
                   />
                 </div>
@@ -448,16 +485,24 @@ export default function DeviceForm() {
                   <Controller
                     control={control}
                     name="status"
-                    render={({ field }) => (
-                      <Select
-                        {...field}
-                        id="status"
-                        options={STATUSES}
-                        value={STATUSES.find((s) => s.value === field.value)}
-                        onChange={(opt) => field.onChange(opt?.value)}
-                        isSearchable={false}
-                        styles={SELECT_STYLES}
-                      />
+                    render={({ field, fieldState }) => (
+                      <>
+                        <Select
+                          inputId="status"
+                          options={STATUSES}
+                          value={STATUSES.find((s) => s.value === field.value) ?? null}
+                          onChange={(opt) => field.onChange(opt?.value)}
+                          onBlur={field.onBlur}
+                          isSearchable={false}
+                          styles={SELECT_STYLES}
+                          aria-invalid={!!fieldState.error}
+                        />
+                        {fieldState.error && (
+                          <p style={{ color: 'var(--color-error)' }} className="text-sm mt-1" role="alert">
+                            {fieldState.error.message}
+                          </p>
+                        )}
+                      </>
                     )}
                   />
                 </div>
@@ -470,23 +515,26 @@ export default function DeviceForm() {
                 <Controller
                   control={control}
                   name="sectionId"
-                  render={({ field }) => (
-                    <Select
-                      {...field}
-                      id="sectionId"
-                      options={sectionOptions}
-                      value={sectionOptions.find((s) => s.value === field.value)}
-                      onChange={(opt) => field.onChange(opt?.value)}
-                      placeholder="Selectează secție"
-                      styles={SELECT_STYLES}
-                    />
+                  render={({ field, fieldState }) => (
+                    <>
+                      <Select
+                        inputId="sectionId"
+                        options={sectionOptions}
+                        value={sectionOptions.find((s) => s.value === field.value) ?? null}
+                        onChange={(opt) => field.onChange(opt?.value)}
+                        onBlur={field.onBlur}
+                        placeholder="Selectează secție"
+                        styles={SELECT_STYLES}
+                        aria-invalid={!!fieldState.error}
+                      />
+                      {fieldState.error && (
+                        <p style={{ color: 'var(--color-error)' }} className="text-sm mt-1" role="alert">
+                          {fieldState.error.message}
+                        </p>
+                      )}
+                    </>
                   )}
                 />
-                {errors.sectionId && (
-                  <p style={{ color: 'var(--color-error)' }} className="text-sm mt-1" role="alert">
-                    {errors.sectionId.message}
-                  </p>
-                )}
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -507,6 +555,11 @@ export default function DeviceForm() {
                       />
                     )}
                   />
+                  {errors.acquisitionDate && (
+                    <p style={{ color: 'var(--color-error)' }} className="text-sm mt-1" role="alert">
+                      {errors.acquisitionDate.message}
+                    </p>
+                  )}
                 </div>
 
                 <div>
@@ -526,6 +579,11 @@ export default function DeviceForm() {
                       />
                     )}
                   />
+                  {errors.warrantyExpiry && (
+                    <p style={{ color: 'var(--color-error)' }} className="text-sm mt-1" role="alert">
+                      {errors.warrantyExpiry.message}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
@@ -626,6 +684,11 @@ export default function DeviceForm() {
                         step="0.01"
                         className="input-base w-full"
                       />
+                      {errors.purchasePrice && (
+                        <p style={{ color: 'var(--color-error)' }} className="text-sm mt-1" role="alert">
+                          {errors.purchasePrice.message}
+                        </p>
+                      )}
                     </div>
 
                     <div>
@@ -668,6 +731,11 @@ export default function DeviceForm() {
                         className="input-base w-full"
                         placeholder="Ex: 12 (anual)"
                       />
+                      {errors.maintenanceSchedule && (
+                        <p style={{ color: 'var(--color-error)' }} className="text-sm mt-1" role="alert">
+                          {errors.maintenanceSchedule.message}
+                        </p>
+                      )}
                     </div>
                   </div>
 
@@ -711,10 +779,10 @@ export default function DeviceForm() {
                       className="input-base w-full"
                     />
                     {uploadingDoc && (
-                      <span className="text-sm mt-2 inline-block" style={{ color: 'var(--color-accent)' }}>⏳ Se încarcă...</span>
+                      <span className="text-sm mt-2 inline-block" role="status" aria-live="polite" style={{ color: 'var(--color-accent)' }}>⏳ Se încarcă...</span>
                     )}
                     {uploadSuccess && (
-                      <span className="text-sm mt-2 inline-block" style={{ color: 'var(--color-success)' }}>✓ Fișier încărcat</span>
+                      <span className="text-sm mt-2 inline-block" role="status" aria-live="polite" style={{ color: 'var(--color-success)' }}>✓ Fișier încărcat</span>
                     )}
                   </div>
                 </>

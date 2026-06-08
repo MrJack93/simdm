@@ -1,18 +1,20 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { MemoryRouter } from 'react-router-dom';
 import Login from '../../pages/Login';
 import { AuthContext } from '../../context/auth.context';
 
 // Helper: randează Login cu un context Auth controlat de test.
-// Componenta reală folosește useAuth().login (username + parolă),
-// fără validare client-side; eroarea vine din err.response.data.error.
+// Componenta folosește useNavigate() → necesită MemoryRouter.
 function renderLogin(loginImpl = vi.fn().mockResolvedValue(undefined)) {
   const value = { user: null, loading: false, login: loginImpl, logout: vi.fn() };
   render(
-    <AuthContext.Provider value={value}>
-      <Login />
-    </AuthContext.Provider>
+    <MemoryRouter>
+      <AuthContext.Provider value={value}>
+        <Login />
+      </AuthContext.Provider>
+    </MemoryRouter>
   );
   return { login: loginImpl };
 }

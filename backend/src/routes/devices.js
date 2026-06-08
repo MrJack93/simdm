@@ -59,8 +59,8 @@ const deviceUpdateSchema = deviceCreateSchema.partial().omit({ inventoryNumber: 
 
 const router = express.Router();
 
-// Apply auth middleware to all routes
-router.use(authMiddleware);
+// L1 Fix: Auth middleware now applied in index.js for consistency
+// router.use(authMiddleware); // REMOVED - auth is applied in index.js
 
 // Setup Multer for file uploads
 const uploadDir = path.join(__dirname, '../../uploads/devices');
@@ -101,6 +101,24 @@ const upload = multer({
   limits: { fileSize: 10 * 1024 * 1024 }, // 10MB
 });
 
+// Helper: Escape CSV field value to prevent injection
+function escapeCSVField(value) {
+  if (value === null || value === undefined) return '';
+
+  let str = String(value);
+
+  // Escape double quotes: " → ""
+  str = str.replace(/"/g, '""');
+
+  // Prevent formula injection: prefix cells starting with dangerous chars with apostrophe
+  if (/^[=+\-@\t\r]/.test(str)) {
+    str = "'" + str;
+  }
+
+  // Always wrap in quotes for safety
+  return `"${str}"`;
+}
+
 // ENDPOINT 1: GET /dropdown/sections — pentru form dropdown
 router.get('/dropdown/sections', async (req, res) => {
   try {
@@ -133,10 +151,20 @@ router.get('/export/xlsx', exportLimiter, async (req, res) => {
     if (riskClass) where.riskClass = riskClass;
     if (sectionId) where.sectionId = parseInt(sectionId);
 
+    // L6 Fix: Add export row limit to prevent memory issues
+    const exportRowLimit = parseInt(process.env.EXPORT_ROW_LIMIT || 10000);
+    const deviceCount = await prisma.devices.count({ where });
+    if (deviceCount > exportRowLimit) {
+      return res.status(400).json({
+        error: `Prea multe rânduri pentru export (${deviceCount}/${exportRowLimit}). Aplică filtre pentru a reduce setul.`,
+      });
+    }
+
     const devices = await prisma.devices.findMany({
       where,
       include: { sections: { select: { name: true } } },
       orderBy: { createdAt: 'desc' },
+      take: exportRowLimit,
     });
 
     const data = devices.map(d => ({
@@ -183,10 +211,20 @@ router.get('/export/csv', exportLimiter, async (req, res) => {
     if (riskClass) where.riskClass = riskClass;
     if (sectionId) where.sectionId = parseInt(sectionId);
 
+    // L6 Fix: Add export row limit to prevent memory issues
+    const exportRowLimit = parseInt(process.env.EXPORT_ROW_LIMIT || 10000);
+    const deviceCount = await prisma.devices.count({ where });
+    if (deviceCount > exportRowLimit) {
+      return res.status(400).json({
+        error: `Prea multe rânduri pentru export (${deviceCount}/${exportRowLimit}). Aplică filtre pentru a reduce setul.`,
+      });
+    }
+
     const devices = await prisma.devices.findMany({
       where,
       include: { sections: { select: { name: true } } },
       orderBy: { createdAt: 'desc' },
+      take: exportRowLimit,
     });
 
     res.setHeader('Content-Type', 'text/csv; charset=utf-8');
@@ -197,7 +235,18 @@ router.get('/export/csv', exportLimiter, async (req, res) => {
     res.write('Inv. Nr.,Denumire,Model,Producător,Clasa Risc,Status,Secție,Data Achiziție,Valoare\n');
 
     devices.forEach(d => {
-      res.write(`"${d.inventoryNumber}","${d.name}","${d.model || ''}","${d.manufacturer || ''}","${d.riskClass || ''}","${d.status}","${d.sections?.name || ''}","${d.acquisitionDate ? d.acquisitionDate.toISOString().split('T')[0] : ''}","${d.acquisitionValue || ''}"\n`);
+      const fields = [
+        d.inventoryNumber,
+        d.name,
+        d.model || '',
+        d.manufacturer || '',
+        d.riskClass || '',
+        d.status,
+        d.sections?.name || '',
+        d.acquisitionDate ? d.acquisitionDate.toISOString().split('T')[0] : '',
+        d.acquisitionValue || '',
+      ];
+      res.write(fields.map(escapeCSVField).join(',') + '\n');
     });
 
     res.end();
@@ -426,6 +475,16 @@ router.post('/:id/upload', upload.single('file'), antivirusMiddleware, async (re
     const allowedFields = ['manualUrl', 'certificateUrl', 'invoiceUrl', 'passportUrl'];
     const field = allowedFields.includes(req.body.field) ? req.body.field : 'manualUrl';
 
+    // M2 Fix: Verify device exists before saving file reference
+    const deviceExists = await prisma.devices.findUnique({ where: { id: deviceId } });
+    if (!deviceExists) {
+      // Delete uploaded file if device doesn't exist
+      fs.unlink(req.file.path, (err) => {
+        if (err) console.error('Error deleting orphaned file:', err.message);
+      });
+      return res.status(404).json({ error: 'Dispozitiv nu găsit' });
+    }
+
     const device = await prisma.devices.update({
       where: { id: deviceId },
       data: { [field]: fileUrl },
@@ -457,6 +516,12 @@ router.post('/:id/upload', upload.single('file'), antivirusMiddleware, async (re
     });
   } catch (error) {
     console.error('Error uploading file:', error);
+    // M2 Fix: Delete uploaded file on any error to prevent orphans
+    if (req.file) {
+      fs.unlink(req.file.path, (err) => {
+        if (err) console.error('Error deleting orphaned file:', err.message);
+      });
+    }
     res.status(500).json({ error: 'Eroare la încărcarea fișierului' });
   }
 });
@@ -479,13 +544,13 @@ router.get('/:id/fisa-pdf', exportLimiter, async (req, res) => {
     doc.pipe(res);
 
     // Header
-    doc.fontSize(16).font('Helvetica-Bold').text('FIȘA DISPOZITIVULUI MEDICAL', { align: 'center' });
-    doc.fontSize(10).font('Helvetica').text('Format SIMDM (AMDM) · Ordinul MS nr. 889/2024', { align: 'center' });
+    doc.fontSize(16).font('Times-Bold').text('FIȘA DISPOZITIVULUI MEDICAL', { align: 'center' });
+    doc.fontSize(10).font('Times-Roman').text('Format SIMDM (AMDM) · Ordinul MS nr. 889/2024', { align: 'center' });
     doc.moveDown();
 
     // Section 1: Identification
-    doc.fontSize(12).font('Helvetica-Bold').text('1. IDENTIFICARE');
-    doc.fontSize(10).font('Helvetica');
+    doc.fontSize(12).font('Times-Bold').text('1. IDENTIFICARE');
+    doc.fontSize(10).font('Times-Roman');
     doc.text(`Numărul Inventarului: ${device.inventoryNumber}`);
     doc.text(`Denumire: ${device.name}`);
     doc.text(`Seria: ${device.serialNumber || '—'}`);
@@ -495,16 +560,16 @@ router.get('/:id/fisa-pdf', exportLimiter, async (req, res) => {
     doc.moveDown();
 
     // Section 2: Classification
-    doc.fontSize(12).font('Helvetica-Bold').text('2. CLASIFICARE');
-    doc.fontSize(10).font('Helvetica');
+    doc.fontSize(12).font('Times-Bold').text('2. CLASIFICARE');
+    doc.fontSize(10).font('Times-Roman');
     doc.text(`Clasa de risc: ${device.riskClass || '—'}`);
     doc.text(`Marcaj CE: ${device.ceMarking || '—'}`);
     doc.text(`Cod CND: ${device.cndCode || '—'}`);
     doc.moveDown();
 
     // Section 3: Status & Operation
-    doc.fontSize(12).font('Helvetica-Bold').text('3. STATUS & EXPLOATARE');
-    doc.fontSize(10).font('Helvetica');
+    doc.fontSize(12).font('Times-Bold').text('3. STATUS & EXPLOATARE');
+    doc.fontSize(10).font('Times-Roman');
     doc.text(`Status: ${device.status}`);
     doc.text(`Secție: ${device.sections?.name || '—'}`);
     doc.text(`Cameră/Locație: ${device.room || '—'}`);
@@ -512,8 +577,8 @@ router.get('/:id/fisa-pdf', exportLimiter, async (req, res) => {
     doc.moveDown();
 
     // Section 4: Financial Data
-    doc.fontSize(12).font('Helvetica-Bold').text('4. DATE FINANCIARE');
-    doc.fontSize(10).font('Helvetica');
+    doc.fontSize(12).font('Times-Bold').text('4. DATE FINANCIARE');
+    doc.fontSize(10).font('Times-Roman');
     doc.text(`Data achiziției: ${device.acquisitionDate ? device.acquisitionDate.toLocaleDateString('ro-RO') : '—'}`);
     doc.text(`Valoare achiziție: ${device.acquisitionValue ? device.acquisitionValue + ' ' + device.currency : '—'}`);
     doc.text(`Valoare reziduală: ${device.residualValue || '—'}`);
@@ -521,8 +586,8 @@ router.get('/:id/fisa-pdf', exportLimiter, async (req, res) => {
     doc.moveDown();
 
     // Section 5: Technical Data
-    doc.fontSize(12).font('Helvetica-Bold').text('5. DATE TEHNICE');
-    doc.fontSize(10).font('Helvetica');
+    doc.fontSize(12).font('Times-Bold').text('5. DATE TEHNICE');
+    doc.fontSize(10).font('Times-Roman');
     doc.text(`Tensiune: ${device.voltage || '—'}`);
     doc.text(`Frecvență: ${device.frequency || '—'}`);
     doc.text(`Putere: ${device.power || '—'}`);
@@ -531,8 +596,8 @@ router.get('/:id/fisa-pdf', exportLimiter, async (req, res) => {
 
     // Section 6: Notes
     if (device.notes) {
-      doc.fontSize(12).font('Helvetica-Bold').text('6. OBSERVAȚII');
-      doc.fontSize(10).font('Helvetica').text(device.notes);
+      doc.fontSize(12).font('Times-Bold').text('6. OBSERVAȚII');
+      doc.fontSize(10).font('Times-Roman').text(device.notes);
       doc.moveDown();
     }
 
@@ -545,6 +610,50 @@ router.get('/:id/fisa-pdf', exportLimiter, async (req, res) => {
   } catch (error) {
     console.error('Error generating PDF:', error);
     res.status(500).json({ error: 'Eroare la generarea PDF' });
+  }
+});
+
+// M3 Fix: Authenticated file serving endpoint (replaces public /uploads)
+// GET /api/devices/file/:filename — serve files with auth check
+router.get('/file/:filename', authMiddleware, async (req, res) => {
+  try {
+    const { filename } = req.params;
+
+    // Security: Prevent directory traversal attacks
+    if (filename.includes('..') || filename.includes('/') || filename.includes('\\')) {
+      return res.status(400).json({ error: 'Invalid filename' });
+    }
+
+    const filePath = path.join(__dirname, '../../uploads/devices', filename);
+
+    // Verify file exists and is in uploads directory
+    if (!fs.existsSync(filePath)) {
+      return res.status(404).json({ error: 'Fișier nu găsit' });
+    }
+
+    // Ensure resolved path is still within uploads directory (prevent escaping)
+    const uploadsDir = path.resolve(path.join(__dirname, '../../uploads/devices'));
+    const resolvedPath = path.resolve(filePath);
+    if (!resolvedPath.startsWith(uploadsDir)) {
+      return res.status(400).json({ error: 'Acces interzis' });
+    }
+
+    // Log file access in audit trail
+    await prisma.audit_logs.create({
+      data: {
+        userId: req.user.sub,
+        action: 'FILE_ACCESS',
+        entity: 'File',
+        entityId: filename,
+        changes: { filename, timestamp: new Date().toISOString() },
+      },
+    }).catch(err => console.error('Audit log error:', err.message));
+
+    // Send file with appropriate headers
+    res.download(filePath);
+  } catch (error) {
+    console.error('Error serving file:', error);
+    res.status(500).json({ error: 'Eroare la descărcarea fișierului' });
   }
 });
 

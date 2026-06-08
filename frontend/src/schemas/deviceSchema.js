@@ -1,6 +1,17 @@
 import { z } from 'zod';
 
+// Schema este aliniată 1-la-1 cu câmpurile din DeviceForm.jsx.
+// Câmpurile care existau în versiunea precedentă dar NU sunt în formular
+// (warrantyEndDate, acquisitionValue, residualValue, maintenanceFreq, room)
+// au fost redenumite/aliniate cu ce trimite efectiv formularul.
+
+// Helper: normalizează stringuri goale și null la undefined pentru câmpuri opționale.
+// Previne stockarea datelor „murdare" în baza de date medicale.
+const emptyToUndef = (schema) =>
+  z.preprocess((v) => (v === '' || v === null ? undefined : v), schema.optional());
+
 export const deviceSchema = z.object({
+  // ── Step 0: Identificare ────────────────────────────────────────────────────
   inventoryNumber: z
     .string()
     .min(1, 'Numărul inventarului este obligatoriu')
@@ -10,52 +21,28 @@ export const deviceSchema = z.object({
     .string()
     .min(3, 'Denumirea trebuie să aibă cel puțin 3 caractere'),
 
-  serialNumber: z
-    .string()
-    .optional()
-    .or(z.literal('')),
+  model: emptyToUndef(z.string()),
 
-  model: z
-    .string()
-    .optional()
-    .or(z.literal('')),
+  serialNumber: emptyToUndef(z.string()),
 
-  manufacturer: z
-    .string()
-    .optional()
-    .or(z.literal('')),
+  manufacturer: emptyToUndef(z.string()),
 
-  countryOfOrigin: z
-    .string()
-    .optional()
-    .or(z.literal('')),
+  yearMade: emptyToUndef(
+    z.coerce
+      .number()
+      .int()
+      .min(1900, 'Anul trebuie să fie după 1900')
+      .max(new Date().getFullYear() + 1, 'Anul nu poate fi în viitor')
+  ),
 
-  yearMade: z
-    .coerce
-    .number()
-    .int()
-    .min(1900)
-    .max(new Date().getFullYear() + 1)
-    .optional()
-    .or(z.literal('')),
-
+  // ── Step 1: Clasificare ─────────────────────────────────────────────────────
   riskClass: z.enum(['I', 'IIa', 'IIb', 'III'], {
-    errorMap: () => ({ message: 'Clasa de risc invalid' }),
-  }),
-
-  ceMarking: z
-    .string()
-    .optional()
-    .or(z.literal('')),
-
-  cndCode: z
-    .string()
-    .optional()
-    .or(z.literal('')),
+    errorMap: () => ({ message: 'Selectați o clasă de risc din listă' }),
+  }).or(z.literal('')),
 
   status: z.enum(
     ['FUNCTIONAL', 'IN_REPARATIE', 'DEFECT', 'CASAT', 'IMPRUMUTAT', 'REZERVA'],
-    { errorMap: () => ({ message: 'Status invalid' }) }
+    { errorMap: () => ({ message: 'Selectați un status din listă' }) }
   ),
 
   sectionId: z
@@ -64,71 +51,50 @@ export const deviceSchema = z.object({
     .int()
     .min(1, 'Selectați o secție'),
 
-  room: z
-    .string()
-    .optional()
-    .or(z.literal('')),
-
+  // Câmpul din formular este `acquisitionDate` (Controller cu DatePicker)
   acquisitionDate: z
     .coerce
     .date()
     .nullable()
     .optional(),
 
-  warrantyEndDate: z
+  // Câmpul din formular este `warrantyExpiry` (Controller cu DatePicker)
+  // Vechiul naam era `warrantyEndDate` — a cauzat validare silențios ruptă
+  warrantyExpiry: z
     .coerce
     .date()
     .nullable()
     .optional(),
 
-  acquisitionValue: z
-    .coerce
-    .number()
-    .min(0, 'Valoarea trebuie să fie >= 0')
-    .optional()
-    .or(z.literal('')),
+  // ── Step 2: Câmpuri avansate (opționale) ────────────────────────────────────
+  location: emptyToUndef(z.string()),
 
-  residualValue: z
-    .coerce
-    .number()
-    .min(0, 'Valoarea trebuie să fie >= 0')
-    .optional()
-    .or(z.literal('')),
+  countryOfOrigin: emptyToUndef(z.string()),
+
+  // Câmpul din formular este `purchasePrice` (input type=number, step=0.01)
+  // Vechiul name era `acquisitionValue`
+  purchasePrice: emptyToUndef(
+    z.coerce
+      .number()
+      .min(0, 'Prețul trebuie să fie >= 0')
+  ),
 
   currency: z
     .string()
     .default('MDL'),
 
-  voltage: z
-    .string()
-    .optional()
-    .or(z.literal('')),
+  ceMarking: emptyToUndef(z.string()),
 
-  frequency: z
-    .string()
-    .optional()
-    .or(z.literal('')),
+  cndCode: emptyToUndef(z.string()),
 
-  power: z
-    .string()
-    .optional()
-    .or(z.literal('')),
+  // Câmpul din formular este `maintenanceSchedule` (input type=number, placeholder "Ex: 12")
+  // Vechiul name era `maintenanceFreq`
+  maintenanceSchedule: emptyToUndef(
+    z.coerce
+      .number()
+      .int()
+      .min(1, 'Minim 1 lună')
+  ),
 
-  accessories: z
-    .string()
-    .optional()
-    .or(z.literal('')),
-
-  maintenanceFreq: z
-    .coerce
-    .number()
-    .int()
-    .min(1)
-    .optional()
-    .or(z.literal('')),
-
-  notes: z
-    .string()
-    .optional()
-    .or(z.literal('')),
+  notes: emptyToUndef(z.string()),
 });

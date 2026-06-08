@@ -1,8 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import api from '../api/axios';
+import { getToken, setToken, clearToken } from '../api/tokenStore';
 import { AuthContext } from './auth.context';
 
+/** @typedef {import('../types').User} User */
+
+/** @param {{ children: React.ReactNode }} props */
 export function AuthProvider({ children }) {
+  /** @type {[User|null, React.Dispatch<React.SetStateAction<User|null>>]} */
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -10,12 +15,12 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const token = sessionStorage.getItem('accessToken');
+        const token = getToken();
         if (!token) {
           // Încearcă refresh în caz că cookie-ul există
           try {
             const { data } = await api.post('/auth/refresh');
-            sessionStorage.setItem('accessToken', data.accessToken);
+            setToken(data.accessToken);
           } catch {
             // Nu e ok, nu sunt logat
             setUser(null);
@@ -37,24 +42,29 @@ export function AuthProvider({ children }) {
     checkAuth();
   }, []);
 
-  const login = async (username, password) => {
+  const login = useCallback(async (username, password) => {
     const { data } = await api.post('/auth/login', { username, password });
-    sessionStorage.setItem('accessToken', data.accessToken);
+    setToken(data.accessToken);
     setUser(data.user);
-  };
+  }, []);
 
-  const logout = async () => {
+  const logout = useCallback(async () => {
     try {
       await api.post('/auth/logout');
     } catch (error) {
       console.error('[AuthContext] Logout error:', error.message);
     }
-    sessionStorage.removeItem('accessToken');
+    clearToken();
     setUser(null);
-  };
+  }, []);
+
+  const value = useMemo(
+    () => ({ user, loading, login, logout }),
+    [user, loading, login, logout]
+  );
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout }}>
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,9 +1,10 @@
 # SPEC — Specificație Tehnică SIMDM
 
-**Versiune:** 2.2 (Faza 1-2 Completă + Design System 100/100 + Production Ready)  
-**Actualizat:** 2026-06-04  
+**Versiune:** 3.0 (Faza 1-2 auditate & remediate · Faza 3 în lucru)  
+**Actualizat:** 2026-06-08  
 **Audiență:** Developeri, Arhitecți, PM  
-**Status:** ✅ Faza 1-2 Aprobate (176 tests, 95.36% backend, 91.99% frontend, Docker optimized) | ✅ Design System 100/100 WCAG 2.1 AA
+**Status:** ✅ Faza 1-2 complete + audit de securitate trecut (remedieri aplicate) | 🔧 Faza 3 în lucru — vezi [tasks/PLAN-FAZA3-DETALIAT.md](tasks/PLAN-FAZA3-DETALIAT.md)  
+**Notă:** §15 de mai jos e overview-ul Fazei 3; planul executabil pas-cu-pas este în `tasks/PLAN-FAZA3-DETALIAT.md`.
 
 ---
 
@@ -515,10 +516,10 @@ Frontend-ul este **100% accesibil:**
 |----------|----------|------|
 | **GETTING-STARTED.md** | Bioinginer, dev nou | [Link](GETTING-STARTED.md) |
 | **CLAUDE.md** | AI + backend dev | [Link](CLAUDE.md) |
-| **Design System** | Frontend dev | [docs/1-DESIGN-AND-ACCESSIBILITY.md](docs/1-DESIGN-AND-ACCESSIBILITY.md) |
+| **Design System** | Frontend dev | [docs/DESIGN-SYSTEM.md](docs/DESIGN-SYSTEM.md) |
 | **Developer Guide** | Frontend dev | [docs/2-DEVELOPER-GUIDE.md](docs/2-DEVELOPER-GUIDE.md) |
 | **Contributing** | Toți | [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) |
-| **Project Plan** | PM | [tasks/plan.md](tasks/plan.md) |
+| **Project Plan** | PM | [tasks/PLAN-FAZA3-DETALIAT.md](tasks/PLAN-FAZA3-DETALIAT.md) |
 | **API Docs** | Backend dev | *(generat swagger — Faza 3+)* |
 
 ---
@@ -537,7 +538,7 @@ Frontend-ul este **100% accesibil:**
 
 ---
 
-**Următor:** Start Faza 2 (Inventar DM) — citire [tasks/plan.md](tasks/plan.md)
+**Următor:** Start Faza 2 (Inventar DM) — citire [tasks/PLAN-FAZA3-DETALIAT.md](tasks/PLAN-FAZA3-DETALIAT.md)
 
 ---
 
@@ -626,14 +627,4 @@ Implementează sistemul complet de mentenanță în 5 pași, bazat pe Proceduril
 - serviceContracts.test.js: 6+ tests
 - jobs/notifications.test.js: 4+ tests
 
-E2E: 5+ scenario tests (login → plan → execute → ticket → reparație → PDF)
-
-### 15.9 Dependințe
-
-**Frontend:** 
-pm install react-big-calendar date-fns react-signature-canvas
-**Backend:** 
-pm install node-cron
-
----
-
+E2E: 5+ scenario tests (login → plan → execute → ticket → reparație

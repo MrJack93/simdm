@@ -1,34 +1,49 @@
 import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { Eye, EyeOff } from 'lucide-react';
 
+// Schema validare — mesaje în română, consistente cu restul aplicației
+const loginSchema = z.object({
+  username: z.string().min(1, 'Utilizatorul este obligatoriu'),
+  password: z.string().min(1, 'Parola este obligatorie'),
+});
+
+const features = [
+  { icon: '📋', title: 'Inventar Centralizat',   desc: 'Gestiune completă a dispozitivelor medicale cu clasificare pe secții și status tracking în timp real' },
+  { icon: '🔧', title: 'Planificare Mentenanță',  desc: 'Mentenanță preventivă și corectivă cu calendar inteligent și notificări automate' },
+  { icon: '⚠️', title: 'Vigilență și Incidente', desc: 'Raportare incidente și gestionare riscuri medicale conform standardelor' },
+];
+
 export default function Login() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+  // Erori venite de la server (credențiale greșite, conexiune etc.)
+  // Separate de erorile de validare client gestionate de RHF.
+  const [serverError, setServerError] = useState('');
   const { login } = useAuth();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: zodResolver(loginSchema),
+    mode: 'onBlur', // Validare la pierderea focusului — feedback rapid, non-intruziv
+  });
+
+  const onSubmit = async ({ username, password }) => {
+    setServerError('');
     try {
       await login(username, password);
+      navigate('/');
     } catch (err) {
-      const msg = err.response?.data?.error || 'Eroare de conectare. Încearcă din nou.';
-      setError(msg);
-    } finally {
-      setLoading(false);
+      setServerError(err.response?.data?.error || 'Eroare de conectare. Încearcă din nou.');
     }
   };
-
-  const features = [
-    { icon: '📋', title: 'Inventar Centralizat',    desc: 'Gestiune completă a dispozitivelor medicale cu clasificare pe secții și status tracking în timp real' },
-    { icon: '🔧', title: 'Planificare Mentenanță',   desc: 'Mentenanță preventivă și corectivă cu calendar inteligent și notificări automate' },
-    { icon: '⚠️', title: 'Vigilență și Incidente',  desc: 'Raportare incidente și gestionare riscuri medicale conform standardelor' },
-  ];
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row" style={{ backgroundColor: 'var(--color-bg-primary)' }}>
@@ -91,23 +106,33 @@ export default function Login() {
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} noValidate className="space-y-5">
+          <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
+
             {/* Username */}
             <div>
               <label htmlFor="username" className="label-base">Utilizator</label>
               <input
+                {...register('username')}
                 id="username"
                 type="text"
-                value={username}
-                onChange={e => setUsername(e.target.value)}
-                className="input-base"
+                className={`input-base${errors.username ? ' border-[var(--color-error)]' : ''}`}
                 placeholder="bioinginer"
                 autoComplete="username"
                 autoFocus
-                disabled={loading}
-                required
-                aria-required="true"
+                disabled={isSubmitting}
+                aria-invalid={!!errors.username}
+                aria-describedby={errors.username ? 'username-error' : undefined}
               />
+              {errors.username && (
+                <p
+                  id="username-error"
+                  role="alert"
+                  className="text-sm mt-1"
+                  style={{ color: 'var(--color-error)' }}
+                >
+                  {errors.username.message}
+                </p>
+              )}
             </div>
 
             {/* Password */}
@@ -115,49 +140,62 @@ export default function Login() {
               <label htmlFor="password" className="label-base">Parolă</label>
               <div className="relative">
                 <input
+                  {...register('password')}
                   id="password"
                   type={showPassword ? 'text' : 'password'}
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                  className="input-base pr-12"
+                  className={`input-base pr-12${errors.password ? ' border-[var(--color-error)]' : ''}`}
                   placeholder="••••••••"
                   autoComplete="current-password"
-                  disabled={loading}
-                  required
-                  aria-required="true"
+                  disabled={isSubmitting}
+                  aria-invalid={!!errors.password}
+                  aria-describedby={errors.password ? 'password-error' : undefined}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(v => !v)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:opacity-70 transition-opacity"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded hover:opacity-70 transition-opacity focus-visible:outline-none focus-visible:ring-2"
                   aria-label={showPassword ? 'Ascunde parola' : 'Arată parola'}
-                  style={{ color: 'var(--color-text-secondary)' }}
+                  aria-pressed={showPassword}
+                  style={{
+                    color: 'var(--color-text-secondary)',
+                    '--tw-ring-color': 'var(--color-accent)',
+                  }}
                 >
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
+              {errors.password && (
+                <p
+                  id="password-error"
+                  role="alert"
+                  className="text-sm mt-1"
+                  style={{ color: 'var(--color-error)' }}
+                >
+                  {errors.password.message}
+                </p>
+              )}
             </div>
 
-            {/* Error */}
-            {error && (
+            {/* Eroare server (credențiale invalide, eroare rețea etc.) */}
+            {serverError && (
               <div
                 role="alert"
                 className="p-4 rounded-lg border flex items-start gap-3"
                 style={{ backgroundColor: 'var(--color-error-bg)', borderColor: 'var(--color-error)', color: 'var(--color-error)' }}
               >
                 <span className="text-lg mt-0.5" aria-hidden="true">⚠️</span>
-                <p className="text-sm">{error}</p>
+                <p className="text-sm">{serverError}</p>
               </div>
             )}
 
             <button
               type="submit"
-              disabled={loading}
-              aria-busy={loading}
+              disabled={isSubmitting}
+              aria-busy={isSubmitting}
               className="btn-primary w-full mt-6 flex items-center justify-center gap-2"
             >
-              {loading && <div className="loading-spinner loading-spinner-sm" />}
-              {loading ? 'Se conectează…' : 'Conectare'}
+              {isSubmitting && <div className="loading-spinner loading-spinner-sm" />}
+              {isSubmitting ? 'Se conectează…' : 'Conectare'}
             </button>
           </form>
 

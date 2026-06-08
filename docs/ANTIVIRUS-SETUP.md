@@ -21,15 +21,20 @@ SIMDM implementează **securitate multi-strat pentru documentele medicale**:
 
 ## Arhitectură securitate
 
-### Mediul de dezvoltare
+### Mediul de dezvoltare (Local)
 - ✅ Validarea tipului de fișier (magic bytes)
 - ✅ Validarea dimensiunii
-- ⚠️ ClamAV opțional (dezactivat implicit)
+- ⚠️ ClamAV opțional (cu opțiune local de dezactivare)
 
-### Mediul de producție
+### Mediul de dezvoltare (Docker)
 - ✅ Validarea tipului de fișier (magic bytes)
 - ✅ Validarea dimensiunii
-- ✅ Scanare ClamAV (OBLIGATORIE)
+- ✅ Scanare ClamAV (ACTIVATĂ în docker-compose.yml)
+
+### Mediul de producție (Spital LAN)
+- ✅ Validarea tipului de fișier (magic bytes)
+- ✅ Validarea dimensiunii
+- ✅ Scanare ClamAV (OBLIGATORIE cu definiții virale actualizate)
 
 ---
 
@@ -49,31 +54,28 @@ npm run dev
 # Încarcă fișiere → Doar validare tip
 ```
 
-### Pasul 3: Configurare producție cu ClamAV
+### Pasul 3: Configurare cu ClamAV
 
-#### Opțiunea A: Docker (Recomandat)
+#### Opțiunea A: Docker (Recomandat — IMPLICIT ACTIVAT)
 
-Adaugă la `docker-compose.yml`:
+ClamAV este deja configurat în `docker-compose.yml` și activat automat:
 
 ```yaml
 clamav:
-  image: clamav/clamav:1.4
+  image: clamav/clamav:latest
+  restart: unless-stopped
   container_name: simdm-clamav
   ports:
     - "3310:3310"
   volumes:
-    - clamav-data:/var/lib/clamav
-  environment:
-    - FRESHCLAM_CHECKS=24
-  healthcheck:
-    test: ["CMD", "clamscan", "--version"]
-    interval: 10s
-    timeout: 5s
-    retries: 3
-
-volumes:
-  clamav-data:
+    - clamav_data:/var/lib/clamav
+  networks:
+    - simdm_network
 ```
+
+Backend se conectează automat la `clamav:3310` pe rețeaua Docker.
+
+**Nu e nevoie să adaugi nimic — deja e în fișier!**
 
 #### Opțiunea B: Linux (ClamAV Daemon)
 

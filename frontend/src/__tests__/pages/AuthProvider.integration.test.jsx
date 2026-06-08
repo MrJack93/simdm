@@ -4,6 +4,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { AuthProvider } from '../../context/AuthProvider';
 import { useAuth } from '../../hooks/useAuth';
 import api from '../../api/axios';
+import { setToken, clearToken, getToken } from '../../api/tokenStore';
 
 // Teste de integrare pentru AuthProvider + useAuth.
 // AuthProvider rulează un bootstrap (checkAuth) la montare folosind instanța
@@ -33,7 +34,7 @@ function renderProvider() {
 describe('AuthProvider + useAuth (lifecycle)', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    sessionStorage.clear();
+    clearToken();
     // Implicit: GET /auth/me eșuează (neautentificat) dacă testul nu specifică altceva.
     api.get.mockRejectedValue(new Error('unauthorized'));
     api.post.mockRejectedValue(new Error('no session'));
@@ -45,8 +46,8 @@ describe('AuthProvider + useAuth (lifecycle)', () => {
     expect(screen.getByTestId('user')).toHaveTextContent('none');
   });
 
-  it('bootstrap cu access token valid în sessionStorage hidratează user-ul din /auth/me', async () => {
-    sessionStorage.setItem('accessToken', 'token-valid');
+  it('bootstrap cu access token valid în tokenStore hidratează user-ul din /auth/me', async () => {
+    setToken('token-valid');
     api.get.mockResolvedValue({ data: { user: { id: 1, username: 'bioinginer' } } });
 
     renderProvider();
@@ -65,10 +66,10 @@ describe('AuthProvider + useAuth (lifecycle)', () => {
     renderProvider();
     await waitFor(() => expect(screen.getByTestId('user')).toHaveTextContent('refreshed'));
     expect(api.post).toHaveBeenCalledWith('/auth/refresh');
-    expect(sessionStorage.getItem('accessToken')).toBe('nou');
+    expect(getToken()).toBe('nou');
   });
 
-  it('login stochează accessToken în sessionStorage și setează user-ul', async () => {
+  it('login stochează accessToken în tokenStore și setează user-ul', async () => {
     const user = userEvent.setup();
     renderProvider();
     await waitFor(() => expect(screen.getByTestId('loading')).toHaveTextContent('false'));
@@ -80,17 +81,17 @@ describe('AuthProvider + useAuth (lifecycle)', () => {
     await user.click(screen.getByRole('button', { name: 'do-login' }));
 
     await waitFor(() => expect(screen.getByTestId('user')).toHaveTextContent('bioinginer'));
-    expect(sessionStorage.getItem('accessToken')).toBe('tok-login');
+    expect(getToken()).toBe('tok-login');
     expect(api.post).toHaveBeenCalledWith('/auth/login', {
       username: 'bioinginer',
       password: 'parola',
     });
   });
 
-  it('logout resetează user-ul la null și șterge accessToken-ul din sessionStorage', async () => {
+  it('logout resetează user-ul la null și șterge accessToken-ul din tokenStore', async () => {
     const user = userEvent.setup();
     // Pornește autentificat.
-    sessionStorage.setItem('accessToken', 'token-valid');
+    setToken('token-valid');
     api.get.mockResolvedValue({ data: { user: { id: 1, username: 'bioinginer' } } });
     renderProvider();
     await waitFor(() => expect(screen.getByTestId('user')).toHaveTextContent('bioinginer'));
@@ -99,13 +100,13 @@ describe('AuthProvider + useAuth (lifecycle)', () => {
     await user.click(screen.getByRole('button', { name: 'do-logout' }));
 
     await waitFor(() => expect(screen.getByTestId('user')).toHaveTextContent('none'));
-    expect(sessionStorage.getItem('accessToken')).toBeNull();
+    expect(getToken()).toBeNull();
     expect(api.post).toHaveBeenCalledWith('/auth/logout');
   });
 
   it('logout curăță starea locală chiar dacă apelul către server eșuează', async () => {
     const user = userEvent.setup();
-    sessionStorage.setItem('accessToken', 'token-valid');
+    setToken('token-valid');
     api.get.mockResolvedValue({ data: { user: { id: 1, username: 'bioinginer' } } });
     renderProvider();
     await waitFor(() => expect(screen.getByTestId('user')).toHaveTextContent('bioinginer'));
@@ -115,7 +116,7 @@ describe('AuthProvider + useAuth (lifecycle)', () => {
     await user.click(screen.getByRole('button', { name: 'do-logout' }));
 
     await waitFor(() => expect(screen.getByTestId('user')).toHaveTextContent('none'));
-    expect(sessionStorage.getItem('accessToken')).toBeNull();
+    expect(getToken()).toBeNull();
   });
 });
 
@@ -132,7 +133,7 @@ describe('useAuth (hook guard)', () => {
 
   it('returnează contextul intact când este folosit în interiorul AuthProvider', async () => {
     api.get.mockResolvedValue({ data: { user: { id: 1, username: 'bioinginer' } } });
-    sessionStorage.setItem('accessToken', 'token-valid');
+    setToken('token-valid');
 
     const { result } = renderHook(() => useAuth(), {
       wrapper: ({ children }) => <AuthProvider>{children}</AuthProvider>,

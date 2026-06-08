@@ -1,10 +1,11 @@
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import InventoryPage from '../../pages/InventoryPage';
+import InventoryPage from '../../pages/InventoryPageV2';
 import { renderWithProviders } from '../helpers/renderWithProviders.jsx';
 import api from '../../api/axios';
 
+// Dispozitive de test — folosesc `section` (string) conform InventoryPageV2
 const SAMPLE_DEVICES = [
   {
     id: 1,
@@ -14,7 +15,7 @@ const SAMPLE_DEVICES = [
     manufacturer: 'Philips',
     riskClass: 'IIb',
     status: 'FUNCTIONAL',
-    sections: { name: 'ATI' },
+    section: 'ATI',
   },
   {
     id: 2,
@@ -24,19 +25,12 @@ const SAMPLE_DEVICES = [
     manufacturer: 'GE',
     riskClass: 'IIa',
     status: 'DEFECT',
-    sections: { name: 'Bloc Operator' },
+    section: 'Bloc Operator',
   },
 ];
 
-// Router pe URL: dispozitivele, secțiile (dropdown) și consumabilele (AlertsWidget).
 function mockApiRouter(devices = SAMPLE_DEVICES) {
   api.get.mockImplementation((url) => {
-    if (url.startsWith('/devices/dropdown/sections')) {
-      return Promise.resolve({ data: [{ id: 1, name: 'ATI' }, { id: 2, name: 'Bloc Operator' }] });
-    }
-    if (url.startsWith('/consumables')) {
-      return Promise.resolve({ data: { consumables: [] } });
-    }
     if (url.startsWith('/devices')) {
       return Promise.resolve({
         data: { devices, pagination: { total: devices.length, pages: 1 } },
@@ -59,175 +53,135 @@ describe('InventoryPage', () => {
     expect(screen.getByRole('table')).toBeInTheDocument();
   });
 
-  it('afișează coloanele Nr. Inventar, Denumire, Status și Secție', async () => {
+  it('afișează coloanele Dispozitiv, Inv. Nr., Status și Secție', async () => {
     renderWithProviders(<InventoryPage />);
     await screen.findByText('DM-2024-001');
-    expect(screen.getByRole('columnheader', { name: 'Nr. Inventar' })).toBeInTheDocument();
-    expect(screen.getByRole('columnheader', { name: 'Denumire / Model' })).toBeInTheDocument();
+    expect(screen.getByRole('columnheader', { name: 'Dispozitiv' })).toBeInTheDocument();
+    expect(screen.getByRole('columnheader', { name: 'Inv. Nr.' })).toBeInTheDocument();
     expect(screen.getByRole('columnheader', { name: 'Status' })).toBeInTheDocument();
     expect(screen.getByRole('columnheader', { name: 'Secție' })).toBeInTheDocument();
   });
 
-  it('refiltrarea după status declanșează un nou fetch cu ?status=DEFECT', async () => {
+  it('filtrarea după status afișează doar dispozitivele cu acel status', async () => {
     const user = userEvent.setup();
     renderWithProviders(<InventoryPage />);
     await screen.findByText('DM-2024-001');
 
-    await user.selectOptions(screen.getByLabelText('Status'), 'DEFECT');
+    await user.selectOptions(screen.getByLabelText('Filtru status'), 'DEFECT');
 
     await waitFor(() => {
-      const statusCall = api.get.mock.calls.find(
-        ([url]) => url.includes('/devices?') && url.includes('status=DEFECT')
-      );
-      expect(statusCall).toBeTruthy();
+      expect(screen.getByText('Monitor pacient')).toBeInTheDocument();
+      expect(screen.queryByText('Defibrilator')).not.toBeInTheDocument();
     });
   });
 
-  it('căutarea declanșează un nou fetch cu ?search=', async () => {
+  it('căutarea filtrează dispozitivele în timp real', async () => {
     const user = userEvent.setup();
     renderWithProviders(<InventoryPage />);
     await screen.findByText('DM-2024-001');
 
-    await user.type(screen.getByLabelText('Căutare'), 'Monitor');
+    await user.type(screen.getByLabelText(/Căutare/), 'Monitor');
 
     await waitFor(() => {
-      const searchCall = api.get.mock.calls.find(
-        ([url]) => url.includes('/devices?') && url.includes('search=Monitor')
-      );
-      expect(searchCall).toBeTruthy();
+      expect(screen.getByText('Monitor pacient')).toBeInTheDocument();
+      expect(screen.queryByText('Defibrilator')).not.toBeInTheDocument();
     });
   });
 
-  it('butoanele de export Excel și CSV sunt vizibile și pot fi apăsate', async () => {
+  it('butoanele de vizualizare (tabel/carduri/kanban) sunt vizibile și schimbă view-ul', async () => {
     const user = userEvent.setup();
     renderWithProviders(<InventoryPage />);
     await screen.findByText('DM-2024-001');
 
-    const excelBtn = screen.getByRole('button', { name: /Export Excel/ });
-    const csvBtn = screen.getByRole('button', { name: /Export CSV/ });
-    expect(excelBtn).toBeInTheDocument();
-    expect(csvBtn).toBeInTheDocument();
+    const cardsBtn = screen.getByRole('button', { name: 'Carduri' });
+    expect(cardsBtn).toBeInTheDocument();
+    await user.click(cardsBtn);
+    expect(cardsBtn).toHaveAttribute('aria-pressed', 'true');
+  });
 
-    await user.click(excelBtn);
+  it('filtrarea după secție afișează doar dispozitivele din acea secție', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<InventoryPage />);
+    await screen.findByText('DM-2024-001');
+
+    await user.selectOptions(screen.getByLabelText('Filtru secție'), 'ATI');
+
     await waitFor(() => {
-      const exportCall = api.get.mock.calls.find(([url]) => url.includes('/devices/export/xlsx'));
-      expect(exportCall).toBeTruthy();
+      expect(screen.getByText('Defibrilator')).toBeInTheDocument();
+      expect(screen.queryByText('Monitor pacient')).not.toBeInTheDocument();
     });
   });
 
-  it('afișează sugestii de autocomplete la căutare și le poate selecta', async () => {
+  it('combinarea filtrelor de status și secție afișează rezultatele corecte', async () => {
     const user = userEvent.setup();
     renderWithProviders(<InventoryPage />);
     await screen.findByText('DM-2024-001');
 
-    await user.type(screen.getByLabelText('Căutare'), 'Monitor');
-    // Sugestiile apar ca opțiuni în listbox
-    const options = await screen.findAllByRole('option');
-    expect(options.length).toBeGreaterThan(0);
-
-    await user.click(options[0]);
-    // După selecție, câmpul de căutare preia numărul de inventar al sugestiei
-    expect(screen.getByLabelText('Căutare')).toHaveValue('DM-2024-002');
-  });
-
-  it('filtrarea după clasă de risc și secție declanșează fetch-uri noi', async () => {
-    const user = userEvent.setup();
-    renderWithProviders(<InventoryPage />);
-    await screen.findByText('DM-2024-001');
-
-    await user.selectOptions(screen.getByLabelText('Clasa Risc'), 'IIb');
-    await user.selectOptions(screen.getByLabelText('Secție'), '1');
+    await user.selectOptions(screen.getByLabelText('Filtru status'), 'FUNCTIONAL');
+    await user.selectOptions(screen.getByLabelText('Filtru secție'), 'ATI');
 
     await waitFor(() => {
-      const call = api.get.mock.calls.find(
-        ([url]) => url.includes('riskClass=IIb') && url.includes('sectionId=1')
-      );
-      expect(call).toBeTruthy();
+      expect(screen.getByText('Defibrilator')).toBeInTheDocument();
+      expect(screen.queryByText('Monitor pacient')).not.toBeInTheDocument();
     });
   });
 
-  it('butonul Resetare curăță căutarea și filtrele', async () => {
+  it('ștergerea textului de căutare restaurează toate dispozitivele', async () => {
     const user = userEvent.setup();
     renderWithProviders(<InventoryPage />);
     await screen.findByText('DM-2024-001');
 
-    const searchInput = screen.getByLabelText('Căutare');
-    await user.type(searchInput, 'ceva');
-    await user.click(screen.getByRole('button', { name: 'Resetare' }));
-    expect(searchInput).toHaveValue('');
-  });
+    const searchInput = screen.getByLabelText(/Căutare/);
+    await user.type(searchInput, 'Monitor');
+    await waitFor(() => expect(screen.queryByText('Defibrilator')).not.toBeInTheDocument());
 
-  it('deschide modalul de editare și salvează statusul prin PUT', async () => {
-    const user = userEvent.setup();
-    api.put.mockResolvedValue({ data: {} });
-    renderWithProviders(<InventoryPage />);
-    await screen.findByText('DM-2024-001');
-
-    // Primul buton "✎ Editare" din tabel
-    const editButtons = screen.getAllByRole('button', { name: /Editare/ });
-    await user.click(editButtons[0]);
-
-    expect(await screen.findByRole('heading', { name: 'Editare Dispozitiv' })).toBeInTheDocument();
-    await user.click(screen.getByRole('button', { name: 'Salvare' }));
-
+    await user.clear(searchInput);
     await waitFor(() => {
-      expect(api.put).toHaveBeenCalledWith('/devices/1', expect.any(Object));
+      expect(screen.getByText('Defibrilator')).toBeInTheDocument();
+      expect(screen.getByText('Monitor pacient')).toBeInTheDocument();
     });
   });
 
-  it('marchează un dispozitiv ca CASAT (soft delete) după confirmare', async () => {
+  it('link-ul de editare navighează la pagina de editare a dispozitivului', async () => {
+    renderWithProviders(<InventoryPage />);
+    await screen.findByText('DM-2024-001');
+
+    const editLink = screen.getByRole('link', { name: /Editare Defibrilator/ });
+    expect(editLink).toHaveAttribute('href', '/devices/1/edit');
+  });
+
+  it('ștergerea unui dispozitiv după confirmare apelează DELETE', async () => {
     const user = userEvent.setup();
-    window.confirm.mockReturnValue(true);
     api.delete.mockResolvedValue({ data: {} });
     renderWithProviders(<InventoryPage />);
     await screen.findByText('DM-2024-001');
 
-    const deleteButtons = screen.getAllByRole('button', { name: '✕' });
-    await user.click(deleteButtons[0]);
+    await user.click(screen.getByRole('button', { name: /Ștergere Defibrilator/ }));
+    await user.click(await screen.findByRole('button', { name: 'Șterge' }));
 
     await waitFor(() => {
       expect(api.delete).toHaveBeenCalledWith('/devices/1');
     });
   });
 
-  it('butonul de export CSV apelează endpoint-ul de export CSV', async () => {
-    const user = userEvent.setup();
-    api.get.mockImplementation((url) => {
-      if (url.startsWith('/devices/dropdown/sections')) return Promise.resolve({ data: [] });
-      if (url.startsWith('/consumables')) return Promise.resolve({ data: { consumables: [] } });
-      if (url.includes('/devices/export/csv')) return Promise.resolve({ data: new Blob(['csv']) });
-      return Promise.resolve({ data: { devices: SAMPLE_DEVICES, pagination: { total: 2, pages: 1 } } });
-    });
+  it('indicatorul de pagini arată numărul corect de dispozitive găsite', async () => {
     renderWithProviders(<InventoryPage />);
     await screen.findByText('DM-2024-001');
 
-    await user.click(screen.getByRole('button', { name: /Export CSV/ }));
-    await waitFor(() => {
-      const call = api.get.mock.calls.find(([url]) => url.includes('/devices/export/csv'));
-      expect(call).toBeTruthy();
-    });
+    expect(await screen.findByText(/2 dispozitive găsite/)).toBeInTheDocument();
   });
 
-  it('afișează mesajul "Nu sunt dispozitive" când lista este goală', async () => {
+  it('afișează mesajul "Niciun dispozitiv găsit" când lista este goală', async () => {
     mockApiRouter([]);
     renderWithProviders(<InventoryPage />);
-    expect(await screen.findByText('Nu sunt dispozitive în baza de date.')).toBeInTheDocument();
+    expect(await screen.findByText('Niciun dispozitiv găsit')).toBeInTheDocument();
   });
 
-  it('randează AlertsWidget cu alerte de stoc scăzut când există', async () => {
-    api.get.mockImplementation((url) => {
-      if (url.startsWith('/devices/dropdown/sections')) {
-        return Promise.resolve({ data: [] });
-      }
-      if (url.startsWith('/consumables')) {
-        return Promise.resolve({
-          data: { consumables: [{ id: 9, name: 'Mănuși', quantity: 1, minQuantity: 100, expiryDate: null }] },
-        });
-      }
-      return Promise.resolve({ data: { devices: SAMPLE_DEVICES, pagination: { total: 2, pages: 1 } } });
-    });
+  it('pagina afișează titlul corect și butonul de adăugare', async () => {
     renderWithProviders(<InventoryPage />);
-    expect(await screen.findByText(/Alerte Consumabile/)).toBeInTheDocument();
-    expect(screen.getByText(/sub stoc minim/)).toBeInTheDocument();
+    await screen.findByText('DM-2024-001');
+
+    expect(screen.getByRole('heading', { name: 'Inventar Dispozitive Medicale' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Adaugă/ })).toBeInTheDocument();
   });
 });

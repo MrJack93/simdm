@@ -318,7 +318,7 @@ Ce se întâmplă acum?
 - [ARIA Authoring Practices](https://www.w3.org/WAI/ARIA/apg/)
 - [WebAIM Contrast Checker](https://webaim.org/resources/contrastchecker/)
 - [NVDA Screen Reader](https://www.nvaccess.org)
-- [Sistem de Design](./1-DESIGN-AND-ACCESSIBILITY.md)
+- [Sistem de Design](./DESIGN-SYSTEM.md)
 - [Ghid Dezvoltator](./2-DEVELOPER-GUIDE.md)
 
 ---
