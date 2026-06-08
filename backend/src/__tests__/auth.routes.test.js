@@ -32,7 +32,7 @@ function login(username = TEST_USERNAME, password = TEST_PASSWORD) {
 // Resetează starea de lockout/failed attempts pe userul de test
 async function resetTestUserLock() {
   await prisma.users.update({
-    where: { email: TEST_EMAIL },
+    where: { username: TEST_USERNAME },
     data: { failedLoginAttempts: 0, lockedUntil: null, isActive: true },
   });
 }

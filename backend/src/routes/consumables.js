@@ -119,8 +119,8 @@ router.post('/', async (req, res) => {
       return res.status(400).json({ error: 'Cantitatea nu poate fi negativă' });
     }
 
-    const [consumable] = await prisma.$transaction([
-      prisma.consumables.create({
+    const consumable = await prisma.$transaction(async (tx) => {
+      const created = await tx.consumables.create({
         data: {
           name: name.trim(),
           model: model?.trim() || null,
@@ -133,14 +133,15 @@ router.post('/', async (req, res) => {
           notes: notes?.trim() || null,
           updatedAt: new Date(),
         },
-      }),
-      prisma.audit_logs.create({
-        data: createAuditLogData(req.user.sub, 'CREATE', 'consumables', null, {
+      });
+      await tx.audit_logs.create({
+        data: createAuditLogData(req.user.sub, 'CREATE', 'consumables', created.id, {
           name: name.trim(),
           quantity: q,
         }),
-      }),
-    ]);
+      });
+      return created;
+    });
 
     res.status(201).json(consumable);
   } catch (error) {
@@ -175,8 +176,8 @@ router.put('/:id', async (req, res) => {
       return res.status(400).json({ error: 'Cantitatea nu poate fi negativă' });
     }
 
-    const [updated] = await prisma.$transaction([
-      prisma.consumables.update({
+    const updated = await prisma.$transaction(async (tx) => {
+      const upd = await tx.consumables.update({
         where: { id: consumableId },
         data: {
           ...(name !== undefined && { name: name.trim() }),
@@ -189,14 +190,15 @@ router.put('/:id', async (req, res) => {
           ...(location !== undefined && { location: location?.trim() || null }),
           ...(notes !== undefined && { notes: notes?.trim() || null }),
         },
-      }),
-      prisma.audit_logs.create({
+      });
+      await tx.audit_logs.create({
         data: createAuditLogData(req.user.sub, 'UPDATE', 'consumables', consumableId, {
-          name: updated.name,
-          quantity: updated.quantity,
+          name: upd.name,
+          quantity: upd.quantity,
         }),
-      }),
-    ]);
+      });
+      return upd;
+    });
 
     res.json(updated);
   } catch (error) {

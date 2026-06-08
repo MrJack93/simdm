@@ -77,6 +77,7 @@ describe('Audit logs — CREATE operații', () => {
     expect(auditLogs[0].userId).not.toBeNull();
 
     // Cleanup
+    await prisma.incidents.deleteMany({ where: { deviceId: res.body.id } });
     await prisma.devices.deleteMany({ where: { id: res.body.id } });
   });
 });
@@ -151,6 +152,7 @@ describe('Audit logs — UPDATE operații', () => {
     expect(auditLog.changes).toBeDefined();
 
     // Cleanup
+    await prisma.incidents.deleteMany({ where: { deviceId } });
     await prisma.devices.deleteMany({ where: { id: deviceId } });
   });
 });
@@ -255,6 +257,9 @@ describe('Audit logs — H1 verification across multiple routes', () => {
 
     // Cleanup
     await prisma.consumables.deleteMany({ where: { id: entities[0]?.id } });
+    if (entities[1]?.id) {
+      await prisma.incidents.deleteMany({ where: { deviceId: entities[1].id } });
+    }
     await prisma.devices.deleteMany({ where: { id: entities[1]?.id } });
   });
 });

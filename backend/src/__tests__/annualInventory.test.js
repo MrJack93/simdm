@@ -54,7 +54,7 @@ beforeAll(async () => {
 
   // Curăță orice device rămas în secția izolată dintr-o rulare anterioară
   // (incidents înainte de devices — FK constraint incidents_deviceId_fkey)
-  await prisma.incidents.deleteMany({ where: { device: { sectionId } } });
+  await prisma.incidents.deleteMany({ where: { devices: { sectionId } } });
   await prisma.devices.deleteMany({ where: { sectionId } });
 
   // Un singur device în secția izolată -> exact un item de inventariat

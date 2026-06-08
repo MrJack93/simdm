@@ -8,7 +8,7 @@ beforeAll(async () => {
   try {
     await prisma.users.upsert({
       where: { username: 'testuser' },
-      update: { failedLoginAttempts: 0, lockedUntil: null, isActive: true },
+      update: { email: 'test@simdm.local', failedLoginAttempts: 0, lockedUntil: null, isActive: true },
       create: {
         email: 'test@simdm.local',
         username: 'testuser',
