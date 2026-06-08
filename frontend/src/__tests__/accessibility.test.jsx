@@ -1,28 +1,12 @@
-import { describe, it, expect, beforeAll, afterEach } from 'vitest';
+import { describe, it, expect, afterEach } from 'vitest';
 import { render, cleanup } from '@testing-library/react';
 import { axe, toHaveNoViolations } from 'jest-axe';
-import { BrowserRouter } from 'react-router-dom';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { AuthProvider } from '../context/AuthProvider';
 
 // Extend matchers
 expect.extend(toHaveNoViolations);
 
 // Mock API
-global.fetch = () => Promise.resolve({ json: () => ({}) });
-
-const queryClient = new QueryClient();
-
-// Wrapper cu toți providerii
-const AllProviders = ({ children }) => (
-  <BrowserRouter>
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        {children}
-      </AuthProvider>
-    </QueryClientProvider>
-  </BrowserRouter>
-);
+globalThis.fetch = () => Promise.resolve({ json: () => ({}) });
 
 describe('Accessibility Compliance (WCAG 2.1 AA)', () => {
   afterEach(cleanup);

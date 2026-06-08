@@ -12,7 +12,7 @@ export class ErrorBoundary extends React.Component {
     };
   }
 
-  static getDerivedStateFromError(error) {
+  static getDerivedStateFromError(_error) {
     return { hasError: true };
   }
 
@@ -167,7 +167,7 @@ export class ErrorBoundary extends React.Component {
   }
 }
 
-// Hook for programmatic error handling
+// eslint-disable-next-line react-refresh/only-export-components
 export function useErrorHandler() {
   return (error) => {
     throw error;

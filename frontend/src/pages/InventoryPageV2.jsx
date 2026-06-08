@@ -294,7 +294,7 @@ export default function InventoryPage() {
 
   const { data: devicesData, isLoading } = useDevices();
 
-  const devices = devicesData?.devices || [];
+  const devices = useMemo(() => devicesData?.devices ?? [], [devicesData]);
 
   const filteredDevices = useMemo(() => devices.filter(device => {
     const q = searchTerm.toLowerCase();

@@ -1,4 +1,3 @@
-import React from 'react';
 import { X, AlertCircle, CheckCircle, AlertTriangle, Info } from 'lucide-react';
 
 const ALERT_CONFIG = {

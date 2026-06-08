@@ -283,7 +283,7 @@ export default function IncidentsPage() {
   });
 
   const devices = devicesData?.devices ?? [];
-  const incidents = data?.data ?? [];
+  const incidents = useMemo(() => data?.data ?? [], [data]);
 
   const filtered = useMemo(() => {
     return incidents.filter((i) => {

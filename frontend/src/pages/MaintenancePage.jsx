@@ -219,7 +219,7 @@ export default function MaintenancePage() {
   });
 
   const devices = devicesData?.devices ?? [];
-  const records = data?.data ?? [];
+  const records = useMemo(() => data?.data ?? [], [data]);
 
   const filtered = useMemo(() => {
     if (!filterType) return records;

@@ -35,7 +35,7 @@ function LoadingFallback() {
   );
 }
 
-function Header({ user, logout, theme, toggleTheme, isMobileMenuOpen, setIsMobileMenuOpen, menuTriggerRef }) {
+function Header({ logout, theme, toggleTheme, isMobileMenuOpen, setIsMobileMenuOpen, menuTriggerRef }) {
 
   return (
     <header
@@ -159,11 +159,11 @@ function MobileMenu({ isOpen, onClose, triggerRef }) {
       }
     };
 
+    const trigger = triggerRef?.current;
     document.addEventListener('keydown', handleKeyDown);
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
-      // Restore focus to trigger button on close
-      triggerRef?.current?.focus();
+      trigger?.focus();
     };
   }, [isOpen, onClose, triggerRef]);
 
