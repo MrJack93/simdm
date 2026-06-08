@@ -191,7 +191,7 @@ describe('POST /api/maintenance — creare', () => {
       partsReplaced: 'Pompa de combustibil',
     });
     expect(res.status).toBe(201);
-    expect(res.body.cost).toBe(150.75);
+    expect(Number(res.body.cost)).toBe(150.75);
     expect(res.body.partsReplaced).toBe('Pompa de combustibil');
   });
 

@@ -115,7 +115,7 @@ describe('/api/consumables — căi de eroare DB (spy)', () => {
 
   it('POST -> 500 când create aruncă', async () => {
     const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-    vi.spyOn(prisma.consumables, 'create').mockRejectedValueOnce(new Error('DB write fail'));
+    vi.spyOn(prisma, '$transaction').mockRejectedValueOnce(new Error('DB write fail'));
     const res = await request(app)
       .post('/api/consumables')
       .set('Authorization', `Bearer ${token}`)
@@ -143,7 +143,7 @@ describe('/api/consumables — căi de eroare DB (spy)', () => {
   it('PUT -> 500 când update aruncă', async () => {
     const created = await createConsumable();
     const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-    vi.spyOn(prisma.consumables, 'update').mockRejectedValueOnce(new Error('DB update fail'));
+    vi.spyOn(prisma, '$transaction').mockRejectedValueOnce(new Error('DB update fail'));
     const res = await request(app)
       .put(`/api/consumables/${created.body.id}`)
       .set('Authorization', `Bearer ${token}`)

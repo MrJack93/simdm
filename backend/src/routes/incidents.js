@@ -114,8 +114,8 @@ router.post('/', async (req, res) => {
     const deviceExists = await prisma.devices.findUnique({ where: { id: parseInt(deviceId) } });
     if (!deviceExists) return res.status(404).json({ error: 'Dispozitivul nu există' });
 
-    const [incident] = await prisma.$transaction([
-      prisma.incidents.create({
+    const incident = await prisma.$transaction(async (tx) => {
+      const created = await tx.incidents.create({
         data: {
           deviceId: parseInt(deviceId),
           sectionId: sectionId ? parseInt(sectionId) : null,
@@ -138,14 +138,15 @@ router.post('/', async (req, res) => {
           devices: { select: { id: true, name: true, inventoryNumber: true } },
           sections: { select: { id: true, name: true } },
         },
-      }),
-      prisma.audit_logs.create({
-        data: createAuditLogData(req.user.sub, 'CREATE', null, {
+      });
+      await tx.audit_logs.create({
+        data: createAuditLogData(req.user.sub, 'CREATE', created.id, {
           deviceId: parseInt(deviceId),
-          severity
+          severity,
         }),
-      }),
-    ]);
+      });
+      return created;
+    });
 
     res.status(201).json(incident);
   } catch (error) {

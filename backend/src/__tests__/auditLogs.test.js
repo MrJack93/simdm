@@ -259,7 +259,7 @@ describe('Audit logs — H1 verification across multiple routes', () => {
     await prisma.consumables.deleteMany({ where: { id: entities[0]?.id } });
     if (entities[1]?.id) {
       await prisma.incidents.deleteMany({ where: { deviceId: entities[1].id } });
+      await prisma.devices.deleteMany({ where: { id: entities[1].id } });
     }
-    await prisma.devices.deleteMany({ where: { id: entities[1]?.id } });
   });
 });
