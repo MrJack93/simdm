@@ -21,16 +21,4 @@ const validateBody = (schema) => (req, res, next) => {
   next();
 };
 
-const validateQuery = (schema) => (req, res, next) => {
-  const result = schema.safeParse(req.query);
-  if (!result.success) {
-    return res.status(400).json({
-      error: 'Parametri invalizi',
-      details: result.error.flatten().fieldErrors,
-    });
-  }
-  req.validated = { ...req.validated, ...result.data };
-  next();
-};
-
-module.exports = { validateBody, validateQuery };
+module.exports = { validateBody };

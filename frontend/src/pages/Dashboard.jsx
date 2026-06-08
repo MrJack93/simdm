@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { useDevices } from '../hooks/useDevices';
 import { useConsumableStats } from '../hooks/useConsumables';
-import { Activity, Wrench, AlertCircle, Package, Calendar, TrendingUp } from 'lucide-react';
+import { Activity, Wrench, AlertCircle, Package, Calendar } from 'lucide-react';
 
 /** @typedef {import('../types').DevicesResponse} DevicesResponse */
 /** @typedef {import('../types').ConsumablesResponse} ConsumablesResponse */

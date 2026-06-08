@@ -455,7 +455,6 @@ export default function ConsumablesPage() {
               </thead>
               <tbody>
                 {consumables.map((consumable) => {
-                  const stockStatus = getStockStatus(consumable.quantity, consumable.minQuantity);
                   const urgencyBadge = getUrgencyBadge(consumable.quantity, consumable.minQuantity);
                   const expiryBadge = getExpiryBadge(consumable.expiryDate);
                   const isCritical = urgencyBadge && urgencyBadge.isUrgent;
