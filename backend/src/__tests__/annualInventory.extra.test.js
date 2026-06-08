@@ -41,6 +41,7 @@ beforeAll(async () => {
     create: { name: 'Secție Test Inv Extra', code: SECTION_CODE, floor: 'P', isActive: true, updatedAt: new Date() },
   });
   sectionId = section.id;
+  await prisma.incidents.deleteMany({ where: { device: { sectionId } } });
   await prisma.devices.deleteMany({ where: { sectionId } });
 
   const device = await prisma.devices.create({
@@ -62,9 +63,11 @@ afterEach(() => {
 afterAll(async () => {
   await prisma.annual_inventories.deleteMany({ where: { sectionId } });
   if (importedCndCodes.length) {
+    await prisma.incidents.deleteMany({ where: { device: { cndCode: { in: importedCndCodes } } } });
     await prisma.devices.deleteMany({ where: { cndCode: { in: importedCndCodes } } });
   }
   await prisma.audit_logs.deleteMany({ where: { entity: 'Device', entityId: String(deviceId) } });
+  await prisma.incidents.deleteMany({ where: { deviceId } });
   await prisma.devices.deleteMany({ where: { id: deviceId } });
   await prisma.sections.deleteMany({ where: { code: SECTION_CODE } });
 });

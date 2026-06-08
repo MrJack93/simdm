@@ -53,6 +53,8 @@ beforeAll(async () => {
   sectionId = section.id;
 
   // Curăță orice device rămas în secția izolată dintr-o rulare anterioară
+  // (incidents înainte de devices — FK constraint incidents_deviceId_fkey)
+  await prisma.incidents.deleteMany({ where: { device: { sectionId } } });
   await prisma.devices.deleteMany({ where: { sectionId } });
 
   // Un singur device în secția izolată -> exact un item de inventariat
@@ -72,6 +74,7 @@ afterAll(async () => {
   // Șterge inventarele anului de test (cascade pe items), apoi device + secția
   await prisma.annual_inventories.deleteMany({ where: { year: YEAR, sectionId } });
   await prisma.audit_logs.deleteMany({ where: { entity: 'Device', entityId: String(deviceId) } });
+  await prisma.incidents.deleteMany({ where: { deviceId } });
   await prisma.devices.deleteMany({ where: { id: deviceId } });
   await prisma.sections.deleteMany({ where: { code: SECTION_CODE } });
 });
