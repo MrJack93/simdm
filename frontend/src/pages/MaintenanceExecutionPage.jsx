@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Wrench, Save, Download, Edit, Trash2 } from 'lucide-react';
+import { Wrench, Save, Download, Trash2 } from 'lucide-react';
 import api from '../api/axios';
 
 // Schema validare

@@ -46,7 +46,7 @@ const STATUS_LABELS = {
 
 export default function MaintenancePlanPage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [editingId, setEditingId] = useState(null);
+  const [_editingId, setEditingId] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
 
   const queryClient = useQueryClient();

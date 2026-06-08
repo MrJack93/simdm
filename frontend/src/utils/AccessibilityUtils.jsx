@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const focusStyles = {
   ring:       '0 0 0 2px var(--color-bg-primary), 0 0 0 4px var(--color-accent)',
   ringDanger: '0 0 0 2px var(--color-bg-primary), 0 0 0 4px var(--color-error)',
@@ -17,6 +18,7 @@ export function SkipLink() {
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useKeyboardNavigation(items, onSelect) {
   const [focusedIndex, setFocusedIndex] = useState(0);
 
@@ -48,6 +50,7 @@ export function useKeyboardNavigation(items, onSelect) {
   return { focusedIndex, handleKeyDown };
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function checkContrast(color1, color2) {
   const getLuminance = (hex) => {
     const rgb = parseInt(hex.slice(1), 16);
@@ -122,6 +125,7 @@ export function AccessibleAlert({ type = 'info', title, message, onDismiss }) {
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function getAccessibleErrorMessage(fieldName, errorType) {
   const messages = {
     required:  `${fieldName} este obligatoriu`,
