@@ -102,11 +102,11 @@ describe('RepairTicketsPage — Kanban Board cu State Machine', () => {
     renderPage();
 
     await waitFor(() => {
-      expect(screen.getByText(/DESCHIS/i)).toBeInTheDocument();
-      expect(screen.getByText(/IN_LUCRU/i)).toBeInTheDocument();
-      expect(screen.getByText(/REZOLVAT/i)).toBeInTheDocument();
-      expect(screen.getByText(/TESTAT/i)).toBeInTheDocument();
-      expect(screen.getByText(/INCHIS/i)).toBeInTheDocument();
+      expect(screen.getByText('DESCHIS')).toBeInTheDocument();
+      expect(screen.getByText('IN_LUCRU')).toBeInTheDocument();
+      expect(screen.getByText('REZOLVAT')).toBeInTheDocument();
+      expect(screen.getByText('TESTAT')).toBeInTheDocument();
+      expect(screen.getByText('INCHIS')).toBeInTheDocument();
     });
   });
 
@@ -255,9 +255,10 @@ describe('RepairTicketsPage — Kanban Board cu State Machine', () => {
     // Try invalid transition
     const statusSelect = screen.getByLabelText(/Status/i);
 
-    // Option INCHIS should not be available for DESCHIS
-    const inchisOption = screen.queryByText(/INCHIS/);
-    expect(inchisOption).not.toBeInTheDocument();
+    // Option INCHIS should not be available for DESCHIS (should only see IN_LUCRU)
+    const selectOptions = statusSelect.querySelectorAll('option');
+    const inchisOption = Array.from(selectOptions).find(opt => opt.value === 'INCHIS');
+    expect(inchisOption).not.toBeDefined();
   });
 
   it('afișează timestamp și responsabil pe card', async () => {

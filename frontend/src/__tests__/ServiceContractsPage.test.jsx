@@ -261,7 +261,11 @@ describe('ServiceContractsPage — Contracte Externe & Cost Analysis', () => {
       expect(screen.getByText(/Evaluare Furnizor/i)).toBeInTheDocument();
     });
 
-    // Select rating
+    // Select rating (wait for form elements to appear)
+    await waitFor(() => {
+      expect(screen.getByLabelText(/Scor/i)).toBeInTheDocument();
+    });
+
     const ratingSelect = screen.getByLabelText(/Scor/i);
     await user.selectOptions(ratingSelect, '5');
 

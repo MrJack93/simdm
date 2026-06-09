@@ -17,8 +17,8 @@ export default function MppExecutionForm({ occurrenceId }) {
   const [stockError, setStockError] = useState('');
   const [beforePhoto, setBeforePhoto] = useState(null);
   const [afterPhoto, setAfterPhoto] = useState(null);
-  const [engineerSigned, setEngineerSigned] = useState(true);
-  const [managerSigned, setManagerSigned] = useState(true);
+  const [engineerSigned, setEngineerSigned] = useState(false);
+  const [managerSigned, setManagerSigned] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [pdfUrl, setPdfUrl] = useState(null);

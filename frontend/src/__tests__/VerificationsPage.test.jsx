@@ -104,22 +104,22 @@ describe('VerificationsPage — Verificări Periodice & Conformitate', () => {
     renderPage();
 
     await waitFor(() => {
-      expect(screen.getByText(/CONFORM/i)).toBeInTheDocument();
-      expect(screen.getByText(/EXPIRAT/i)).toBeInTheDocument();
-    });
+      expect(screen.getByText('CONFORM')).toBeInTheDocument();
+      expect(screen.getByText('EXPIRAT')).toBeInTheDocument();
+    }, { timeout: 3000 });
   });
 
   it('culori diferite pentru status (verde=CONFORM, roșu=EXPIRAT)', async () => {
     renderPage();
 
     await waitFor(() => {
-      const conformCell = screen.getByText(/CONFORM/i);
-      const expiratCell = screen.getByText(/EXPIRAT/i);
+      const conformCell = screen.getByText('CONFORM');
+      const expiratCell = screen.getByText('EXPIRAT');
 
       // Status-uri ar trebui să aibă clase diferite
       expect(conformCell).toBeInTheDocument();
       expect(expiratCell).toBeInTheDocument();
-    });
+    }, { timeout: 3000 });
   });
 
   it('permite upload certificat pentru dispozitiv', async () => {
@@ -243,13 +243,13 @@ describe('VerificationsPage — Verificări Periodice & Conformitate', () => {
     const filterBtn = screen.getByRole('button', { name: /Filtrare/i });
     await user.click(filterBtn);
 
-    const conformCheckbox = screen.getByLabelText(/CONFORM/i);
+    const conformCheckbox = screen.getByLabelText('CONFORM');
     await user.click(conformCheckbox);
 
     await waitFor(() => {
       // Should only show CONFORM verifications
-      expect(screen.getByText(/CONFORM/i)).toBeInTheDocument();
-    });
+      expect(screen.getByText('CONFORM')).toBeInTheDocument();
+    }, { timeout: 3000 });
   });
 
   it('permite sortare după data expirare', async () => {

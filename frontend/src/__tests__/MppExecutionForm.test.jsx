@@ -180,8 +180,8 @@ describe('MppExecutionForm — Execuție Mentenanță cu Semnătură', () => {
     });
 
     // SignaturePad component should be rendered
-    const signaturePad = screen.getByText(/Click pentru semnătură/i);
-    expect(signaturePad).toBeInTheDocument();
+    const signaturePads = screen.getAllByText(/Click pentru semnătură/i);
+    expect(signaturePads.length).toBeGreaterThanOrEqual(1);
   });
 
   it('afișează componenta semnătură digitală pentru manager', async () => {
@@ -255,9 +255,12 @@ describe('MppExecutionForm — Execuție Mentenanță cu Semnătură', () => {
     const afterFile = new File(['image'], 'after.jpg', { type: 'image/jpeg' });
     await user.upload(afterInput, afterFile);
 
-    // Sign (simulate signature capture)
-    // In real test, would interact with SignaturePad component
-    // For now, assume signatures are captured
+    // Sign (click signature areas to sign)
+    const signaturePads = screen.getAllByText(/Click pentru semnătură/i);
+    if (signaturePads.length >= 2) {
+      await user.click(signaturePads[0]); // Engineer signature
+      await user.click(signaturePads[1]); // Manager signature
+    }
 
     // Submit
     const submitBtn = screen.getByRole('button', { name: /Salvare/i });
@@ -277,26 +280,46 @@ describe('MppExecutionForm — Execuție Mentenanță cu Semnătură', () => {
       expect(screen.getByRole('button', { name: /Salvare/i })).toBeInTheDocument();
     });
 
-    // Mock successful execution
-    // Submit form with all required data
+    // Sign both signatures
+    const signaturePads = screen.getAllByText(/Click pentru semnătură/i);
+    if (signaturePads.length >= 2) {
+      await user.click(signaturePads[0]); // Engineer
+      await user.click(signaturePads[1]); // Manager
+    }
+
+    // Submit form
     const submitBtn = screen.getByRole('button', { name: /Salvare/i });
     await user.click(submitBtn);
 
+    // Check success message
     await waitFor(() => {
       expect(screen.getByText(/Mentenanță executată cu succes/i)).toBeInTheDocument();
-    });
+    }, { timeout: 2000 });
   });
 
   it('genereaza și afișează link PDF Formular Nr. 6', async () => {
+    const user = userEvent.setup();
     renderForm();
 
     await waitFor(() => {
-      expect(screen.getByText(/Formular Nr\. 6/i)).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /Salvare/i })).toBeInTheDocument();
     });
 
+    // Sign and submit to trigger success
+    const signaturePads = screen.getAllByText(/Click pentru semnătură/i);
+    if (signaturePads.length >= 2) {
+      await user.click(signaturePads[0]); // Engineer
+      await user.click(signaturePads[1]); // Manager
+    }
+
+    const submitBtn = screen.getByRole('button', { name: /Salvare/i });
+    await user.click(submitBtn);
+
     // After successful execution, should show PDF link
-    const pdfLink = screen.getByRole('link', { name: /Descarcă Formular/i });
-    expect(pdfLink).toHaveAttribute('href', '/files/formular6.pdf');
+    await waitFor(() => {
+      const pdfLink = screen.getByRole('link', { name: /Descarcă Formular/i });
+      expect(pdfLink).toHaveAttribute('href', '/files/formular6.pdf');
+    });
   });
 
   it('permite descărcare PDF Formular Nr. 6', async () => {
@@ -304,11 +327,24 @@ describe('MppExecutionForm — Execuție Mentenanță cu Semnătură', () => {
     renderForm();
 
     await waitFor(() => {
-      expect(screen.getByText(/Formular Nr\. 6/i)).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /Salvare/i })).toBeInTheDocument();
     });
 
-    const downloadBtn = screen.getByRole('link', { name: /Descarcă/i });
-    expect(downloadBtn).toBeInTheDocument();
+    // Sign and submit to trigger success
+    const signaturePads = screen.getAllByText(/Click pentru semnătură/i);
+    if (signaturePads.length >= 2) {
+      await user.click(signaturePads[0]); // Engineer
+      await user.click(signaturePads[1]); // Manager
+    }
+
+    const submitBtn = screen.getByRole('button', { name: /Salvare/i });
+    await user.click(submitBtn);
+
+    // Check download button is present and clickable
+    await waitFor(() => {
+      const downloadBtn = screen.getByRole('link', { name: /Descarcă/i });
+      expect(downloadBtn).toBeInTheDocument();
+    });
   });
 
   it('decrementează stoc consumabile după salvare', async () => {
@@ -336,6 +372,13 @@ describe('MppExecutionForm — Execuție Mentenanță cu Semnătură', () => {
     await waitFor(() => {
       expect(screen.getByRole('button', { name: /Salvare/i })).toBeInTheDocument();
     });
+
+    // Sign both signatures
+    const signaturePads = screen.getAllByText(/Click pentru semnătură/i);
+    if (signaturePads.length >= 2) {
+      await user.click(signaturePads[0]); // Engineer
+      await user.click(signaturePads[1]); // Manager
+    }
 
     const submitBtn = screen.getByRole('button', { name: /Salvare/i });
     await user.click(submitBtn);

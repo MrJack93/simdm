@@ -193,7 +193,11 @@ describe('MaintenanceCalendarPage — Calendar & Apariții MPP', () => {
     const createBtn = screen.getByRole('button', { name: /Creare Plan/i });
     await user.click(createBtn);
 
-    // Fill form
+    // Fill form (wait for modal elements to appear)
+    await waitFor(() => {
+      expect(screen.getByLabelText(/Dispozitiv/i)).toBeInTheDocument();
+    });
+
     const deviceSelect = screen.getByLabelText(/Dispozitiv/i);
     await user.selectOptions(deviceSelect, '2');
 
