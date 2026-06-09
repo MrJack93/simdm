@@ -6,7 +6,7 @@ import { ErrorBoundary } from './components/ErrorBoundary';
 import Login from './pages/Login';
 import ProtectedRoute from './components/ProtectedRoute';
 import SkipLink from './components/SkipLink';
-import { Menu, X, Home, Warehouse, Package, Calendar, Cog, LogOut, Wrench, AlertTriangle, FileText } from 'lucide-react';
+import { Menu, X, Home, Warehouse, Package, Calendar, Cog, LogOut, Wrench, AlertTriangle, FileText, TicketCheck, CheckSquare, Briefcase } from 'lucide-react';
 
 // Lazy-loaded pages - code splitting pentru perf boost
 const Dashboard = lazy(() => import('./pages/Dashboard'));
@@ -18,6 +18,9 @@ const SettingsPage = lazy(() => import('./pages/SettingsPage'));
 const MaintenancePage = lazy(() => import('./pages/MaintenancePage'));
 const MaintenancePlanPage = lazy(() => import('./pages/MaintenancePlanPage'));
 const MaintenanceExecutionPage = lazy(() => import('./pages/MaintenanceExecutionPage'));
+const RepairTicketsPage = lazy(() => import('./pages/RepairTicketsPage'));
+const VerificationsPage = lazy(() => import('./pages/VerificationsPage'));
+const ServiceContractsPage = lazy(() => import('./pages/ServiceContractsPage'));
 const IncidentsPage = lazy(() => import('./pages/IncidentsPage'));
 const AuditLogsPage = lazy(() => import('./pages/AuditLogsPage'));
 
@@ -62,12 +65,15 @@ function Header({ logout, theme, toggleTheme, isMobileMenuOpen, setIsMobileMenuO
 
         <nav className="hidden md:flex gap-6 ml-8">
           {[
-            { to: '/inventory',        Icon: Warehouse,     label: 'Inventar' },
-            { to: '/inventory/annual', Icon: Calendar,      label: 'Inventariere' },
-            { to: '/consumables',      Icon: Package,       label: 'Consumabile' },
-            { to: '/maintenance',      Icon: Wrench,        label: 'Mentenanță' },
-            { to: '/incidents',        Icon: AlertTriangle, label: 'Incidente' },
-            { to: '/audit-logs',       Icon: FileText,      label: 'Jurnal' },
+            { to: '/inventory',           Icon: Warehouse,     label: 'Inventar' },
+            { to: '/inventory/annual',    Icon: Calendar,      label: 'Inventariere' },
+            { to: '/consumables',         Icon: Package,       label: 'Consumabile' },
+            { to: '/maintenance',         Icon: Wrench,        label: 'Mentenanță' },
+            { to: '/maintenance/tickets', Icon: TicketCheck,          label: 'Bilete' },
+            { to: '/verifications',       Icon: CheckSquare,   label: 'Verificări' },
+            { to: '/service-contracts',   Icon: Briefcase,     label: 'Contracte' },
+            { to: '/incidents',           Icon: AlertTriangle, label: 'Incidente' },
+            { to: '/audit-logs',          Icon: FileText,      label: 'Jurnal' },
           ].map(({ to, Icon, label }) => (
             <NavLink
               key={to}
@@ -168,14 +174,17 @@ function MobileMenu({ isOpen, onClose, triggerRef }) {
   }, [isOpen, onClose, triggerRef]);
 
   const links = [
-    { to: '/',                 Icon: Home,          label: 'Dashboard' },
-    { to: '/inventory',        Icon: Warehouse,     label: 'Inventar' },
-    { to: '/inventory/annual', Icon: Calendar,      label: 'Inventariere' },
-    { to: '/consumables',      Icon: Package,       label: 'Consumabile' },
-    { to: '/maintenance',      Icon: Wrench,        label: 'Mentenanță' },
-    { to: '/incidents',        Icon: AlertTriangle, label: 'Incidente' },
-    { to: '/audit-logs',       Icon: FileText,      label: 'Jurnal Audit' },
-    { to: '/settings',         Icon: Cog,           label: 'Setări' },
+    { to: '/',                    Icon: Home,          label: 'Dashboard' },
+    { to: '/inventory',           Icon: Warehouse,     label: 'Inventar' },
+    { to: '/inventory/annual',    Icon: Calendar,      label: 'Inventariere' },
+    { to: '/consumables',         Icon: Package,       label: 'Consumabile' },
+    { to: '/maintenance',         Icon: Wrench,        label: 'Mentenanță' },
+    { to: '/maintenance/tickets', Icon: TicketCheck,          label: 'Bilete Reparație' },
+    { to: '/verifications',       Icon: CheckSquare,   label: 'Verificări Periodice' },
+    { to: '/service-contracts',   Icon: Briefcase,     label: 'Contracte Externe' },
+    { to: '/incidents',           Icon: AlertTriangle, label: 'Incidente' },
+    { to: '/audit-logs',          Icon: FileText,      label: 'Jurnal Audit' },
+    { to: '/settings',            Icon: Cog,           label: 'Setări' },
   ];
 
   if (!isOpen) return null;
@@ -235,6 +244,9 @@ function DashboardLayout({ logout, theme, toggleTheme }) {
             <Route path="/maintenance"       element={<ProtectedRoute><MaintenancePage /></ProtectedRoute>} />
             <Route path="/maintenance/plan"  element={<ProtectedRoute><MaintenancePlanPage /></ProtectedRoute>} />
             <Route path="/maintenance/execution" element={<ProtectedRoute><MaintenanceExecutionPage /></ProtectedRoute>} />
+            <Route path="/maintenance/tickets" element={<ProtectedRoute><RepairTicketsPage /></ProtectedRoute>} />
+            <Route path="/verifications"     element={<ProtectedRoute><VerificationsPage /></ProtectedRoute>} />
+            <Route path="/service-contracts" element={<ProtectedRoute><ServiceContractsPage /></ProtectedRoute>} />
             <Route path="/incidents"         element={<ProtectedRoute><IncidentsPage /></ProtectedRoute>} />
             <Route path="/audit-logs"        element={<ProtectedRoute><AuditLogsPage /></ProtectedRoute>} />
             <Route path="/devices/new"       element={<ProtectedRoute><DeviceForm /></ProtectedRoute>} />

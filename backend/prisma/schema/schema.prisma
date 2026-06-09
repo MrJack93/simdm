@@ -112,6 +112,11 @@ model devices {
   maintenanceFreq        Int?
   nextMaintenanceAt      DateTime?
   lastMaintenanceAt      DateTime?
+  requiresVerification   Boolean              @default(false)
+  verificationType       String?              // LABORATOR | METROLOGIC | NONE
+  verificationFreqMonths Int?
+  lastVerificationAt     DateTime?
+  nextVerificationAt     DateTime?
   sectionId              Int?
   room                   String?
   manualUrl              String?
@@ -128,6 +133,10 @@ model devices {
   sections               sections?             @relation(fields: [sectionId], references: [id])
   incidents              incidents[]
   maintenance_records    maintenance_records[]
+  maintenance_plans      maintenance_plans[]
+  mpp_executions        mpp_executions[]
+  repair_tickets        repair_tickets[]
+  verifications         verifications[]
 
   @@index([inventoryNumber])
   @@index([nextMaintenanceAt])
@@ -265,11 +274,162 @@ model users {
   devices             devices[]
   incidents           incidents[]
   maintenance_records maintenance_records[]
+  mpp_executions      mpp_executions[]
+  repair_tickets      repair_tickets[]
+  verifications       verifications[]
   refresh_tokens      refresh_tokens[]
   sections            sections?             @relation(fields: [sectionId], references: [id])
 
   @@index([email])
   @@index([username])
+}
+
+// Phase 3: Maintenance Management Models
+model maintenance_plans {
+  id              Int       @id @default(autoincrement())
+  deviceId        Int
+  year            Int
+  frequency       String    // LUNAR|BIMESTRIAL|TRIMESTRIAL|SEMESTRIAL|ANUAL
+  responsibleName String
+  responsibleAffil String?
+  months          Int[]     // [1..12] lunile marcate
+  approvedBy      String?
+  approvedAt      DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime
+  device          devices   @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+  occurrences     mpp_occurrences[]
+  @@unique([deviceId, year])
+  @@index([year])
+}
+
+model mpp_occurrences {
+  id            Int       @id @default(autoincrement())
+  planId        Int
+  deviceId      Int
+  scheduledDate DateTime
+  status        String    @default("PROGRAMAT") // PROGRAMAT|SCADENT|DEPASIT|EFECTUAT
+  rescheduledTo DateTime?
+  rescheduleReason String?
+  executionId   Int?
+  createdAt     DateTime  @default(now())
+  plan          maintenance_plans @relation(fields: [planId], references: [id], onDelete: Cascade)
+  @@index([deviceId])
+  @@index([status])
+  @@index([scheduledDate])
+}
+
+model mpp_executions {
+  id              Int       @id @default(autoincrement())
+  deviceId        Int
+  occurrenceId    Int?
+  executedDate    DateTime
+  durationMinutes Int?
+  checklist       Json
+  consumablesUsed Json?
+  result          String    // FUNCTIONAL | DEFECT
+  engineerName    String
+  signature       String?
+  notes           String?
+  createdById     Int?
+  createdAt       DateTime  @default(now())
+  device          devices   @relation(fields: [deviceId], references: [id])
+  createdBy       users?    @relation(fields: [createdById], references: [id])
+  @@index([deviceId])
+  @@index([executedDate])
+}
+
+model repair_tickets {
+  id                  Int       @id @default(autoincrement())
+  ticketNumber        String    @unique
+  deviceId            Int
+  sectionId           Int?
+  reportedAt          DateTime  @default(now())
+  reportedBy          String
+  faultDescription    String
+  priority            String    @default("NORMAL") // SCAZUT|NORMAL|RIDICAT|URGENT
+  status              String    @default("DESCHIS") // DESCHIS→IN_LUCRU→REZOLVAT→TESTAT→INCHIS (+ ESCALADAT)
+  faultCause          String?
+  repairReport        String?   // Raport reparație (observații)
+  actionsTaken        String?   // Acțiuni concrete executate
+  durationHours       Decimal?  // Durata reparației în ore
+  partsUsed           Json?     // [{description, qty, costUnit}, ...]
+  totalCost           Decimal?  // Suma piese
+  functionalTest      String?   // FUNCTIONAL | NEFUNCTIONAL
+  beforePhoto         String?   // Base64 sau URL
+  afterPhoto          String?   // Base64 sau URL
+  engineerName        String?
+  engineerSignature   String?   // Base64 PNG
+  managerSignature    String?   // Base64 PNG
+  externalized        Boolean   @default(false)
+  resolvedAt          DateTime?
+  createdById         Int?
+  updatedAt           DateTime
+  device              devices   @relation(fields: [deviceId], references: [id])
+  createdBy           users?    @relation(fields: [createdById], references: [id])
+  @@index([status])
+  @@index([deviceId])
+  @@index([priority])
+}
+
+model verifications {
+  id            Int       @id @default(autoincrement())
+  deviceId      Int
+  type          String    // LABORATOR | METROLOGIC
+  performedAt   DateTime
+  validUntil    DateTime
+  result        String    // CONFORM | NECONFORM
+  certificateNo String?
+  inspectionBody String?
+  reportUrl     String?
+  notes         String?
+  createdById   Int?
+  createdAt     DateTime  @default(now())
+  device        devices   @relation(fields: [deviceId], references: [id])
+  createdBy     users?    @relation(fields: [createdById], references: [id])
+  @@index([deviceId])
+  @@index([validUntil])
+  @@index([result])
+}
+
+model service_providers {
+  id        Int      @id @default(autoincrement())
+  name      String
+  contact   String?
+  email     String?
+  phone     String?
+  ratingAvg Decimal?
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+  contracts service_contracts[]
+  ratings   provider_ratings[]
+}
+
+model service_contracts {
+  id                 Int      @id @default(autoincrement())
+  providerId         Int
+  contractNo         String   @unique
+  startDate          DateTime
+  endDate            DateTime
+  value              Decimal?
+  currency           String   @default("MDL")
+  slaHours           Int?
+  scope              String?
+  coveredDeviceIds   Int[]    // JSON array of device IDs covered by this contract
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime
+  provider           service_providers @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  @@index([endDate])
+  @@index([providerId])
+}
+
+model provider_ratings {
+  id         Int      @id @default(autoincrement())
+  providerId Int
+  score      Int      // 1-5
+  comment    String?
+  createdAt  DateTime @default(now())
+  provider   service_providers @relation(fields: [providerId], references: [id], onDelete: Cascade)
 }
 
 enum DeviceStatus {

@@ -239,7 +239,7 @@ describe('Audit logs — H1 verification across multiple routes', () => {
       .send({
         inventoryNumber: `H1-${Date.now()}`,
         name: 'H1 Test Device',
-        riskClass: 'II',
+        riskClass: 'IIa',
         sectionId: 1,
       });
     if (devRes.status === 201) entities.push({ id: devRes.body.id, entity: 'Device' });

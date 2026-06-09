@@ -58,3 +58,10 @@ export const fetchConsumableStats = async () => {
 export const deleteConsumable = async (id) => {
   await api.delete(`/consumables/${id}`);
 };
+
+export const getConsumables = fetchConsumables;
+
+export const updateConsumableStock = async (id, delta) => {
+  const { data } = await api.patch(`/consumables/${id}/stock`, { delta });
+  return data;
+};

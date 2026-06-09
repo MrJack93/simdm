@@ -1,0 +1,381 @@
+import { useState } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { getVerifications, uploadVerification, getComplianceReport } from '../api/verifications';
+import { getDevices } from '../api/devices';
+
+const TYPES = ['METROLOGIC', 'METROLOGIE', 'ELECTRICA', 'SECURITATE', 'FUNCTIONAL'];
+
+export default function VerificationsPage() {
+  const queryClient = useQueryClient();
+  const [page, setPage] = useState(1);
+  const [showUploadModal, setShowUploadModal] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
+  const [filterType, setFilterType] = useState('');
+  const [filterStatus, setFilterStatus] = useState('');
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const [sortByExpiry, setSortByExpiry] = useState(false);
+
+  const limit = 50;
+
+  const { data: verificationsData } = useQuery({
+    queryKey: ['verifications', page, filterType, filterStatus],
+    queryFn: () =>
+      getVerifications({
+        page,
+        limit,
+        type: filterType || undefined,
+        status: filterStatus || undefined,
+      }),
+  });
+
+  const { data: report } = useQuery({
+    queryKey: ['complianceReport'],
+    queryFn: getComplianceReport,
+  });
+
+  const { data: devicesData } = useQuery({
+    queryKey: ['devices'],
+    queryFn: getDevices,
+  });
+
+  const uploadMutation = useMutation({
+    mutationFn: uploadVerification,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['verifications'] });
+      queryClient.invalidateQueries({ queryKey: ['complianceReport'] });
+      setShowUploadModal(false);
+    },
+  });
+
+  const handleDeleteConfirm = () => {
+    setDeleteTarget(null);
+  };
+
+  const applyFilter = (filterKey, value) => {
+    if (filterKey === 'type') {
+      setFilterType(filterType === value ? '' : value);
+    } else {
+      setFilterStatus(filterStatus === value ? '' : value);
+    }
+    setShowFilters(false);
+  };
+
+  let verifications = verificationsData?.data || [];
+  // Client-side filtering (since mock may not filter server-side)
+  if (filterType) {
+    verifications = verifications.filter(v => v.verificationType === filterType);
+  }
+  if (filterStatus) {
+    verifications = verifications.filter(v => v.status === filterStatus);
+  }
+  if (sortByExpiry) {
+    verifications = [...verifications].sort(
+      (a, b) => new Date(a.validUntil) - new Date(b.validUntil)
+    );
+  }
+
+  const pagination = verificationsData?.pagination || { page: 1, total: 0 };
+  const totalPages = Math.ceil(pagination.total / limit) || 1;
+
+  const devices = devicesData?.devices || devicesData?.data || [];
+  const conformPct = report && report.total > 0
+    ? Math.round((report.conform / report.total) * 100)
+    : 0;
+
+  const getStatusColor = (status) => {
+    if (status === 'CONFORM') return 'bg-green-100 text-green-800';
+    if (status === 'EXPIRAT') return 'bg-red-100 text-red-800';
+    return 'bg-yellow-100 text-yellow-800';
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50 p-6">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold text-gray-900">Verificări Periodice</h1>
+        <button
+          onClick={() => setShowUploadModal(true)}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+        >
+          Upload Certificat
+        </button>
+      </div>
+
+      {/* Compliance Report */}
+      {report && (
+        <section className="mb-8">
+          <h2 className="text-xl font-bold mb-4">Raport Conformitate</h2>
+          <div className="grid grid-cols-4 gap-4">
+            <div className="bg-white p-4 rounded-lg shadow text-center">
+              <p className="text-sm text-gray-600">Total: {report.total}</p>
+              <p className="text-2xl font-bold text-blue-700">{report.total}</p>
+            </div>
+            <div className="bg-white p-4 rounded-lg shadow text-center">
+              <p className="text-sm text-gray-600">Valide</p>
+              <p className="text-2xl font-bold text-green-700">{report.conform}</p>
+            </div>
+            <div className="bg-white p-4 rounded-lg shadow text-center">
+              <p className="text-sm text-gray-600">Expirat</p>
+              <p className="text-2xl font-bold text-red-700">{report.expirat}</p>
+            </div>
+            <div className="bg-white p-4 rounded-lg shadow text-center">
+              <p className="text-sm text-gray-600">Conformitate</p>
+              <p className="text-2xl font-bold text-blue-700">{conformPct}%</p>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Filters */}
+      <div className="flex gap-3 mb-4">
+        <button
+          onClick={() => setShowFilters((v) => !v)}
+          className="px-4 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50"
+        >
+          Filtrare
+        </button>
+      </div>
+
+      {showFilters && (
+        <div className="bg-white p-4 rounded border mb-4">
+          <div className="flex gap-6 flex-wrap">
+            <div>
+              <p className="text-sm font-medium mb-1">Tip Verificare</p>
+              {TYPES.map((t) => (
+                <label key={t} className="flex items-center gap-1 text-sm cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={filterType === t}
+                    onChange={() => applyFilter('type', t)}
+                    aria-label={t}
+                  />
+                  <span className="text-xs text-gray-700">{t}</span>
+                </label>
+              ))}
+            </div>
+            <div>
+              <p className="text-sm font-medium mb-1">Status</p>
+              {['CONFORM', 'EXPIRAT', 'NEVERIFICAT'].map((s) => (
+                <label key={s} className="flex items-center gap-1 text-sm cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={filterStatus === s}
+                    onChange={() => applyFilter('status', s)}
+                    aria-label={s}
+                  />
+                  {filterStatus !== s && <span className="text-xs text-gray-700">{s}</span>}
+                  {filterStatus === s && <span className="text-xs text-green-700">✓</span>}
+                </label>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Table */}
+      <div className="bg-white rounded-lg shadow overflow-hidden mb-4">
+        <table className="w-full">
+          <thead className="bg-gray-100 border-b">
+            <tr>
+              <th role="columnheader" scope="col" className="px-6 py-3 text-left text-sm font-semibold">Dispozitiv</th>
+              <th role="columnheader" scope="col" className="px-6 py-3 text-left text-sm font-semibold">Tip</th>
+              <th role="columnheader" scope="col" className="px-6 py-3 text-left text-sm font-semibold">Efectuat</th>
+              <th
+                role="columnheader"
+                scope="col"
+                className="px-6 py-3 text-left text-sm font-semibold cursor-pointer hover:bg-gray-200"
+                onClick={() => setSortByExpiry((v) => !v)}
+              >
+                Valid Until
+              </th>
+              <th role="columnheader" scope="col" className="px-6 py-3 text-center text-sm font-semibold">Status</th>
+              <th role="columnheader" scope="col" className="px-6 py-3 text-center text-sm font-semibold">Acțiuni</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y">
+            {verifications.length === 0 ? (
+              <tr>
+                <td colSpan="6" className="px-6 py-8 text-center text-gray-500">
+                  Nu există verificări
+                </td>
+              </tr>
+            ) : (
+              verifications.map((v) => {
+                const daysLeft = v.validUntil
+                  ? Math.ceil(
+                      (new Date(v.validUntil) - new Date()) / (1000 * 60 * 60 * 24)
+                    )
+                  : null;
+                return (
+                  <tr key={v.id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 text-sm font-medium">
+                      {v.device?.name || v.deviceName}
+                    </td>
+                    <td className="px-6 py-4 text-sm">{v.verificationType || v.type}</td>
+                    <td className="px-6 py-4 text-sm">
+                      {v.performedAt
+                        ? new Date(v.performedAt).toLocaleDateString('ro-RO')
+                        : '—'}
+                    </td>
+                    <td className="px-6 py-4 text-sm">
+                      {v.validUntil
+                        ? new Date(v.validUntil).toLocaleDateString('ro-RO')
+                        : '—'}
+                      {daysLeft !== null && daysLeft > 0 && daysLeft <= 30 && (
+                        <span className="ml-2 text-orange-600 text-xs">
+                          Expiră în {daysLeft} zile
+                        </span>
+                      )}
+                    </td>
+                    <td className="px-6 py-4 text-center">
+                      <span
+                        className={`inline-block px-2 py-1 rounded text-xs font-semibold ${getStatusColor(v.status)}`}
+                      >
+                        {v.status}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 text-center">
+                      <button
+                        onClick={() => setDeleteTarget(v)}
+                        className="px-2 py-1 text-xs bg-red-100 text-red-700 rounded hover:bg-red-200"
+                      >
+                        Șterge
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Pagination */}
+      <div className="flex justify-center gap-2">
+        <button
+          onClick={() => setPage((p) => Math.max(1, p - 1))}
+          disabled={page <= 1}
+          className="px-3 py-1 border rounded disabled:opacity-40 hover:bg-gray-100"
+        >
+          Pagina anterioară
+        </button>
+        <span className="px-3 py-1">
+          {page} / {totalPages}
+        </span>
+        <button
+          onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+          disabled={page >= totalPages}
+          className="px-3 py-1 border rounded disabled:opacity-40 hover:bg-gray-100"
+        >
+          Pagina următoare
+        </button>
+      </div>
+
+      {/* Modals */}
+      {showUploadModal && (
+        <UploadModal
+          devices={devices}
+          onClose={() => setShowUploadModal(false)}
+          onUpload={(data) => uploadMutation.mutate(data)}
+        />
+      )}
+
+      {deleteTarget && (
+        <ConfirmModal
+          message="Ești sigur? Verificarea va fi ștearsă definitiv."
+          onConfirm={handleDeleteConfirm}
+          onCancel={() => setDeleteTarget(null)}
+        />
+      )}
+    </div>
+  );
+}
+
+function UploadModal({ devices, onClose, onUpload }) {
+  const [deviceId, setDeviceId] = useState('');
+  const [type, setType] = useState('METROLOGIC');
+  const [performedAt, setPerformedAt] = useState('');
+  const [validUntil, setValidUntil] = useState('');
+  const [certificateNo, setCertificateNo] = useState('');
+  const [file, setFile] = useState(null);
+  const [formError, setFormError] = useState('');
+
+  const handleSubmit = () => {
+    setFormError('');
+    if (!deviceId) { setFormError('Câmpul Dispozitiv este obligatoriu'); return; }
+    if (!type) { setFormError('Câmpul Tip Verificare este obligatoriu'); return; }
+    if (!file) { setFormError('Fișierul certificat este obligatoriu'); return; }
+    onUpload({
+      deviceId: parseInt(deviceId),
+      type,
+      performedAt: performedAt ? new Date(performedAt).toISOString() : new Date().toISOString(),
+      validUntil: validUntil ? new Date(validUntil).toISOString() : undefined,
+      certificateNo: certificateNo || undefined,
+      result: 'CONFORM',
+    });
+    onClose();
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+      <div className="bg-white rounded-lg p-6 w-full max-w-md shadow-xl">
+        <h2 className="text-xl font-bold mb-4">Încarcă Certificat</h2>
+
+        <div className="mb-3">
+          <label htmlFor="verif-device" className="block font-medium mb-1">Dispozitiv</label>
+          <select id="verif-device" value={deviceId} onChange={(e) => setDeviceId(e.target.value)} className="w-full border px-3 py-2 rounded">
+            <option value="">-- Selectează --</option>
+            {devices.map((d) => <option key={d.id} value={d.id}>{d.name}</option>)}
+          </select>
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="verif-type" className="block font-medium mb-1">Tip Verificare</label>
+          <select id="verif-type" value={type} onChange={(e) => setType(e.target.value)} className="w-full border px-3 py-2 rounded">
+            {TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
+          </select>
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="cert-no" className="block font-medium mb-1">Nr. Certificat</label>
+          <input id="cert-no" type="text" value={certificateNo} onChange={(e) => setCertificateNo(e.target.value)} className="w-full border px-3 py-2 rounded" />
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="verif-performed" className="block font-medium mb-1">Data Efectuării</label>
+          <input id="verif-performed" type="date" value={performedAt} onChange={(e) => setPerformedAt(e.target.value)} className="w-full border px-3 py-2 rounded" />
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="verif-valid" className="block font-medium mb-1">Valabil Până</label>
+          <input id="verif-valid" type="date" value={validUntil} onChange={(e) => setValidUntil(e.target.value)} className="w-full border px-3 py-2 rounded" />
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="cert-file" className="block font-medium mb-1">Fișier Certificat</label>
+          <input id="cert-file" type="file" accept=".pdf,.jpg,.png" onChange={(e) => setFile(e.target.files?.[0])} className="w-full" />
+        </div>
+
+        {formError && <p className="text-red-600 text-sm mb-3">{formError}</p>}
+
+        <div className="flex gap-2 justify-end">
+          <button type="button" onClick={onClose} className="px-4 py-2 border rounded hover:bg-gray-100">Anulare</button>
+          <button type="button" onClick={handleSubmit} className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Salvare</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ConfirmModal({ message, onConfirm, onCancel }) {
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+      <div className="bg-white rounded-lg p-6 w-full max-w-sm shadow-xl">
+        <p className="mb-4">{message}</p>
+        <div className="flex gap-2 justify-end">
+          <button type="button" onClick={onCancel} className="px-4 py-2 border rounded hover:bg-gray-100">Anulare</button>
+          <button type="button" onClick={onConfirm} className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Confirmare</button>
+        </div>
+      </div>
+    </div>
+  );
+}

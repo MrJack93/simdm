@@ -85,3 +85,5 @@ export const fetchConsumables = async () => {
   const { data } = await api.get('/devices/consumables');
   return data;
 };
+
+export const getDevices = fetchDevices;

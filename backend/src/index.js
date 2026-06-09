@@ -10,9 +10,10 @@ const { log } = require('./utils/logger');
 
 const authMiddleware = require('./middleware/auth');
 const { cleanupExpiredTokens } = require('./jobs/cleanupTokens');
+const { startCronJobs } = require('./jobs/notifications');
 
 let authRoutes, sectionsRoutes, deviceRoutes, consumableRoutes, annualInventoryRoutes;
-let auditLogsRoutes, maintenanceRoutes, incidentRoutes;
+let auditLogsRoutes, maintenanceRoutes, incidentRoutes, maintenancePlansRoutes, mppExecutionsRoutes, repairTicketsRoutes, verificationsRoutes, serviceContractsRoutes;
 try {
   authRoutes = require('./routes/auth');
   console.log('✅ Auth routes loaded');
@@ -30,6 +31,16 @@ try {
   console.log('✅ Maintenance routes loaded');
   incidentRoutes = require('./routes/incidents');
   console.log('✅ Incidents routes loaded');
+  maintenancePlansRoutes = require('./routes/maintenancePlans');
+  console.log('✅ Maintenance plans routes loaded');
+  mppExecutionsRoutes = require('./routes/mppExecutions');
+  console.log('✅ MPP executions routes loaded');
+  repairTicketsRoutes = require('./routes/repairTickets');
+  console.log('✅ Repair tickets routes loaded');
+  verificationsRoutes = require('./routes/verifications');
+  console.log('✅ Verifications routes loaded');
+  serviceContractsRoutes = require('./routes/serviceContracts');
+  console.log('✅ Service contracts routes loaded');
 } catch (e) {
   console.error('❌ Error loading routes:', e.message);
   process.exit(1);
@@ -86,6 +97,11 @@ app.use('/api/annual-inventory', authMiddleware, annualInventoryRoutes);
 app.use('/api/audit-logs', authMiddleware, auditLogsRoutes);
 app.use('/api/maintenance', authMiddleware, maintenanceRoutes);
 app.use('/api/incidents', authMiddleware, incidentRoutes);
+app.use('/api/maintenance-plans', authMiddleware, maintenancePlansRoutes);
+app.use('/api/mpp-executions', authMiddleware, mppExecutionsRoutes);
+app.use('/api/repair-tickets', authMiddleware, repairTicketsRoutes);
+app.use('/api/verifications', authMiddleware, verificationsRoutes);
+app.use('/api/service-contracts', authMiddleware, serviceContractsRoutes);
 // app.use('/api/documents', authMiddleware, documentRoutes);
 
 app.use((err, req, res, next) => {
@@ -119,6 +135,13 @@ if (require.main === module) {
     // Daily cleanup of expired refresh tokens
     setInterval(cleanupExpiredTokens, 24 * 60 * 60 * 1000);
     log('Refresh token cleanup job started (daily)');
+
+    // Start cron jobs for alerts and notifications
+    try {
+      startCronJobs();
+    } catch (err) {
+      log(`Warning: Failed to start cron jobs: ${err.message}`);
+    }
   });
 
   server.on('error', (err) => {
