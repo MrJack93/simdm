@@ -616,8 +616,8 @@ router.get('/:id/fisa-pdf', exportLimiter, async (req, res) => {
     const doc = new PDFDocument({ margin: 50 });
     
     // Register custom TTF fonts that support Romanian diacritics
-    doc.registerFont('Times-Roman-Custom', path.join(__dirname, '../assets/fonts/DejaVuSans.ttf'));
-    doc.registerFont('Times-Bold-Custom', path.join(__dirname, '../assets/fonts/DejaVuSans-Bold.ttf'));
+    doc.registerFont('Times-Roman-Custom', path.join(__dirname, '../assets/fonts/times.ttf'));
+    doc.registerFont('Times-Bold-Custom', path.join(__dirname, '../assets/fonts/timesbd.ttf'));
 
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `attachment; filename="Fisa_DM_${device.inventoryNumber}.pdf"`);

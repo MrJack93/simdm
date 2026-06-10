@@ -1,0 +1,1582 @@
+
+> backend@1.0.0 test
+> vitest run
+
+
+ RUN  v4.1.8 C:/Users/janea/simdm/backend
+
+[2026-06-10 12:10:40.875 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:40.968 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:40.993 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:41.130 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:41.373 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:41.442 +0300] [32mINFO[39m: [36mGET /api/auth/me[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:41.452 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:41.443 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:41.662 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:41.681 +0300] [32mINFO[39m: [36mPATCH /api/auth/change-password[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:41.689 +0300] [32mINFO[39m: [36mPATCH /api/auth/change-password[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:41.697 +0300] [32mINFO[39m: [36mPATCH /api/auth/change-password[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:41.702 +0300] [32mINFO[39m: [36mPATCH /api/auth/change-password[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:41.708 +0300] [32mINFO[39m: [36mPATCH /api/auth/change-password[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:41.728 +0300] [32mINFO[39m: [36mPOST /api/devices[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:41.760 +0300] [32mINFO[39m: [36mPOST /api/consumables[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:41.774 +0300] [32mINFO[39m: [36mPOST /api/maintenance-plans/generate[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:41.811 +0300] [32mINFO[39m: [36mGET /api/maintenance-plans/calendar[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:41.829 +0300] [32mINFO[39m: [36mGET /api/mpp-executions/checklist-template/2863[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:41.835 +0300] [32mINFO[39m: [36mGET /api/mpp-executions/checklist-template/2863[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:41.843 +0300] [32mINFO[39m: [36mGET /api/mpp-executions/checklist-template/2863[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:41.851 +0300] [32mINFO[39m: [36mGET /api/mpp-executions/checklist-template/999999[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:41.859 +0300] [32mINFO[39m: [36mPOST /api/mpp-executions[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:41.863 +0300] [32mINFO[39m: [36mPOST /api/mpp-executions[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:41.870 +0300] [32mINFO[39m: [36mPOST /api/mpp-executions[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:41.874 +0300] [32mINFO[39m: [36mPOST /api/mpp-executions[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:41.899 +0300] [32mINFO[39m: [36mPOST /api/mpp-executions[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:41.915 +0300] [32mINFO[39m: [36mGET /api/consumables[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:41.985 +0300] [32mINFO[39m: [36mGET /api/auth/me[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:41.992 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.037 +0300] [32mINFO[39m: [36mPOST /api/devices[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.073 +0300] [32mINFO[39m: [36mPOST /api/mpp-executions[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.076 +0300] [32mINFO[39m: [36mPOST /api/verifications[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.110 +0300] [32mINFO[39m: [36mGET /api/consumables[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.084 +0300] [32mINFO[39m: [36mPOST /api/verifications[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.112 +0300] [32mINFO[39m: [36mPOST /api/verifications[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.119 +0300] [32mINFO[39m: [36mPOST /api/devices[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.134 +0300] [32mINFO[39m: [36mPOST /api/verifications[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.119 +0300] [32mINFO[39m: [36mPOST /api/mpp-executions[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.134 +0300] [32mINFO[39m: [36mPOST /api/mpp-executions[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.147 +0300] [32mINFO[39m: [36mGET /api/devices/2863[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.158 +0300] [32mINFO[39m: [36mPOST /api/verifications[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.179 +0300] [32mINFO[39m: [36mPOST /api/verifications[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.196 +0300] [32mINFO[39m: [36mPOST /api/verifications[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.202 +0300] [32mINFO[39m: [36mPOST /api/verifications[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.214 +0300] [32mINFO[39m: [36mGET /api/verifications/compliance-report[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.235 +0300] [32mINFO[39m: [36mGET /api/verifications/compliance-report[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.245 +0300] [32mINFO[39m: [36mGET /api/verifications/compliance-report[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.259 +0300] [32mINFO[39m: [36mPOST /api/verifications[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.273 +0300] [32mINFO[39m: [36mGET /api/verifications/compliance-report[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.282 +0300] [32mINFO[39m: [36mGET /api/verifications/compliance-report[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.292 +0300] [32mINFO[39m: [36mGET /api/verifications/compliance-report[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.300 +0300] [32mINFO[39m: [36mGET /api/verifications/compliance-report[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.309 +0300] [32mINFO[39m: [36mGET /api/verifications/compliance-report[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.213 +0300] [32mINFO[39m: [36mPOST /api/devices[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.317 +0300] [32mINFO[39m: [36mGET /api/verifications/445[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.249 +0300] [32mINFO[39m: [36mPOST /api/consumables[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.265 +0300] [32mINFO[39m: [36mPOST /api/repair-tickets[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.272 +0300] [32mINFO[39m: [36mPOST /api/repair-tickets[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.225 +0300] [32mINFO[39m: [36mPATCH /api/auth/change-password[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.307 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.325 +0300] [32mINFO[39m: [36mGET /api/verifications/999999[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.330 +0300] [32mINFO[39m: [36mGET /api/verifications[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.441 +0300] [32mINFO[39m: [36mPOST /api/mpp-executions[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.474 +0300] [32mINFO[39m: [36mPOST /api/mpp-executions[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.493 +0300] [32mINFO[39m: [36mPOST /api/mpp-executions[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.506 +0300] [32mINFO[39m: [36mPOST /api/repair-tickets[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.506 +0300] [32mINFO[39m: [36mGET /api/mpp-executions/582[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.515 +0300] [32mINFO[39m: [36mGET /api/mpp-executions/999999[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.521 +0300] [32mINFO[39m: [36mGET /api/mpp-executions[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.533 +0300] [32mINFO[39m: [36mGET /api/mpp-executions[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.507 +0300] [32mINFO[39m: [36mGET /api/verifications[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.520 +0300] [32mINFO[39m: [36mGET /api/verifications[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.531 +0300] [32mINFO[39m: [36mGET /api/verifications[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.536 +0300] [32mINFO[39m: [36mPOST /api/verifications[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.560 +0300] [32mINFO[39m: [36mPOST /api/verifications[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.585 +0300] [32mINFO[39m: [36mGET /api/verifications/445/certificate[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.589 +0300] [32mINFO[39m: [36mGET /api/verifications/445/certificate[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.542 +0300] [32mINFO[39m: [36mGET /api/mpp-executions[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.513 +0300] [32mINFO[39m: [36mPOST /api/repair-tickets[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.532 +0300] [32mINFO[39m: [36mPOST /api/repair-tickets[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.552 +0300] [32mINFO[39m: [36mPOST /api/repair-tickets[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.559 +0300] [32mINFO[39m: [36mPOST /api/repair-tickets[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.573 +0300] [32mINFO[39m: [36mPOST /api/repair-tickets[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.588 +0300] [32mINFO[39m: [36mPOST /api/repair-tickets[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.601 +0300] [32mINFO[39m: [36mPATCH /api/repair-tickets/1070/status[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.619 +0300] [32mINFO[39m: [36mPATCH /api/repair-tickets/1070/status[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.554 +0300] [32mINFO[39m: [36mPOST /api/mpp-executions[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.571 +0300] [32mINFO[39m: [36mGET /api/mpp-executions/583/formular6-pdf[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.575 +0300] [32mINFO[39m: [36mGET /api/mpp-executions/583/formular6-pdf[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.630 +0300] [32mINFO[39m: [36mPATCH /api/repair-tickets/1070/status[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.640 +0300] [32mINFO[39m: [36mPATCH /api/repair-tickets/1070/status[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.656 +0300] [32mINFO[39m: [36mPATCH /api/repair-tickets/1070/status[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.662 +0300] [32mINFO[39m: [36mPATCH /api/repair-tickets/999999/status[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.671 +0300] [32mINFO[39m: [36mPOST /api/repair-tickets[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.684 +0300] [32mINFO[39m: [36mPATCH /api/repair-tickets/1071/triage[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.695 +0300] [32mINFO[39m: [36mPOST /api/repair-tickets[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.707 +0300] [32mINFO[39m: [36mPATCH /api/repair-tickets/1072/triage[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.718 +0300] [32mINFO[39m: [36mGET /api/consumables[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.734 +0300] [32mINFO[39m: [36mPOST /api/repair-tickets[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.746 +0300] [32mINFO[39m: [36mPATCH /api/repair-tickets/1073/triage[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.755 +0300] [32mINFO[39m: [36mPATCH /api/repair-tickets/1073/status[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.761 +0300] [32mINFO[39m: [36mPUT /api/repair-tickets/1073/repair[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.784 +0300] [32mINFO[39m: [36mGET /api/consumables[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.792 +0300] [32mINFO[39m: [36mPOST /api/repair-tickets[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.804 +0300] [32mINFO[39m: [36mPATCH /api/repair-tickets/1074/triage[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.814 +0300] [32mINFO[39m: [36mPUT /api/repair-tickets/1074/repair[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.831 +0300] [32mINFO[39m: [36mGET /api/consumables[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.839 +0300] [32mINFO[39m: [36mPOST /api/repair-tickets[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.852 +0300] [32mINFO[39m: [36mPATCH /api/repair-tickets/1075/triage[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.861 +0300] [32mINFO[39m: [36mPUT /api/repair-tickets/1075/repair[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.876 +0300] [32mINFO[39m: [36mPOST /api/repair-tickets[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.889 +0300] [32mINFO[39m: [36mPATCH /api/repair-tickets/1076/triage[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.897 +0300] [32mINFO[39m: [36mPUT /api/repair-tickets/1076/repair[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.930 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.950 +0300] [32mINFO[39m: [36mGET /api/verifications/999999/certificate[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.956 +0300] [32mINFO[39m: [36mGET /api/verifications/abc/certificate[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.960 +0300] [32mINFO[39m: [36mPOST /api/verifications[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.972 +0300] [32mINFO[39m: [36mDELETE /api/verifications/452[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.976 +0300] [32mINFO[39m: [36mDELETE /api/verifications/452[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.987 +0300] [32mINFO[39m: [36mGET /api/verifications/452[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.911 +0300] [32mINFO[39m: [36mPOST /api/repair-tickets[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.924 +0300] [32mINFO[39m: [36mGET /api/repair-tickets/1077[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.932 +0300] [32mINFO[39m: [36mGET /api/repair-tickets/999999[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.939 +0300] [32mINFO[39m: [36mGET /api/repair-tickets[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.953 +0300] [32mINFO[39m: [36mGET /api/repair-tickets[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.965 +0300] [32mINFO[39m: [36mGET /api/repair-tickets[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.974 +0300] [32mINFO[39m: [36mGET /api/repair-tickets[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.984 +0300] [32mINFO[39m: [36mPOST /api/repair-tickets[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.996 +0300] [32mINFO[39m: [36mPATCH /api/repair-tickets/1078/triage[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:42.993 +0300] [32mINFO[39m: [36mDELETE /api/verifications/abc[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:43.008 +0300] [32mINFO[39m: [36mPUT /api/repair-tickets/1078/repair[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:43.025 +0300] [32mINFO[39m: [36mGET /api/repair-tickets/1078/formular8-pdf[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:43.037 +0300] [32mINFO[39m: [36mGET /api/repair-tickets/1078/formular8-pdf[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:43.182 +0300] [32mINFO[39m: [36mGET /api/mpp-executions/999999/formular6-pdf[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:43.189 +0300] [32mINFO[39m: [36mGET /api/mpp-executions/abc/formular6-pdf[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:43.195 +0300] [32mINFO[39m: [36mGET /api/consumables[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:43.211 +0300] [32mINFO[39m: [36mPOST /api/mpp-executions[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:43.227 +0300] [32mINFO[39m: [36mDELETE /api/mpp-executions/584[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:43.249 +0300] [32mINFO[39m: [36mGET /api/consumables[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:43.381 +0300] [32mINFO[39m: [36mGET /api/repair-tickets/999999/formular8-pdf[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:43.391 +0300] [32mINFO[39m: [36mGET /api/repair-tickets/abc/formular8-pdf[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:43.399 +0300] [32mINFO[39m: [36mGET /api/repair-tickets/formular7-pdf[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:43.403 +0300] [32mINFO[39m: [36mGET /api/repair-tickets/formular7-pdf[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:43.479 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:43.768 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:43.910 +0300] [32mINFO[39m: [36mGET /api/repair-tickets/formular7-pdf[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:43.968 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:43.976 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:43.983 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:43.992 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:44.007 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:44.302 +0300] [32mINFO[39m: [36mPATCH /api/auth/change-password[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:44.311 +0300] [32mINFO[39m: [36mPATCH /api/auth/change-password[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:44.587 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:44.594 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:45.511 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:45.541 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:46.022 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:46.306 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:46.489 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:46.581 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:46.739 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:46.946 +0300] [32mINFO[39m: [36mGET /api/devices[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:46.953 +0300] [32mINFO[39m: [36mGET /api/devices[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:46.960 +0300] [32mINFO[39m: [36mGET /api/devices/dropdown/sections[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:46.983 +0300] [32mINFO[39m: [36mPOST /api/devices[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:46.994 +0300] [32mINFO[39m: [36mPOST /api/devices[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.001 +0300] [32mINFO[39m: [36mPOST /api/devices[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.008 +0300] [32mINFO[39m: [36mPOST /api/devices[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.068 +0300] [32mINFO[39m: [36mPOST /api/devices[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.089 +0300] [32mINFO[39m: [36mPOST /api/devices[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.102 +0300] [32mINFO[39m: [36mPOST /api/devices[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.114 +0300] [32mINFO[39m: [36mPOST /api/devices[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.128 +0300] [32mINFO[39m: [36mGET /api/devices/2870[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.083 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.134 +0300] [32mINFO[39m: [36mPOST /api/devices[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.167 +0300] [32mINFO[39m: [36mGET /api/devices/export/xlsx[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.231 +0300] [32mINFO[39m: [36mPOST /api/devices[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.245 +0300] [32mINFO[39m: [36mGET /api/devices/export/csv[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.264 +0300] [32mINFO[39m: [36mPOST /api/devices[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.279 +0300] [32mINFO[39m: [36mGET /api/devices[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.440 +0300] [32mINFO[39m: [36mPOST /api/devices[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.456 +0300] [32mINFO[39m: [36mPOST /api/consumables[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.464 +0300] [32mINFO[39m: [36mGET /api/devices/2874/fisa-pdf[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.433 +0300] [32mINFO[39m: [36mGET /api/devices/99999999[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.440 +0300] [32mINFO[39m: [36mGET /api/devices[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.464 +0300] [32mINFO[39m: [36mPOST /api/devices[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.483 +0300] [32mINFO[39m: [36mGET /api/devices[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.499 +0300] [32mINFO[39m: [36mPOST /api/devices[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.512 +0300] [32mINFO[39m: [36mGET /api/devices[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.529 +0300] [32mINFO[39m: [36mPOST /api/devices[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.485 +0300] [32mINFO[39m: [36mPOST /api/devices[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.541 +0300] [32mINFO[39m: [36mPOST /api/consumables[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.552 +0300] [32mINFO[39m: [36mPUT /api/consumables/1495[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.544 +0300] [32mINFO[39m: [36mDELETE /api/devices/2878[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.557 +0300] [32mINFO[39m: [36mGET /api/devices[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.569 +0300] [32mINFO[39m: [36mPOST /api/devices[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.583 +0300] [32mINFO[39m: [36mPUT /api/devices/2879[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.571 +0300] [32mINFO[39m: [36mPOST /api/devices[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.583 +0300] [32mINFO[39m: [36mPUT /api/devices/2880[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.604 +0300] [32mINFO[39m: [36mPUT /api/devices/99999999[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.611 +0300] [32mINFO[39m: [36mPOST /api/devices[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.618 +0300] [32mINFO[39m: [36mPOST /api/consumables[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.628 +0300] [32mINFO[39m: [36mDELETE /api/consumables/1496[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.623 +0300] [32mINFO[39m: [36mPUT /api/devices/2881[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.631 +0300] [32mINFO[39m: [36mPOST /api/devices[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.643 +0300] [32mINFO[39m: [36mDELETE /api/devices/2882[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.659 +0300] [32mINFO[39m: [36mPOST /api/devices[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.670 +0300] [32mINFO[39m: [36mGET /api/devices/2883/fisa-pdf[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.649 +0300] [32mINFO[39m: [36mPOST /api/consumables[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.663 +0300] [32mINFO[39m: [36mPOST /api/consumables[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.672 +0300] [32mINFO[39m: [36mPOST /api/devices[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.695 +0300] [32mINFO[39m: [36mPOST /api/consumables[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.704 +0300] [32mINFO[39m: [36mPOST /api/devices[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.717 +0300] [32mINFO[39m: [36mGET /api/audit-logs[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.961 +0300] [32mINFO[39m: [36mGET /api/audit-logs[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.976 +0300] [32mINFO[39m: [36mGET /api/audit-logs[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.988 +0300] [32mINFO[39m: [36mGET /api/audit-logs[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:48.005 +0300] [32mINFO[39m: [36mGET /api/audit-logs[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:48.017 +0300] [32mINFO[39m: [36mGET /api/audit-logs[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:48.027 +0300] [32mINFO[39m: [36mGET /api/audit-logs[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.973 +0300] [32mINFO[39m: [36mPOST /api/devices[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.994 +0300] [32mINFO[39m: [36mPOST /api/devices/2886/upload[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:48.044 +0300] [32mINFO[39m: [36mPOST /api/devices[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:47.993 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:48.057 +0300] [32mINFO[39m: [36mPOST /api/devices/2887/upload[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:48.078 +0300] [32mINFO[39m: [36mPOST /api/devices[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:48.092 +0300] [32mINFO[39m: [36mPOST /api/devices/2888/upload[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:48.063 +0300] [32mINFO[39m: [36mGET /api/audit-logs/export/csv[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:48.112 +0300] [32mINFO[39m: [36mGET /api/devices[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:48.134 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:48.121 +0300] [32mINFO[39m: [36mPOST /api/devices[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:48.127 +0300] [32mINFO[39m: [36mGET /api/devices/12345/fisa-pdf[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:48.133 +0300] [32mINFO[39m: [36mPOST /api/devices[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:48.147 +0300] [32mINFO[39m: [36mPUT /api/devices/2889[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:48.162 +0300] [32mINFO[39m: [36mPOST /api/devices[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:48.175 +0300] [32mINFO[39m: [36mDELETE /api/devices/2890[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:48.185 +0300] [32mINFO[39m: [36mGET /api/devices/424242[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:48.191 +0300] [32mINFO[39m: [36mGET /api/devices/export/xlsx[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:48.199 +0300] [32mINFO[39m: [36mGET /api/devices/export/csv[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:48.189 +0300] [32mINFO[39m: [36mGET /api/devices/99999999/fisa-pdf[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:48.196 +0300] [32mINFO[39m: [36mGET /api/devices/export/xlsx[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:48.226 +0300] [32mINFO[39m: [36mGET /api/devices/export/csv[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:48.239 +0300] [32mINFO[39m: [36mPOST /api/devices[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:48.252 +0300] [32mINFO[39m: [36mPOST /api/devices/2891/upload[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:48.289 +0300] [32mINFO[39m: [36mPOST /api/devices[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:48.300 +0300] [32mINFO[39m: [36mPOST /api/devices/2892/upload[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:48.303 +0300] [32mINFO[39m: [36mERROR HANDLER: Tip fișier neacceptat[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:48.303 +0300] [32mINFO[39m: [36mError: Tip fișier neacceptat
+    at fileFilter (C:\Users\janea\simdm\backend\src\routes\devices.js:98:8)
+    at wrappedFileFilter (C:\Users\janea\simdm\backend\node_modules\multer\index.js:45:7)
+    at Multipart.<anonymous> (C:\Users\janea\simdm\backend\node_modules\multer\lib\make-middleware.js:183:7)
+    at Multipart.emit (node:events:519:28)
+    at HeaderParser.cb (C:\Users\janea\simdm\backend\node_modules\busboy\lib\types\multipart.js:358:14)
+    at HeaderParser.push (C:\Users\janea\simdm\backend\node_modules\busboy\lib\types\multipart.js:162:20)
+    at SBMH.ssCb [as _cb] (C:\Users\janea\simdm\backend\node_modules\busboy\lib\types\multipart.js:394:37)
+    at feed (C:\Users\janea\simdm\backend\node_modules\streamsearch\lib\sbmh.js:219:14)
+    at SBMH.push (C:\Users\janea\simdm\backend\node_modules\streamsearch\lib\sbmh.js:104:16)
+    at Multipart._write (C:\Users\janea\simdm\backend\node_modules\busboy\lib\types\multipart.js:567:19)[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:48.311 +0300] [32mINFO[39m: [36mPOST /api/devices[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:48.320 +0300] [32mINFO[39m: [36mPOST /api/devices/2893/upload[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:48.410 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:48.608 +0300] [32mINFO[39m: [36mGET /api/audit-logs/export/csv[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:48.701 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:48.725 +0300] [32mINFO[39m: [36mPOST /api/devices[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:48.763 +0300] [32mINFO[39m: [36mPOST /api/maintenance-plans/generate[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:48.770 +0300] [32mINFO[39m: [36mPOST /api/maintenance-plans/generate[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:48.815 +0300] [32mINFO[39m: [36mPOST /api/maintenance-plans/generate[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:48.835 +0300] [32mINFO[39m: [36mPOST /api/maintenance-plans/generate[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:48.852 +0300] [32mINFO[39m: [36mPOST /api/maintenance-plans/generate[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:48.868 +0300] [32mINFO[39m: [36mPOST /api/maintenance-plans/generate[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:48.877 +0300] [32mINFO[39m: [36mPOST /api/maintenance-plans/generate[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:48.885 +0300] [32mINFO[39m: [36mPOST /api/maintenance-plans/generate[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:48.907 +0300] [32mINFO[39m: [36mPOST /api/maintenance-plans/generate[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:48.922 +0300] [32mINFO[39m: [36mGET /api/maintenance-plans/calendar[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:48.946 +0300] [32mINFO[39m: [36mGET /api/maintenance-plans/calendar[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:48.959 +0300] [32mINFO[39m: [36mPOST /api/maintenance-plans/generate[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:48.976 +0300] [32mINFO[39m: [36mGET /api/maintenance-plans/649[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.007 +0300] [32mINFO[39m: [36mPOST /api/devices[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.045 +0300] [32mINFO[39m: [36mGET /api/maintenance[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.053 +0300] [32mINFO[39m: [36mPOST /api/maintenance[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.060 +0300] [32mINFO[39m: [36mGET /api/maintenance[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.093 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.176 +0300] [32mINFO[39m: [36mGET /api/maintenance-plans/649[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.180 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.190 +0300] [32mINFO[39m: [36mGET /api/maintenance-plans/999999[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.196 +0300] [32mINFO[39m: [36mPOST /api/maintenance-plans/generate[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.216 +0300] [32mINFO[39m: [36mGET /api/maintenance-plans/650[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.223 +0300] [32mINFO[39m: [36mPATCH /api/maintenance-plans/occurrence/4091/reschedule[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.235 +0300] [32mINFO[39m: [36mPATCH /api/maintenance-plans/occurrence/4091/reschedule[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.240 +0300] [32mINFO[39m: [36mPATCH /api/maintenance-plans/occurrence/4091/reschedule[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.245 +0300] [32mINFO[39m: [36mPATCH /api/maintenance-plans/occurrence/4091/reschedule[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.259 +0300] [32mINFO[39m: [36mPOST /api/maintenance-plans/generate[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.259 +0300] [32mINFO[39m: [36mPOST /api/maintenance[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.273 +0300] [32mINFO[39m: [36mGET /api/maintenance-plans/2033/formular5-pdf[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.291 +0300] [32mINFO[39m: [36mGET /api/maintenance[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.313 +0300] [32mINFO[39m: [36mPOST /api/maintenance[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.330 +0300] [32mINFO[39m: [36mGET /api/maintenance[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.342 +0300] [32mINFO[39m: [36mPOST /api/maintenance[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.356 +0300] [32mINFO[39m: [36mGET /api/maintenance/1304[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.366 +0300] [32mINFO[39m: [36mGET /api/maintenance/999999[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.374 +0300] [32mINFO[39m: [36mPOST /api/maintenance[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.390 +0300] [32mINFO[39m: [36mPOST /api/maintenance[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.397 +0300] [32mINFO[39m: [36mPOST /api/maintenance[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.402 +0300] [32mINFO[39m: [36mPOST /api/maintenance[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.407 +0300] [32mINFO[39m: [36mPOST /api/maintenance[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.427 +0300] [32mINFO[39m: [36mPOST /api/maintenance[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.444 +0300] [32mINFO[39m: [36mPOST /api/maintenance[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.458 +0300] [32mINFO[39m: [36mPUT /api/maintenance/1308[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.472 +0300] [32mINFO[39m: [36mPOST /api/maintenance[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.486 +0300] [32mINFO[39m: [36mPUT /api/maintenance/1309[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.499 +0300] [32mINFO[39m: [36mPOST /api/maintenance[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.511 +0300] [32mINFO[39m: [36mPUT /api/maintenance/1310[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.519 +0300] [32mINFO[39m: [36mPOST /api/maintenance[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.531 +0300] [32mINFO[39m: [36mDELETE /api/maintenance/1311[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.541 +0300] [32mINFO[39m: [36mGET /api/maintenance/1311[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.549 +0300] [32mINFO[39m: [36mPOST /api/maintenance[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.626 +0300] [32mINFO[39m: [36mGET /api/maintenance-plans/2090/formular5-pdf[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.634 +0300] [32mINFO[39m: [36mGET /api/maintenance-plans/invalid/formular5-pdf[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.663 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.657 +0300] [32mINFO[39m: [36mGET /api/consumables[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.820 +0300] [32mINFO[39m: [36mGET /api/consumables[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.832 +0300] [32mINFO[39m: [36mGET /api/consumables[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.843 +0300] [32mINFO[39m: [36mPUT /api/consumables/abc[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.852 +0300] [32mINFO[39m: [36mPOST /api/consumables[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.872 +0300] [32mINFO[39m: [36mPUT /api/consumables/1500[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.891 +0300] [32mINFO[39m: [36mDELETE /api/consumables/xyz[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.899 +0300] [32mINFO[39m: [36mGET /api/consumables[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.909 +0300] [32mINFO[39m: [36mPOST /api/consumables[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:49.916 +0300] [32mINFO[39m: [36mPOST /api/consumables[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:50.098 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:50.536 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:50.546 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:50.553 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:50.561 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:50.568 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:50.576 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:50.585 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:50.592 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:50.600 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:50.610 +0300] [32mINFO[39m: [36mGET /api/auth/me[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:50.616 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:51.159 +0300] [32mINFO[39m: [36mGET /api/auth/me[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:51.170 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:51.638 +0300] [32mINFO[39m: [36mGET /api/auth/me[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:51.646 +0300] [32mINFO[39m: [36mGET /api/auth/me[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:51.652 +0300] [32mINFO[39m: [36mPOST /api/auth/refresh[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:51.657 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:51.773 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:51.934 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:52.155 +0300] [32mINFO[39m: [36mPOST /api/auth/refresh[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:52.175 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:52.342 +0300] [32mINFO[39m: [36mPOST /api/devices[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:52.377 +0300] [32mINFO[39m: [36mGET /api/devices/dropdown/sections[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:52.391 +0300] [32mINFO[39m: [36mGET /api/incidents[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:52.400 +0300] [32mINFO[39m: [36mPOST /api/incidents[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:52.406 +0300] [32mINFO[39m: [36mGET /api/incidents[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:52.481 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:52.680 +0300] [32mINFO[39m: [36mPOST /api/service-contracts/providers[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:52.687 +0300] [32mINFO[39m: [36mPOST /api/service-contracts/providers[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:52.704 +0300] [32mINFO[39m: [36mPOST /api/service-contracts/providers[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:52.711 +0300] [32mINFO[39m: [36mPOST /api/service-contracts/providers[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:52.655 +0300] [32mINFO[39m: [36mPOST /api/auth/refresh[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:52.667 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:52.724 +0300] [32mINFO[39m: [36mPOST /api/service-contracts/providers[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:52.736 +0300] [32mINFO[39m: [36mPOST /api/service-contracts/contracts[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:52.742 +0300] [32mINFO[39m: [36mPOST /api/service-contracts/contracts[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:52.774 +0300] [32mINFO[39m: [36mPOST /api/service-contracts/contracts[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:52.735 +0300] [32mINFO[39m: [36mPOST /api/incidents[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:52.769 +0300] [32mINFO[39m: [36mGET /api/incidents[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:52.783 +0300] [32mINFO[39m: [36mPOST /api/service-contracts/contracts[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:52.798 +0300] [32mINFO[39m: [36mGET /api/service-contracts/contracts[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:52.818 +0300] [32mINFO[39m: [36mPOST /api/service-contracts/contracts[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:52.831 +0300] [32mINFO[39m: [36mGET /api/service-contracts/contracts[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:52.839 +0300] [32mINFO[39m: [36mGET /api/service-contracts/contracts[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:52.849 +0300] [32mINFO[39m: [36mPOST /api/service-contracts/providers/211/rate[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:52.854 +0300] [32mINFO[39m: [36mPOST /api/service-contracts/providers/211/rate[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:52.792 +0300] [32mINFO[39m: [36mGET /api/incidents[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:52.873 +0300] [32mINFO[39m: [36mPOST /api/service-contracts/providers/211/rate[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:52.887 +0300] [32mINFO[39m: [36mGET /api/service-contracts/providers/211[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:52.809 +0300] [32mINFO[39m: [36mPOST /api/incidents[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:52.829 +0300] [32mINFO[39m: [36mGET /api/incidents/538[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:52.838 +0300] [32mINFO[39m: [36mGET /api/incidents/999999[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:52.846 +0300] [32mINFO[39m: [36mPOST /api/incidents[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:52.862 +0300] [32mINFO[39m: [36mPOST /api/incidents[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:52.876 +0300] [32mINFO[39m: [36mPOST /api/incidents[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:52.883 +0300] [32mINFO[39m: [36mPOST /api/incidents[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:52.889 +0300] [32mINFO[39m: [36mPOST /api/incidents[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:52.902 +0300] [32mINFO[39m: [36mPUT /api/incidents/541[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:52.921 +0300] [32mINFO[39m: [36mPOST /api/incidents[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:52.936 +0300] [32mINFO[39m: [36mPUT /api/incidents/542[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:52.951 +0300] [32mINFO[39m: [36mPOST /api/incidents[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:52.962 +0300] [32mINFO[39m: [36mPUT /api/incidents/543[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:52.968 +0300] [32mINFO[39m: [36mPOST /api/incidents[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:52.980 +0300] [32mINFO[39m: [36mDELETE /api/incidents/544[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:52.992 +0300] [32mINFO[39m: [36mGET /api/incidents/544[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:53.000 +0300] [32mINFO[39m: [36mPOST /api/incidents[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:53.037 +0300] [32mINFO[39m: [36mPOST /api/service-contracts/providers/211/rate[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:53.043 +0300] [32mINFO[39m: [36mPOST /api/service-contracts/providers/999999/rate[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:53.050 +0300] [32mINFO[39m: [36mPOST /api/service-contracts/providers/211/rate[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:53.077 +0300] [32mINFO[39m: [36mGET /api/service-contracts/cost-analysis[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:53.104 +0300] [32mINFO[39m: [36mGET /api/service-contracts/cost-analysis[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:53.116 +0300] [32mINFO[39m: [36mGET /api/service-contracts/cost-analysis[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:53.127 +0300] [32mINFO[39m: [36mGET /api/service-contracts/providers[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:53.150 +0300] [32mINFO[39m: [36mGET /api/service-contracts/providers[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:53.161 +0300] [32mINFO[39m: [36mGET /api/service-contracts/providers/211[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:53.167 +0300] [32mINFO[39m: [36mGET /api/service-contracts/providers/999999[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:53.173 +0300] [32mINFO[39m: [36mDELETE /api/service-contracts/contracts/219[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:53.294 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:53.379 +0300] [32mINFO[39m: [36mPOST /api/auth/refresh[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:53.390 +0300] [32mINFO[39m: [36mPOST /api/auth/refresh[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:53.404 +0300] [32mINFO[39m: [36mPOST /api/auth/refresh[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:53.412 +0300] [32mINFO[39m: [36mPOST /api/auth/logout[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:53.418 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:53.434 +0300] [32mINFO[39m: [36mGET /api/consumables[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:53.442 +0300] [32mINFO[39m: [36mGET /api/consumables[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:53.534 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:53.562 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:53.585 +0300] [32mINFO[39m: [36mPOST /api/consumables[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:53.604 +0300] [32mINFO[39m: [36mGET /api/consumables[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:53.628 +0300] [32mINFO[39m: [36mPOST /api/consumables[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:53.639 +0300] [32mINFO[39m: [36mGET /api/consumables[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:53.651 +0300] [32mINFO[39m: [36mPOST /api/consumables[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:53.661 +0300] [32mINFO[39m: [36mGET /api/consumables/dropdown[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:53.672 +0300] [32mINFO[39m: [36mPOST /api/consumables[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:53.682 +0300] [32mINFO[39m: [36mPOST /api/consumables[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:53.688 +0300] [32mINFO[39m: [36mPOST /api/consumables[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:53.693 +0300] [32mINFO[39m: [36mPOST /api/consumables[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:53.706 +0300] [32mINFO[39m: [36mPOST /api/consumables[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:53.715 +0300] [32mINFO[39m: [36mPUT /api/consumables/1509[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:53.728 +0300] [32mINFO[39m: [36mPUT /api/consumables/99999999[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:53.735 +0300] [32mINFO[39m: [36mPOST /api/consumables[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:53.743 +0300] [32mINFO[39m: [36mPUT /api/consumables/1510[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:53.751 +0300] [32mINFO[39m: [36mPOST /api/consumables[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:53.922 +0300] [32mINFO[39m: [36mPOST /api/auth/logout[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:53.936 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:53.938 +0300] [32mINFO[39m: [36mPOST /api/devices[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:53.977 +0300] [32mINFO[39m: [36mPOST /api/service-contracts/providers[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:53.991 +0300] [32mINFO[39m: [36mPOST /api/maintenance-plans/generate[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.045 +0300] [32mINFO[39m: [36m[Cron] ⚠️  1 dispozitive nu au fost niciodată verificate[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.045 +0300] [32mINFO[39m: [36m  └─ Test Device for Notifications (Tip: METROLOGIC)[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.078 +0300] [32mINFO[39m: [36mGET /api/sections[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.056 +0300] [32mINFO[39m: [36m[Cron] ⚠️  1 verificări expiră în 30 zile[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.082 +0300] [32mINFO[39m: [36m  └─ Test Device for Notifications (Valabil până: 10.07.2026)[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.094 +0300] [32mINFO[39m: [36mPOST /api/devices[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.085 +0300] [32mINFO[39m: [36mGET /api/sections[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.104 +0300] [32mINFO[39m: [36mGET /api/sections[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.116 +0300] [32mINFO[39m: [36m[Cron] ⚠️  2 dispozitive nu au fost niciodată verificate[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.116 +0300] [32mINFO[39m: [36m  └─ Test Device for Notifications (Tip: METROLOGIC)[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.116 +0300] [32mINFO[39m: [36m  └─ Unverified Device for Test (Tip: null)[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.139 +0300] [32mINFO[39m: [36m[Cron] ⚠️  2 contracte expiră în următoarele 30 zile[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.139 +0300] [32mINFO[39m: [36m  └─ CONTRACT-2026-001-1781075968303 (Furnizor Test Service) - 1 zile rămase[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.139 +0300] [32mINFO[39m: [36m  └─ CONTRACT-1781075968335 (Furnizor Test Service) - 2 zile rămase[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.146 +0300] [32mINFO[39m: [36m[Cron] ⚠️  3 contracte expiră în următoarele 30 zile[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.146 +0300] [32mINFO[39m: [36m  └─ CONTRACT-2026-001-1781075968303 (Furnizor Test Service) - 1 zile rămase[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.146 +0300] [32mINFO[39m: [36m  └─ CONTRACT-1781075968335 (Furnizor Test Service) - 2 zile rămase[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.146 +0300] [32mINFO[39m: [36m  └─ CONTRACT-30D-1781082654140 (Test Provider for Cron) - 31 zile rămase[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.159 +0300] [32mINFO[39m: [36m[Cron] 🔧 36 mentenanțe scadente (22 depășite, 14 în 7 zile)[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.159 +0300] [32mINFO[39m: [36m  └─ Ventilator Mecanic (DEPASIT, 15.01.2026)[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.159 +0300] [32mINFO[39m: [36m  └─ Ventilator Mecanic (DEPASIT, 15.02.2026)[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.159 +0300] [32mINFO[39m: [36m  └─ Ventilator Mecanic (DEPASIT, 15.03.2026)[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.159 +0300] [32mINFO[39m: [36m  └─ Ventilator Mecanic (DEPASIT, 15.04.2026)[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.159 +0300] [32mINFO[39m: [36m  └─ Ventilator Mecanic (DEPASIT, 15.05.2026)[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.167 +0300] [32mINFO[39m: [36m[Cron] 🔧 36 mentenanțe scadente (22 depășite, 14 în 7 zile)[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.167 +0300] [32mINFO[39m: [36m  └─ Ventilator Mecanic (DEPASIT, 15.01.2026)[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.167 +0300] [32mINFO[39m: [36m  └─ Ventilator Mecanic (DEPASIT, 15.02.2026)[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.167 +0300] [32mINFO[39m: [36m  └─ Ventilator Mecanic (DEPASIT, 15.03.2026)[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.167 +0300] [32mINFO[39m: [36m  └─ Ventilator Mecanic (DEPASIT, 15.04.2026)[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.167 +0300] [32mINFO[39m: [36m  └─ Ventilator Mecanic (DEPASIT, 15.05.2026)[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.176 +0300] [32mINFO[39m: [36m[Cron] 🔧 36 mentenanțe scadente (22 depășite, 14 în 7 zile)[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.177 +0300] [32mINFO[39m: [36m  └─ Ventilator Mecanic (DEPASIT, 15.01.2026)[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.177 +0300] [32mINFO[39m: [36m  └─ Ventilator Mecanic (DEPASIT, 15.02.2026)[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.177 +0300] [32mINFO[39m: [36m  └─ Ventilator Mecanic (DEPASIT, 15.03.2026)[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.177 +0300] [32mINFO[39m: [36m  └─ Ventilator Mecanic (DEPASIT, 15.04.2026)[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.177 +0300] [32mINFO[39m: [36m  └─ Ventilator Mecanic (DEPASIT, 15.05.2026)[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.195 +0300] [32mINFO[39m: [36m[Cron] 🚨 1 bilete critice nerezolvate (>7 zile)[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.195 +0300] [32mINFO[39m: [36m  └─ TKT-URGENT-1781082654185 - Test Device for Notifications (Prioritate: URGENT)[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.213 +0300] [32mINFO[39m: [36m[Cron] 📊 Raport zilnic conformitate:[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.213 +0300] [32mINFO[39m: [36m  • Total dispozitive: 10[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.213 +0300] [32mINFO[39m: [36m  • CONFORM: 9[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.213 +0300] [32mINFO[39m: [36m  • EXPIRAT: 0[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.213 +0300] [32mINFO[39m: [36m  • NEVERIFICAT: 1[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.217 +0300] [32mINFO[39m: [36m[Cron] 📊 Raport zilnic conformitate:[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.217 +0300] [32mINFO[39m: [36m  • Total dispozitive: 10[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.218 +0300] [32mINFO[39m: [36m  • CONFORM: 9[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.218 +0300] [32mINFO[39m: [36m  • EXPIRAT: 0[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.218 +0300] [32mINFO[39m: [36m  • NEVERIFICAT: 1[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.229 +0300] [32mINFO[39m: [36m✅ Cron jobs started (08:00 Europe/Chisinau timezone)[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.229 +0300] [32mINFO[39m: [36mCron jobs stopped[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.231 +0300] [32mINFO[39m: [36m✅ Cron jobs started (08:00 Europe/Chisinau timezone)[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.231 +0300] [32mINFO[39m: [36mCron jobs stopped[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.468 +0300] [32mINFO[39m: [36mPOST /api/auth/logout[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.479 +0300] [32mINFO[39m: [36mPOST /api/auth/refresh[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:54.490 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:55.026 +0300] [32mINFO[39m: [36mPOST /api/auth/logout[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:57.047 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:57.131 +0300] [32mINFO[39m: [36mPOST /api/auth/login[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:57.567 +0300] [32mINFO[39m: [36mPOST /api/annual-inventory/2098/discrepancies/abc/verify[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:57.590 +0300] [32mINFO[39m: [36mGET /api/annual-inventory/2098/report-pdf[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:57.650 +0300] [32mINFO[39m: [36mGET /api/annual-inventory/years[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:57.659 +0300] [32mINFO[39m: [36mGET /api/annual-inventory/years[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:57.668 +0300] [32mINFO[39m: [36mGET /api/annual-inventory/2099/status[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+file:///C:/Users/janea/simdm/backend/node_modules/vitest/dist/chunks/base.RR7zL1h0.js:109
+		throw new Error(`process.exit unexpectedly called with "${code}"`);
+		^
+
+Error: process.exit unexpectedly called with "1"
+    at process.exit (file:///C:/Users/janea/simdm/backend/node_modules/vitest/dist/chunks/base.RR7zL1h0.js:109:9)
+    at process.<anonymous> (C:\Users\janea\simdm\backend\src\index.js:118:11)
+    at process.emit (node:events:531:35)
+    at process.emit (C:\Users\janea\simdm\backend\node_modules\vitest\suppress-warnings.cjs:21:18)
+    at process._fatalException (node:internal/process/execution:155:25)
+
+Node.js v22.21.0
+[2026-06-10 12:10:57.915 +0300] [32mINFO[39m: [36mGET /api/annual-inventory/1500/status[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:57.923 +0300] [32mINFO[39m: [36mPOST /api/annual-inventory/2099/section/251[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:57.968 +0300] [32mINFO[39m: [36mPOST /api/annual-inventory/0/section/0[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:57.978 +0300] [32mINFO[39m: [36mGET /api/annual-inventory/2099/discrepancies[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:57.992 +0300] [32mINFO[39m: [36mPOST /api/annual-inventory/2099/discrepancies/127/verify[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:58.009 +0300] [32mINFO[39m: [36mGET /api/annual-inventory/abc/discrepancies[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+[2026-06-10 12:10:58.015 +0300] [32mINFO[39m: [36mGET /api/annual-inventory/2099/report-pdf[39m
+    [35mservice[39m: "simdm-backend"
+    [35menvironment[39m: "development"
+file:///C:/Users/janea/simdm/backend/node_modules/vitest/dist/chunks/base.RR7zL1h0.js:109
+		throw new Error(`process.exit unexpectedly called with "${code}"`);
+		^
+
+Error: process.exit unexpectedly called with "1"
+    at process.exit (file:///C:/Users/janea/simdm/backend/node_modules/vitest/dist/chunks/base.RR7zL1h0.js:109:9)
+    at process.<anonymous> (C:\Users\janea\simdm\backend\src\index.js:118:11)
+    at process.emit (node:events:531:35)
+    at process.emit (C:\Users\janea\simdm\backend\node_modules\vitest\suppress-warnings.cjs:21:18)
+    at process._fatalException (node:internal/process/execution:155:25)
+
+Node.js v22.21.0
+⎯⎯⎯⎯⎯⎯ Unhandled Errors ⎯⎯⎯⎯⎯⎯
+
+Vitest caught 2 unhandled errors during the test run.
+This might cause false positive tests. Resolve unhandled errors to make sure your tests are not affected.
+
+⎯⎯⎯⎯⎯⎯ Unhandled Error ⎯⎯⎯⎯⎯⎯⎯
+Error: [vitest-pool]: Worker forks emitted error.
+ ❯ EventEmitter.<anonymous> node_modules/vitest/dist/chunks/cli-api.BfdDOPPI.js:3446:22
+ ❯ EventEmitter.emit node:events:519:28
+ ❯ ChildProcess.emitUnexpectedExit node_modules/vitest/dist/chunks/cli-api.BfdDOPPI.js:3013:22
+ ❯ ChildProcess.emit node:events:519:28
+ ❯ Process.ChildProcess._handle.onexit node:internal/child_process:293:12
+
+Caused by: Error: Worker exited unexpectedly
+ ❯ ChildProcess.emitUnexpectedExit node_modules/vitest/dist/chunks/cli-api.BfdDOPPI.js:3012:33
+ ❯ ChildProcess.emit node:events:519:28
+ ❯ Process.ChildProcess._handle.onexit node:internal/child_process:293:12
+
+
+⎯⎯⎯⎯⎯⎯ Unhandled Error ⎯⎯⎯⎯⎯⎯⎯
+Error: [vitest-pool]: Worker forks emitted error.
+ ❯ EventEmitter.<anonymous> node_modules/vitest/dist/chunks/cli-api.BfdDOPPI.js:3446:22
+ ❯ EventEmitter.emit node:events:519:28
+ ❯ ChildProcess.emitUnexpectedExit node_modules/vitest/dist/chunks/cli-api.BfdDOPPI.js:3013:22
+ ❯ ChildProcess.emit node:events:519:28
+ ❯ Process.ChildProcess._handle.onexit node:internal/child_process:293:12
+
+
+Caused by: Error: Worker exited unexpectedly
+ Test Files  23 passed (25)
+      Tests  368 passed | 1 skipped (391)
+     Errors  2 errors
+   Start at  12:10:37
+   Duration  20.56s (transform 421ms, setup 5.38s, import 31.55s, tests 74.87s, environment 4ms)
+
+ ❯ ChildProcess.emitUnexpectedExit node_modules/vitest/dist/chunks/cli-api.BfdDOPPI.js:3012:33
+ ❯ ChildProcess.emit node:events:519:28
+ ❯ Process.ChildProcess._handle.onexit node:internal/child_process:293:12
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+
