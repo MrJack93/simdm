@@ -29,6 +29,14 @@ const repairSchema = z.object({
     qty: z.coerce.number().int().positive(),
     costUnit: z.coerce.number().positive(),
   })).optional(),
+  operations: z.array(z.object({
+    date: z.string().datetime().or(z.date()),
+    timeStart: z.string().regex(/^\d{2}:\d{2}$/),
+    timeEnd: z.string().regex(/^\d{2}:\d{2}$/).optional(),
+    operation: z.string().min(1).max(500),
+    engineer: z.string().min(1).max(255),
+    signature: z.string().optional(),
+  })).optional(),
   functionalTest: z.enum(['FUNCTIONAL', 'NEFUNCTIONAL']),
   engineerName: z.string().min(1).max(255),
   engineerSignature: z.string().optional(), // Base64
@@ -339,6 +347,7 @@ router.put('/:id/repair', async (req, res) => {
       actionsTaken,
       durationHours,
       partsUsed,
+      operations,
       functionalTest,
       engineerName,
       engineerSignature,
@@ -393,6 +402,7 @@ router.put('/:id/repair', async (req, res) => {
           actionsTaken,
           durationHours: durationHours ? parseFloat(durationHours) : null,
           partsUsed: partsUsed || null,
+          operations: operations || null,
           totalCost: totalCost > 0 ? totalCost : null,
           functionalTest,
           beforePhoto: beforePhoto || null,
@@ -773,6 +783,49 @@ router.get('/:id/formular8-pdf', async (req, res) => {
       });
       pdf.fontSize(10).font('Times-Roman-Custom').text(toSafePdfText(ticket.actionsTaken));
       pdf.moveDown(0.5);
+    }
+
+    // Operations table — detailed work log
+    if (ticket.operations && Array.isArray(ticket.operations) && ticket.operations.length > 0) {
+      pdf.fontSize(11).font('Times-Bold-Custom').text(toSafePdfText('5a. Tabel Operații'), {
+        underline: true,
+      });
+      pdf.fontSize(8).font('Times-Roman-Custom');
+
+      const operColumns = [
+        { header: 'Data', width: 60 },
+        { header: 'Ora Început', width: 50 },
+        { header: 'Ora Final', width: 50 },
+        { header: 'Operație', width: 180 },
+        { header: 'Responsabil', width: 80 },
+      ];
+
+      let opX = 30;
+      const opHeaderY = pdf.y;
+      const opRowH = 12;
+
+      operColumns.forEach((col) => {
+        pdf.rect(opX, opHeaderY, col.width, opRowH).stroke();
+        pdf.text(col.header, opX + 2, opHeaderY + 3, { width: col.width - 4, fontSize: 7 });
+        opX += col.width;
+      });
+      pdf.moveDown(1);
+
+      ticket.operations.forEach((op) => {
+        opX = 30;
+        const opRowY = pdf.y;
+        const opDate = typeof op.date === 'string' ? new Date(op.date) : op.date;
+        const opDateStr = opDate.toLocaleDateString('ro-RO');
+        const cells = [opDateStr, op.timeStart || '', op.timeEnd || '', op.operation || '', op.engineer || ''];
+
+        operColumns.forEach((col, idx) => {
+          pdf.rect(opX, opRowY, col.width, opRowH).stroke();
+          pdf.text(cells[idx] || '', opX + 2, opRowY + 3, { width: col.width - 4, fontSize: 7, ellipsis: true });
+          opX += col.width;
+        });
+        pdf.moveDown(0.8);
+      });
+      pdf.moveDown(0.3);
     }
 
     // Parts used

@@ -357,6 +357,7 @@ model repair_tickets {
   repairReport        String?   // Raport reparație (observații)
   actionsTaken        String?   // Acțiuni concrete executate
   durationHours       Decimal?  // Durata reparației în ore
+  operations          Json?     // [{date, timeStart, timeEnd, operation, engineer, signature}, ...] — detailed work log
   partsUsed           Json?     // [{description, qty, costUnit}, ...]
   totalCost           Decimal?  // Suma piese
   functionalTest      String?   // FUNCTIONAL | NEFUNCTIONAL
