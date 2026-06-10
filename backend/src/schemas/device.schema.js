@@ -19,7 +19,9 @@ exports.deviceCreateSchema = z.object({
   cndCode: z.string().optional().nullable(),
   room: z.string().optional().nullable(),
   acquisitionDate: z.coerce.date().optional().nullable(),
-  warrantyEndDate: z.coerce.date().optional().nullable(),
+  installationDate: z.coerce.date().optional().nullable(),
+  warrantyExpiry: z.coerce.date().optional().nullable(), // Frontend field name (maps to warrantyEndDate)
+  warrantyEndDate: z.coerce.date().optional().nullable(), // Direct DB field name
   acquisitionValue: z.coerce.number().min(0).optional().nullable(),
   residualValue: z.coerce.number().min(0).optional().nullable(),
   currency: z.enum(VALID_CURRENCIES).default('MDL'),
@@ -28,6 +30,9 @@ exports.deviceCreateSchema = z.object({
   power: z.string().optional().nullable(),
   accessories: z.string().optional().nullable(),
   maintenanceFreq: z.coerce.number().int().min(1).optional().nullable(),
+  financingSource: z.string().max(255).optional().nullable(),
+  destination: z.string().max(255).optional().nullable(),
+  electricalSafetyClass: z.string().max(50).optional().nullable(),
   notes: z.string().max(2000).optional().nullable(),
 });
 

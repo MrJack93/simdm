@@ -793,11 +793,12 @@ router.get('/:id/formular8-pdf', async (req, res) => {
       pdf.fontSize(8).font('Times-Roman-Custom');
 
       const operColumns = [
-        { header: 'Data', width: 60 },
-        { header: 'Ora Început', width: 50 },
-        { header: 'Ora Final', width: 50 },
-        { header: 'Operație', width: 180 },
-        { header: 'Responsabil', width: 80 },
+        { header: 'Data', width: 50 },
+        { header: 'Ora Început', width: 40 },
+        { header: 'Ora Final', width: 40 },
+        { header: 'Operație', width: 150 },
+        { header: 'Responsabil', width: 70 },
+        { header: 'Semnătură', width: 60 },
       ];
 
       let opX = 30;
@@ -816,7 +817,7 @@ router.get('/:id/formular8-pdf', async (req, res) => {
         const opRowY = pdf.y;
         const opDate = typeof op.date === 'string' ? new Date(op.date) : op.date;
         const opDateStr = opDate.toLocaleDateString('ro-RO');
-        const cells = [opDateStr, op.timeStart || '', op.timeEnd || '', op.operation || '', op.engineer || ''];
+        const cells = [opDateStr, op.timeStart || '', op.timeEnd || '', op.operation || '', op.engineer || '', op.signature ? '✓' : ''];
 
         operColumns.forEach((col, idx) => {
           pdf.rect(opX, opRowY, col.width, opRowH).stroke();

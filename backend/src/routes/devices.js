@@ -328,6 +328,12 @@ router.post('/', async (req, res) => {
 
     const data = parsed.data;
 
+    // Map warrantyExpiry (frontend) to warrantyEndDate (database)
+    if (data.warrantyExpiry) {
+      data.warrantyEndDate = data.warrantyExpiry;
+      delete data.warrantyExpiry;
+    }
+
     // Check for duplicate inventory number
     const existing = await prisma.devices.findUnique({ where: { inventoryNumber: data.inventoryNumber } });
     if (existing) {
@@ -399,6 +405,12 @@ router.put('/:id', async (req, res) => {
 
     const updateData = parsed.data;
 
+    // Map warrantyExpiry (frontend) to warrantyEndDate (database)
+    if (updateData.warrantyExpiry) {
+      updateData.warrantyEndDate = updateData.warrantyExpiry;
+      delete updateData.warrantyExpiry;
+    }
+
     // Get old device for audit log
     const oldDevice = await prisma.devices.findUnique({ where: { id: deviceId } });
     if (!oldDevice) {
@@ -428,6 +440,60 @@ router.put('/:id', async (req, res) => {
     res.json(device);
   } catch (error) {
     console.error('Error updating device:', error);
+    res.status(500).json({ error: 'Eroare la actualizarea dispozitivului' });
+  }
+});
+
+// ENDPOINT 7b: PATCH /:id — partial update (same as PUT)
+router.patch('/:id', async (req, res) => {
+  try {
+    const deviceId = parseInt(req.params.id);
+
+    const parsed = deviceUpdateSchema.safeParse(req.body);
+    if (!parsed.success) {
+      return res.status(400).json({
+        error: 'Date invalide',
+        fields: parsed.error.flatten().fieldErrors,
+      });
+    }
+
+    const updateData = parsed.data;
+
+    // Map warrantyExpiry (frontend) to warrantyEndDate (database)
+    if (updateData.warrantyExpiry) {
+      updateData.warrantyEndDate = updateData.warrantyExpiry;
+      delete updateData.warrantyExpiry;
+    }
+
+    // Get old device for audit log
+    const oldDevice = await prisma.devices.findUnique({ where: { id: deviceId } });
+    if (!oldDevice) {
+      return res.status(404).json({ error: 'Dispozitiv nu găsit' });
+    }
+
+    const device = await prisma.devices.update({
+      where: { id: deviceId },
+      data: updateData,
+      include: { sections: { select: { name: true } } },
+    });
+
+    // Audit log
+    await prisma.audit_logs.create({
+      data: {
+        userId: req.user.sub,
+        action: 'UPDATE',
+        entity: 'Device',
+        entityId: String(device.id),
+        changes: {
+          before: oldDevice,
+          after: device,
+        },
+      },
+    });
+
+    res.json(device);
+  } catch (error) {
+    console.error('Error patching device:', error);
     res.status(500).json({ error: 'Eroare la actualizarea dispozitivului' });
   }
 });
