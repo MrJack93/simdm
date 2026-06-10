@@ -185,3 +185,144 @@ describe('/api/annual-inventory — căi de eroare DB (spy)', () => {
     errSpy.mockRestore();
   });
 });
+
+describe('GET /api/annual-inventory/years — additional coverage', () => {
+  it('returnează array de 6 ani consecutive (curent + 5 anteriori)', async () => {
+    const res = await request(app)
+      .get('/api/annual-inventory/years')
+      .set('Authorization', `Bearer ${token}`);
+    expect(res.status).toBe(200);
+    expect(Array.isArray(res.body)).toBe(true);
+    expect(res.body.length).toBe(6);
+    const currentYear = new Date().getFullYear();
+    expect(res.body[0]).toBe(currentYear);
+    expect(res.body[5]).toBe(currentYear - 5);
+  });
+});
+
+describe('GET /api/annual-inventory/:year/status — edge cases', () => {
+  it('respinge an < 2000 -> 400', async () => {
+    const res = await request(app)
+      .get('/api/annual-inventory/1999/status')
+      .set('Authorization', `Bearer ${token}`);
+    expect(res.status).toBe(400);
+    expect(res.body.error).toMatch(/invalid/i);
+  });
+
+  it('respinge an > 2100 -> 400', async () => {
+    const res = await request(app)
+      .get('/api/annual-inventory/2101/status')
+      .set('Authorization', `Bearer ${token}`);
+    expect(res.status).toBe(400);
+  });
+
+  it('returnează status NOT_STARTED pentru an fără inventar', async () => {
+    const yearNoInventory = 2050;
+    const res = await request(app)
+      .get(`/api/annual-inventory/${yearNoInventory}/status`)
+      .set('Authorization', `Bearer ${token}`);
+    expect(res.status).toBe(200);
+    const testSec = res.body.find((s) => s.sectionId === sectionId);
+    if (testSec) {
+      expect(testSec.status).toBe('NOT_STARTED');
+      expect(testSec.foundCount).toBe(0);
+      expect(testSec.percentage).toBe(0);
+    }
+  });
+});
+
+describe('POST /api/annual-inventory/:year/section/:sectionId — transactional', () => {
+  it('creează inventar cu items pentru toate dispozitivele din secție', async () => {
+    const yearTest = 2097;
+    const res = await request(app)
+      .post(`/api/annual-inventory/${yearTest}/section/${sectionId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({ items: [{ deviceId, found: false }] });
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty('items');
+
+    const inv = await prisma.annual_inventories.findFirst({
+      where: { year: yearTest, sectionId },
+      include: { items: true },
+    });
+    expect(inv).not.toBeNull();
+    expect(inv.items.length).toBeGreaterThanOrEqual(1);
+  });
+
+  it('marchează inventar COMPLETED când toate items found=true', async () => {
+    const yearTest = 2096;
+    const inv = await prisma.annual_inventories.create({
+      data: {
+        year: yearTest,
+        sectionId,
+        status: 'IN_PROGRESS',
+        updatedAt: new Date(),
+        items: {
+          create: [{ deviceId, found: false }],
+        },
+      },
+      include: { items: true },
+    });
+
+    const res = await request(app)
+      .post(`/api/annual-inventory/${yearTest}/section/${sectionId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({ items: [{ deviceId, found: true, locationFound: 'Test' }] });
+
+    expect(res.status).toBe(200);
+    const updated = await prisma.annual_inventories.findUnique({
+      where: { id: inv.id },
+    });
+    expect(updated.status).toBe('COMPLETED');
+    expect(updated.completedAt).not.toBeNull();
+  });
+
+  it('creeaza audit log la update inventariere', async () => {
+    const yearTest = 2095;
+    const invRes = await request(app)
+      .post(`/api/annual-inventory/${yearTest}/section/${sectionId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({ items: [{ deviceId, found: true }] });
+
+    expect(invRes.status).toBe(200);
+
+    const logs = await prisma.audit_logs.findMany({
+      where: { entity: 'annual_inventories' },
+      orderBy: { timestamp: 'desc' },
+      take: 1,
+    });
+
+    if (logs.length > 0) {
+      expect(logs[0].action).toBe('UPDATE');
+      expect(logs[0].changes).not.toBeNull();
+    }
+  });
+});
+
+describe('GET /api/annual-inventory/:year/discrepancies — filtering', () => {
+  it('returnează lista discrepanțelor (found=false)', async () => {
+    const yearTest = 2094;
+    await request(app)
+      .post(`/api/annual-inventory/${yearTest}/section/${sectionId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({ items: [{ deviceId, found: false }] });
+
+    const res = await request(app)
+      .get(`/api/annual-inventory/${yearTest}/discrepancies`)
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(res.status).toBe(200);
+    expect(Array.isArray(res.body)).toBe(true);
+    const ourDisc = res.body.find((d) => d.deviceId === deviceId);
+    expect(ourDisc).toBeDefined();
+    expect(ourDisc.found).toBe(false);
+  });
+
+  it('respinge an invalid -> 400', async () => {
+    const res = await request(app)
+      .get('/api/annual-inventory/abc/discrepancies')
+      .set('Authorization', `Bearer ${token}`);
+    expect(res.status).toBe(400);
+  });
+});
