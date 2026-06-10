@@ -395,25 +395,31 @@ router.put('/:id/repair', async (req, res) => {
 
       // 2. Update ticket with repair details
       const newStatus = functionalTest === 'FUNCTIONAL' ? 'REZOLVAT' : 'IN_LUCRU';
+      const updateData = {
+        repairReport,
+        actionsTaken,
+        durationHours: durationHours ? parseFloat(durationHours) : null,
+        partsUsed: partsUsed || null,
+        totalCost: totalCost > 0 ? totalCost : null,
+        functionalTest,
+        beforePhoto: beforePhoto || null,
+        afterPhoto: afterPhoto || null,
+        engineerName,
+        engineerSignature: engineerSignature || null,
+        managerSignature: managerSignature || null,
+        status: newStatus,
+        resolvedAt: newStatus === 'REZOLVAT' ? new Date() : null,
+        updatedAt: new Date(),
+      };
+
+      // Only include operations if provided
+      if (operations) {
+        updateData.operations = operations;
+      }
+
       const upd = await tx.repair_tickets.update({
         where: { id: ticketId },
-        data: {
-          repairReport,
-          actionsTaken,
-          durationHours: durationHours ? parseFloat(durationHours) : null,
-          partsUsed: partsUsed || null,
-          operations: operations || null,
-          totalCost: totalCost > 0 ? totalCost : null,
-          functionalTest,
-          beforePhoto: beforePhoto || null,
-          afterPhoto: afterPhoto || null,
-          engineerName,
-          engineerSignature: engineerSignature || null,
-          managerSignature: managerSignature || null,
-          status: newStatus,
-          resolvedAt: newStatus === 'REZOLVAT' ? new Date() : null,
-          updatedAt: new Date(),
-        },
+        data: updateData,
       });
 
       // 2.5. Create entry in maintenance_records for unified audit trail
@@ -499,8 +505,8 @@ router.get('/formular7-pdf', async (req, res) => {
     const pdf = new PDFDocument({ size: 'A4', layout: 'landscape', margin: 30 });
 
     // Inregistrare fonturi custom pentru suport diacritice românesti
-    pdf.registerFont('Times-Roman-Custom', path.join(__dirname, '../assets/fonts/DejaVuSans.ttf'));
-    pdf.registerFont('Times-Bold-Custom', path.join(__dirname, '../assets/fonts/DejaVuSans-Bold.ttf'));
+    pdf.registerFont('Times-Roman-Custom', path.join(__dirname, '../assets/fonts/times.ttf'));
+    pdf.registerFont('Times-Bold-Custom', path.join(__dirname, '../assets/fonts/timesbd.ttf'));
 
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', 'attachment; filename="Formular7-JurnalChemari.pdf"');
@@ -675,27 +681,7 @@ router.get('/:id/formular8-pdf', async (req, res) => {
     const ticket = await prisma.repair_tickets.findUnique({
       where: { id: idParse.data },
       include: {
-        device: {
-          select: {
-            id: true,
-            name: true,
-            serialNumber: true,
-            inventoryNumber: true,
-            riskClass: true,
-            manufacturer: true,
-            model: true,
-            yearMade: true,
-            countryOfOrigin: true,
-            acquisitionDate: true,
-            installationDate: true,
-            warrantyEndDate: true,
-            financingSource: true,
-            destination: true,
-            electricalSafetyClass: true,
-            sectionId: true,
-            sections: { select: { name: true } },
-          },
-        },
+        device: true,
       },
     });
 
@@ -707,8 +693,8 @@ router.get('/:id/formular8-pdf', async (req, res) => {
     const path = require('path');
     const pdf = new PDFDocument({ size: 'A4' });
 
-    pdf.registerFont('Times-Roman-Custom', path.join(__dirname, '../assets/fonts/DejaVuSans.ttf'));
-    pdf.registerFont('Times-Bold-Custom', path.join(__dirname, '../assets/fonts/DejaVuSans-Bold.ttf'));
+    pdf.registerFont('Times-Roman-Custom', path.join(__dirname, '../assets/fonts/times.ttf'));
+    pdf.registerFont('Times-Bold-Custom', path.join(__dirname, '../assets/fonts/timesbd.ttf'));
 
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader(
@@ -943,8 +929,8 @@ router.get('/:id/handover-pdf', async (req, res) => {
     const path = require('path');
     const pdf = new PDFDocument({ size: 'A4' });
 
-    pdf.registerFont('Times-Roman-Custom', path.join(__dirname, '../assets/fonts/DejaVuSans.ttf'));
-    pdf.registerFont('Times-Bold-Custom', path.join(__dirname, '../assets/fonts/DejaVuSans-Bold.ttf'));
+    pdf.registerFont('Times-Roman-Custom', path.join(__dirname, '../assets/fonts/times.ttf'));
+    pdf.registerFont('Times-Bold-Custom', path.join(__dirname, '../assets/fonts/timesbd.ttf'));
 
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader(
