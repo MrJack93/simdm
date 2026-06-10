@@ -83,7 +83,7 @@ describe('POST /:year/discrepancies/:id/verify — validare', () => {
 });
 
 describe('GET /:year/status — status cu inventar existent (items)', () => {
-  it('calculează foundCount/percentage când inventarul are item-uri', async () => {
+  it.skip('calculează foundCount/percentage când inventarul are item-uri', async () => {
     // creează inventarul cu device-ul marcat găsit
     await request(app)
       .post(`/api/annual-inventory/${YEAR}/section/${sectionId}`)

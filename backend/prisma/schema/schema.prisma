@@ -370,7 +370,7 @@ model repair_tickets {
   resolvedAt          DateTime?
   createdById         Int?
   updatedAt           DateTime
-  device              devices   @relation(fields: [deviceId], references: [id])
+  device              devices   @relation(fields: [deviceId], references: [id], onDelete: Cascade)
   createdBy           users?    @relation(fields: [createdById], references: [id])
   @@index([status])
   @@index([deviceId])

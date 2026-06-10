@@ -52,8 +52,9 @@ beforeAll(async () => {
   });
   sectionId = section.id;
 
-  // Curăță orice device rămas în secția izolată dintr-o rulare anterioară
-  // (incidents înainte de devices — FK constraint incidents_deviceId_fkey)
+  // Curăță orice inventory + device din rulare anterioară
+  // (annual_inventories + incidents înainte de devices — FK constraints)
+  await prisma.annual_inventories.deleteMany({ where: { year: YEAR, sectionId } });
   await prisma.incidents.deleteMany({ where: { devices: { sectionId } } });
   await prisma.devices.deleteMany({ where: { sectionId } });
 
