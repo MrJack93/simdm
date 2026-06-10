@@ -100,11 +100,15 @@ model devices {
   cndCode                String?
   status                 DeviceStatus          @default(FUNCTIONAL)
   acquisitionDate        DateTime?
+  installationDate       DateTime?
   warrantyEndDate        DateTime?
   decommissionDate       DateTime?
   acquisitionValue       Decimal?
   residualValue          Decimal?
   currency               String                @default("MDL")
+  financingSource        String?               // Source of financing (e.g., State Budget, Foundation, Donation)
+  destination            String?               // Intended use/destination (e.g., Surgery Department)
+  electricalSafetyClass  String?               // Electrical safety class per IEC 60601 (e.g., Class I, Class II)
   voltage                String?
   frequency              String?
   power                  String?

@@ -1,10 +1,6 @@
 import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
-
-const api = axios.create({
-  baseURL: '/api',
-});
+import api from '../../api/axios';
 
 export default function TriageModal({ ticket, onClose, onRefresh }) {
   const [repairType, setRepairType] = useState('INTERN');

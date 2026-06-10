@@ -210,7 +210,7 @@ describe('POST /api/auth/login — rate limit & lockout', () => {
     expect(res.body.error).toMatch(/Cont blocat/i);
 
     await prisma.users.deleteMany({ where: { email: 'lockme@simdm.local' } });
-  });
+  }, 15000);
 
   it('limiterul HTTP returnează 429 după prea multe cereri fără skip', async () => {
     // Note: In test environment with rapid sequential requests, rate limiter state

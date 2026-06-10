@@ -1,11 +1,7 @@
 import { useState, useRef } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import axios from 'axios';
+import api from '../../api/axios';
 import SignatureCanvas from 'react-signature-canvas';
-
-const api = axios.create({
-  baseURL: '/api',
-});
 
 export default function RepairModal({ ticket, onClose, onRefresh }) {
   const [repairReport, setRepairReport] = useState('');

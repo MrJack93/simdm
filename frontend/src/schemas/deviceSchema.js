@@ -58,6 +58,13 @@ export const deviceSchema = z.object({
     .nullable()
     .optional(),
 
+  // Data instalării dispozitivului
+  installationDate: z
+    .coerce
+    .date()
+    .nullable()
+    .optional(),
+
   // Câmpul din formular este `warrantyExpiry` (Controller cu DatePicker)
   // Vechiul naam era `warrantyEndDate` — a cauzat validare silențios ruptă
   warrantyExpiry: z
@@ -97,4 +104,11 @@ export const deviceSchema = z.object({
   ),
 
   notes: emptyToUndef(z.string()),
+
+  // Câmpuri Pașaport Dispozitiv (Anexa 2)
+  financingSource: emptyToUndef(z.string().max(255, 'Max 255 caractere')),
+
+  destination: emptyToUndef(z.string().max(255, 'Max 255 caractere')),
+
+  electricalSafetyClass: emptyToUndef(z.string().max(50, 'Max 50 caractere')),
 });

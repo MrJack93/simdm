@@ -737,6 +737,65 @@ export default function DeviceForm() {
                         </p>
                       )}
                     </div>
+
+                    <div>
+                      <label htmlFor="installationDate" className="label-base">
+                        Data instalării
+                      </label>
+                      <Controller
+                        control={control}
+                        name="installationDate"
+                        render={({ field }) => (
+                          <DatePicker
+                            selected={field.value ? new Date(field.value) : null}
+                            onChange={(date) => field.onChange(date?.toISOString())}
+                            dateFormat="dd/MM/yyyy"
+                            className="input-base w-full"
+                            placeholderText="DD/MM/YYYY"
+                          />
+                        )}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label htmlFor="financingSource" className="label-base">
+                        Sursă finanțare
+                      </label>
+                      <input
+                        {...register('financingSource')}
+                        id="financingSource"
+                        className="input-base w-full"
+                        placeholder="Ex: Buget de stat, Fundație, Donație"
+                      />
+                    </div>
+
+                    <div>
+                      <label htmlFor="destination" className="label-base">
+                        Destinație / Utilizare
+                      </label>
+                      <input
+                        {...register('destination')}
+                        id="destination"
+                        className="input-base w-full"
+                        placeholder="Ex: Salon de estetică, Ambulatoriu"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label htmlFor="electricalSafetyClass" className="label-base">
+                        Clasa de siguranță electrică (IEC 60601)
+                      </label>
+                      <input
+                        {...register('electricalSafetyClass')}
+                        id="electricalSafetyClass"
+                        className="input-base w-full"
+                        placeholder="Ex: Class I, Class II, Class III"
+                      />
+                    </div>
                   </div>
 
                   <div>

@@ -445,8 +445,8 @@ router.get('/:id/formular6-pdf', async (req, res) => {
     const pdf = new PDFDocument({ size: 'A4' });
 
     // Register custom TTF fonts that support Romanian diacritics
-    pdf.registerFont('Times-Roman-Custom', path.join(__dirname, '../assets/fonts/times.ttf'));
-    pdf.registerFont('Times-Bold-Custom', path.join(__dirname, '../assets/fonts/timesbd.ttf'));
+    pdf.registerFont('Times-Roman-Custom', path.join(__dirname, '../assets/fonts/DejaVuSans.ttf'));
+    pdf.registerFont('Times-Bold-Custom', path.join(__dirname, '../assets/fonts/DejaVuSans-Bold.ttf'));
 
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader(

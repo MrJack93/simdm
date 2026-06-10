@@ -312,10 +312,10 @@ describe('GET /api/verifications/compliance-report — Raport Conformitate', () 
 
     const devices = res.body.devices;
     let lastStatusPriority = -1;
-    const priorityMap = { EXPIRAT: 0, EXPIRA_CURAND: 1, NEVERIFICAT: 2, CONFORM: 3 };
+    const priorityMap = { EXPIRAT: 0, NECONFORM: 1, EXPIRA_CURAND: 2, NEVERIFICAT: 3, CONFORM: 4 };
 
     for (const device of devices) {
-      const priority = priorityMap[device.status] ?? 3;
+      const priority = priorityMap[device.status] ?? 4;
       expect(priority).toBeGreaterThanOrEqual(lastStatusPriority);
       lastStatusPriority = priority;
     }

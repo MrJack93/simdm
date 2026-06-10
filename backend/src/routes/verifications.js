@@ -252,8 +252,8 @@ router.get('/:id/certificate', async (req, res) => {
     const path = require('path');
     const pdf = new PDFDocument({ size: 'A4' });
 
-    pdf.registerFont('Times-Roman-Custom', path.join(__dirname, '../assets/fonts/times.ttf'));
-    pdf.registerFont('Times-Bold-Custom', path.join(__dirname, '../assets/fonts/timesbd.ttf'));
+    pdf.registerFont('Times-Roman-Custom', path.join(__dirname, '../assets/fonts/DejaVuSans.ttf'));
+    pdf.registerFont('Times-Bold-Custom', path.join(__dirname, '../assets/fonts/DejaVuSans-Bold.ttf'));
 
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader(

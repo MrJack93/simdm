@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
+import axios from '../../api/axios';
 
 const STATUS_FLOW = {
   DESCHIS: ['IN_LUCRU', 'ESCALADAT'],

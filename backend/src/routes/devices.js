@@ -43,14 +43,18 @@ const deviceCreateSchema = z.object({
   cndCode: z.string().optional().nullable(),
   room: z.string().optional().nullable(),
   acquisitionDate: z.coerce.date().optional().nullable(),
+  installationDate: z.coerce.date().optional().nullable(),
   warrantyEndDate: z.coerce.date().optional().nullable(),
   acquisitionValue: z.coerce.number().min(0).optional().nullable(),
   residualValue: z.coerce.number().min(0).optional().nullable(),
   currency: z.enum(VALID_CURRENCIES).default('MDL'),
+  financingSource: z.string().max(255).optional().nullable(),
+  destination: z.string().max(255).optional().nullable(),
   voltage: z.string().optional().nullable(),
   frequency: z.string().optional().nullable(),
   power: z.string().optional().nullable(),
   accessories: z.string().optional().nullable(),
+  electricalSafetyClass: z.string().max(50).optional().nullable(),
   maintenanceFreq: z.coerce.number().int().min(1).optional().nullable(),
   notes: z.string().max(2000).optional().nullable(),
 });
@@ -546,8 +550,8 @@ router.get('/:id/fisa-pdf', exportLimiter, async (req, res) => {
     const doc = new PDFDocument({ margin: 50 });
     
     // Register custom TTF fonts that support Romanian diacritics
-    doc.registerFont('Times-Roman-Custom', path.join(__dirname, '../assets/fonts/times.ttf'));
-    doc.registerFont('Times-Bold-Custom', path.join(__dirname, '../assets/fonts/timesbd.ttf'));
+    doc.registerFont('Times-Roman-Custom', path.join(__dirname, '../assets/fonts/DejaVuSans.ttf'));
+    doc.registerFont('Times-Bold-Custom', path.join(__dirname, '../assets/fonts/DejaVuSans-Bold.ttf'));
 
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `attachment; filename="Fisa_DM_${device.inventoryNumber}.pdf"`);
