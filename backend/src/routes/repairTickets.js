@@ -970,9 +970,10 @@ router.get('/:id/handover-pdf', async (req, res) => {
     pdf.moveDown(0.5);
 
     // Parties
+    const hospitalName = process.env.HOSPITAL_NAME || 'Institutul de Sănătate';
     pdf.fontSize(11).font('Times-Bold-Custom').text(toSafePdfText('Părți'), { underline: true });
     pdf.fontSize(10).font('Times-Roman-Custom');
-    pdf.text(toSafePdfText('Beneficiar (Instituție medicală): Spitalul Clinic SIMDM'), { indent: 20 });
+    pdf.text(toSafePdfText(`Beneficiar (Instituție medicală): ${hospitalName}`), { indent: 20 });
     pdf.text(toSafePdfText(`Prestator de servicii: ${providerName}`), { indent: 20 });
     pdf.text(toSafePdfText(`Contract de service: ${contractNoStr}`), { indent: 20 });
     pdf.moveDown(0.5);
