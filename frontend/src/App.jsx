@@ -16,8 +16,9 @@ const AnnualInventoryPage = lazy(() => import('./pages/AnnualInventoryPage'));
 const DeviceForm = lazy(() => import('./pages/DeviceForm'));
 const SettingsPage = lazy(() => import('./pages/SettingsPage'));
 const MaintenancePage = lazy(() => import('./pages/MaintenancePage'));
-const MaintenancePlanPage = lazy(() => import('./pages/MaintenancePlanPage'));
+const MaintenanceCalendarPage = lazy(() => import('./pages/MaintenanceCalendarPage'));
 const MaintenanceExecutionPage = lazy(() => import('./pages/MaintenanceExecutionPage'));
+const MppExecutionForm = lazy(() => import('./pages/MppExecutionForm'));
 const RepairTicketsPage = lazy(() => import('./pages/RepairTicketsPage'));
 const VerificationsPage = lazy(() => import('./pages/VerificationsPage'));
 const ServiceContractsPage = lazy(() => import('./pages/ServiceContractsPage'));
@@ -242,8 +243,9 @@ function DashboardLayout({ logout, theme, toggleTheme }) {
             <Route path="/inventory/annual"  element={<ProtectedRoute><AnnualInventoryPage /></ProtectedRoute>} />
             <Route path="/consumables"       element={<ProtectedRoute><ConsumablesPage /></ProtectedRoute>} />
             <Route path="/maintenance"       element={<ProtectedRoute><MaintenancePage /></ProtectedRoute>} />
-            <Route path="/maintenance/plan"  element={<ProtectedRoute><MaintenancePlanPage /></ProtectedRoute>} />
-            <Route path="/maintenance/execution" element={<ProtectedRoute><MaintenanceExecutionPage /></ProtectedRoute>} />
+            <Route path="/maintenance/calendar" element={<ProtectedRoute><MaintenanceCalendarPage /></ProtectedRoute>} />
+            <Route path="/maintenance/execution" element={<ProtectedRoute><MppExecutionForm /></ProtectedRoute>} />
+            <Route path="/maintenance/execution/legacy" element={<ProtectedRoute><MaintenanceExecutionPage /></ProtectedRoute>} />
             <Route path="/maintenance/tickets" element={<ProtectedRoute><RepairTicketsPage /></ProtectedRoute>} />
             <Route path="/verifications"     element={<ProtectedRoute><VerificationsPage /></ProtectedRoute>} />
             <Route path="/service-contracts" element={<ProtectedRoute><ServiceContractsPage /></ProtectedRoute>} />

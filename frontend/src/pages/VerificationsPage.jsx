@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getVerifications, uploadVerification, getComplianceReport } from '../api/verifications';
+import { getVerifications, uploadVerification, getComplianceReport, deleteVerification, downloadCertificate } from '../api/verifications';
 import { getDevices } from '../api/devices';
 
-const TYPES = ['METROLOGIC', 'METROLOGIE', 'ELECTRICA', 'SECURITATE', 'FUNCTIONAL'];
+const TYPES = ['LABORATOR', 'METROLOGIC'];
 
 export default function VerificationsPage() {
   const queryClient = useQueryClient();
@@ -47,8 +47,55 @@ export default function VerificationsPage() {
     },
   });
 
+  const deleteMutation = useMutation({
+    mutationFn: deleteVerification,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['verifications'] });
+      queryClient.invalidateQueries({ queryKey: ['complianceReport'] });
+      setDeleteTarget(null);
+    },
+  });
+
   const handleDeleteConfirm = () => {
-    setDeleteTarget(null);
+    if (deleteTarget) deleteMutation.mutate(deleteTarget.id);
+  };
+
+  const handleDownloadCertificate = async (id) => {
+    try {
+      const blob = await downloadCertificate(id);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Buletin-Verificare-${id}.pdf`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch {
+      alert('Eroare la descărcarea buletinului');
+    }
+  };
+
+  const handleDownloadComplianceReport = () => {
+    if (!report || !report.devices) return;
+    const rows = [
+      ['Dispozitiv', 'Nr. Inventar', 'Tip Verificare', 'Status', 'Zile Ramase', 'Data Ultima Verificare', 'Valabil Pana'],
+      ...report.devices.map(d => [
+        d.deviceName,
+        d.inventoryNumber,
+        d.verificationType || '',
+        d.status,
+        d.daysLeft ?? '',
+        d.lastVerification ? new Date(d.lastVerification.performedAt).toLocaleDateString('ro-RO') : 'Neverificat',
+        d.lastVerification ? new Date(d.lastVerification.validUntil).toLocaleDateString('ro-RO') : '',
+      ]),
+    ];
+    const csv = rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'Raport-Conformitate.csv';
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   const applyFilter = (filterKey, value) => {
@@ -70,7 +117,7 @@ export default function VerificationsPage() {
   }
   if (sortByExpiry) {
     verifications = [...verifications].sort(
-      (a, b) => new Date(a.validUntil) - new Date(b.validUntil)
+      (a, b) => new Date(a.validUntil).getTime() - new Date(b.validUntil).getTime()
     );
   }
 
@@ -85,6 +132,8 @@ export default function VerificationsPage() {
   const getStatusColor = (status) => {
     if (status === 'CONFORM') return 'bg-green-100 text-green-800';
     if (status === 'EXPIRAT') return 'bg-red-100 text-red-800';
+    if (status === 'EXPIRA_CURAND') return 'bg-orange-100 text-orange-800';
+    if (status === 'NECONFORM') return 'bg-red-200 text-red-950 border border-red-400';
     return 'bg-yellow-100 text-yellow-800';
   };
 
@@ -103,10 +152,18 @@ export default function VerificationsPage() {
       {/* Compliance Report */}
       {report && (
         <section className="mb-8">
-          <h2 className="text-xl font-bold mb-4">Raport Conformitate</h2>
-          <div className="grid grid-cols-4 gap-4">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-bold">Raport Conformitate</h2>
+            <button
+              onClick={handleDownloadComplianceReport}
+              className="px-3 py-2 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700"
+            >
+              Descarca Raport (CSV)
+            </button>
+          </div>
+          <div className="grid grid-cols-3 md:grid-cols-6 gap-4">
             <div className="bg-white p-4 rounded-lg shadow text-center">
-              <p className="text-sm text-gray-600">Total: {report.total}</p>
+              <p className="text-sm text-gray-600">Total</p>
               <p className="text-2xl font-bold text-blue-700">{report.total}</p>
             </div>
             <div className="bg-white p-4 rounded-lg shadow text-center">
@@ -114,8 +171,16 @@ export default function VerificationsPage() {
               <p className="text-2xl font-bold text-green-700">{report.conform}</p>
             </div>
             <div className="bg-white p-4 rounded-lg shadow text-center">
+              <p className="text-sm text-gray-600">Expira curand</p>
+              <p className="text-2xl font-bold text-orange-700">{report.expiraCurand ?? 0}</p>
+            </div>
+            <div className="bg-white p-4 rounded-lg shadow text-center">
               <p className="text-sm text-gray-600">Expirat</p>
               <p className="text-2xl font-bold text-red-700">{report.expirat}</p>
+            </div>
+            <div className="bg-white p-4 rounded-lg shadow text-center">
+              <p className="text-sm text-gray-600">Neconforme</p>
+              <p className="text-2xl font-bold text-red-900">{report.neconform ?? 0}</p>
             </div>
             <div className="bg-white p-4 rounded-lg shadow text-center">
               <p className="text-sm text-gray-600">Conformitate</p>
@@ -146,7 +211,6 @@ export default function VerificationsPage() {
                     type="checkbox"
                     checked={filterType === t}
                     onChange={() => applyFilter('type', t)}
-                    aria-label={t}
                   />
                   <span className="text-xs text-gray-700">{t}</span>
                 </label>
@@ -154,16 +218,14 @@ export default function VerificationsPage() {
             </div>
             <div>
               <p className="text-sm font-medium mb-1">Status</p>
-              {['CONFORM', 'EXPIRAT', 'NEVERIFICAT'].map((s) => (
+              {['CONFORM', 'EXPIRAT', 'EXPIRA_CURAND', 'NECONFORM', 'NEVERIFICAT'].map((s) => (
                 <label key={s} className="flex items-center gap-1 text-sm cursor-pointer">
                   <input
                     type="checkbox"
                     checked={filterStatus === s}
                     onChange={() => applyFilter('status', s)}
-                    aria-label={s}
                   />
-                  {filterStatus !== s && <span className="text-xs text-gray-700">{s}</span>}
-                  {filterStatus === s && <span className="text-xs text-green-700">✓</span>}
+                  <span className="text-xs text-gray-700">{s}</span>
                 </label>
               ))}
             </div>
@@ -188,13 +250,14 @@ export default function VerificationsPage() {
                 Valid Until
               </th>
               <th role="columnheader" scope="col" className="px-6 py-3 text-center text-sm font-semibold">Status</th>
+              <th role="columnheader" scope="col" className="px-6 py-3 text-center text-sm font-semibold">Buletin</th>
               <th role="columnheader" scope="col" className="px-6 py-3 text-center text-sm font-semibold">Acțiuni</th>
             </tr>
           </thead>
           <tbody className="divide-y">
             {verifications.length === 0 ? (
               <tr>
-                <td colSpan="6" className="px-6 py-8 text-center text-gray-500">
+                <td colSpan="7" className="px-6 py-8 text-center text-gray-500">
                   Nu există verificări
                 </td>
               </tr>
@@ -232,6 +295,14 @@ export default function VerificationsPage() {
                       >
                         {v.status}
                       </span>
+                    </td>
+                    <td className="px-6 py-4 text-center">
+                      <button
+                        onClick={() => handleDownloadCertificate(v.id)}
+                        className="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded hover:bg-blue-200"
+                      >
+                        PDF
+                      </button>
                     </td>
                     <td className="px-6 py-4 text-center">
                       <button

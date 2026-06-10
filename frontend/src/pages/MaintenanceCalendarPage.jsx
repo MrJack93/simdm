@@ -1,6 +1,12 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getMaintenancePlans, createMaintenancePlan } from '../api/maintenancePlans';
+import { useNavigate } from 'react-router-dom';
+import {
+  getMaintenancePlans,
+  createMaintenancePlan,
+  rescheduleOccurrence,
+  downloadFormular5,
+} from '../api/maintenancePlans';
 import { getDevices } from '../api/devices';
 
 const MONTHS_RO = [
@@ -10,19 +16,40 @@ const MONTHS_RO = [
 
 const FREQUENCIES = ['LUNAR', 'BIMESTRIAL', 'TRIMESTRIAL', 'SEMESTRIAL', 'ANUAL'];
 
+const CURRENT_YEAR = new Date().getFullYear();
+const YEAR_OPTIONS = Array.from({ length: 5 }, (_, i) => CURRENT_YEAR - 1 + i);
+
+// spec §2.3: PROGRAMAT=verde (success), SCADENT=portocaliu (warning), DEPASIT=roșu (error), EFECTUAT=albastru (info)
+function getStatusStyle(status) {
+  if (status === 'DEPASIT') {
+    return { backgroundColor: 'var(--color-error-bg)', color: 'var(--color-error)', border: '1px solid rgba(248, 113, 113, 0.2)' };
+  }
+  if (status === 'SCADENT') {
+    return { backgroundColor: 'var(--color-warning-bg)', color: 'var(--color-warning)', border: '1px solid rgba(251, 191, 36, 0.2)' };
+  }
+  if (status === 'EFECTUAT') {
+    return { backgroundColor: 'var(--color-info-bg)', color: 'var(--color-info)', border: '1px solid rgba(96, 165, 250, 0.2)' };
+  }
+  return { backgroundColor: 'var(--color-success-bg)', color: 'var(--color-success)', border: '1px solid rgba(52, 211, 153, 0.2)' }; // PROGRAMAT
+}
+
 export default function MaintenanceCalendarPage() {
   const queryClient = useQueryClient();
-  const [currentDate, setCurrentDate] = useState(new Date());
+  const navigate = useNavigate();
+
+  const [selectedYear, setSelectedYear] = useState(CURRENT_YEAR);
+  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
   const [selectedDay, setSelectedDay] = useState(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [rescheduleOccId, setRescheduleOccId] = useState(null);
+  const [rescheduleData, setRescheduleData] = useState({ newDate: '', reason: '' });
+  const [rescheduleError, setRescheduleError] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
+  const [pdfError, setPdfError] = useState('');
 
-  const year = currentDate.getFullYear();
-  const month = currentDate.getMonth();
-
-  const { data: plansData } = useQuery({
-    queryKey: ['maintenancePlans', year],
-    queryFn: () => getMaintenancePlans({ year }),
+  const { data: calendarData } = useQuery({
+    queryKey: ['maintenancePlans', selectedYear],
+    queryFn: () => getMaintenancePlans({ year: selectedYear }),
   });
 
   const { data: devicesData } = useQuery({
@@ -30,7 +57,7 @@ export default function MaintenanceCalendarPage() {
     queryFn: getDevices,
   });
 
-  const plans = plansData?.data || [];
+  const plans = calendarData?.data || [];
   const devices = devicesData?.devices || devicesData?.data || [];
 
   const createMutation = useMutation({
@@ -43,87 +70,200 @@ export default function MaintenanceCalendarPage() {
     },
   });
 
-  const prevMonth = () =>
-    setCurrentDate((d) => new Date(d.getFullYear(), d.getMonth() - 1, 1));
-  const nextMonth = () =>
-    setCurrentDate((d) => new Date(d.getFullYear(), d.getMonth() + 1, 1));
+  const rescheduleMutation = useMutation({
+    mutationFn: ({ id, data }) => rescheduleOccurrence(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['maintenancePlans'] });
+      setRescheduleOccId(null);
+      setRescheduleData({ newDate: '', reason: '' });
+      setRescheduleError('');
+      setSuccessMsg('Ocurență reprogramată cu succes');
+      setTimeout(() => setSuccessMsg(''), 4000);
+    },
+    onError: (err) => {
+      setRescheduleError(err?.response?.data?.error || 'Eroare la reprogramare');
+    },
+  });
 
-  // Occurrences for current month
-  const occurrencesForMonth = plans.flatMap((plan) =>
-    (plan.occurrences || [])
-      .filter((occ) => {
-        const d = new Date(occ.dueDate || occ.scheduledDate);
-        return d.getFullYear() === year && d.getMonth() === month;
-      })
-      .map((occ) => ({
+  const handleRescheduleSubmit = (occId) => {
+    if (!rescheduleData.newDate) {
+      setRescheduleError('Data nouă este obligatorie');
+      return;
+    }
+    if (!rescheduleData.reason || rescheduleData.reason.length < 5) {
+      setRescheduleError('Motivul trebuie să aibă cel puțin 5 caractere');
+      return;
+    }
+    setRescheduleError('');
+    rescheduleMutation.mutate({
+      id: occId,
+      data: { newDate: new Date(rescheduleData.newDate).toISOString(), reason: rescheduleData.reason },
+    });
+  };
+
+  const handleDownloadPdf = async () => {
+    setPdfError('');
+    try {
+      const blob = await downloadFormular5(selectedYear);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Formular-5-${selectedYear}.pdf`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch {
+      setPdfError('Nu există planuri pentru acest an sau eroare la generare.');
+    }
+  };
+
+  const prevMonth = () => {
+    if (currentMonth === 0) {
+      setCurrentMonth(11);
+      setSelectedYear((y) => y - 1);
+    } else {
+      setCurrentMonth((m) => m - 1);
+    }
+    setSelectedDay(null);
+  };
+  const nextMonth = () => {
+    if (currentMonth === 11) {
+      setCurrentMonth(0);
+      setSelectedYear((y) => y + 1);
+    } else {
+      setCurrentMonth((m) => m + 1);
+    }
+    setSelectedDay(null);
+  };
+
+  // Flatten all occurrences for the current month.
+  // Support both array of plans (unit tests) and array of occurrences (real backend calendar endpoint).
+  const occurrencesForMonth = plans.flatMap((item) => {
+    if (item.occurrences && Array.isArray(item.occurrences)) {
+      return item.occurrences
+        .filter((occ) => {
+          const d = new Date(occ.rescheduledTo || occ.scheduledDate || occ.dueDate);
+          return d.getFullYear() === selectedYear && d.getMonth() === currentMonth;
+        })
+        .map((occ) => ({
+          ...occ,
+          planFrequency: item.frequency,
+          deviceName: item.device?.name,
+        }));
+    }
+    const occ = item;
+    const d = new Date(occ.rescheduledTo || occ.scheduledDate || occ.dueDate);
+    if (d.getFullYear() === selectedYear && d.getMonth() === currentMonth) {
+      return [{
         ...occ,
-        planFrequency: plan.frequency,
-        deviceName: plan.device?.name,
-      }))
-  );
+        planFrequency: occ.plan?.frequency || 'LUNAR',
+        deviceName: occ.plan?.device?.name || 'Dispozitiv',
+      }];
+    }
+    return [];
+  });
 
   const occurrencesForDay = (day) =>
     occurrencesForMonth.filter(
-      (occ) => new Date(occ.dueDate || occ.scheduledDate).getDate() === day
+      (occ) => new Date(occ.rescheduledTo || occ.scheduledDate || occ.dueDate).getDate() === day
     );
 
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const daysInMonth = new Date(selectedYear, currentMonth + 1, 0).getDate();
+  const firstDayOffset = (new Date(selectedYear, currentMonth, 1).getDay() + 6) % 7;
 
   return (
-    <div className="p-4">
+    <div className="p-4 md:p-8 space-y-6">
       {/* Hidden identifier for tests */}
       <span className="sr-only">MaintenanceCalendarPage</span>
 
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold">
-          Calendar Mentenanță — {MONTHS_RO[month]} {year}
-        </h1>
-        <button
-          onClick={() => setShowCreateModal(true)}
-          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-        >
-          Creare Plan
-        </button>
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
+        <div>
+          <h1 className="text-3xl font-bold mb-2" style={{ color: 'var(--healthcare-primary)' }}>
+            Calendar Mentenanță
+          </h1>
+          <p style={{ color: 'var(--color-text-secondary)' }} className="text-sm">
+            Vizualizați programările de mentenanță preventivă și reprogramați ocurențele scadente
+          </p>
+        </div>
+        <div className="flex gap-2 flex-wrap">
+          <button
+            onClick={handleDownloadPdf}
+            className="px-4 py-2 border rounded-lg hover:bg-[var(--color-bg-elevated)] transition-all duration-150 text-sm font-semibold flex items-center gap-2 cursor-pointer"
+            style={{ borderColor: 'var(--color-border)', color: 'var(--color-text-primary)', backgroundColor: 'var(--color-bg-secondary)' }}
+          >
+            Descarcă Formular Nr. 5 (PDF)
+          </button>
+          <button
+            onClick={() => setShowCreateModal(true)}
+            className="px-4 py-2 rounded-lg transition-all duration-150 text-sm font-semibold flex items-center gap-2 cursor-pointer"
+            style={{ backgroundColor: 'var(--healthcare-primary)', color: '#fff' }}
+          >
+            Creare Plan
+          </button>
+        </div>
       </div>
 
       {successMsg && (
         <div className="bg-green-100 text-green-700 p-3 mb-4 rounded">{successMsg}</div>
       )}
+      {pdfError && (
+        <div className="bg-red-100 text-red-700 p-3 mb-4 rounded">{pdfError}</div>
+      )}
 
-      {/* Navigation */}
-      <div className="flex items-center gap-4 mb-4">
+      {/* Year dropdown + month navigation */}
+      <div className="flex items-center gap-3 mb-4 flex-wrap">
+        <label htmlFor="year-select" className="font-medium text-sm" style={{ color: 'var(--color-text-secondary)' }}>An:</label>
+        <select
+          id="year-select"
+          value={selectedYear}
+          onChange={(e) => { setSelectedYear(Number(e.target.value)); setSelectedDay(null); }}
+          className="border rounded-lg px-3 py-1.5 text-sm cursor-pointer outline-none transition-all duration-150"
+          style={{
+            backgroundColor: 'var(--color-bg-secondary)',
+            color: 'var(--color-text-primary)',
+            borderColor: 'var(--color-border)',
+          }}
+        >
+          {YEAR_OPTIONS.map((y) => (
+            <option key={y} value={y} style={{ backgroundColor: 'var(--color-bg-secondary)', color: 'var(--color-text-primary)' }}>{y}</option>
+          ))}
+        </select>
+
         <button
           aria-label="Luna anterioară"
           onClick={prevMonth}
-          className="px-3 py-1 border rounded hover:bg-gray-100"
+          className="px-3 py-1.5 border rounded-lg transition-all duration-150 text-sm font-medium hover:bg-[var(--color-bg-elevated)] cursor-pointer"
+          style={{
+            backgroundColor: 'var(--color-bg-secondary)',
+            color: 'var(--color-text-primary)',
+            borderColor: 'var(--color-border)',
+          }}
         >
           ‹ Luna anterioară
         </button>
-        <span className="font-semibold">
-          {MONTHS_RO[month]} {year}
+        <span className="font-semibold text-sm px-2" style={{ color: 'var(--color-text-primary)' }}>
+          {MONTHS_RO[currentMonth]} {selectedYear}
         </span>
         <button
           aria-label="Luna următoare"
           onClick={nextMonth}
-          className="px-3 py-1 border rounded hover:bg-gray-100"
+          className="px-3 py-1.5 border rounded-lg transition-all duration-150 text-sm font-medium hover:bg-[var(--color-bg-elevated)] cursor-pointer"
+          style={{
+            backgroundColor: 'var(--color-bg-secondary)',
+            color: 'var(--color-text-primary)',
+            borderColor: 'var(--color-border)',
+          }}
         >
           Luna următoare ›
         </button>
       </div>
 
-      {/* Plan frequency summary */}
-      {plans.length > 0 && (
-        <div className="flex gap-2 mb-4 flex-wrap">
-          {plans.map((plan) => (
-            <span
-              key={plan.id}
-              className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-sm"
-            >
-              {plan.device?.name} — {plan.frequency}
-            </span>
-          ))}
-        </div>
-      )}
+      {/* Color legend */}
+      <div className="flex gap-3 mb-4 text-xs flex-wrap font-medium">
+        <span className="px-2.5 py-1 rounded" style={getStatusStyle('PROGRAMAT')}>PROGRAMAT</span>
+        <span className="px-2.5 py-1 rounded" style={getStatusStyle('SCADENT')}>SCADENT</span>
+        <span className="px-2.5 py-1 rounded" style={getStatusStyle('DEPASIT')}>DEPASIT</span>
+        <span className="px-2.5 py-1 rounded" style={getStatusStyle('EFECTUAT')}>EFECTUAT</span>
+      </div>
 
       {/* Calendar grid */}
       <div className="grid grid-cols-7 gap-1 mb-6">
@@ -132,35 +272,29 @@ export default function MaintenanceCalendarPage() {
             {d}
           </div>
         ))}
-        {/* Empty cells before first day */}
-        {Array.from({ length: (new Date(year, month, 1).getDay() + 6) % 7 }, (_, i) => (
+        {Array.from({ length: firstDayOffset }, (_, i) => (
           <div key={`empty-${i}`} />
         ))}
-        {/* Day cells */}
         {Array.from({ length: daysInMonth }, (_, i) => {
           const day = i + 1;
           const dayOccs = occurrencesForDay(day);
           return (
             <div
               key={day}
-              onClick={() => setSelectedDay(selectedDay === day ? null : day)}
-              className={`min-h-[48px] p-1 border rounded cursor-pointer hover:bg-gray-50 ${
-                selectedDay === day ? 'bg-blue-50 border-blue-400' : 'border-gray-200'
-              }`}
+              onClick={() => { setSelectedDay(selectedDay === day ? null : day); setRescheduleOccId(null); }}
+              className="min-h-[64px] p-1.5 border rounded-lg cursor-pointer transition-all duration-150 ease-out hover:bg-[var(--color-bg-elevated)]"
+              style={{
+                borderColor: selectedDay === day ? 'var(--color-accent)' : 'var(--color-border)',
+                backgroundColor: selectedDay === day ? 'var(--color-accent-subtle)' : 'var(--color-bg-secondary)',
+                boxShadow: selectedDay === day ? '0 0 8px var(--color-accent-muted)' : 'none',
+              }}
             >
-              <span className="text-sm font-medium">{day}</span>
+              <span className="text-sm font-semibold" style={{ color: 'var(--color-text-primary)' }}>{day}</span>
               {dayOccs.map((occ) => (
                 <div
                   key={occ.id}
-                  className={`text-xs mt-1 rounded px-1 ${
-                    occ.status === 'DEPASIT'
-                      ? 'bg-red-200 text-red-800'
-                      : occ.status === 'SCADENT'
-                        ? 'bg-yellow-200 text-yellow-800'
-                        : occ.status === 'EFECTUAT'
-                          ? 'bg-green-200 text-green-800'
-                          : 'bg-blue-200 text-blue-800'
-                  }`}
+                  style={getStatusStyle(occ.status)}
+                  className="text-[10px] mt-1 rounded px-1.5 py-0.5 font-medium block truncate text-center"
                 >
                   {occ.status}
                 </div>
@@ -172,21 +306,119 @@ export default function MaintenanceCalendarPage() {
 
       {/* Selected day details */}
       {selectedDay !== null && (
-        <div className="border rounded p-4 bg-gray-50">
-          <h2 className="font-semibold mb-2">Apariții mentenanță — {selectedDay} {MONTHS_RO[month]}</h2>
+        <div className="border rounded-xl p-6 transition-all duration-150" style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)' }}>
+          <h2 className="font-semibold text-lg mb-4" style={{ color: 'var(--color-text-primary)' }}>
+            Apariții mentenanță — {selectedDay} {MONTHS_RO[currentMonth]} {selectedYear}
+          </h2>
           {occurrencesForDay(selectedDay).length === 0 ? (
-            <p className="text-gray-500 text-sm">Nu există apariții pentru această zi.</p>
+            <p className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>Nu există apariții pentru această zi.</p>
           ) : (
             occurrencesForDay(selectedDay).map((occ) => (
-              <div key={occ.id} className="mb-2 p-2 bg-white rounded border">
-                <span className="font-medium">{occ.deviceName}</span>
-                {' — '}
-                <span>{occ.planFrequency}</span>
-                {' — '}
-                <span>{occ.status}</span>
+              <div key={occ.id} className="mb-4 p-4 rounded-lg border transition-all duration-150" style={{ backgroundColor: 'var(--color-bg-elevated)', borderColor: 'var(--color-border)' }}>
+                <div className="flex flex-wrap justify-between items-center gap-3">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="font-semibold" style={{ color: 'var(--color-text-primary)' }}>{occ.deviceName}</span>
+                    <span className="text-xs" style={{ color: 'var(--color-text-tertiary)' }}>•</span>
+                    <span className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>{occ.planFrequency}</span>
+                    <span className="text-xs" style={{ color: 'var(--color-text-tertiary)' }}>•</span>
+                    <span className="text-xs px-2.5 py-0.5 rounded font-semibold" style={getStatusStyle(occ.status)}>
+                      {occ.status}
+                    </span>
+                  </div>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => {
+                        setRescheduleOccId(rescheduleOccId === occ.id ? null : occ.id);
+                        setRescheduleError('');
+                        setRescheduleData({ newDate: '', reason: '' });
+                      }}
+                      className="px-3 py-1 text-xs border rounded-lg hover:bg-[var(--color-bg-elevated)] transition-all duration-150 font-semibold cursor-pointer"
+                      style={{ borderColor: 'var(--color-warning)', color: 'var(--color-warning)', backgroundColor: 'transparent' }}
+                    >
+                      Reprogramează
+                    </button>
+                    <button
+                      onClick={() => navigate('/maintenance/execution')}
+                      className="px-3 py-1 text-xs border rounded-lg hover:bg-[var(--color-bg-elevated)] transition-all duration-150 font-semibold cursor-pointer"
+                      style={{ borderColor: 'var(--color-info)', color: 'var(--color-info)', backgroundColor: 'transparent' }}
+                    >
+                      Execută MPP
+                    </button>
+                  </div>
+                </div>
+
+                {/* Reschedule inline form */}
+                {rescheduleOccId === occ.id && (
+                  <div className="mt-4 p-4 rounded-lg border transition-all duration-150" style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-warning)' }}>
+                    <h3 className="text-sm font-semibold mb-3" style={{ color: 'var(--color-text-primary)' }}>Reprogramare ocurență</h3>
+                    <div className="mb-3">
+                      <label className="block text-xs font-medium mb-1" style={{ color: 'var(--color-text-secondary)' }}>Data nouă</label>
+                      <input
+                        type="date"
+                        value={rescheduleData.newDate}
+                        onChange={(e) => setRescheduleData((d) => ({ ...d, newDate: e.target.value }))}
+                        className="border rounded-lg px-3 py-2 text-sm w-full outline-none transition-all duration-150"
+                        style={{ backgroundColor: 'var(--color-bg-elevated)', color: 'var(--color-text-primary)', borderColor: 'var(--color-border)' }}
+                      />
+                    </div>
+                    <div className="mb-3">
+                      <label className="block text-xs font-medium mb-1" style={{ color: 'var(--color-text-secondary)' }}>
+                        Motiv <span style={{ color: 'var(--color-text-tertiary)' }}>(min 5 caractere)</span>
+                      </label>
+                      <textarea
+                        value={rescheduleData.reason}
+                        onChange={(e) => setRescheduleData((d) => ({ ...d, reason: e.target.value }))}
+                        rows={2}
+                        placeholder="Ex: Bioinginerul nu era disponibil"
+                        className="border rounded-lg px-3 py-2 text-sm w-full outline-none transition-all duration-150"
+                        style={{ backgroundColor: 'var(--color-bg-elevated)', color: 'var(--color-text-primary)', borderColor: 'var(--color-border)' }}
+                      />
+                    </div>
+                    {rescheduleError && (
+                      <p className="text-red-600 text-xs mb-3">{rescheduleError}</p>
+                    )}
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => handleRescheduleSubmit(occ.id)}
+                        disabled={rescheduleMutation.isPending}
+                        className="px-4 py-1.5 text-xs text-white rounded-lg hover:opacity-90 disabled:opacity-50 transition-all duration-150 cursor-pointer"
+                        style={{ backgroundColor: 'var(--color-warning)', color: 'var(--color-bg-primary)', fontWeight: 'bold' }}
+                      >
+                        {rescheduleMutation.isPending ? 'Se salvează...' : 'Salvează'}
+                      </button>
+                      <button
+                        onClick={() => { setRescheduleOccId(null); setRescheduleError(''); }}
+                        className="px-4 py-1.5 text-xs border rounded-lg hover:bg-[var(--color-bg-elevated)] transition-all duration-150 cursor-pointer"
+                        style={{ borderColor: 'var(--color-border)', color: 'var(--color-text-primary)', backgroundColor: 'transparent' }}
+                      >
+                        Anulare
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             ))
           )}
+        </div>
+      )}
+
+      {/* Plan frequency summary */}
+      {plans.length > 0 && (
+        <div className="flex gap-2 mt-4 flex-wrap">
+          {plans.map((item) => {
+            const isOcc = !item.occurrences;
+            const deviceName = isOcc ? item.plan?.device?.name : item.device?.name;
+            const frequency = isOcc ? item.plan?.frequency : item.frequency;
+            if (!deviceName) return null;
+            return (
+              <span
+                key={item.id}
+                className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs"
+              >
+                {deviceName} — {frequency}
+              </span>
+            );
+          })}
         </div>
       )}
 
@@ -196,17 +428,19 @@ export default function MaintenanceCalendarPage() {
           devices={devices}
           onClose={() => setShowCreateModal(false)}
           onCreate={(data) => createMutation.mutate(data)}
-          year={year}
+          year={selectedYear}
+          isPending={createMutation.isPending}
         />
       )}
     </div>
   );
 }
 
-function CreatePlanModal({ devices, onClose, onCreate, year }) {
+function CreatePlanModal({ devices, onClose, onCreate, year, isPending }) {
   const [deviceId, setDeviceId] = useState('');
   const [frequency, setFrequency] = useState('');
   const [responsibleName, setResponsibleName] = useState('');
+  const [responsibleAffil, setResponsibleAffil] = useState('');
   const [formError, setFormError] = useState('');
 
   const handleSubmit = () => {
@@ -219,56 +453,62 @@ function CreatePlanModal({ devices, onClose, onCreate, year }) {
       setFormError('Câmpul Frecvență este obligatoriu');
       return;
     }
-    onCreate({ deviceId: parseInt(deviceId), frequency, year, responsibleName });
+    if (!responsibleName.trim()) {
+      setFormError('Câmpul Responsabil este obligatoriu');
+      return;
+    }
+    onCreate({ deviceId: parseInt(deviceId), frequency, year, responsibleName, responsibleAffil: responsibleAffil || undefined });
     onClose();
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 w-full max-w-md shadow-xl">
-        <h2 className="text-xl font-bold mb-4">Creare Plan Mentenanță</h2>
+    <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 transition-opacity">
+      <div className="rounded-2xl p-6 w-full max-w-md shadow-2xl border transition-all duration-150" style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)' }}>
+        <h2 className="text-xl font-bold mb-5" style={{ color: 'var(--color-text-primary)' }}>Creare Plan Mentenanță — {year}</h2>
 
-        <div className="mb-3">
-          <label htmlFor="device-select" className="block font-medium mb-1">
+        <div className="mb-4">
+          <label htmlFor="device-select" className="block text-sm font-semibold mb-1.5" style={{ color: 'var(--color-text-secondary)' }}>
             Dispozitiv
           </label>
           <select
             id="device-select"
             value={deviceId}
             onChange={(e) => setDeviceId(e.target.value)}
-            className="w-full border px-3 py-2 rounded"
+            className="w-full border rounded-lg px-3 py-2 text-sm outline-none transition-all duration-150"
+            style={{ backgroundColor: 'var(--color-bg-elevated)', color: 'var(--color-text-primary)', borderColor: 'var(--color-border)' }}
           >
-            <option value="">-- Selectează dispozitiv --</option>
+            <option value="" style={{ backgroundColor: 'var(--color-bg-elevated)', color: 'var(--color-text-primary)' }}>-- Selectează dispozitiv --</option>
             {devices.map((d) => (
-              <option key={d.id} value={d.id}>
+              <option key={d.id} value={d.id} style={{ backgroundColor: 'var(--color-bg-elevated)', color: 'var(--color-text-primary)' }}>
                 {d.name}
               </option>
             ))}
           </select>
         </div>
 
-        <div className="mb-3">
-          <label htmlFor="freq-select" className="block font-medium mb-1">
+        <div className="mb-4">
+          <label htmlFor="freq-select" className="block text-sm font-semibold mb-1.5" style={{ color: 'var(--color-text-secondary)' }}>
             Frecvență
           </label>
           <select
             id="freq-select"
             value={frequency}
             onChange={(e) => setFrequency(e.target.value)}
-            className="w-full border px-3 py-2 rounded"
+            className="w-full border rounded-lg px-3 py-2 text-sm outline-none transition-all duration-150"
+            style={{ backgroundColor: 'var(--color-bg-elevated)', color: 'var(--color-text-primary)', borderColor: 'var(--color-border)' }}
           >
-            <option value="">-- Selectează frecvență --</option>
+            <option value="" style={{ backgroundColor: 'var(--color-bg-elevated)', color: 'var(--color-text-primary)' }}>-- Selectează frecvență --</option>
             {FREQUENCIES.map((f) => (
-              <option key={f} value={f}>
+              <option key={f} value={f} style={{ backgroundColor: 'var(--color-bg-elevated)', color: 'var(--color-text-primary)' }}>
                 {f.charAt(0) + f.slice(1).toLowerCase()}
               </option>
             ))}
           </select>
         </div>
 
-        <div className="mb-3">
-          <label htmlFor="responsible-input" className="block font-medium mb-1">
-            Responsabil
+        <div className="mb-4">
+          <label htmlFor="responsible-input" className="block text-sm font-semibold mb-1.5" style={{ color: 'var(--color-text-secondary)' }}>
+            Responsabil <span className="text-red-500">*</span>
           </label>
           <input
             id="responsible-input"
@@ -276,26 +516,45 @@ function CreatePlanModal({ devices, onClose, onCreate, year }) {
             value={responsibleName}
             onChange={(e) => setResponsibleName(e.target.value)}
             placeholder="Ing. Ion Popescu"
-            className="w-full border px-3 py-2 rounded"
+            className="w-full border rounded-lg px-3 py-2 text-sm outline-none transition-all duration-150"
+            style={{ backgroundColor: 'var(--color-bg-elevated)', color: 'var(--color-text-primary)', borderColor: 'var(--color-border)' }}
           />
         </div>
 
-        {formError && <p className="text-red-600 text-sm mb-3">{formError}</p>}
+        <div className="mb-5">
+          <label htmlFor="affil-input" className="block text-sm font-semibold mb-1.5" style={{ color: 'var(--color-text-secondary)' }}>
+            Afiliat <span style={{ color: 'var(--color-text-tertiary)', fontWeight: 'normal' }} className="text-xs">(opțional)</span>
+          </label>
+          <input
+            id="affil-input"
+            type="text"
+            value={responsibleAffil}
+            onChange={(e) => setResponsibleAffil(e.target.value)}
+            placeholder="Ex: Dept. Bioinginerie"
+            className="w-full border rounded-lg px-3 py-2 text-sm outline-none transition-all duration-150"
+            style={{ backgroundColor: 'var(--color-bg-elevated)', color: 'var(--color-text-primary)', borderColor: 'var(--color-border)' }}
+          />
+        </div>
+
+        {formError && <p className="text-red-600 text-sm mb-4">{formError}</p>}
 
         <div className="flex gap-2 justify-end">
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 border rounded hover:bg-gray-100"
+            className="px-4 py-2 border rounded-lg hover:bg-[var(--color-bg-elevated)] transition-all duration-150 font-semibold cursor-pointer text-sm"
+            style={{ borderColor: 'var(--color-border)', color: 'var(--color-text-primary)', backgroundColor: 'transparent' }}
           >
             Anulare
           </button>
           <button
             type="button"
             onClick={handleSubmit}
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            disabled={isPending}
+            className="px-4 py-2 rounded-lg hover:opacity-90 disabled:opacity-50 transition-all duration-150 font-semibold cursor-pointer text-sm"
+            style={{ backgroundColor: 'var(--healthcare-primary)', color: '#fff' }}
           >
-            Salvare Plan
+            {isPending ? 'Se salvează...' : 'Salvare Plan'}
           </button>
         </div>
       </div>

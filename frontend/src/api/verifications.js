@@ -17,3 +17,8 @@ export const getComplianceReport = () =>
 
 export const deleteVerification = (id) =>
   api.delete(`/verifications/${id}`).then((r) => r.data);
+
+export const downloadCertificate = (id) =>
+  api
+    .get(`/verifications/${id}/certificate`, { responseType: 'blob' })
+    .then((r) => r.data);

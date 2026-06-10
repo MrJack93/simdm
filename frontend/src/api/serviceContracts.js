@@ -23,3 +23,9 @@ export const rateProvider = (id, data) =>
 
 export const getCostAnalysis = () =>
   api.get('/service-contracts/cost-analysis').then((r) => r.data);
+
+export const deleteContract = (id) =>
+  api.delete(`/service-contracts/contracts/${id}`).then((r) => r.data);
+
+export const deleteProvider = (id) =>
+  api.delete(`/service-contracts/providers/${id}`).then((r) => r.data);

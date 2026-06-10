@@ -26,8 +26,94 @@ function withExpiry(days, overrides = {}) {
   };
 }
 
+function resolveAllEmpty() {
+  api.get.mockImplementation((url) => {
+    if (url.includes('/consumables')) {
+      return Promise.resolve({ data: { consumables: [] } });
+    }
+    if (url.includes('/service-contracts/contracts')) {
+      return Promise.resolve({ data: { data: [] } });
+    }
+    if (url.includes('/verifications/compliance-report')) {
+      return Promise.resolve({ data: { conform: 0, expirat: 0, expiraCurand: 0, neverificat: 0, neconform: 0, total: 0 } });
+    }
+    if (url.includes('/maintenance-plans/calendar')) {
+      return Promise.resolve({ data: { data: [] } });
+    }
+    return Promise.resolve({ data: {} });
+  });
+}
+
 function resolveConsumables(consumables) {
-  api.get.mockResolvedValue({ data: { consumables } });
+  api.get.mockImplementation((url) => {
+    if (url.includes('/consumables')) {
+      return Promise.resolve({ data: { consumables } });
+    }
+    if (url.includes('/service-contracts/contracts')) {
+      return Promise.resolve({ data: { data: [] } });
+    }
+    if (url.includes('/verifications/compliance-report')) {
+      return Promise.resolve({ data: { conform: 0, expirat: 0, expiraCurand: 0, neverificat: 0, neconform: 0, total: 0 } });
+    }
+    if (url.includes('/maintenance-plans/calendar')) {
+      return Promise.resolve({ data: { data: [] } });
+    }
+    return Promise.resolve({ data: {} });
+  });
+}
+
+function resolveContracts(contracts) {
+  api.get.mockImplementation((url) => {
+    if (url.includes('/consumables')) {
+      return Promise.resolve({ data: { consumables: [] } });
+    }
+    if (url.includes('/service-contracts/contracts')) {
+      return Promise.resolve({ data: { data: contracts } });
+    }
+    if (url.includes('/verifications/compliance-report')) {
+      return Promise.resolve({ data: { conform: 0, expirat: 0, expiraCurand: 0, neverificat: 0, neconform: 0, total: 0 } });
+    }
+    if (url.includes('/maintenance-plans/calendar')) {
+      return Promise.resolve({ data: { data: [] } });
+    }
+    return Promise.resolve({ data: {} });
+  });
+}
+
+function resolveCompliance(compliance) {
+  api.get.mockImplementation((url) => {
+    if (url.includes('/consumables')) {
+      return Promise.resolve({ data: { consumables: [] } });
+    }
+    if (url.includes('/service-contracts/contracts')) {
+      return Promise.resolve({ data: { data: [] } });
+    }
+    if (url.includes('/verifications/compliance-report')) {
+      return Promise.resolve({ data: compliance });
+    }
+    if (url.includes('/maintenance-plans/calendar')) {
+      return Promise.resolve({ data: { data: [] } });
+    }
+    return Promise.resolve({ data: {} });
+  });
+}
+
+function resolveMpps(occurrences) {
+  api.get.mockImplementation((url) => {
+    if (url.includes('/consumables')) {
+      return Promise.resolve({ data: { consumables: [] } });
+    }
+    if (url.includes('/service-contracts/contracts')) {
+      return Promise.resolve({ data: { data: [] } });
+    }
+    if (url.includes('/verifications/compliance-report')) {
+      return Promise.resolve({ data: { conform: 0, expirat: 0, expiraCurand: 0, neverificat: 0, neconform: 0, total: 0 } });
+    }
+    if (url.includes('/maintenance-plans/calendar')) {
+      return Promise.resolve({ data: { data: occurrences } });
+    }
+    return Promise.resolve({ data: {} });
+  });
 }
 
 describe('AlertsWidget', () => {
@@ -41,12 +127,12 @@ describe('AlertsWidget', () => {
     await waitFor(() => {
       expect(api.get).toHaveBeenCalled();
     });
-    expect(screen.queryByText(/Alerte Consumabile/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Alerte Active Sistem/)).not.toBeInTheDocument();
     expect(container.querySelector('.card-base')).toBeNull();
   });
 
   it('apelează api.get pentru lista de consumabile (limit=1000)', async () => {
-    resolveConsumables([]);
+    resolveAllEmpty();
     renderWithProviders(<AlertsWidget />);
     await waitFor(() => {
       expect(api.get).toHaveBeenCalledWith('/consumables?limit=1000');
@@ -66,13 +152,13 @@ describe('AlertsWidget', () => {
   it('afișează numărul de produse care expiră în mai puțin de 7 zile', async () => {
     resolveConsumables([withExpiry(3), withExpiry(5)]);
     renderWithProviders(<AlertsWidget />);
-    expect(await screen.findByText(/2 expirând în/)).toBeInTheDocument();
+    expect(await screen.findByText(/2 consumabile expiră în <7 zile/)).toBeInTheDocument();
   });
 
   it('afișează numărul de produse care expiră între 7 și 30 de zile', async () => {
     resolveConsumables([withExpiry(15), withExpiry(20), withExpiry(25)]);
     renderWithProviders(<AlertsWidget />);
-    expect(await screen.findByText(/3 expirând în/)).toBeInTheDocument();
+    expect(await screen.findByText(/3 consumabile expiră în <30 zile/)).toBeInTheDocument();
   });
 
   it('navighează către pagina de consumabile la click pe alerta de stoc', async () => {
@@ -89,5 +175,64 @@ describe('AlertsWidget', () => {
     api.get.mockReturnValue(new Promise(() => {}));
     const { container } = renderWithProviders(<AlertsWidget />);
     expect(container.firstChild).toBeNull();
+  });
+
+  // Teste noi pentru alerte de contracte, verificări și MPP
+  it('afișează alerte despre contracte de service care expiră în <=30 de zile', async () => {
+    resolveContracts([
+      { id: 101, contractNo: 'C1', daysUntilExpiry: 15, isExpired: false },
+      { id: 102, contractNo: 'C2', daysUntilExpiry: 5, isExpired: false },
+    ]);
+    renderWithProviders(<AlertsWidget />);
+    expect(await screen.findByText(/2 contracte expiră în <30 zile/)).toBeInTheDocument();
+  });
+
+  it('navighează către pagina de contracte la click pe alerta de contracte', async () => {
+    const user = userEvent.setup();
+    resolveContracts([{ id: 101, contractNo: 'C1', daysUntilExpiry: 15, isExpired: false }]);
+    renderWithProviders(<AlertsWidget />);
+    const alertButton = await screen.findByText(/contracte expiră în/);
+    await user.click(alertButton);
+    expect(mockNavigate).toHaveBeenCalledWith('/service-contracts');
+  });
+
+  it('afișează alerte despre verificări critice', async () => {
+    resolveCompliance({
+      neverificat: 2,
+      expirat: 3,
+      expiraCurand: 1,
+      neconform: 1,
+      total: 7,
+    });
+    renderWithProviders(<AlertsWidget />);
+    expect(await screen.findByText(/7 verificări critice/)).toBeInTheDocument();
+  });
+
+  it('navighează către verificări la click pe alerta de verificări', async () => {
+    const user = userEvent.setup();
+    resolveCompliance({ neverificat: 1, expirat: 0, expiraCurand: 0, neconform: 0, total: 1 });
+    renderWithProviders(<AlertsWidget />);
+    const alertButton = await screen.findByText(/verificări critice/);
+    await user.click(alertButton);
+    expect(mockNavigate).toHaveBeenCalledWith('/verifications');
+  });
+
+  it('afișează alerte despre MPP scadente sau depășite', async () => {
+    resolveMpps([
+      { id: 1, status: 'SCADENT' },
+      { id: 2, status: 'DEPASIT' },
+      { id: 3, status: 'PROGRAMAT' }, // Ignorat
+    ]);
+    renderWithProviders(<AlertsWidget />);
+    expect(await screen.findByText(/2 mentenanțe active \/ depășite/)).toBeInTheDocument();
+  });
+
+  it('navighează către calendar la click pe alerta MPP', async () => {
+    const user = userEvent.setup();
+    resolveMpps([{ id: 1, status: 'SCADENT' }]);
+    renderWithProviders(<AlertsWidget />);
+    const alertButton = await screen.findByText(/mentenanțe active \/ depășite/);
+    await user.click(alertButton);
+    expect(mockNavigate).toHaveBeenCalledWith('/maintenance/calendar');
   });
 });

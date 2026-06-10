@@ -131,17 +131,30 @@ async function checkVerificationExpiry() {
 }
 
 /**
- * Check for maintenance plans that are due
+ * Check for maintenance plans that are due (checkMppDue)
+ * Status SCADENT/DEPASIT is calculated dynamically (never stored in DB).
+ * We query by scheduledDate or rescheduledTo: occurrences with status='PROGRAMAT' due within 7 days or overdue.
  */
-async function checkMaintenanceDue() {
+async function checkMppDue() {
   try {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    // Get occurrences that are SCADENT (due within 7 days) or DEPASIT (overdue)
+    const sevenDaysFromNow = new Date(today);
+    sevenDaysFromNow.setDate(sevenDaysFromNow.getDate() + 7);
+
     const dueOccurrences = await prisma.mpp_occurrences.findMany({
       where: {
-        status: { in: ['SCADENT', 'DEPASIT'] },
+        status: 'PROGRAMAT',
+        OR: [
+          {
+            rescheduledTo: null,
+            scheduledDate: { lte: sevenDaysFromNow },
+          },
+          {
+            rescheduledTo: { lte: sevenDaysFromNow },
+          },
+        ],
       },
       include: {
         plan: {
@@ -150,17 +163,24 @@ async function checkMaintenanceDue() {
           },
         },
       },
-      take: 100, // Limit to avoid spam
+      take: 100,
     });
 
     if (dueOccurrences.length > 0) {
-      log(`[Cron] 🔧 ${dueOccurrences.length} mentenanțe sunt scadente sau depășite`);
+      const overdue = dueOccurrences.filter((o) => {
+        const actualDate = o.rescheduledTo ?? o.scheduledDate;
+        return new Date(actualDate) < today;
+      }).length;
+      const dueSoon = dueOccurrences.length - overdue;
+      log(`[Cron] 🔧 ${dueOccurrences.length} mentenanțe scadente (${overdue} depășite, ${dueSoon} în 7 zile)`);
       dueOccurrences.slice(0, 5).forEach((occ) => {
-        log(`  └─ ${occ.plan.device.name} (Status: ${occ.status})`);
+        const actualDate = occ.rescheduledTo ?? occ.scheduledDate;
+        const dynamicStatus = new Date(actualDate) < today ? 'DEPASIT' : 'SCADENT';
+        log(`  └─ ${occ.plan.device.name} (${dynamicStatus}, ${new Date(actualDate).toLocaleDateString('ro-RO')})`);
       });
     }
   } catch (error) {
-    log(`[Cron] ❌ Error in checkMaintenanceDue: ${error.message}`);
+    log(`[Cron] ❌ Error in checkMppDue: ${error.message}`);
   }
 }
 
@@ -260,7 +280,7 @@ function startCronJobs() {
         log('[Cron] ⏰ Starting daily system checks...');
         await checkVerificationExpiry();
         await checkContractExpiry();
-        await checkMaintenanceDue();
+        await checkMppDue();
         await checkRepairTickets();
         await generateComplianceSummary();
         log('[Cron] ✅ All daily checks completed');
@@ -289,7 +309,7 @@ module.exports = {
   startCronJobs,
   checkVerificationExpiry,
   checkContractExpiry,
-  checkMaintenanceDue,
+  checkMppDue,
   checkRepairTickets,
   generateComplianceSummary,
 };

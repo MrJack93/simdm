@@ -1,0 +1,182 @@
+import { test, expect } from '@playwright/test';
+
+test.describe('SIMDM Maintenance and Repair End-to-End Flow', () => {
+  test('Complete flow: plan -> execution -> repair -> closure -> PDF', async ({ page }) => {
+    page.on('console', msg => console.log('BROWSER LOG:', msg.text()));
+    page.on('pageerror', err => console.error('BROWSER ERROR:', err.message));
+
+    // 1. Login
+    await page.goto('/login');
+    await page.waitForTimeout(500); // Wait for async checkAuth bootstrap to finish
+    await page.fill('input[name="username"]', 'testuser');
+    await page.fill('input[name="password"]', 'Test123!');
+    await page.click('button[type="submit"]');
+    await expect(page.locator('nav')).toBeVisible({ timeout: 15000 });
+
+    // 2. Navigate client-side to Maintenance and then Calendar
+    await page.click('nav >> text=Mentenanță');
+    await page.waitForURL('**/maintenance');
+    await page.click('text=Planificare & Calendar MPP');
+    await page.waitForURL('**/maintenance/calendar');
+    await page.waitForLoadState('networkidle');
+
+    // Click on "Creare Plan" button
+    await page.click('button:has-text("Creare Plan")');
+    await page.waitForSelector('text=Creare Plan Mentenanță', { timeout: 5000 });
+
+    // Select first device
+    const deviceSelect = page.locator('#device-select');
+    await deviceSelect.selectOption({ index: 1 });
+
+    // Select frequency LUNAR
+    const freqSelect = page.locator('#freq-select');
+    await freqSelect.selectOption('LUNAR');
+
+    // Fill responsible bioengineer
+    await page.fill('#responsible-input', 'Inginer E2E');
+
+    // Click Create
+    await page.click('button:has-text("Salvare Plan")');
+    
+    // Wait for success toast or alert
+    await expect(page.locator('text=Plan creat cu succes')).toBeVisible({ timeout: 5000 });
+
+    // 3. Find occurrence in calendar grid and start execution
+    // Find the cell with "PROGRAMAT" or "SCADENT" text in the calendar
+    const programatCell = page.locator('.grid >> text=/PROGRAMAT|SCADENT/').first();
+    await programatCell.click();
+
+    // Click on "Execută MPP" from details panel
+    await page.click('button:has-text("Execută MPP")');
+    await page.waitForURL('**/maintenance/execution', { timeout: 5000 });
+
+    // 4. Fill MPP Execution Form with DEFECT status
+    await page.waitForLoadState('networkidle');
+    
+    // Select device in form (first device)
+    const execDeviceSelect = page.locator('select').first();
+    await page.waitForFunction(() => {
+      const select = document.querySelector('select');
+      return select && select.options.length > 1;
+    }, { timeout: 10000 });
+    
+    // Safety delay to allow page rendering to stabilize
+    await page.waitForTimeout(500);
+    
+    const deviceValue = await page.evaluate(() => {
+      const select = document.querySelector('select');
+      return select.options[1].value;
+    });
+    await execDeviceSelect.selectOption(deviceValue);
+
+    // Select occurrence (first occurrence)
+    const execOccSelect = page.locator('select').nth(1);
+    await page.waitForFunction(() => {
+      const selects = document.querySelectorAll('select');
+      const occSelect = selects[1];
+      return occSelect && !occSelect.disabled && occSelect.options.length > 1;
+    }, { timeout: 10000 });
+    
+    await page.waitForTimeout(200);
+    const occValue = await page.evaluate(() => {
+      const selects = document.querySelectorAll('select');
+      return selects[1].options[1].value;
+    });
+    await execOccSelect.selectOption(occValue);
+
+    // Fill duration
+    await page.fill('input[placeholder="45"]', '60');
+
+    // Select result DEFECT
+    const resultSelect = page.locator('select').nth(2);
+    await resultSelect.selectOption('DEFECT');
+
+    // Fill engineer name
+    await page.fill('input[placeholder="Ing. Ion Popescu"]', 'Inginer E2E');
+
+    // Check first checklist item
+    const firstCheckbox = page.locator('input[type="checkbox"]').first();
+    await firstCheckbox.check();
+
+    // Click Save
+    await page.click('button[type="submit"]');
+
+    // Wait for E2E redirection to Repair Tickets (Kanban)
+    await page.waitForURL('**/maintenance/tickets*', { timeout: 10000 });
+    await page.waitForLoadState('networkidle');
+
+    // 5. Create Repair Ticket for the Device (since it is defective)
+    await page.click('button:has-text("Tichet Nou")');
+    await page.waitForSelector('text=Creare Tichet Reparație', { timeout: 5000 });
+
+    // Select the first device in Create Ticket Modal
+    const ticketDeviceSelect = page.locator('#ticket-device');
+    await ticketDeviceSelect.selectOption({ index: 1 });
+
+    // Select priority URGENT
+    const ticketPrioritySelect = page.locator('#ticket-priority');
+    await ticketPrioritySelect.selectOption('URGENT');
+
+    // Description
+    await page.fill('#ticket-desc', 'Defect detectat in timpul verificarii anuale preventive E2E');
+
+    // Reported by
+    await page.fill('#ticket-reported', 'Bioinginer E2E');
+
+    // Create
+    await page.click('button:has-text("Creează")');
+
+    // Wait for Kanban to refresh
+    await expect(page.locator('text=Tichet creat cu succes')).toBeVisible({ timeout: 5000 });
+
+    // 6. Workflow transitions: DESCHIS -> IN_LUCRU -> REZOLVAT -> TESTAT -> INCHIS
+    // Click on the newly created ticket card in Kanban under DESCHIS
+    const newTicketCard = page.locator('.ticket-card').first();
+    await newTicketCard.click();
+    await page.waitForSelector('text=Detalii Tichet', { timeout: 5000 });
+
+    // Change status to IN_LUCRU
+    const statusSelect = page.locator('#status-select');
+    await statusSelect.selectOption('IN_LUCRU');
+    await page.click('button:has-text("Salvare status")');
+
+    // Open ticket details again from IN_LUCRU column
+    await page.locator('.ticket-card').first().click();
+    await page.waitForSelector('text=Detalii Tichet', { timeout: 5000 });
+
+    // Click on "Editare Reparatie" tab
+    await page.click('button:has-text("Editare Reparatie")');
+
+    // Fill Repair Form
+    await page.fill('textarea[placeholder*="reparatia efectuata"]', 'Reparatie finalizata cu succes pentru testul E2E');
+    await page.fill('textarea[placeholder*="actiunile concrete"]', 'Curatare contacte, recalibrare senzori');
+    await page.fill('input[type="number"]', '1.5');
+    await page.selectOption('select:has-text("Functional")', 'FUNCTIONAL');
+    await page.fill('input:near(label:has-text("Inginer responsabil"))', 'Inginer E2E');
+
+    // Save Repair (which transitions to REZOLVAT)
+    await page.click('button:has-text("Salvare reparație")');
+
+    // Open ticket details again from REZOLVAT column
+    await page.locator('.ticket-card').first().click();
+    await page.waitForSelector('text=Detalii Tichet', { timeout: 5000 });
+
+    // Transition REZOLVAT -> TESTAT
+    const statusSelect2 = page.locator('#status-select');
+    await statusSelect2.selectOption('TESTAT');
+    await page.click('button:has-text("Salvare status")');
+
+    // Open ticket details again from TESTAT column
+    await page.locator('.ticket-card').first().click();
+    await page.waitForSelector('text=Detalii Tichet', { timeout: 5000 });
+
+    // Transition TESTAT -> INCHIS
+    const statusSelect3 = page.locator('#status-select');
+    await statusSelect3.selectOption('INCHIS');
+    await page.click('button:has-text("Salvare status")');
+
+    // 7. Verify Formular 8 (PDF) is downloadable on the closed card
+    const closedTicketCard = page.locator('.ticket-card').first();
+    await expect(closedTicketCard.locator('text=Formular Nr. 8 (PDF)')).toBeVisible({ timeout: 5000 });
+  });
+});

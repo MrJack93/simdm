@@ -526,6 +526,11 @@ router.post('/:id/upload', upload.single('file'), antivirusMiddleware, async (re
   }
 });
 
+// Helper for PDF texts
+function toSafePdfText(str) {
+  return str || '';
+}
+
 // ENDPOINT 10: GET /:id/fisa-pdf — generare PDF
 router.get('/:id/fisa-pdf', exportLimiter, async (req, res) => {
   try {
@@ -539,70 +544,75 @@ router.get('/:id/fisa-pdf', exportLimiter, async (req, res) => {
     }
 
     const doc = new PDFDocument({ margin: 50 });
+    
+    // Register custom TTF fonts that support Romanian diacritics
+    doc.registerFont('Times-Roman-Custom', path.join(__dirname, '../assets/fonts/times.ttf'));
+    doc.registerFont('Times-Bold-Custom', path.join(__dirname, '../assets/fonts/timesbd.ttf'));
+
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `attachment; filename="Fisa_DM_${device.inventoryNumber}.pdf"`);
     doc.pipe(res);
 
     // Header
-    doc.fontSize(16).font('Times-Bold').text('FIȘA DISPOZITIVULUI MEDICAL', { align: 'center' });
-    doc.fontSize(10).font('Times-Roman').text('Format SIMDM (AMDM) · Ordinul MS nr. 889/2024', { align: 'center' });
+    doc.fontSize(16).font('Times-Bold-Custom').text(toSafePdfText('FIȘA DISPOZITIVULUI MEDICAL'), { align: 'center' });
+    doc.fontSize(10).font('Times-Roman-Custom').text(toSafePdfText('Format SIMDM (AMDM) · Ordinul MS nr. 889/2024'), { align: 'center' });
     doc.moveDown();
 
     // Section 1: Identification
-    doc.fontSize(12).font('Times-Bold').text('1. IDENTIFICARE');
-    doc.fontSize(10).font('Times-Roman');
-    doc.text(`Numărul Inventarului: ${device.inventoryNumber}`);
-    doc.text(`Denumire: ${device.name}`);
-    doc.text(`Seria: ${device.serialNumber || '—'}`);
-    doc.text(`Model: ${device.model || '—'}`);
-    doc.text(`Producător: ${device.manufacturer || '—'}`);
-    doc.text(`Țara de origine: ${device.countryOfOrigin || '—'}`);
+    doc.fontSize(12).font('Times-Bold-Custom').text(toSafePdfText('1. IDENTIFICARE'));
+    doc.fontSize(10).font('Times-Roman-Custom');
+    doc.text(toSafePdfText(`Numărul Inventarului: ${device.inventoryNumber}`));
+    doc.text(toSafePdfText(`Denumire: ${device.name}`));
+    doc.text(toSafePdfText(`Seria: ${device.serialNumber || '—'}`));
+    doc.text(toSafePdfText(`Model: ${device.model || '—'}`));
+    doc.text(toSafePdfText(`Producător: ${device.manufacturer || '—'}`));
+    doc.text(toSafePdfText(`Țara de origine: ${device.countryOfOrigin || '—'}`));
     doc.moveDown();
 
     // Section 2: Classification
-    doc.fontSize(12).font('Times-Bold').text('2. CLASIFICARE');
-    doc.fontSize(10).font('Times-Roman');
-    doc.text(`Clasa de risc: ${device.riskClass || '—'}`);
-    doc.text(`Marcaj CE: ${device.ceMarking || '—'}`);
-    doc.text(`Cod CND: ${device.cndCode || '—'}`);
+    doc.fontSize(12).font('Times-Bold-Custom').text(toSafePdfText('2. CLASIFICARE'));
+    doc.fontSize(10).font('Times-Roman-Custom');
+    doc.text(toSafePdfText(`Clasa de risc: ${device.riskClass || '—'}`));
+    doc.text(toSafePdfText(`Marcaj CE: ${device.ceMarking || '—'}`));
+    doc.text(toSafePdfText(`Cod CND: ${device.cndCode || '—'}`));
     doc.moveDown();
 
     // Section 3: Status & Operation
-    doc.fontSize(12).font('Times-Bold').text('3. STATUS & EXPLOATARE');
-    doc.fontSize(10).font('Times-Roman');
-    doc.text(`Status: ${device.status}`);
-    doc.text(`Secție: ${device.sections?.name || '—'}`);
-    doc.text(`Cameră/Locație: ${device.room || '—'}`);
-    doc.text(`Frecvență mentenanță: ${device.maintenanceFreq ? device.maintenanceFreq + ' luni' : '—'}`);
+    doc.fontSize(12).font('Times-Bold-Custom').text(toSafePdfText('3. STATUS & EXPLOATARE'));
+    doc.fontSize(10).font('Times-Roman-Custom');
+    doc.text(toSafePdfText(`Status: ${device.status}`));
+    doc.text(toSafePdfText(`Secție: ${device.sections?.name || '—'}`));
+    doc.text(toSafePdfText(`Cameră/Locație: ${device.room || '—'}`));
+    doc.text(toSafePdfText(`Frecvență mentenanță: ${device.maintenanceFreq ? device.maintenanceFreq + ' luni' : '—'}`));
     doc.moveDown();
 
     // Section 4: Financial Data
-    doc.fontSize(12).font('Times-Bold').text('4. DATE FINANCIARE');
-    doc.fontSize(10).font('Times-Roman');
-    doc.text(`Data achiziției: ${device.acquisitionDate ? device.acquisitionDate.toLocaleDateString('ro-RO') : '—'}`);
-    doc.text(`Valoare achiziție: ${device.acquisitionValue ? device.acquisitionValue + ' ' + device.currency : '—'}`);
-    doc.text(`Valoare reziduală: ${device.residualValue || '—'}`);
-    doc.text(`Garanție până la: ${device.warrantyEndDate ? device.warrantyEndDate.toLocaleDateString('ro-RO') : '—'}`);
+    doc.fontSize(12).font('Times-Bold-Custom').text(toSafePdfText('4. DATE FINANCIARE'));
+    doc.fontSize(10).font('Times-Roman-Custom');
+    doc.text(toSafePdfText(`Data achiziției: ${device.acquisitionDate ? device.acquisitionDate.toLocaleDateString('ro-RO') : '—'}`));
+    doc.text(toSafePdfText(`Valoare achiziție: ${device.acquisitionValue ? device.acquisitionValue + ' ' + device.currency : '—'}`));
+    doc.text(toSafePdfText(`Valoare reziduală: ${device.residualValue || '—'}`));
+    doc.text(toSafePdfText(`Garanție până la: ${device.warrantyEndDate ? device.warrantyEndDate.toLocaleDateString('ro-RO') : '—'}`));
     doc.moveDown();
 
     // Section 5: Technical Data
-    doc.fontSize(12).font('Times-Bold').text('5. DATE TEHNICE');
-    doc.fontSize(10).font('Times-Roman');
-    doc.text(`Tensiune: ${device.voltage || '—'}`);
-    doc.text(`Frecvență: ${device.frequency || '—'}`);
-    doc.text(`Putere: ${device.power || '—'}`);
-    doc.text(`Accesorii: ${device.accessories || '—'}`);
+    doc.fontSize(12).font('Times-Bold-Custom').text(toSafePdfText('5. DATE TEHNICE'));
+    doc.fontSize(10).font('Times-Roman-Custom');
+    doc.text(toSafePdfText(`Tensiune: ${device.voltage || '—'}`));
+    doc.text(toSafePdfText(`Frecvență: ${device.frequency || '—'}`));
+    doc.text(toSafePdfText(`Putere: ${device.power || '—'}`));
+    doc.text(toSafePdfText(`Accesorii: ${device.accessories || '—'}`));
     doc.moveDown();
 
     // Section 6: Notes
     if (device.notes) {
-      doc.fontSize(12).font('Times-Bold').text('6. OBSERVAȚII');
-      doc.fontSize(10).font('Times-Roman').text(device.notes);
+      doc.fontSize(12).font('Times-Bold-Custom').text(toSafePdfText('6. OBSERVAȚII'));
+      doc.fontSize(10).font('Times-Roman-Custom').text(toSafePdfText(device.notes));
       doc.moveDown();
     }
 
     // Footer
-    doc.fontSize(8).text(`Generat: ${new Date().toLocaleString('ro-RO')} | Utilizator: ${req.user.username}`, {
+    doc.fontSize(8).font('Times-Roman-Custom').text(toSafePdfText(`Generat: ${new Date().toLocaleString('ro-RO')} | Utilizator: ${req.user.username}`), {
       align: 'center',
     });
 

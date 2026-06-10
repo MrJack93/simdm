@@ -15,7 +15,7 @@ const prisma = require('../db');
 const {
   checkVerificationExpiry,
   checkContractExpiry,
-  checkMaintenanceDue,
+  checkMppDue,
   checkRepairTickets,
   generateComplianceSummary,
   startCronJobs,
@@ -199,9 +199,9 @@ describe('checkContractExpiry() — Alerte Contracte (30 zile)', () => {
   });
 });
 
-describe('checkMaintenanceDue() — Alerte Mentenanță Scadentă', () => {
+describe('checkMppDue() — Alerte Mentenanță Scadentă', () => {
   it('execută fără erori', async () => {
-    await expect(checkMaintenanceDue()).resolves.not.toThrow();
+    await expect(checkMppDue()).resolves.not.toThrow();
   });
 
   it('detectează mentenanță cu status SCADENT', async () => {
@@ -214,7 +214,7 @@ describe('checkMaintenanceDue() — Alerte Mentenanță Scadentă', () => {
       },
     });
 
-    await expect(checkMaintenanceDue()).resolves.not.toThrow();
+    await expect(checkMppDue()).resolves.not.toThrow();
 
     await prisma.mpp_occurrences.deleteMany({ where: { id: occurrence.id } });
   });
@@ -229,7 +229,7 @@ describe('checkMaintenanceDue() — Alerte Mentenanță Scadentă', () => {
       },
     });
 
-    await expect(checkMaintenanceDue()).resolves.not.toThrow();
+    await expect(checkMppDue()).resolves.not.toThrow();
 
     await prisma.mpp_occurrences.deleteMany({ where: { id: occurrence.id } });
   });

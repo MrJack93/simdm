@@ -20,9 +20,11 @@ export function AuthProvider({ children }) {
           // Încearcă refresh în caz că cookie-ul există
           try {
             const { data } = await api.post('/auth/refresh');
+            if (getToken()) return; // Abort if user logged in manually
             setToken(data.accessToken);
           } catch {
             // Nu e ok, nu sunt logat
+            if (getToken()) return;
             setUser(null);
             setLoading(false);
             return;
@@ -32,6 +34,7 @@ export function AuthProvider({ children }) {
         const { data } = await api.get('/auth/me');
         setUser(data.user);
       } catch (error) {
+        if (getToken()) return;
         console.error('[AuthContext] Bootstrap error:', error.message);
         setUser(null);
       } finally {

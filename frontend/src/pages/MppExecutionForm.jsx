@@ -226,25 +226,30 @@ export default function MppExecutionForm() {
   };
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6">Formular Execuție MPP</h1>
+    <div className="p-6 max-w-4xl mx-auto space-y-6">
+      <div>
+        <h1 className="text-3xl font-bold mb-2" style={{ color: 'var(--healthcare-primary)' }}>Formular Execuție MPP</h1>
+        <p style={{ color: 'var(--color-text-secondary)' }} className="text-sm">
+          Înregistrați rezultatele mentenanței preventive și consumabilele utilizate conform procedurilor
+        </p>
+      </div>
 
       {error && (
-        <div className="bg-red-100 text-red-700 p-3 mb-4 rounded">
+        <div className="p-4 mb-4 rounded-xl text-sm font-medium border" style={{ backgroundColor: 'var(--color-error-bg)', color: 'var(--color-error)', borderColor: 'rgba(248, 113, 113, 0.2)' }}>
           {error}
         </div>
       )}
       {success && (
-        <div className="bg-green-100 text-green-700 p-3 mb-4 rounded">
+        <div className="p-4 mb-4 rounded-xl text-sm font-medium border" style={{ backgroundColor: 'var(--color-success-bg)', color: 'var(--color-success)', borderColor: 'rgba(52, 211, 153, 0.2)' }}>
           {success}
         </div>
       )}
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Device & Occurrence Selection */}
-        <div className="grid grid-cols-2 gap-4 bg-gray-50 p-4 rounded">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-5 rounded-xl border transition-all duration-150" style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)' }}>
           <div>
-            <label className="block font-semibold mb-2">Dispozitiv *</label>
+            <label className="block text-sm font-semibold mb-2" style={{ color: 'var(--color-text-secondary)' }}>Dispozitiv *</label>
             <select
               value={selectedDeviceId}
               onChange={(e) => {
@@ -252,12 +257,13 @@ export default function MppExecutionForm() {
                 setSelectedOccurrenceId('');
                 setChecklist([]);
               }}
-              className="border w-full px-3 py-2 rounded"
+              className="w-full border rounded-lg px-3 py-2 text-sm outline-none transition-all duration-150"
+              style={{ backgroundColor: 'var(--color-bg-elevated)', color: 'var(--color-text-primary)', borderColor: 'var(--color-border)' }}
               required
             >
-              <option value="">-- Selectează dispozitiv --</option>
+              <option value="" style={{ backgroundColor: 'var(--color-bg-elevated)', color: 'var(--color-text-primary)' }}>-- Selectează dispozitiv --</option>
               {devicesData?.devices?.map((device) => (
-                <option key={device.id} value={device.id}>
+                <option key={device.id} value={device.id} style={{ backgroundColor: 'var(--color-bg-elevated)', color: 'var(--color-text-primary)' }}>
                   {device.name} ({device.inventoryNumber})
                 </option>
               ))}
@@ -265,18 +271,18 @@ export default function MppExecutionForm() {
           </div>
 
           <div>
-            <label className="block font-semibold mb-2">Ocurență (opțional)</label>
+            <label className="block text-sm font-semibold mb-2" style={{ color: 'var(--color-text-secondary)' }}>Ocurență (opțional)</label>
             <select
               value={selectedOccurrenceId}
               onChange={(e) => setSelectedOccurrenceId(e.target.value)}
-              className="border w-full px-3 py-2 rounded"
+              className="w-full border rounded-lg px-3 py-2 text-sm outline-none transition-all duration-150"
+              style={{ backgroundColor: 'var(--color-bg-elevated)', color: 'var(--color-text-primary)', borderColor: 'var(--color-border)' }}
               disabled={!selectedDeviceId}
             >
-              <option value="">-- Fără ocurență --</option>
+              <option value="" style={{ backgroundColor: 'var(--color-bg-elevated)', color: 'var(--color-text-primary)' }}>-- Fără ocurență --</option>
               {deviceOccurrences.map((occ) => (
-                <option key={occ.id} value={occ.id}>
-                  {new Date(occ.scheduledDate).toLocaleDateString('ro-RO')} (
-                  {occ.status})
+                <option key={occ.id} value={occ.id} style={{ backgroundColor: 'var(--color-bg-elevated)', color: 'var(--color-text-primary)' }}>
+                  {new Date(occ.rescheduledTo || occ.scheduledDate).toLocaleDateString('ro-RO')} ({occ.status})
                 </option>
               ))}
             </select>
@@ -284,73 +290,77 @@ export default function MppExecutionForm() {
         </div>
 
         {/* Execution Details */}
-        <div className="grid grid-cols-3 gap-4 bg-gray-50 p-4 rounded">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-5 rounded-xl border transition-all duration-150" style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)' }}>
           <div>
-            <label className="block font-semibold mb-2">Data execuției *</label>
+            <label className="block text-sm font-semibold mb-2" style={{ color: 'var(--color-text-secondary)' }}>Data execuției *</label>
             <input
               type="date"
               value={executedDate}
               onChange={(e) => setExecutedDate(e.target.value)}
-              className="border w-full px-3 py-2 rounded"
+              className="w-full border rounded-lg px-3 py-2 text-sm outline-none transition-all duration-150"
+              style={{ backgroundColor: 'var(--color-bg-elevated)', color: 'var(--color-text-primary)', borderColor: 'var(--color-border)' }}
               required
             />
           </div>
 
           <div>
-            <label className="block font-semibold mb-2">Durată (minute)</label>
+            <label className="block text-sm font-semibold mb-2" style={{ color: 'var(--color-text-secondary)' }}>Durată (minute)</label>
             <input
               type="number"
               value={durationMinutes}
               onChange={(e) => setDurationMinutes(e.target.value)}
               placeholder="45"
-              className="border w-full px-3 py-2 rounded"
+              className="w-full border rounded-lg px-3 py-2 text-sm outline-none transition-all duration-150"
+              style={{ backgroundColor: 'var(--color-bg-elevated)', color: 'var(--color-text-primary)', borderColor: 'var(--color-border)' }}
               min="1"
             />
           </div>
 
           <div>
-            <label className="block font-semibold mb-2">Rezultat *</label>
+            <label className="block text-sm font-semibold mb-2" style={{ color: 'var(--color-text-secondary)' }}>Rezultat *</label>
             <select
               value={result}
               onChange={(e) => setResult(e.target.value)}
-              className="border w-full px-3 py-2 rounded bg-white"
+              className="w-full border rounded-lg px-3 py-2 text-sm outline-none transition-all duration-150"
+              style={{ backgroundColor: 'var(--color-bg-elevated)', color: 'var(--color-text-primary)', borderColor: 'var(--color-border)' }}
             >
-              <option value="FUNCTIONAL">✅ Funcțional</option>
-              <option value="DEFECT">❌ Defect</option>
+              <option value="FUNCTIONAL" style={{ backgroundColor: 'var(--color-bg-elevated)', color: 'var(--color-text-primary)' }}>✅ Funcțional</option>
+              <option value="DEFECT" style={{ backgroundColor: 'var(--color-bg-elevated)', color: 'var(--color-text-primary)' }}>❌ Defect</option>
             </select>
           </div>
         </div>
 
         {/* Engineer Name */}
-        <div className="bg-gray-50 p-4 rounded">
-          <label className="block font-semibold mb-2">Inginer responsabil *</label>
+        <div className="p-5 rounded-xl border transition-all duration-150" style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)' }}>
+          <label className="block text-sm font-semibold mb-2" style={{ color: 'var(--color-text-secondary)' }}>Inginer responsabil *</label>
           <input
             type="text"
             value={engineerName}
             onChange={(e) => setEngineerName(e.target.value)}
             placeholder="Ing. Ion Popescu"
-            className="border w-full px-3 py-2 rounded"
+            className="w-full border rounded-lg px-3 py-2 text-sm outline-none transition-all duration-150"
+            style={{ backgroundColor: 'var(--color-bg-elevated)', color: 'var(--color-text-primary)', borderColor: 'var(--color-border)' }}
             required
           />
         </div>
 
         {/* Checklist */}
         {checklist.length > 0 && (
-          <div className="bg-gray-50 p-4 rounded">
-            <h2 className="text-lg font-semibold mb-4">Checklist Operații</h2>
-            <div className="space-y-3">
+          <div className="p-5 rounded-xl border transition-all duration-150" style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)' }}>
+            <h2 className="text-lg font-bold mb-4" style={{ color: 'var(--color-text-primary)' }}>Checklist Operații</h2>
+            <div className="space-y-4">
               {checklist.map((item, idx) => (
-                <div key={idx} className="flex items-start gap-3 border-b pb-3">
+                <div key={idx} className="flex items-start gap-3 pb-3 border-b" style={{ borderColor: 'var(--color-border)' }}>
                   <input
                     type="checkbox"
                     checked={item.bifat}
                     onChange={(e) =>
                       handleChecklistUpdate(idx, 'bifat', e.target.checked)
                     }
-                    className="mt-2"
+                    className="mt-1.5 cursor-pointer accent-[var(--color-accent)]"
                   />
                   <div className="flex-1">
-                    <label className="block font-semibold text-sm">
+                    <label className="block text-sm font-semibold mb-1" style={{ color: 'var(--color-text-primary)' }}>
                       {item.operatiune}
                     </label>
                     <textarea
@@ -359,7 +369,8 @@ export default function MppExecutionForm() {
                         handleChecklistUpdate(idx, 'nota', e.target.value)
                       }
                       placeholder="Notă (opțional)"
-                      className="border w-full px-2 py-1 rounded text-sm mt-1 h-12"
+                      className="w-full border rounded-lg px-3 py-2 text-sm outline-none transition-all duration-150 h-16"
+                      style={{ backgroundColor: 'var(--color-bg-elevated)', color: 'var(--color-text-primary)', borderColor: 'var(--color-border)' }}
                     />
                   </div>
                 </div>
@@ -369,22 +380,23 @@ export default function MppExecutionForm() {
         )}
 
         {/* Consumables */}
-        <div className="bg-gray-50 p-4 rounded">
-          <h2 className="text-lg font-semibold mb-4">Consumabile Utilizate</h2>
+        <div className="p-5 rounded-xl border transition-all duration-150" style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)' }}>
+          <h2 className="text-lg font-bold mb-4" style={{ color: 'var(--color-text-primary)' }}>Consumabile Utilizate</h2>
           {consumablesUsed.length > 0 && (
-            <div className="space-y-2 mb-3">
+            <div className="space-y-3 mb-4">
               {consumablesUsed.map((item, idx) => (
-                <div key={idx} className="flex gap-2">
+                <div key={idx} className="flex gap-2 flex-wrap md:flex-nowrap">
                   <select
                     value={item.consumableId}
                     onChange={(e) =>
                       handleUpdateConsumable(idx, 'consumableId', e.target.value)
                     }
-                    className="flex-1 border px-2 py-1 rounded text-sm"
+                    className="flex-1 border rounded-lg px-3 py-2 text-sm outline-none transition-all duration-150"
+                    style={{ backgroundColor: 'var(--color-bg-elevated)', color: 'var(--color-text-primary)', borderColor: 'var(--color-border)' }}
                   >
-                    <option value="">-- Selectează consumabil --</option>
+                    <option value="" style={{ backgroundColor: 'var(--color-bg-elevated)', color: 'var(--color-text-primary)' }}>-- Selectează consumabil --</option>
                     {consumablesData?.map((c) => (
-                      <option key={c.id} value={c.id}>
+                      <option key={c.id} value={c.id} style={{ backgroundColor: 'var(--color-bg-elevated)', color: 'var(--color-text-primary)' }}>
                         {c.name}
                       </option>
                     ))}
@@ -396,13 +408,15 @@ export default function MppExecutionForm() {
                       handleUpdateConsumable(idx, 'qty', e.target.value)
                     }
                     placeholder="Cantitate"
-                    className="w-20 border px-2 py-1 rounded text-sm"
+                    className="w-24 border rounded-lg px-3 py-2 text-sm outline-none transition-all duration-150"
+                    style={{ backgroundColor: 'var(--color-bg-elevated)', color: 'var(--color-text-primary)', borderColor: 'var(--color-border)' }}
                     min="1"
                   />
                   <button
                     type="button"
                     onClick={() => handleRemoveConsumable(idx)}
-                    className="bg-red-500 text-white px-2 py-1 rounded text-sm hover:bg-red-600"
+                    className="px-3 py-2 border rounded-lg hover:bg-[var(--color-bg-elevated)] transition-all duration-150 text-xs font-semibold cursor-pointer"
+                    style={{ borderColor: 'var(--color-error)', color: 'var(--color-error)', backgroundColor: 'transparent' }}
                   >
                     Șterge
                   </button>
@@ -413,90 +427,97 @@ export default function MppExecutionForm() {
           <button
             type="button"
             onClick={handleAddConsumable}
-            className="bg-blue-500 text-white px-3 py-1 rounded text-sm hover:bg-blue-600"
+            className="px-4 py-2 border rounded-lg hover:bg-[var(--color-bg-elevated)] transition-all duration-150 text-sm font-semibold flex items-center gap-2 cursor-pointer"
+            style={{ borderColor: 'var(--color-accent)', color: 'var(--color-accent)', backgroundColor: 'transparent' }}
           >
             + Adaugă consumabil
           </button>
         </div>
 
         {/* Photos */}
-        <div className="grid grid-cols-2 gap-4 bg-gray-50 p-4 rounded">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-5 rounded-xl border transition-all duration-150" style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)' }}>
           <div>
-            <label className="block font-semibold mb-2">Foto înainte</label>
+            <label className="block text-sm font-semibold mb-2" style={{ color: 'var(--color-text-secondary)' }}>Foto înainte</label>
             <input
               type="file"
               accept="image/*"
               onChange={(e) => handlePhotoUpload(e, setPhotoBefore)}
-              className="border w-full px-2 py-1 rounded text-sm"
+              className="w-full border rounded-lg px-3 py-2 text-sm outline-none transition-all duration-150"
+              style={{ backgroundColor: 'var(--color-bg-elevated)', color: 'var(--color-text-primary)', borderColor: 'var(--color-border)' }}
             />
             {photoBefore && (
               <img
                 src={photoBefore}
                 alt="Before"
-                className="mt-2 w-full h-32 object-cover rounded"
+                className="mt-3 w-full h-40 object-cover rounded-lg border"
+                style={{ borderColor: 'var(--color-border)' }}
               />
             )}
           </div>
 
           <div>
-            <label className="block font-semibold mb-2">Foto după</label>
+            <label className="block text-sm font-semibold mb-2" style={{ color: 'var(--color-text-secondary)' }}>Foto după</label>
             <input
               type="file"
               accept="image/*"
               onChange={(e) => handlePhotoUpload(e, setPhotoAfter)}
-              className="border w-full px-2 py-1 rounded text-sm"
+              className="w-full border rounded-lg px-3 py-2 text-sm outline-none transition-all duration-150"
+              style={{ backgroundColor: 'var(--color-bg-elevated)', color: 'var(--color-text-primary)', borderColor: 'var(--color-border)' }}
             />
             {photoAfter && (
               <img
                 src={photoAfter}
                 alt="After"
-                className="mt-2 w-full h-32 object-cover rounded"
+                className="mt-3 w-full h-40 object-cover rounded-lg border"
+                style={{ borderColor: 'var(--color-border)' }}
               />
             )}
           </div>
         </div>
 
         {/* Signatures */}
-        <div className="grid grid-cols-2 gap-4 bg-gray-50 p-4 rounded">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-5 rounded-xl border transition-all duration-150" style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)' }}>
           <div>
-            <label className="block font-semibold mb-2">Semnătură Inginer *</label>
-            <div className="border-2 border-dashed bg-white rounded">
+            <label className="block text-sm font-semibold mb-2" style={{ color: 'var(--color-text-secondary)' }}>Semnătură Inginer *</label>
+            <div className="border rounded-lg bg-white overflow-hidden transition-all duration-150" style={{ borderColor: 'var(--color-border)' }}>
               <SignatureCanvas
                 ref={signaturePadEngineerRef}
                 canvasProps={{
                   width: 300,
                   height: 150,
-                  className: 'w-full rounded',
+                  className: 'w-full rounded-lg',
                 }}
               />
             </div>
             <button
               type="button"
               onClick={() => signaturePadEngineerRef.current?.clear()}
-              className="mt-2 text-sm text-blue-500 hover:underline"
+              className="mt-2 text-xs font-semibold hover:underline cursor-pointer transition-all"
+              style={{ color: 'var(--color-accent)' }}
             >
               Șterge semnătură
             </button>
           </div>
 
           <div>
-            <label className="block font-semibold mb-2">
+            <label className="block text-sm font-semibold mb-2" style={{ color: 'var(--color-text-secondary)' }}>
               Semnătură Responsabil Secție
             </label>
-            <div className="border-2 border-dashed bg-white rounded">
+            <div className="border rounded-lg bg-white overflow-hidden transition-all duration-150" style={{ borderColor: 'var(--color-border)' }}>
               <SignatureCanvas
                 ref={signaturePadManagerRef}
                 canvasProps={{
                   width: 300,
                   height: 150,
-                  className: 'w-full rounded',
+                  className: 'w-full rounded-lg',
                 }}
               />
             </div>
             <button
               type="button"
               onClick={() => signaturePadManagerRef.current?.clear()}
-              className="mt-2 text-sm text-blue-500 hover:underline"
+              className="mt-2 text-xs font-semibold hover:underline cursor-pointer transition-all"
+              style={{ color: 'var(--color-accent)' }}
             >
               Șterge semnătură
             </button>
@@ -504,13 +525,14 @@ export default function MppExecutionForm() {
         </div>
 
         {/* Notes */}
-        <div className="bg-gray-50 p-4 rounded">
-          <label className="block font-semibold mb-2">Observații generale</label>
+        <div className="p-5 rounded-xl border transition-all duration-150" style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)' }}>
+          <label className="block text-sm font-semibold mb-2" style={{ color: 'var(--color-text-secondary)' }}>Observații generale</label>
           <textarea
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             placeholder="Observații sau comentarii (opțional)"
-            className="border w-full px-3 py-2 rounded h-24"
+            className="w-full border rounded-lg px-3 py-2 text-sm outline-none transition-all duration-150 h-24"
+            style={{ backgroundColor: 'var(--color-bg-elevated)', color: 'var(--color-text-primary)', borderColor: 'var(--color-border)' }}
           />
         </div>
 
@@ -519,14 +541,16 @@ export default function MppExecutionForm() {
           <button
             type="submit"
             disabled={loading}
-            className="flex-1 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 disabled:bg-gray-400"
+            className="flex-1 py-2.5 rounded-lg hover:opacity-90 disabled:opacity-50 transition-all duration-150 font-bold text-sm cursor-pointer flex items-center justify-center gap-2 text-white"
+            style={{ backgroundColor: 'var(--healthcare-success)' }}
           >
             {loading ? 'Se salvează...' : '💾 Salvează Execuție MPP'}
           </button>
           <button
             type="button"
             onClick={() => navigate('/maintenance/calendar')}
-            className="flex-1 bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+            className="flex-1 py-2.5 border rounded-lg hover:bg-[var(--color-bg-elevated)] transition-all duration-150 font-semibold text-sm cursor-pointer flex items-center justify-center"
+            style={{ borderColor: 'var(--color-border)', color: 'var(--color-text-primary)', backgroundColor: 'var(--color-bg-secondary)' }}
           >
             Anulează
           </button>
@@ -534,13 +558,12 @@ export default function MppExecutionForm() {
 
         {/* Defect Warning */}
         {result === 'DEFECT' && (
-          <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4">
-            <p className="text-yellow-700 font-semibold">
+          <div className="border-l-4 p-4 rounded-r-xl transition-all duration-150" style={{ backgroundColor: 'var(--color-warning-bg)', borderColor: 'var(--color-warning)' }}>
+            <p className="font-semibold" style={{ color: 'var(--color-warning)' }}>
               ⚠️ Atenție: Defect detectat!
             </p>
-            <p className="text-yellow-600 text-sm">
-              După salvare, vei fi redirecționat pentru a deschide un tichet de
-              reparație.
+            <p className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>
+              După salvare, vei fi redirecționat pentru a deschide un tichet de reparație.
             </p>
           </div>
         )}

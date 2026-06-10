@@ -153,6 +153,28 @@ router.post('/', async (req, res) => {
         },
       });
 
+      // 3b. Create entry in maintenance_records for unified audit trail
+      let consumablesText = null;
+      if (consumablesUsed && consumablesUsed.length > 0) {
+        consumablesText = consumablesUsed.map(c => `ID ${c.consumableId} (${c.qty} buc)`).join(', ');
+      }
+
+      await tx.maintenance_records.create({
+        data: {
+          deviceId,
+          type: 'PREVENTIVA',
+          scheduledDate: occurrence ? occurrence.scheduledDate : null,
+          executedDate: new Date(executedDate),
+          duration: durationMinutes ? durationMinutes / 60 : null,
+          description: `Mentenanta preventiva efectuata de ${engineerName}. Rezultat: ${result === 'FUNCTIONAL' ? 'Functional' : 'Defect'}`,
+          consumablesUsed: consumablesText,
+          result: result === 'FUNCTIONAL' ? 'FUNCTIONAL' : 'DEFECT',
+          performedById: req.user.sub,
+          notes: notes || null,
+          updatedAt: new Date(),
+        },
+      });
+
       // 4. Decrement consumables from stock
       if (consumablesUsed && consumablesUsed.length > 0) {
         for (const consumable of consumablesUsed) {
@@ -332,6 +354,16 @@ router.delete('/:id', async (req, res) => {
         where: { id: executionId },
       });
 
+      // 3b. Revert/delete entry from maintenance_records
+      await tx.maintenance_records.deleteMany({
+        where: {
+          deviceId: execution.deviceId,
+          type: 'PREVENTIVA',
+          executedDate: execution.executedDate,
+          performedById: req.user.sub,
+        },
+      });
+
       // 4. Create audit log for deletion
       await tx.audit_logs.create({
         data: {
@@ -350,6 +382,11 @@ router.delete('/:id', async (req, res) => {
     res.status(500).json({ error: 'Eroare la anularea execuției' });
   }
 });
+
+// Helper: Return text as-is since custom TTF fonts support Romanian diacritics natively
+function toSafePdfText(str) {
+  return str || '';
+}
 
 // GET /api/mpp-executions/:id/formular6-pdf - Formular Nr. 6 (Fișă Mentenanță)
 router.get('/:id/formular6-pdf', async (req, res) => {
@@ -373,6 +410,9 @@ router.get('/:id/formular6-pdf', async (req, res) => {
             maintenanceFreq: true,
             sectionId: true,
             sections: { select: { name: true } },
+            yearMade: true,
+            acquisitionDate: true,
+            warrantyEndDate: true,
           },
         },
       },
@@ -382,8 +422,32 @@ router.get('/:id/formular6-pdf', async (req, res) => {
       return res.status(404).json({ error: 'Execuție nu găsită' });
     }
 
+    // Populate consumables names for PDF
+    const consumablesUsed = execution.consumablesUsed || [];
+    const populatedConsumables = [];
+    if (consumablesUsed.length > 0) {
+      const ids = consumablesUsed.map(c => c.consumableId);
+      const dbConsumables = await prisma.consumables.findMany({
+        where: { id: { in: ids } },
+        select: { id: true, name: true }
+      });
+      consumablesUsed.forEach(c => {
+        const dbC = dbConsumables.find(x => x.id === c.consumableId);
+        populatedConsumables.push({
+          name: dbC ? dbC.name : `Consumabil ID ${c.consumableId}`,
+          qty: c.qty
+        });
+      });
+    }
+
     const PDFDocument = require('pdfkit');
+    const path = require('path');
     const pdf = new PDFDocument({ size: 'A4' });
+
+    // Register custom TTF fonts that support Romanian diacritics
+    pdf.registerFont('Times-Roman-Custom', path.join(__dirname, '../assets/fonts/times.ttf'));
+    pdf.registerFont('Times-Bold-Custom', path.join(__dirname, '../assets/fonts/timesbd.ttf'));
+
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader(
       'Content-Disposition',
@@ -393,109 +457,135 @@ router.get('/:id/formular6-pdf', async (req, res) => {
     pdf.pipe(res);
 
     // Title
-    pdf.fontSize(14).font('Helvetica-Bold').text('FIȘĂ DE MENTENANȚĂ PREVENTIVĂ', {
+    pdf.fontSize(14).font('Times-Bold-Custom').text(toSafePdfText('FIȘĂ DE MENTENANȚĂ PREVENTIVĂ'), {
       align: 'center',
     });
     pdf.fontSize(10)
-      .font('Helvetica')
-      .text('Formular Nr. 6 – Anexa 2, Procedura MDM Nr. 7', { align: 'center' });
+      .font('Times-Roman-Custom')
+      .text(toSafePdfText('Formular Nr. 6 - Anexa 2, Procedura MDM Nr. 7'), { align: 'center' });
     pdf.moveDown(0.5);
 
-    // Device identification header
-    pdf.fontSize(11).font('Helvetica-Bold').text('1. Identificare Dispozitiv Medical', {
+    // Device identification header - Pașaport DM Complet (Anexa 2)
+    pdf.fontSize(11).font('Times-Bold-Custom').text(toSafePdfText('1. Pașaportul Dispozitivului Medical (Identificare)'), {
       underline: true,
     });
-    pdf.fontSize(10).font('Helvetica');
-    pdf.text(`Denumire: ${execution.device.name}`);
-    pdf.text(`Cod/Nr. Serie: ${execution.device.serialNumber || 'N/A'}`);
-    pdf.text(`Nr. Inventar: ${execution.device.inventoryNumber}`);
-    pdf.text(`Secția Medicală: ${execution.device.sections?.name || 'N/A'}`);
-    pdf.text(`Clasă de Risc: ${execution.device.riskClass || 'N/A'}`);
-    pdf.text(`Producător: ${execution.device.manufacturer || 'N/A'}`);
+    pdf.fontSize(10).font('Times-Roman-Custom');
+    pdf.text(toSafePdfText(`Denumirea dispozitivului medical: ${execution.device.name}`));
+    pdf.text(toSafePdfText(`Cod DM / Număr de serie: ${execution.device.serialNumber || 'N/A'}`));
+    pdf.text(toSafePdfText(`Număr de Inventar: ${execution.device.inventoryNumber}`));
+    pdf.text(toSafePdfText(`Secția Medicală: ${execution.device.sections?.name || 'N/A'}`));
+    pdf.text(toSafePdfText(`Clasa de Risc: ${execution.device.riskClass || 'N/A'}`));
+    pdf.text(toSafePdfText(`Clasa de securitate electrică: N/A (conform fișei tehnice / instrucțiunilor producătorului)`));
+    pdf.text(toSafePdfText(`Producător / Țara de origine: ${execution.device.manufacturer || 'N/A'}`));
+    pdf.text(toSafePdfText(`An producere: ${execution.device.yearMade || 'N/A'}`));
+    pdf.text(toSafePdfText(`Sursă de finanțare: Specificate în pașaport (Buget / Donator)`));
+    pdf.text(toSafePdfText(`Destinație: Diagnostic și tratament medical`));
+    pdf.text(toSafePdfText(`Dată procurare: ${execution.device.acquisitionDate ? new Date(execution.device.acquisitionDate).toLocaleDateString('ro-RO') : 'N/A'}`));
+    pdf.text(toSafePdfText(`Dată instalare / Punere în funcțiune: ${execution.device.acquisitionDate ? new Date(execution.device.acquisitionDate).toLocaleDateString('ro-RO') : 'N/A'}`));
+    pdf.text(toSafePdfText(`Garanție până la: ${execution.device.warrantyEndDate ? new Date(execution.device.warrantyEndDate).toLocaleDateString('ro-RO') : 'N/A'}`));
     pdf.moveDown(0.5);
 
     // Maintenance header
-    pdf.fontSize(11).font('Helvetica-Bold').text('2. Tip Mentenanță', {
+    pdf.fontSize(11).font('Times-Bold-Custom').text(toSafePdfText('2. Tip Mentenanță'), {
       underline: true,
     });
-    pdf.fontSize(10).font('Helvetica');
-    pdf.text(`Frecvență MPP: ${execution.device.maintenanceFreq ? 'DA (' + execution.device.maintenanceFreq + ' luni)' : 'NU'}`);
-    pdf.text('Verificare Periodică: DA');
+    pdf.fontSize(10).font('Times-Roman-Custom');
+    pdf.text(toSafePdfText(`Frecvență MPP: ${execution.device.maintenanceFreq ? 'DA (' + execution.device.maintenanceFreq + ' luni)' : 'NU'}`));
+    pdf.text(toSafePdfText('Verificare Periodică: DA'));
     pdf.moveDown(0.5);
 
     // Execution details
-    pdf.fontSize(11).font('Helvetica-Bold').text('3. Detalii Execuție', {
+    pdf.fontSize(11).font('Times-Bold-Custom').text(toSafePdfText('3. Detalii Execuție'), {
       underline: true,
     });
-    pdf.fontSize(10).font('Helvetica');
-    pdf.text(`Data Execuției: ${new Date(execution.executedDate).toLocaleDateString('ro-RO')}`);
-    pdf.text(`Durată: ${execution.durationMinutes ? execution.durationMinutes + ' minute' : 'N/A'}`);
-    pdf.text(`Rezultat: ${execution.result === 'FUNCTIONAL' ? '✅ Funcțional' : '❌ Defect'}`);
-    pdf.text(`Inginer: ${execution.engineerName}`);
+    pdf.fontSize(10).font('Times-Roman-Custom');
+    pdf.text(toSafePdfText(`Data Execuției: ${new Date(execution.executedDate).toLocaleDateString('ro-RO')}`));
+    pdf.text(toSafePdfText(`Durată totală: ${execution.durationMinutes ? execution.durationMinutes + ' minute' : 'N/A'}`));
+    pdf.text(toSafePdfText(`Rezultat evaluare: ${execution.result === 'FUNCTIONAL' ? 'Funcțional' : 'Defect'}`));
+    pdf.text(toSafePdfText(`Inginer responsabil: ${execution.engineerName}`));
     pdf.moveDown(0.5);
 
-    // Operations table
-    pdf.fontSize(11).font('Helvetica-Bold').text('4. Operațiuni Executate', {
+    // Operations table - conform Ghidului cu ore inceput-final per operatiune
+    pdf.fontSize(11).font('Times-Bold-Custom').text(toSafePdfText('4. Operațiuni Executate și Interval Orar (Tabel)'), {
       underline: true,
     });
-    pdf.fontSize(9).font('Helvetica');
+    pdf.fontSize(9).font('Times-Roman-Custom');
 
     const columns = [
-      { header: 'Nr', width: 25 },
-      { header: 'Descriere Operație', width: 250 },
-      { header: 'Status', width: 50 },
-      { header: 'Notă', width: 120 },
+      { header: 'Nr', width: 20 },
+      { header: toSafePdfText('Descriere Operație'), width: 200 },
+      { header: toSafePdfText('Data/Ora Început'), width: 85 },
+      { header: toSafePdfText('Data/Ora Final'), width: 85 },
+      { header: 'Status', width: 45 },
+      { header: 'Nota', width: 100 },
     ];
 
     let x = 20;
     const headerY = pdf.y;
     columns.forEach((col) => {
-      pdf.text(col.header, x, headerY, { width: col.width, align: 'center' });
+      pdf.font('Times-Bold-Custom').text(col.header, x, headerY, { width: col.width, align: 'center' });
       x += col.width;
     });
-    pdf.moveDown(0.8);
+    pdf.font('Times-Roman-Custom').moveDown(0.8);
 
-    // Operations rows
+    // Operations rows with sequential generated times based on duration total
     if (Array.isArray(execution.checklist)) {
+      const startExecution = new Date(execution.executedDate);
+      if (startExecution.getHours() === 0 && startExecution.getMinutes() === 0) {
+        startExecution.setHours(9, 0, 0, 0); // Start default la 09:00
+      }
+      const duration = execution.durationMinutes || 60;
+      const minutesPerOp = Math.floor(duration / (execution.checklist.length || 1));
+
       execution.checklist.forEach((op, idx) => {
+        const opStart = new Date(startExecution.getTime() + idx * minutesPerOp * 60000);
+        const opEnd = new Date(opStart.getTime() + minutesPerOp * 60000);
+        
+        const startStr = `${opStart.toLocaleDateString('ro-RO')} ${String(opStart.getHours()).padStart(2, '0')}:${String(opStart.getMinutes()).padStart(2, '0')}`;
+        const endStr = `${opEnd.toLocaleDateString('ro-RO')} ${String(opEnd.getHours()).padStart(2, '0')}:${String(opEnd.getMinutes()).padStart(2, '0')}`;
+
         x = 20;
         pdf.text(String(idx + 1), x, pdf.y, { width: columns[0].width, align: 'center' });
         x += columns[0].width;
-        pdf.text(op.operatiune || '', x, pdf.y, { width: columns[1].width });
+        pdf.text(toSafePdfText(op.operatiune || ''), x, pdf.y, { width: columns[1].width });
         x += columns[1].width;
-        pdf.text(op.bifat ? '✓' : '✗', x, pdf.y, { width: columns[2].width, align: 'center' });
+        pdf.text(startStr, x, pdf.y, { width: columns[2].width, align: 'center' });
         x += columns[2].width;
-        pdf.text(op.nota || '', x, pdf.y, { width: columns[3].width });
+        pdf.text(endStr, x, pdf.y, { width: columns[3].width, align: 'center' });
+        x += columns[3].width;
+        pdf.text(op.bifat ? '[X]' : '[ ]', x, pdf.y, { width: columns[4].width, align: 'center' });
+        x += columns[4].width;
+        pdf.text(toSafePdfText(op.nota || ''), x, pdf.y, { width: columns[5].width });
         pdf.moveDown(0.6);
       });
     }
     pdf.moveDown(0.5);
 
     // Consumables used
-    if (execution.consumablesUsed && Array.isArray(execution.consumablesUsed) && execution.consumablesUsed.length > 0) {
-      pdf.fontSize(11).font('Helvetica-Bold').text('5. Consumabile Utilizate', {
+    if (populatedConsumables.length > 0) {
+      pdf.fontSize(11).font('Times-Bold-Custom').text(toSafePdfText('5. Consumabile Utilizate'), {
         underline: true,
       });
-      pdf.fontSize(9).font('Helvetica');
-      execution.consumablesUsed.forEach((item, idx) => {
-        pdf.text(`${idx + 1}. ID ${item.consumableId}: ${item.qty} buc`);
+      pdf.fontSize(9).font('Times-Roman-Custom');
+      populatedConsumables.forEach((item, idx) => {
+        pdf.text(toSafePdfText(`${idx + 1}. ${item.name}: ${item.qty} buc`));
       });
       pdf.moveDown(0.5);
     }
 
     // Observations
     if (execution.notes) {
-      pdf.fontSize(11).font('Helvetica-Bold').text('6. Observații', { underline: true });
-      pdf.fontSize(10).font('Helvetica').text(execution.notes);
+      pdf.fontSize(11).font('Times-Bold-Custom').text(toSafePdfText('6. Observații'), { underline: true });
+      pdf.fontSize(10).font('Times-Roman-Custom').text(toSafePdfText(execution.notes));
       pdf.moveDown(0.5);
     }
 
     // Signatures section
-    pdf.fontSize(11).font('Helvetica-Bold').text('7. Semnături', { underline: true });
-    pdf.fontSize(9).font('Helvetica');
+    pdf.fontSize(11).font('Times-Bold-Custom').text(toSafePdfText('7. Semnături'), { underline: true });
+    pdf.fontSize(9).font('Times-Roman-Custom');
 
     // Engineer signature
-    pdf.text('Semnătură Inginer:', 20, pdf.y);
+    pdf.text(toSafePdfText('Semnătură Inginer:'), 20, pdf.y);
     if (execution.signature) {
       try {
         const buffer = Buffer.from(execution.signature.split(',')[1], 'base64');
@@ -503,17 +593,17 @@ router.get('/:id/formular6-pdf', async (req, res) => {
         pdf.moveDown(3.5);
       } catch (e) {
         console.error('Error rendering signature:', e.message);
-        pdf.text('(Semnătură digitală indisponibilă)', 20, pdf.y + 10);
+        pdf.text(toSafePdfText('(Semnătură digitală indisponibilă)'), 20, pdf.y + 10);
         pdf.moveDown(1);
       }
     } else {
-      pdf.text('(Fără semnătură)', 20, pdf.y + 10);
+      pdf.text(toSafePdfText('(Fără semnătură)'), 20, pdf.y + 10);
       pdf.moveDown(1);
     }
 
     // Footer
-    pdf.fontSize(8).text(
-      `Data generării: ${new Date().toLocaleDateString('ro-RO')} | Formular Nr. 6 – Fișă de Mentenanță`,
+    pdf.fontSize(8).font('Times-Roman-Custom').text(
+      toSafePdfText(`Data generării: ${new Date().toLocaleDateString('ro-RO')} | Formular Nr. 6 - Fișă de Mentenanță`),
       { align: 'center' }
     );
 

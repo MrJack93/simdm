@@ -290,6 +290,11 @@ router.post('/:year/discrepancies/:id/verify', async (req, res) => {
   }
 });
 
+// Helper for PDF texts
+function toSafePdfText(str) {
+  return str || '';
+}
+
 // GET /api/annual-inventory/:year/report-pdf — generate PDF report
 router.get('/:year/report-pdf', async (req, res) => {
   try {
@@ -315,42 +320,48 @@ router.get('/:year/report-pdf', async (req, res) => {
 
     // Create PDF
     const doc = new PDFDocument({ margin: 50 });
+    
+    // Register custom TTF fonts that support Romanian diacritics
+    const path = require('path');
+    doc.registerFont('Helvetica-Custom', path.join(__dirname, '../assets/fonts/times.ttf'));
+    doc.registerFont('Helvetica-Bold-Custom', path.join(__dirname, '../assets/fonts/timesbd.ttf'));
+
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `attachment; filename="Raport_Inventariere_${yearNum}.pdf"`);
 
     doc.pipe(res);
 
     // Header
-    doc.fontSize(18).font('Helvetica-Bold').text('RAPORT INVENTARIERE ANUALĂ', { align: 'center' });
-    doc.fontSize(12).text(`An: ${yearNum}`, { align: 'center' });
-    doc.text(`Data: ${new Date().toLocaleDateString('ro-RO')}`, { align: 'center' });
-    doc.fontSize(9).font('Helvetica').text(
-      'Conform Ordinului MS nr. 763/2023 și Procedurii MDM Nr. 1 (Ordinul MS nr. 889/2024)',
+    doc.fontSize(18).font('Helvetica-Bold-Custom').text(toSafePdfText('RAPORT INVENTARIERE ANUALĂ'), { align: 'center' });
+    doc.fontSize(12).font('Helvetica-Custom').text(toSafePdfText(`An: ${yearNum}`), { align: 'center' });
+    doc.text(toSafePdfText(`Data: ${new Date().toLocaleDateString('ro-RO')}`), { align: 'center' });
+    doc.fontSize(9).font('Helvetica-Custom').text(
+      toSafePdfText('Conform Ordinului MS nr. 763/2023 și Procedurii MDM Nr. 1 (Ordinul MS nr. 889/2024)'),
       { align: 'center' }
     );
     doc.moveDown(1);
 
     // Summary
-    doc.fontSize(14).font('Helvetica-Bold').text('REZUMAT');
-    doc.fontSize(10).font('Helvetica');
-    doc.text(`Total discrepanțe: ${discrepancies.length}`, { indent: 20 });
+    doc.fontSize(14).font('Helvetica-Bold-Custom').text(toSafePdfText('REZUMAT'));
+    doc.fontSize(10).font('Helvetica-Custom');
+    doc.text(toSafePdfText(`Total discrepanțe: ${discrepancies.length}`), { indent: 20 });
     doc.moveDown(0.5);
 
     // Discrepancies section
-    doc.fontSize(14).font('Helvetica-Bold').text('DISCREPANȚE IDENTIFICATE:');
-    doc.fontSize(10).font('Helvetica');
+    doc.fontSize(14).font('Helvetica-Bold-Custom').text(toSafePdfText('DISCREPANȚE IDENTIFICATE:'));
+    doc.fontSize(10).font('Helvetica-Custom');
 
     if (discrepancies.length === 0) {
-      doc.text('✓ Nicio discrepanță găsită', { color: '#4ade80', indent: 20 });
+      doc.text(toSafePdfText('✓ Nicio discrepanță găsită'), { color: '#4ade80', indent: 20 });
     } else {
       discrepancies.forEach((item, idx) => {
-        doc.text(`${idx + 1}. ${item.device.inventoryNumber} - ${item.device.name}`, {
+        doc.text(toSafePdfText(`${idx + 1}. ${item.device.inventoryNumber} - ${item.device.name}`), {
           underline: true,
           indent: 20,
         });
-        doc.text(`   Status: ${item.device.status}`, { indent: 40 });
-        doc.text(`   Secție: ${item.inventory?.section?.name || 'N/A'}`, { indent: 40 });
-        doc.text(`   Localizare găsită: ${item.locationFound || 'NEGĂSIT'}`, {
+        doc.text(toSafePdfText(`   Status: ${item.device.status}`), { indent: 40 });
+        doc.text(toSafePdfText(`   Secție: ${item.inventory?.section?.name || 'N/A'}`), { indent: 40 });
+        doc.text(toSafePdfText(`   Localizare găsită: ${item.locationFound || 'NEGĂSIT'}`), {
           indent: 40,
           color: '#f87171',
         });
@@ -360,12 +371,12 @@ router.get('/:year/report-pdf', async (req, res) => {
 
     // Footer
     doc.moveDown(1);
-    doc.fontSize(10).text('─'.repeat(80), { align: 'center' });
-    doc.text(`Raport generat: ${new Date().toLocaleString('ro-RO')}`, {
+    doc.fontSize(10).font('Helvetica-Custom').text('─'.repeat(80), { align: 'center' });
+    doc.text(toSafePdfText(`Raport generat: ${new Date().toLocaleString('ro-RO')}`), {
       align: 'center',
       color: '#6b7280',
     });
-    doc.text(`Utilizator: ${req.user.username}`, {
+    doc.text(toSafePdfText(`Utilizator: ${req.user.username}`), {
       align: 'center',
       color: '#6b7280',
     });

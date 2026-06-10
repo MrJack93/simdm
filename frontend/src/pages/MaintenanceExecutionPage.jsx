@@ -168,10 +168,12 @@ export default function MaintenanceExecutionPage() {
                                 setIsDialogOpen(open);
                                 if (open) setSelectedPlan(plan);
                               }}>
-                        <DialogTrigger asChild>
-                          <Button className="w-full mt-4" style={{ backgroundColor: 'var(--color-success)' }}>
-                            Execută mentenanță
-                          </Button>
+                        <DialogTrigger
+                          render={
+                            <Button className="w-full mt-4" style={{ backgroundColor: 'var(--color-success)' }} />
+                          }
+                        >
+                          Execută mentenanță
                         </DialogTrigger>
                         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
                           <DialogHeader>
@@ -183,15 +185,15 @@ export default function MaintenanceExecutionPage() {
                             <div className="space-y-2">
                               <label className="block text-sm font-medium">Inginer responsabil *</label>
                               <Select
+                                value={form.watch('engineer')}
                                 onValueChange={(value) => form.setValue('engineer', value)}
-                                defaultValue={form.getValues('engineer')}
                               >
                                 <SelectTrigger>
                                   <SelectValue placeholder="Selectați inginerul" />
                                 </SelectTrigger>
                                 <SelectContent>
                                   {engineers.map(eng => (
-                                    <SelectItem key={eng.id} value={eng.id}>
+                                    <SelectItem key={eng.id} value={String(eng.id)}>
                                       {eng.name}
                                     </SelectItem>
                                   ))}

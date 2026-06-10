@@ -93,48 +93,64 @@ router.post('/', async (req, res) => {
       return res.status(404).json({ error: 'Dispozitivul nu există' });
     }
 
-    // Generate ticket number and create ticket in transaction
-    const ticket = await prisma.$transaction(async (tx) => {
-      const ticketNumber = await generateTicketNumber();
+    let ticket;
+    let attempts = 0;
+    
+    while (attempts < 5) {
+      try {
+        // Generate ticket number and create ticket in transaction
+        ticket = await prisma.$transaction(async (tx) => {
+          const ticketNumber = await generateTicketNumber();
 
-      const created = await tx.repair_tickets.create({
-        data: {
-          ticketNumber,
-          deviceId,
-          sectionId: sectionId || null,
-          reportedBy,
-          faultDescription,
-          priority,
-          status: 'DESCHIS',
-          createdById: req.user.sub,
-          updatedAt: new Date(),
-        },
-      });
+          const created = await tx.repair_tickets.create({
+            data: {
+              ticketNumber,
+              deviceId,
+              sectionId: sectionId || null,
+              reportedBy,
+              faultDescription,
+              priority,
+              status: 'DESCHIS',
+              createdById: req.user.sub,
+              updatedAt: new Date(),
+            },
+          });
 
-      // Update device status to DEFECT
-      await tx.devices.update({
-        where: { id: deviceId },
-        data: { status: 'DEFECT' },
-      });
+          // Update device status to DEFECT
+          await tx.devices.update({
+            where: { id: deviceId },
+            data: { status: 'DEFECT' },
+          });
 
-      // Create audit log
-      await tx.audit_logs.create({
-        data: {
-          userId: req.user.sub,
-          action: 'CREATE',
-          entity: 'repair_tickets',
-          entityId: String(created.id),
-          changes: {
-            ticketNumber,
-            deviceId,
-            priority,
-            faultDescription: faultDescription.substring(0, 100),
-          },
-        },
-      });
+          // Create audit log
+          await tx.audit_logs.create({
+            data: {
+              userId: req.user.sub,
+              action: 'CREATE',
+              entity: 'repair_tickets',
+              entityId: String(created.id),
+              changes: {
+                ticketNumber,
+                deviceId,
+                priority,
+                faultDescription: faultDescription.substring(0, 100),
+              },
+            },
+          });
 
-      return created;
-    });
+          return created;
+        });
+        
+        break; // Success, break the retry loop
+      } catch (err) {
+        if (err.code === 'P2002') {
+          attempts++;
+          if (attempts >= 5) throw err;
+          continue;
+        }
+        throw err;
+      }
+    }
 
     res.status(201).json(ticket);
   } catch (error) {
@@ -390,6 +406,31 @@ router.put('/:id/repair', async (req, res) => {
         },
       });
 
+      // 2.5. Create entry in maintenance_records for unified audit trail
+      if (newStatus === 'REZOLVAT') {
+        let consumablesText = null;
+        if (partsUsed && partsUsed.length > 0) {
+          consumablesText = partsUsed.map(p => `${p.description} (${p.qty} buc)`).join(', ');
+        }
+
+        await tx.maintenance_records.create({
+          data: {
+            deviceId: ticket.deviceId,
+            type: 'CORECTIVA',
+            executedDate: new Date(),
+            duration: durationHours ? parseFloat(durationHours) : null,
+            description: `Reparatie efectuata de ${engineerName}. Raport: ${repairReport}`,
+            partsReplaced: partsUsed ? JSON.stringify(partsUsed) : null,
+            consumablesUsed: consumablesText,
+            result: functionalTest === 'FUNCTIONAL' ? 'FUNCTIONAL' : 'DEFECT',
+            cost: totalCost > 0 ? totalCost : null,
+            performedById: req.user.sub,
+            notes: actionsTaken || null,
+            updatedAt: new Date(),
+          },
+        });
+      }
+
       // 3. Create audit log
       await tx.audit_logs.create({
         data: {
@@ -414,6 +455,138 @@ router.put('/:id/repair', async (req, res) => {
   } catch (error) {
     console.error('Error repairing ticket:', error);
     res.status(500).json({ error: 'Eroare la înregistrarea reparației' });
+  }
+});
+
+// GET /api/repair-tickets/formular7-pdf - PDF Jurnal chemări (Formular Nr. 7, Anexa 23)
+router.get('/formular7-pdf', async (req, res) => {
+  try {
+    const { from, to } = req.query;
+
+    const where = {};
+    if (from || to) {
+      where.reportedAt = {};
+      if (from) where.reportedAt.gte = new Date(from);
+      if (to) where.reportedAt.lte = new Date(to);
+    }
+
+    const tickets = await prisma.repair_tickets.findMany({
+      where,
+      orderBy: { reportedAt: 'asc' },
+      include: {
+        device: {
+          select: {
+            name: true,
+            inventoryNumber: true,
+            sections: { select: { name: true } }
+          }
+        },
+      },
+    });
+
+    const PDFDocument = require('pdfkit');
+    const path = require('path');
+    const pdf = new PDFDocument({ size: 'A4', layout: 'landscape', margin: 30 });
+
+    // Inregistrare fonturi custom pentru suport diacritice românesti
+    pdf.registerFont('Times-Roman-Custom', path.join(__dirname, '../assets/fonts/times.ttf'));
+    pdf.registerFont('Times-Bold-Custom', path.join(__dirname, '../assets/fonts/timesbd.ttf'));
+
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename="Formular7-JurnalChemari.pdf"');
+    pdf.pipe(res);
+
+    // Titlu
+    pdf.fontSize(13).font('Times-Bold-Custom')
+      .text(toSafePdfText('JURNAL DE CHEMARI PENTRU REPARATII'), { align: 'center' });
+    pdf.fontSize(9).font('Times-Roman-Custom')
+      .text(toSafePdfText('Formular Nr. 7 - Anexa 23, Ghidul Bioinginerului (Ordinul MS nr. 889/2024)'), { align: 'center' });
+
+    if (from || to) {
+      const period = `Perioada: ${from ? new Date(from).toLocaleDateString('ro-RO') : '-'} - ${to ? new Date(to).toLocaleDateString('ro-RO') : '-'}`;
+      pdf.fontSize(9).font('Times-Roman-Custom').text(toSafePdfText(period), { align: 'center' });
+    }
+    pdf.moveDown(0.5);
+
+    // Dimensiuni coloane (landscape A4 = 841.89pt, margin 30 each side = 781.89 usable)
+    const colWidths = [20, 60, 110, 110, 110, 50, 60, 110, 110, 30];
+    const headers = [
+      toSafePdfText('Nr.'),
+      toSafePdfText('Data/ora'),
+      toSafePdfText('Denumire DM / Cod'),
+      toSafePdfText('Secție / Solicitant'),
+      toSafePdfText('Defecțiune reclamată'),
+      toSafePdfText('Prioritate'),
+      toSafePdfText('Data rezolvare'),
+      toSafePdfText('Măsuri întreprinse'),
+      toSafePdfText('Inginer responsabil'),
+      toSafePdfText('Stare')
+    ];
+    const startX = 30;
+    let y = pdf.y;
+    const rowH = 18;
+
+    // Header tabel
+    pdf.fontSize(7).font('Times-Bold-Custom');
+    let x = startX;
+    colWidths.forEach((w, i) => {
+      pdf.rect(x, y, w, rowH).stroke();
+      pdf.text(headers[i], x + 2, y + 4, { width: w - 4, lineBreak: false });
+      x += w;
+    });
+    y += rowH;
+
+    // Rânduri
+    pdf.fontSize(7).font('Times-Roman-Custom');
+    tickets.forEach((ticket, idx) => {
+      x = startX;
+      const stare = ['INCHIS', 'REZOLVAT', 'TESTAT'].includes(ticket.status) ? 'F' : 'N';
+      
+      const sectieNume = ticket.device?.sections?.name || '—';
+      const solicitant = ticket.reportedBy || '—';
+      const sectieSolicitant = `${sectieNume}\n/ ${solicitant}`;
+
+      const row = [
+        String(idx + 1),
+        new Date(ticket.reportedAt).toLocaleDateString('ro-RO'),
+        toSafePdfText(`${ticket.device?.name || ''}\n${ticket.device?.inventoryNumber || ''}`),
+        toSafePdfText(sectieSolicitant),
+        toSafePdfText(ticket.faultDescription.substring(0, 50)),
+        toSafePdfText(ticket.priority),
+        ticket.resolvedAt ? new Date(ticket.resolvedAt).toLocaleDateString('ro-RO') : '—',
+        toSafePdfText(ticket.actionsTaken ? ticket.actionsTaken.substring(0, 50) : '—'),
+        toSafePdfText(ticket.engineerName || '—'),
+        toSafePdfText(stare),
+      ];
+
+      colWidths.forEach((w, i) => {
+        pdf.rect(x, y, w, rowH).stroke();
+        pdf.text(row[i], x + 2, y + 4, { width: w - 4, lineBreak: false, ellipsis: true });
+        x += w;
+      });
+      y += rowH;
+
+      // Pagină nouă dacă e nevoie
+      if (y > 540) {
+        pdf.addPage({ size: 'A4', layout: 'landscape' });
+        y = 30;
+      }
+    });
+
+    if (tickets.length === 0) {
+      pdf.fontSize(10).font('Times-Roman-Custom').text(toSafePdfText('Nu exista chemari in perioada selectata.'), startX, y + 10);
+    }
+
+    // Footer
+    pdf.fontSize(7).font('Times-Roman-Custom').text(
+      toSafePdfText(`Total: ${tickets.length} chemari | Generat: ${new Date().toLocaleDateString('ro-RO')} | SIMDM`),
+      { align: 'center' }
+    );
+
+    pdf.end();
+  } catch (error) {
+    console.error('Error generating Formular 7 PDF:', error);
+    res.status(500).json({ error: 'Eroare la generarea jurnalului PDF' });
   }
 });
 
@@ -512,7 +685,12 @@ router.get('/:id/formular8-pdf', async (req, res) => {
     }
 
     const PDFDocument = require('pdfkit');
+    const path = require('path');
     const pdf = new PDFDocument({ size: 'A4' });
+
+    pdf.registerFont('Times-Roman-Custom', path.join(__dirname, '../assets/fonts/times.ttf'));
+    pdf.registerFont('Times-Bold-Custom', path.join(__dirname, '../assets/fonts/timesbd.ttf'));
+
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader(
       'Content-Disposition',
@@ -522,115 +700,115 @@ router.get('/:id/formular8-pdf', async (req, res) => {
     pdf.pipe(res);
 
     // Title
-    pdf.fontSize(14).font('Helvetica-Bold').text('FIȘĂ DE DESERVIRE', {
+    pdf.fontSize(14).font('Times-Bold-Custom').text(toSafePdfText('FIȘĂ DE DESERVIRE'), {
       align: 'center',
     });
     pdf.fontSize(10)
-      .font('Helvetica')
-      .text('Formular Nr. 8 – Anexa 3, Procedura MDM Nr. 8', { align: 'center' });
+      .font('Times-Roman-Custom')
+      .text(toSafePdfText('Formular Nr. 8 - Anexa 3, Procedura MDM Nr. 8'), { align: 'center' });
     pdf.moveDown(0.5);
 
     // Ticket header
-    pdf.fontSize(11).font('Helvetica-Bold').text('1. Identificare Tichet', {
+    pdf.fontSize(11).font('Times-Bold-Custom').text(toSafePdfText('1. Identificare Tichet'), {
       underline: true,
     });
-    pdf.fontSize(10).font('Helvetica');
-    pdf.text(`Număr Tichet: ${ticket.ticketNumber}`);
-    pdf.text(`Data Raportării: ${new Date(ticket.reportedAt).toLocaleDateString('ro-RO')}`);
-    pdf.text(`Prioritate: ${ticket.priority}`);
-    pdf.text(`Status: ${ticket.status}`);
+    pdf.fontSize(10).font('Times-Roman-Custom');
+    pdf.text(toSafePdfText(`Număr Tichet: ${ticket.ticketNumber}`));
+    pdf.text(toSafePdfText(`Dată Raportare: ${new Date(ticket.reportedAt).toLocaleDateString('ro-RO')}`));
+    pdf.text(toSafePdfText(`Prioritate: ${ticket.priority}`));
+    pdf.text(toSafePdfText(`Status: ${ticket.status}`));
     pdf.moveDown(0.5);
 
     // Device info
-    pdf.fontSize(11).font('Helvetica-Bold').text('2. Dispozitiv Medical', {
+    pdf.fontSize(11).font('Times-Bold-Custom').text(toSafePdfText('2. Dispozitiv Medical'), {
       underline: true,
     });
-    pdf.fontSize(10).font('Helvetica');
-    pdf.text(`Denumire: ${ticket.device.name}`);
-    pdf.text(`Nr. Serie: ${ticket.device.serialNumber || 'N/A'}`);
-    pdf.text(`Nr. Inventar: ${ticket.device.inventoryNumber}`);
-    pdf.text(`Secția: ${ticket.device.sections?.name || 'N/A'}`);
+    pdf.fontSize(10).font('Times-Roman-Custom');
+    pdf.text(toSafePdfText(`Denumire: ${ticket.device.name}`));
+    pdf.text(toSafePdfText(`Nr. Serie: ${ticket.device.serialNumber || 'N/A'}`));
+    pdf.text(toSafePdfText(`Nr. Inventar: ${ticket.device.inventoryNumber}`));
+    pdf.text(toSafePdfText(`Secția: ${ticket.device.sections?.name || 'N/A'}`));
     pdf.moveDown(0.5);
 
     // Defect description
-    pdf.fontSize(11).font('Helvetica-Bold').text('3. Descriere Defect', {
+    pdf.fontSize(11).font('Times-Bold-Custom').text(toSafePdfText('3. Descriere Defect'), {
       underline: true,
     });
-    pdf.fontSize(10).font('Helvetica').text(ticket.faultDescription);
+    pdf.fontSize(10).font('Times-Roman-Custom').text(toSafePdfText(ticket.faultDescription));
     pdf.moveDown(0.5);
 
     // Defect cause
     if (ticket.faultCause) {
-      pdf.fontSize(11).font('Helvetica-Bold').text('4. Cauza Defectului', {
+      pdf.fontSize(11).font('Times-Bold-Custom').text(toSafePdfText('4. Cauza Defectului'), {
         underline: true,
       });
-      pdf.fontSize(10).font('Helvetica').text(ticket.faultCause);
+      pdf.fontSize(10).font('Times-Roman-Custom').text(toSafePdfText(ticket.faultCause));
       pdf.moveDown(0.5);
     }
 
     // Repair details
     if (ticket.actionsTaken) {
-      pdf.fontSize(11).font('Helvetica-Bold').text('5. Măsuri Întreprinse', {
+      pdf.fontSize(11).font('Times-Bold-Custom').text(toSafePdfText('5. Măsuri Întreprinse'), {
         underline: true,
       });
-      pdf.fontSize(10).font('Helvetica').text(ticket.actionsTaken);
+      pdf.fontSize(10).font('Times-Roman-Custom').text(toSafePdfText(ticket.actionsTaken));
       pdf.moveDown(0.5);
     }
 
     // Parts used
     if (ticket.partsUsed && Array.isArray(ticket.partsUsed)) {
-      pdf.fontSize(11).font('Helvetica-Bold').text('6. Materiale Utilizate', {
+      pdf.fontSize(11).font('Times-Bold-Custom').text(toSafePdfText('6. Materiale Utilizate'), {
         underline: true,
       });
-      pdf.fontSize(9).font('Helvetica');
+      pdf.fontSize(9).font('Times-Roman-Custom');
       ticket.partsUsed.forEach((part, idx) => {
         pdf.text(
-          `${idx + 1}. ${part.description} - ${part.qty} × ${part.costUnit} MDL = ${part.qty * part.costUnit} MDL`
+          toSafePdfText(`${idx + 1}. ${part.description} - ${part.qty} x ${part.costUnit} MDL = ${part.qty * part.costUnit} MDL`)
         );
       });
       if (ticket.totalCost) {
-        pdf.fontSize(10).font('Helvetica-Bold').text(`Cost Total: ${ticket.totalCost} MDL`);
+        pdf.fontSize(10).font('Times-Bold-Custom').text(toSafePdfText(`Cost Total: ${ticket.totalCost} MDL`));
       }
       pdf.moveDown(0.5);
     }
 
     // Functional test
     if (ticket.functionalTest) {
-      pdf.fontSize(11).font('Helvetica-Bold').text('7. Test Funcțional', {
+      pdf.fontSize(11).font('Times-Bold-Custom').text(toSafePdfText('7. Test Funcțional'), {
         underline: true,
       });
-      pdf.fontSize(10).font('Helvetica');
+      pdf.fontSize(10).font('Times-Roman-Custom');
       const testResult = ticket.functionalTest === 'FUNCTIONAL'
-        ? '✓ Dispozitiv Funcțional'
-        : '✗ Dispozitiv Nefuncțional';
-      pdf.text(testResult);
+        ? '[F] Dispozitiv Funcțional'
+        : '[N] Dispozitiv Nefuncțional';
+      pdf.text(toSafePdfText(testResult));
       pdf.moveDown(0.5);
     }
 
     // Observations/Notes
     if (ticket.repairReport) {
-      pdf.fontSize(11).font('Helvetica-Bold').text('8. Raport Reparație', {
+      pdf.fontSize(11).font('Times-Bold-Custom').text(toSafePdfText('8. Raport Reparație'), {
         underline: true,
       });
-      pdf.fontSize(10).font('Helvetica').text(ticket.repairReport);
+      pdf.fontSize(10).font('Times-Roman-Custom').text(toSafePdfText(ticket.repairReport));
       pdf.moveDown(0.5);
     }
 
     // Signatures section
-    pdf.fontSize(11).font('Helvetica-Bold').text('9. Semnări', {
+    pdf.fontSize(11).font('Times-Bold-Custom').text(toSafePdfText('9. Semnături'), {
       underline: true,
     });
-    pdf.fontSize(10).font('Helvetica').text('Inginer Responsabil: _________________');
-    pdf.text(`(${ticket.engineerName || 'Nespecificat'})`);
+    pdf.fontSize(10).font('Times-Roman-Custom').text(toSafePdfText('Inginer Responsabil: _________________'));
+    pdf.text(toSafePdfText(`(${ticket.engineerName || 'Nespecificat'})`));
     pdf.moveDown(0.5);
 
     if (ticket.managerSignature) {
-      pdf.text('Manager/Supraveghetor: _________________');
+      pdf.text(toSafePdfText('Manager/Supraveghetor: _________________'));
     }
 
     // Footer
-    pdf.fontSize(8).text(
-      `Data generării: ${new Date().toLocaleDateString('ro-RO')} | Formular Nr. 8 – Fișă de Deservire`,
+    pdf.fontSize(8).font('Times-Roman-Custom').text(
+      toSafePdfText(`Dată generare: ${new Date().toLocaleDateString('ro-RO')} | Formular Nr. 8 - Fișă de Deservire`),
       { align: 'center' }
     );
 
@@ -672,8 +850,28 @@ router.get('/:id/handover-pdf', async (req, res) => {
       return res.status(400).json({ error: 'Tichetul nu este o reparație externă' });
     }
 
+    // Determinam contractul activ asociat dispozitivului pentru a prelua datele reale
+    const activeContracts = await prisma.service_contracts.findMany({
+      where: {
+        endDate: { gte: new Date() }
+      },
+      include: {
+        provider: true
+      }
+    });
+    const activeContract = activeContracts.find(c => c.coveredDeviceIds.includes(ticket.deviceId));
+    const providerName = activeContract?.provider?.name || 'Service Provider Extern';
+    const contractNoStr = activeContract 
+      ? `Contract nr. ${activeContract.contractNo} din ${new Date(activeContract.startDate).toLocaleDateString('ro-RO')}` 
+      : 'Nespecificat';
+
     const PDFDocument = require('pdfkit');
+    const path = require('path');
     const pdf = new PDFDocument({ size: 'A4' });
+
+    pdf.registerFont('Times-Roman-Custom', path.join(__dirname, '../assets/fonts/times.ttf'));
+    pdf.registerFont('Times-Bold-Custom', path.join(__dirname, '../assets/fonts/timesbd.ttf'));
+
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader(
       'Content-Disposition',
@@ -683,87 +881,108 @@ router.get('/:id/handover-pdf', async (req, res) => {
     pdf.pipe(res);
 
     // Title
-    pdf.fontSize(14).font('Helvetica-Bold').text('ACT DE PREDARE-PRIMIRE', {
+    pdf.fontSize(14).font('Times-Bold-Custom').text(toSafePdfText('ACT DE PREDARE-PRIMIRE'), {
       align: 'center',
     });
     pdf.fontSize(10)
-      .font('Helvetica')
-      .text('Formular Nr. 9 – Anexa 21, Procedura MDM Nr. 9', { align: 'center' });
+      .font('Times-Roman-Custom')
+      .text(toSafePdfText('Formular Nr. 9 – Anexa 21, Procedura MDM Nr. 4'), { align: 'center' });
     pdf.moveDown(0.5);
 
     // Header info
-    pdf.fontSize(10).font('Helvetica');
+    pdf.fontSize(10).font('Times-Roman-Custom');
     pdf.text(
-      `Nr. Act: ${ticket.ticketNumber} | Data: ${new Date(ticket.reportedAt).toLocaleDateString('ro-RO')}`
+      toSafePdfText(`Nr. Act: ${ticket.ticketNumber} | Data: ${new Date(ticket.reportedAt).toLocaleDateString('ro-RO')}`)
     );
     pdf.moveDown(0.5);
 
     // Parties
-    pdf.fontSize(11).font('Helvetica-Bold').text('Părți', { underline: true });
-    pdf.fontSize(10).font('Helvetica');
-    pdf.text('Beneficiar (Instituție medicală): Institutul de sănătate', { indent: 20 });
-    pdf.text('Prestator de servicii: Service Provider', { indent: 20 });
+    pdf.fontSize(11).font('Times-Bold-Custom').text(toSafePdfText('Părți'), { underline: true });
+    pdf.fontSize(10).font('Times-Roman-Custom');
+    pdf.text(toSafePdfText('Beneficiar (Instituție medicală): Spitalul Clinic SIMDM'), { indent: 20 });
+    pdf.text(toSafePdfText(`Prestator de servicii: ${providerName}`), { indent: 20 });
+    pdf.text(toSafePdfText(`Contract de service: ${contractNoStr}`), { indent: 20 });
     pdf.moveDown(0.5);
 
     // Ticket info
-    pdf.fontSize(11).font('Helvetica-Bold').text('Informații Tichet', { underline: true });
-    pdf.fontSize(10).font('Helvetica');
-    pdf.text(`Nr. Tichet: ${ticket.ticketNumber}`);
-    pdf.text(`Defecțiune raportată: ${ticket.faultDescription}`);
+    pdf.fontSize(11).font('Times-Bold-Custom').text(toSafePdfText('Informații Tichet'), { underline: true });
+    pdf.fontSize(10).font('Times-Roman-Custom');
+    pdf.text(toSafePdfText(`Nr. Tichet: ${ticket.ticketNumber}`));
+    pdf.text(toSafePdfText(`Defecțiune raportată: ${ticket.faultDescription}`));
     if (ticket.faultCause) {
-      pdf.text(`Cauza identificată: ${ticket.faultCause}`);
+      pdf.text(toSafePdfText(`Cauza identificată: ${ticket.faultCause}`));
     }
     pdf.moveDown(0.5);
 
     // Device info
-    pdf.fontSize(11).font('Helvetica-Bold').text('Dispozitiv Medical', { underline: true });
-    pdf.fontSize(10).font('Helvetica');
-    pdf.text(`Denumire: ${ticket.device.name}`);
-    pdf.text(`Producător: ${ticket.device.manufacturer || 'N/A'}`);
-    pdf.text(`Nr. Serie: ${ticket.device.serialNumber || 'N/A'}`);
-    pdf.text(`Nr. Inventar: ${ticket.device.inventoryNumber}`);
+    pdf.fontSize(11).font('Times-Bold-Custom').text(toSafePdfText('Dispozitiv Medical'), { underline: true });
+    pdf.fontSize(10).font('Times-Roman-Custom');
+    pdf.text(toSafePdfText(`Denumire: ${ticket.device.name}`));
+    pdf.text(toSafePdfText(`Producător: ${ticket.device.manufacturer || 'N/A'}`));
+    pdf.text(toSafePdfText(`Nr. Serie: ${ticket.device.serialNumber || 'N/A'}`));
+    pdf.text(toSafePdfText(`Nr. Inventar: ${ticket.device.inventoryNumber}`));
     pdf.moveDown(0.5);
 
     // Physical condition
-    pdf.fontSize(11).font('Helvetica-Bold').text('Starea Fizică la Predare', { underline: true });
-    pdf.fontSize(10).font('Helvetica');
-    pdf.text('(Descriere calitatoare a stării dispozitivului):', { indent: 20 });
-    pdf.text('_______________________________________________________________________________');
-    pdf.text('_______________________________________________________________________________');
+    pdf.fontSize(11).font('Times-Bold-Custom').text(toSafePdfText('Starea Fizică la Predare'), { underline: true });
+    pdf.fontSize(10).font('Times-Roman-Custom');
+    pdf.text(toSafePdfText('(Descriere calitativă a stării dispozitivului):'), { indent: 20 });
+    const stareaFizica = ticket.repairReport 
+      ? `Conform raportului: ${ticket.repairReport}` 
+      : 'Dispozitivul prezintă defectul semnalat; fără alte deteriorări mecanice vizibile extern.';
+    pdf.text(toSafePdfText(stareaFizica), { indent: 20 });
     pdf.moveDown(0.5);
 
     // Included items
-    pdf.fontSize(11).font('Helvetica-Bold').text('Materiale/Consumabile Incluse', { underline: true });
-    pdf.fontSize(10).font('Helvetica');
-    pdf.text(
-      '(Lista completă a articolelor incluse în pachetul de reparație)',
-      { indent: 20 }
-    );
-    pdf.text('_______________________________________________________________________________');
-    pdf.text('_______________________________________________________________________________');
+    pdf.fontSize(11).font('Times-Bold-Custom').text(toSafePdfText('Piese și Consumabile Utilizate'), { underline: true });
+    pdf.fontSize(10).font('Times-Roman-Custom');
+    if (ticket.partsUsed && Array.isArray(ticket.partsUsed) && ticket.partsUsed.length > 0) {
+      ticket.partsUsed.forEach((part, idx) => {
+        pdf.text(
+          toSafePdfText(`${idx + 1}. ${part.description} - ${part.qty} buc (Cost: ${part.costUnit} MDL/buc)`),
+          { indent: 20 }
+        );
+      });
+    } else {
+      pdf.text(toSafePdfText('Nu s-au înregistrat piese/consumabile suplimentare din stoc.'), { indent: 20 });
+    }
     pdf.moveDown(1);
 
     // Signatures
-    pdf.fontSize(11).font('Helvetica-Bold').text('Semnări', { underline: true });
+    pdf.fontSize(11).font('Times-Bold-Custom').text(toSafePdfText('Semnături Predare / Recepție'), { underline: true });
     pdf.moveDown(0.3);
 
-    // Handed over by
-    pdf.fontSize(9).font('Helvetica').text('Predat de (Bioingineri):', { indent: 20 });
-    pdf.text('Semnătură: _________________________ Nume: _________________ Data: __________', {
-      indent: 30,
+    // Faza I: Predare spre service
+    pdf.fontSize(10).font('Times-Bold-Custom').text(toSafePdfText('Faza I: Predarea dispozitivului pentru reparație'));
+    pdf.fontSize(9).font('Times-Roman-Custom');
+    pdf.text(toSafePdfText('Predat de (Beneficiar - Bioinginer):'), { indent: 10 });
+    pdf.text(toSafePdfText('Semnătura: _________________________ Nume: _________________ Data: __________'), {
+      indent: 20,
+    });
+    pdf.moveDown(0.2);
+    pdf.text(toSafePdfText('Primit de (Prestator - Reprezentant):'), { indent: 10 });
+    pdf.text(toSafePdfText('Semnătura: _________________________ Nume: _________________ Data: __________'), {
+      indent: 20,
     });
     pdf.moveDown(0.5);
 
-    // Received by
-    pdf.fontSize(9).font('Helvetica').text('Primit de (Furnizor):', { indent: 20 });
-    pdf.text('Semnătură: _________________________ Nume: _________________ Data: __________', {
-      indent: 30,
+    // Faza II: Recepție din service (după reparație)
+    pdf.fontSize(10).font('Times-Bold-Custom').text(toSafePdfText('Faza II: Recepția dispozitivului reparat și testat'));
+    pdf.fontSize(9).font('Times-Roman-Custom');
+    pdf.text(toSafePdfText('Returnat de (Prestator - Reprezentant):'), { indent: 10 });
+    pdf.text(toSafePdfText('Semnătura: _________________________ Nume: _________________ Data: __________'), {
+      indent: 20,
     });
-    pdf.moveDown(1);
+    pdf.moveDown(0.2);
+    pdf.text(toSafePdfText('Primit și verificat de (Beneficiar - Bioinginer):'), { indent: 10 });
+    pdf.text(toSafePdfText(`Semnătura: _________________________ Nume: ${ticket.engineerName || '_________________'} Data: __________`), {
+      indent: 20,
+    });
+    pdf.moveDown(0.8);
 
     // Footer
-    pdf.fontSize(8).text(
-      `Data generării: ${new Date().toLocaleDateString('ro-RO')} | Formular Nr. 9 – Act de predare-primire`,
+    pdf.fontSize(8).font('Times-Roman-Custom').text(
+      toSafePdfText(`Data generării: ${new Date().toLocaleDateString('ro-RO')} | Formular Nr. 9 – Act de predare-primire`),
       { align: 'center' }
     );
 
@@ -773,5 +992,10 @@ router.get('/:id/handover-pdf', async (req, res) => {
     res.status(500).json({ error: 'Eroare la generarea PDF-ului' });
   }
 });
+
+// Helper: Return text as-is since custom TTF fonts support Romanian diacritics natively
+function toSafePdfText(str) {
+  return str || '';
+}
 
 module.exports = router;

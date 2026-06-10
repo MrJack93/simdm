@@ -47,6 +47,8 @@ vi.mock('../api/maintenancePlans', () => ({
       frequency: 'TRIMESTRIAL',
     })
   ),
+  rescheduleOccurrence: vi.fn(() => Promise.resolve({ id: 101 })),
+  downloadFormular5: vi.fn(() => Promise.resolve(new Blob(['%PDF'], { type: 'application/pdf' }))),
 }));
 
 vi.mock('../api/devices', () => ({
@@ -225,6 +227,9 @@ describe('MaintenanceCalendarPage — Calendar & Apariții MPP', () => {
 
     const frequencySelect = screen.getByLabelText(/Frecvență/i);
     await user.selectOptions(frequencySelect, 'TRIMESTRIAL');
+
+    const responsibleInput = screen.getByLabelText(/Responsabil/i);
+    await user.type(responsibleInput, 'Ing. Test');
 
     const submitBtn = screen.getByRole('button', { name: /Salvare Plan/i });
     await user.click(submitBtn);

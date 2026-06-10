@@ -5,9 +5,13 @@
  * 3. Verificare raport conformitate
  */
 
-const { test, expect } = require('@playwright/test');
-const fs = require('fs');
-const path = require('path');
+import { test, expect } from '@playwright/test';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const TEST_USERNAME = 'testuser';
 const TEST_PASSWORD = process.env.TEST_PASSWORD || 'Test123!';
@@ -17,13 +21,13 @@ test.describe('E2E — Verificări Periodice & Conformitate (Faza 3.4)', () => {
     await page.goto('/login');
     await page.locator('input[name="username"]').fill(TEST_USERNAME);
     await page.locator('input[name="password"]').fill(TEST_PASSWORD);
-    await page.locator('button:has-text("Autentificare")').click();
+    await page.locator('button:has-text("Conectare")').click();
     await page.waitForURL('/');
   });
 
   test('navigare la Verificări Periodice', async ({ page }) => {
     // Click Verificări menu
-    await page.locator('a:has-text(/Verificări|CheckSquare/i)').click();
+    await page.locator('a', { hasText: 'Verificări' }).click();
 
     // Check table is visible
     await expect(page.locator('table, [role="table"]')).toBeVisible({
@@ -32,20 +36,20 @@ test.describe('E2E — Verificări Periodice & Conformitate (Faza 3.4)', () => {
 
     // Check status columns (CONFORM, EXPIRAT, NEVERIFICAT)
     const headerText = await page.locator('body').textContent();
-    expect(headerText).toContain(/CONFORM|verificar/i);
+    expect(headerText).toMatch(/CONFORM|verific/i);
   });
 
   test('upload certificat nou', async ({ page }) => {
-    await page.locator('a:has-text(/Verificări|CheckSquare/i)').click();
+    await page.locator('a', { hasText: 'Verificări' }).click();
     await page.waitForURL(/verifications/);
 
     // Click "Upload Certificat" button
-    const uploadBtn = page.locator('button:has-text(/Upload|Certificat/i)');
+    const uploadBtn = page.locator('button', { hasText: /Upload|Certificat/i });
     if (await uploadBtn.isVisible()) {
       await uploadBtn.click();
 
       // Wait for modal
-      await expect(page.locator('text=/Upload|Certificat|Încarcă/i')).toBeVisible({
+      await expect(page.locator('text=/Upload|Certificat|Încarcă/i').first()).toBeVisible({
         timeout: 5000,
       });
 
@@ -72,10 +76,10 @@ test.describe('E2E — Verificări Periodice & Conformitate (Faza 3.4)', () => {
       }
 
       // Click save
-      const saveBtn = page.locator('button:has-text(/Salvare|Încarcă/i)');
+      const saveBtn = page.locator('button', { hasText: /Salvare|Încarcă/i });
       if (await saveBtn.isVisible()) {
         await saveBtn.click();
-        await expect(page.locator('text=/salvat|succes|uploaded/i')).toBeVisible({
+        await expect(page.locator('text=/salvat|succes|uploaded/i').first()).toBeVisible({
           timeout: 5000,
         });
       }
@@ -83,11 +87,11 @@ test.describe('E2E — Verificări Periodice & Conformitate (Faza 3.4)', () => {
   });
 
   test('raport conformitate afișează statistici', async ({ page }) => {
-    await page.locator('a:has-text(/Verificări|CheckSquare/i)').click();
+    await page.locator('a', { hasText: 'Verificări' }).click();
     await page.waitForURL(/verifications/);
 
     // Check if compliance report is visible
-    const reportSection = page.locator('text=/Raport|Conformitate|Compliance/i');
+    const reportSection = page.locator('text=/Raport|Conformitate|Compliance/i').first();
     if (await reportSection.isVisible()) {
       // Should show stats
       const statsText = await page.locator('body').textContent();
@@ -96,7 +100,7 @@ test.describe('E2E — Verificări Periodice & Conformitate (Faza 3.4)', () => {
   });
 
   test('status color coding: CONFORM (verde), EXPIRAT (roșu)', async ({ page }) => {
-    await page.locator('a:has-text(/Verificări|CheckSquare/i)').click();
+    await page.locator('a', { hasText: 'Verificări' }).click();
     await page.waitForURL(/verifications/);
 
     // Find status cells
@@ -111,16 +115,16 @@ test.describe('E2E — Verificări Periodice & Conformitate (Faza 3.4)', () => {
   });
 
   test('filtrare verificări după tip', async ({ page }) => {
-    await page.locator('a:has-text(/Verificări|CheckSquare/i)').click();
+    await page.locator('a', { hasText: 'Verificări' }).click();
     await page.waitForURL(/verifications/);
 
     // Look for filter button
-    const filterBtn = page.locator('button:has-text(/Filtrare|Filter/i)');
+    const filterBtn = page.locator('button', { hasText: /Filtrare|Filter/i });
     if (await filterBtn.isVisible()) {
       await filterBtn.click();
 
       // Check filter options
-      const metroCheckbox = page.locator('label:has-text(/METROLOGIE|Metrologie/i)');
+      const metroCheckbox = page.locator('label', { hasText: /METROLOGIE|Metrologie/i });
       if (await metroCheckbox.isVisible()) {
         await metroCheckbox.click();
 
@@ -132,11 +136,11 @@ test.describe('E2E — Verificări Periodice & Conformitate (Faza 3.4)', () => {
   });
 
   test('sorare tabel după data expirare', async ({ page }) => {
-    await page.locator('a:has-text(/Verificări|CheckSquare/i)').click();
+    await page.locator('a', { hasText: 'Verificări' }).click();
     await page.waitForURL(/verifications/);
 
     // Find "Valid Until" or "Expires" column header
-    const expiresHeader = page.locator('th:has-text(/Valid|Expiră|Expires/i)');
+    const expiresHeader = page.locator('th', { hasText: /Valid|Expiră|Expires/i });
     if (await expiresHeader.isVisible()) {
       // Click to sort
       await expiresHeader.click();
@@ -148,11 +152,11 @@ test.describe('E2E — Verificări Periodice & Conformitate (Faza 3.4)', () => {
   });
 
   test('paginare funcționează pe tabel verificări', async ({ page }) => {
-    await page.locator('a:has-text(/Verificări|CheckSquare/i)').click();
+    await page.locator('a', { hasText: 'Verificări' }).click();
     await page.waitForURL(/verifications/);
 
     // Look for next page button
-    const nextPageBtn = page.locator('button:has-text(/Pagina următoare|Next/i)');
+    const nextPageBtn = page.locator('button', { hasText: /Pagina următoare|Next/i });
     if (await nextPageBtn.isVisible()) {
       await nextPageBtn.click();
       await page.waitForTimeout(500);

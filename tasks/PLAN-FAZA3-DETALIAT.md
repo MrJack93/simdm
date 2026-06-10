@@ -410,18 +410,18 @@ Montează în `index.js` (cu `authMiddleware`): `maintenancePlans`, `mppExecutio
 
 Faza 3 este completă când TOATE de mai jos sunt bifate:
 
-- [ ] 5 module funcționale end-to-end (UI → API → DB).
-- [ ] 5 formulare PDF corecte și cu diacritice: Nr. 5, 6, 7, 8, 9.
-- [ ] State machine corectiv cu tranziții validate.
-- [ ] Generator plan + calendar cu status automat.
-- [ ] Execuție MPP cu tranzacție de stoc + semnătură digitală.
-- [ ] Registru verificări (laborator + metrologic) + raport conformitate + alerte.
-- [ ] Contracte + rating furnizori + analiză cost.
-- [ ] Cron jobs zilnice (MPP/verificări/contracte).
-- [ ] Toate regulile §0 respectate în fiecare endpoint nou.
-- [ ] Teste: ≥95% coverage backend pe modulele noi; ≥1 test verifică `audit_logs.userId` ne-null; toate verzi (`npm test`).
-- [ ] ≥1 scenariu E2E: login → generează plan → execută MPP → deschide tichet → reparație → PDF.
-- [ ] `tasks/todo.md` actualizat; commit pe `dev`.
+- [x] 5 module funcționale end-to-end (UI → API → DB).
+- [x] 5 formulare PDF corecte și cu diacritice: Nr. 5, 6, 7, 8, 9.
+- [x] State machine corectiv cu tranziții validate.
+- [x] Generator plan + calendar cu status automat.
+- [x] Execuție MPP cu tranzacție de stoc + semnătură digitală.
+- [x] Registru verificări (laborator + metrologic) + raport conformitate + alerte.
+- [x] Contracte + rating furnizori + analiză cost.
+- [x] Cron jobs zilnice (MPP/verificări/contracte).
+- [x] Toate regulile §0 respectate în fiecare endpoint nou.
+- [x] Teste: ≥95% coverage backend pe modulele noi; ≥1 test verifică `audit_logs.userId` ne-null; toate verzi (`npm test`).
+- [x] ≥1 scenariu E2E: login → generează plan → execută MPP → deschide tichet → reparație → PDF.
+- [x] `tasks/todo.md` actualizat; commit pe `dev`.
 
 ---
 

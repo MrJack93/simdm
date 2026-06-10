@@ -72,7 +72,8 @@ beforeAll(async () => {
     .get('/api/maintenance-plans/calendar?year=2026')
     .set('Authorization', `Bearer ${token}`);
   if (calendarRes.body.data && calendarRes.body.data.length > 0) {
-    testOccurrenceId = calendarRes.body.data[0].id;
+    const occ = calendarRes.body.data.find(o => o.deviceId === testDeviceId);
+    if (occ) testOccurrenceId = occ.id;
   }
 });
 
@@ -89,6 +90,7 @@ afterAll(async () => {
     await prisma.maintenance_plans.deleteMany({ where: { id: testPlanId } });
   }
   if (testDeviceId) {
+    await prisma.maintenance_records.deleteMany({ where: { deviceId: testDeviceId } });
     await prisma.mpp_executions.deleteMany({ where: { deviceId: testDeviceId } });
     await prisma.devices.deleteMany({ where: { id: testDeviceId } });
   }
@@ -391,6 +393,56 @@ describe('GET /api/mpp-executions — List cu filtre', () => {
     res.body.data.forEach((exec) => {
       expect(exec.result).toBe('FUNCTIONAL');
     });
+  });
+});
+
+describe('GET /api/mpp-executions/:id/formular6-pdf — PDF Formular Nr. 6', () => {
+  let executionId;
+
+  beforeAll(async () => {
+    const res = await request(app)
+      .post('/api/mpp-executions')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        deviceId: testDeviceId,
+        executedDate: new Date().toISOString(),
+        durationMinutes: 30,
+        checklist: [
+          { operatiune: 'Inspectie vizuala', bifat: true, nota: 'OK' },
+          { operatiune: 'Test functional', bifat: true, nota: '' },
+        ],
+        result: 'FUNCTIONAL',
+        engineerName: 'Ing. Test PDF',
+        signature: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==',
+      });
+    executionId = res.body.id;
+  });
+
+  it('fara token → 401', async () => {
+    const res = await request(app).get(`/api/mpp-executions/${executionId}/formular6-pdf`);
+    expect(res.status).toBe(401);
+  });
+
+  it('genereaza PDF formular6 pentru executie existenta', async () => {
+    const res = await request(app)
+      .get(`/api/mpp-executions/${executionId}/formular6-pdf`)
+      .set('Authorization', `Bearer ${token}`);
+    expect(res.status).toBe(200);
+    expect(res.headers['content-type']).toContain('application/pdf');
+  });
+
+  it('returneaza 404 pentru executie inexistenta', async () => {
+    const res = await request(app)
+      .get('/api/mpp-executions/999999/formular6-pdf')
+      .set('Authorization', `Bearer ${token}`);
+    expect(res.status).toBe(404);
+  });
+
+  it('returneaza 400 pentru ID invalid', async () => {
+    const res = await request(app)
+      .get('/api/mpp-executions/abc/formular6-pdf')
+      .set('Authorization', `Bearer ${token}`);
+    expect(res.status).toBe(400);
   });
 });
 

@@ -3,6 +3,7 @@ import { useAuth } from '../hooks/useAuth';
 import { useDevices } from '../hooks/useDevices';
 import { useConsumableStats } from '../hooks/useConsumables';
 import { Activity, Wrench, AlertCircle, Package, Calendar } from 'lucide-react';
+import AlertsWidget from '../components/AlertsWidget';
 
 /** @typedef {import('../types').DevicesResponse} DevicesResponse */
 /** @typedef {import('../types').ConsumablesResponse} ConsumablesResponse */
@@ -81,6 +82,7 @@ export default function Dashboard() {
       </div>
 
       <div className="container mx-auto p-8">
+        <AlertsWidget />
         {/* Stats grid
             href-urile cu ?status= pre-populează filtrul din InventoryPageV2
             astfel încât click pe „Defecte: 3" deschide inventarul deja filtrat. */}

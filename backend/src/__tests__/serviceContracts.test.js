@@ -88,6 +88,29 @@ describe('POST /api/service-contracts/providers — Creare Furnizor', () => {
     expect(res.body.email).toBeNull();
     expect(res.body.phone).toBeNull();
   });
+
+  it('crează audit log la creare furnizor', async () => {
+    const res = await request(app)
+      .post('/api/service-contracts/providers')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        name: `Furnizor Audit Test ${Date.now()}`,
+      });
+
+    expect(res.status).toBe(201);
+
+    const auditLogs = await prisma.audit_logs.findMany({
+      where: {
+        entity: 'service_providers',
+        entityId: String(res.body.id),
+        userId,
+      },
+    });
+
+    expect(auditLogs.length).toBeGreaterThan(0);
+    expect(auditLogs[0].action).toBe('CREATE');
+    expect(auditLogs[0].userId).not.toBeNull();
+  });
 });
 
 describe('POST /api/service-contracts/contracts — Creare Contract', () => {
@@ -297,7 +320,7 @@ describe('POST /api/service-contracts/providers/:id/rate — Evaluare Furnizor',
 });
 
 describe('GET /api/service-contracts/cost-analysis — Cost Analysis', () => {
-  it('returnează comparație internal vs external', async () => {
+  it('returnează comparație internal vs external cu statistici extinse', async () => {
     const res = await request(app)
       .get('/api/service-contracts/cost-analysis')
       .set('Authorization', `Bearer ${token}`);
@@ -310,6 +333,11 @@ describe('GET /api/service-contracts/cost-analysis — Cost Analysis', () => {
     expect(res.body.external).toMatchObject({
       totalValue: expect.any(Number),
       contractCount: expect.any(Number),
+    });
+    expect(Array.isArray(res.body.byProvider)).toBe(true);
+    expect(res.body.contractStatus).toMatchObject({
+      active: expect.any(Number),
+      expired: expect.any(Number),
     });
   });
 
@@ -387,6 +415,37 @@ describe('GET /api/service-contracts/providers/:id — Get Provider Details', ()
   it('returnează 404 pentru furnizor inexistent', async () => {
     const res = await request(app)
       .get('/api/service-contracts/providers/999999')
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(res.status).toBe(404);
+  });
+});
+
+describe('DELETE /api/service-contracts/contracts/:id — Ștergere Contract', () => {
+  it('șterge contractul și creează audit log', async () => {
+    const res = await request(app)
+      .delete(`/api/service-contracts/contracts/${testContractId}`)
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(res.status).toBe(200);
+    expect(res.body.message).toMatch(/șters cu succes/);
+
+    // Verify audit log
+    const audit = await prisma.audit_logs.findFirst({
+      where: {
+        entity: 'service_contracts',
+        entityId: String(testContractId),
+        action: 'DELETE',
+      },
+    });
+    expect(audit).not.toBeNull();
+    // Nullify testContractId so cleanup won't crash
+    testContractId = null;
+  });
+
+  it('returnează 404 pentru contract inexistent', async () => {
+    const res = await request(app)
+      .delete('/api/service-contracts/contracts/999999')
       .set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(404);

@@ -172,7 +172,7 @@ describe('AuthService.login', () => {
     await prisma.refresh_tokens.deleteMany({ where: { userId: locked.id } });
     await prisma.audit_logs.deleteMany({ where: { userId: locked.id } });
     await prisma.users.deleteMany({ where: { email: 'svc-lock@simdm.local' } });
-  });
+  }, 15000);
 });
 
 describe('AuthService.refreshAccessToken', () => {

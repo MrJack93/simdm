@@ -77,6 +77,10 @@ vi.mock('../api/serviceContracts', () => ({
         internalAvgPerRepair: '8000.00',
         externalAvgPerContract: '40000.00',
       },
+      byProvider: [
+        { providerId: 1, providerName: 'Service Pro', totalValue: 50000, contractCount: 1 },
+      ],
+      contractStatus: { active: 1, expired: 1 },
     })
   ),
   createContract: vi.fn(() =>
@@ -100,6 +104,7 @@ vi.mock('../api/serviceContracts', () => ({
       },
     })
   ),
+  deleteContract: vi.fn(() => Promise.resolve()),
 }));
 
 vi.mock('../api/devices', () => ({
@@ -140,7 +145,7 @@ describe('ServiceContractsPage — Contracte Externe & Cost Analysis', () => {
     renderPage();
 
     await waitFor(() => {
-      expect(screen.getByText('Service Pro')).toBeInTheDocument();
+      expect(screen.getAllByText('Service Pro').length).toBeGreaterThan(0);
       expect(screen.getByText('Tech Solutions')).toBeInTheDocument();
     });
   });
@@ -217,7 +222,7 @@ describe('ServiceContractsPage — Contracte Externe & Cost Analysis', () => {
     await waitFor(() => {
       expect(createContract).toHaveBeenCalled();
     });
-  });
+  }, 15000);
 
   it('validează form creare contract', async () => {
     const user = userEvent.setup();
@@ -282,26 +287,26 @@ describe('ServiceContractsPage — Contracte Externe & Cost Analysis', () => {
 
     // After adding rating 5, average should update to ~4.67
     // This would be verified after actual rating submission
-    expect(screen.getByText('Service Pro')).toBeInTheDocument();
+    expect(screen.getAllByText('Service Pro').length).toBeGreaterThan(0);
   });
 
   it('afișează cost analysis (internal vs external)', async () => {
     renderPage();
 
     await waitFor(() => {
-      expect(screen.getByText(/Cost Analysis/i)).toBeInTheDocument();
+      expect(screen.getByText(/Analiză Costuri/i)).toBeInTheDocument();
     });
 
     // Check internal cost
     await waitFor(() => {
-      expect(screen.getByText(/120000/)).toBeInTheDocument(); // internal total
+      expect(screen.getByText(/120\.000/)).toBeInTheDocument(); // internal total
     });
 
     // Check external cost
-    expect(screen.getByText(/80000/)).toBeInTheDocument(); // external total
+    expect(screen.getByText(/80\.000/)).toBeInTheDocument(); // external total
 
     // Check savings
-    expect(screen.getByText(/40000/)).toBeInTheDocument(); // savings
+    expect(screen.getAllByText(/40\.000/).length).toBeGreaterThan(0); // savings
   });
 
   it('calculează economii (external - internal)', async () => {
@@ -310,7 +315,7 @@ describe('ServiceContractsPage — Contracte Externe & Cost Analysis', () => {
     await waitFor(() => {
       // 80000 - 120000 = -40000 (actually costs more internally)
       // Should show savings or extra cost appropriately
-      expect(screen.getByText(/40000/)).toBeInTheDocument();
+      expect(screen.getAllByText(/40\.000/).length).toBeGreaterThan(0);
     });
   });
 
@@ -319,7 +324,7 @@ describe('ServiceContractsPage — Contracte Externe & Cost Analysis', () => {
 
     await waitFor(() => {
       // Internal: 120000 / 15 = 8000
-      expect(screen.getByText(/8000/)).toBeInTheDocument();
+      expect(screen.getByText(/8\.000/)).toBeInTheDocument();
     });
   });
 

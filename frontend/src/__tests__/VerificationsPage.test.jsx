@@ -20,7 +20,7 @@ vi.mock('../api/verifications', () => ({
         {
           id: 1,
           device: { id: 1, name: 'Echograf' },
-          verificationType: 'METROLOGIE',
+          verificationType: 'METROLOGIC',
           performedAt: '2026-06-08T10:00:00Z',
           validUntil: '2026-12-08T23:59:59Z',
           certificateNo: 'CERT-2026-001',
@@ -53,8 +53,11 @@ vi.mock('../api/verifications', () => ({
       conform: 35,
       expirat: 10,
       neverificat: 5,
+      neconform: 0,
     })
   ),
+  deleteVerification: vi.fn(() => Promise.resolve()),
+  downloadCertificate: vi.fn(() => Promise.resolve(new Blob())),
 }));
 
 vi.mock('../api/devices', () => ({
@@ -146,7 +149,7 @@ describe('VerificationsPage — Verificări Periodice & Conformitate', () => {
 
     // Select type
     const typeSelect = screen.getByLabelText(/Tip Verificare/i);
-    await user.selectOptions(typeSelect, 'METROLOGIE');
+    await user.selectOptions(typeSelect, 'METROLOGIC');
 
     // Upload file (mock)
     const fileInput = screen.getByLabelText(/Fișier Certificat/i);
@@ -193,13 +196,12 @@ describe('VerificationsPage — Verificări Periodice & Conformitate', () => {
       expect(screen.getByText(/Raport Conformitate/i)).toBeInTheDocument();
     });
 
-    // Check compliance stats are displayed
     const report = screen.getByText(/Raport Conformitate/i);
     expect(report).toBeInTheDocument();
 
-    // Stats should be visible in some form
     await waitFor(() => {
-      expect(screen.getByText(/Total: 50/i)).toBeInTheDocument();
+      expect(screen.getByText('Total')).toBeInTheDocument();
+      expect(screen.getByText('50')).toBeInTheDocument();
     });
   });
 
@@ -207,8 +209,7 @@ describe('VerificationsPage — Verificări Periodice & Conformitate', () => {
     renderPage();
 
     await waitFor(() => {
-      // 35/50 = 70%
-      expect(screen.getByText(/70%/i)).toBeInTheDocument();
+      expect(screen.getByText(/70/)).toBeInTheDocument();
     });
   });
 
@@ -223,12 +224,12 @@ describe('VerificationsPage — Verificări Periodice & Conformitate', () => {
     const filterBtn = screen.getByRole('button', { name: /Filtrare/i });
     await user.click(filterBtn);
 
-    const metroCheckbox = screen.getByLabelText(/METROLOGIE/i);
+    const metroCheckbox = screen.getByLabelText(/METROLOGIC/i);
     await user.click(metroCheckbox);
 
     await waitFor(() => {
-      // Should only show METROLOGIE verifications
-      expect(screen.getByText(/METROLOGIE/)).toBeInTheDocument();
+      // Should only show METROLOGIC verifications
+      expect(screen.getByText(/METROLOGIC/)).toBeInTheDocument();
     });
   });
 

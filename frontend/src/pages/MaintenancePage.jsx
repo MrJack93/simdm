@@ -1,8 +1,9 @@
 import { useState, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
-import { Wrench, Plus, Edit2, Trash2, ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { Wrench, Plus, Edit2, Trash2, ChevronLeft, ChevronRight, X, Calendar, ClipboardList, Settings } from 'lucide-react';
 import api from '../api/axios';
+import { Link } from 'react-router-dom';
 
 const ITEMS_PER_PAGE = 25;
 
@@ -195,6 +196,7 @@ function MaintenanceModal({ record, devices, onClose, onSaved }) {
 
 export default function MaintenancePage() {
   const queryClient = useQueryClient();
+  const [activeTab, setActiveTab] = useState('hub'); // 'hub' | 'records'
   const [currentPage, setCurrentPage] = useState(1);
   const [filterType, setFilterType] = useState('');
   const [modal, setModal] = useState(null); // null | { record: null } | { record: {...} }
@@ -249,18 +251,102 @@ export default function MaintenancePage() {
 
   return (
     <section className="p-4 md:p-8" aria-label="Mentenanță">
+      {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div className="flex items-center gap-3">
           <Wrench size={24} style={{ color: 'var(--color-accent)' }} />
           <div>
             <h1 className="text-2xl font-bold" style={{ color: 'var(--color-text-primary)' }}>Mentenanță</h1>
-            <p className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>{filtered.length} înregistrări</p>
+            <p className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>
+              {activeTab === 'hub' ? 'Panou Control Operațiuni' : `${filtered.length} înregistrări istoric`}
+            </p>
           </div>
         </div>
-        <button onClick={() => setModal({ record: null })} className="btn-primary flex items-center gap-2">
-          <Plus size={16} /> Adaugă Înregistrare
+        {activeTab === 'records' && (
+          <button onClick={() => setModal({ record: null })} className="btn-primary flex items-center gap-2">
+            <Plus size={16} /> Adaugă Înregistrare
+          </button>
+        )}
+      </div>
+
+      {/* Tabs */}
+      <div className="flex gap-2 mb-6 border-b" style={{ borderColor: 'var(--color-border)' }}>
+        <button
+          onClick={() => setActiveTab('hub')}
+          className={`px-4 py-2 text-sm font-medium border-b-2 transition-all ${
+            activeTab === 'hub'
+              ? 'border-b-2 text-[var(--color-accent)] font-bold'
+              : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] border-transparent'
+          }`}
+          style={{ borderColor: activeTab === 'hub' ? 'var(--color-accent)' : 'transparent' }}
+        >
+          Panou Control (Hub)
+        </button>
+        <button
+          onClick={() => setActiveTab('records')}
+          className={`px-4 py-2 text-sm font-medium border-b-2 transition-all ${
+            activeTab === 'records'
+              ? 'border-b-2 text-[var(--color-accent)] font-bold'
+              : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] border-transparent'
+          }`}
+          style={{ borderColor: activeTab === 'records' ? 'var(--color-accent)' : 'transparent' }}
+        >
+          Registru Istoric Intervenții
         </button>
       </div>
+
+      {activeTab === 'hub' ? (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <Link
+            to="/maintenance/calendar"
+            className="block p-6 rounded-xl border transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0"
+            style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)', textDecoration: 'none', color: 'inherit' }}
+          >
+            <div className="flex items-center gap-4 mb-3">
+              <div className="p-3 rounded-lg bg-green-100 text-green-600">
+                <Calendar size={24} />
+              </div>
+              <h3 className="text-lg font-bold">Planificare & Calendar MPP</h3>
+            </div>
+            <p className="text-sm text-gray-500">
+              Configurarea frecvenței, generarea planurilor anuale de mentenanță preventivă (Formularul Nr. 5) și vizualizarea calendaristică.
+            </p>
+          </Link>
+
+          <Link
+            to="/maintenance/execution"
+            className="block p-6 rounded-xl border transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0"
+            style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)', textDecoration: 'none', color: 'inherit' }}
+          >
+            <div className="flex items-center gap-4 mb-3">
+              <div className="p-3 rounded-lg bg-purple-100 text-purple-600">
+                <ClipboardList size={24} />
+              </div>
+              <h3 className="text-lg font-bold">Execuție MPP</h3>
+            </div>
+            <p className="text-sm text-gray-500">
+              Înregistrarea mentenanțelor cu checklist, consumabile și semnătură olografă (Formularul Nr. 6).
+            </p>
+          </Link>
+
+          <Link
+            to="/maintenance/tickets"
+            className="block p-6 rounded-xl border transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0"
+            style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)', textDecoration: 'none', color: 'inherit' }}
+          >
+            <div className="flex items-center gap-4 mb-3">
+              <div className="p-3 rounded-lg bg-orange-100 text-orange-600">
+                <Wrench size={24} />
+              </div>
+              <h3 className="text-lg font-bold">Bilete de Reparație</h3>
+            </div>
+            <p className="text-sm text-gray-500">
+              Managementul defecțiunilor prin tichete de service, cu fișă de deservire (Formularul Nr. 8).
+            </p>
+          </Link>
+        </div>
+      ) : (
+        <>
 
       {/* Filtru tip */}
       <div className="flex gap-2 mb-6 flex-wrap">
@@ -385,6 +471,8 @@ export default function MaintenancePage() {
           </div>
         </div>
       )}
+    </>
+  )}
 
       {modal && (
         <MaintenanceModal

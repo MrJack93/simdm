@@ -155,6 +155,32 @@ describe('POST /api/verifications — Creare înregistrare', () => {
     expect(auditLogs[0].userId).not.toBeNull();
   });
 
+  it('calculează validUntil automat din verificationFreqMonths când nu e furnizat', async () => {
+    const performedAt = new Date().toISOString();
+
+    const res = await request(app)
+      .post('/api/verifications')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        deviceId: testDeviceId,
+        type: 'METROLOGIC',
+        performedAt,
+        // validUntil omis — calculat automat din verificationFreqMonths=24
+        result: 'CONFORM',
+        certificateNo: 'AUTO-CALC-TEST',
+      });
+
+    expect(res.status).toBe(201);
+
+    // validUntil trebuie să fie ~24 luni după performedAt
+    const expectedValidUntil = new Date(performedAt);
+    expectedValidUntil.setMonth(expectedValidUntil.getMonth() + 24);
+
+    const actualValidUntil = new Date(res.body.validUntil);
+    const diffMs = Math.abs(actualValidUntil.getTime() - expectedValidUntil.getTime());
+    expect(diffMs).toBeLessThan(60 * 1000); // max 1 minut diferență
+  });
+
   it('validează type enum (LABORATOR|METROLOGIC)', async () => {
     const res = await request(app)
       .post('/api/verifications')
@@ -212,7 +238,7 @@ describe('GET /api/verifications/compliance-report — Raport Conformitate', () 
     });
   });
 
-  it('calculează status: NEVERIFICAT | CONFORM | EXPIRAT', async () => {
+  it('calculează status: NEVERIFICAT | CONFORM | EXPIRA_CURAND | EXPIRAT | NECONFORM', async () => {
     const res = await request(app)
       .get('/api/verifications/compliance-report')
       .set('Authorization', `Bearer ${token}`);
@@ -221,8 +247,31 @@ describe('GET /api/verifications/compliance-report — Raport Conformitate', () 
 
     const statuses = res.body.devices.map((d) => d.status);
     statuses.forEach((status) => {
-      expect(['NEVERIFICAT', 'CONFORM', 'EXPIRAT']).toContain(status);
+      expect(['NEVERIFICAT', 'CONFORM', 'EXPIRA_CURAND', 'EXPIRAT', 'NECONFORM']).toContain(status);
     });
+  });
+
+  it('raportează statusul NECONFORM dacă ultima verificare este neconformă', async () => {
+    await request(app)
+      .post('/api/verifications')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        deviceId: testDeviceId,
+        type: 'METROLOGIC',
+        performedAt: new Date().toISOString(),
+        validUntil: new Date(Date.now() + 12 * 30 * 24 * 60 * 60 * 1000).toISOString(),
+        result: 'NECONFORM',
+      });
+
+    const res = await request(app)
+      .get('/api/verifications/compliance-report')
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(res.status).toBe(200);
+
+    const deviceInReport = res.body.devices.find((d) => d.deviceId === testDeviceId);
+    expect(deviceInReport).toBeDefined();
+    expect(deviceInReport.status).toBe('NECONFORM');
   });
 
   it('calculează daysLeft pentru dispozitive CONFORM', async () => {
@@ -254,7 +303,7 @@ describe('GET /api/verifications/compliance-report — Raport Conformitate', () 
     });
   });
 
-  it('sortează dispozitive: EXPIRAT → NEVERIFICAT → CONFORM', async () => {
+  it('sortează dispozitive: EXPIRAT → EXPIRA_CURAND → NEVERIFICAT → CONFORM', async () => {
     const res = await request(app)
       .get('/api/verifications/compliance-report')
       .set('Authorization', `Bearer ${token}`);
@@ -263,18 +312,22 @@ describe('GET /api/verifications/compliance-report — Raport Conformitate', () 
 
     const devices = res.body.devices;
     let lastStatusPriority = -1;
+    const priorityMap = { EXPIRAT: 0, EXPIRA_CURAND: 1, NEVERIFICAT: 2, CONFORM: 3 };
 
     for (const device of devices) {
-      const priority =
-        device.status === 'EXPIRAT'
-          ? 0
-          : device.status === 'NEVERIFICAT'
-            ? 1
-            : 2;
-
+      const priority = priorityMap[device.status] ?? 3;
       expect(priority).toBeGreaterThanOrEqual(lastStatusPriority);
       lastStatusPriority = priority;
     }
+  });
+
+  it('raportul include expiraCurand în statistici', async () => {
+    const res = await request(app)
+      .get('/api/verifications/compliance-report')
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(res.status).toBe(200);
+    expect(typeof res.body.expiraCurand).toBe('number');
   });
 });
 
@@ -346,7 +399,32 @@ describe('GET /api/verifications — List cu filtre', () => {
 });
 
 describe('Integrations & Atomicity', () => {
-  it('verification creation is transactional', async () => {
+  it('actualizează device.lastVerificationAt și nextVerificationAt la creare', async () => {
+    const performedAt = new Date().toISOString();
+    const validUntil = new Date(Date.now() + 24 * 30 * 24 * 60 * 60 * 1000).toISOString();
+
+    const res = await request(app)
+      .post('/api/verifications')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        deviceId: testDeviceId,
+        type: 'METROLOGIC',
+        performedAt,
+        validUntil,
+        result: 'CONFORM',
+      });
+
+    expect(res.status).toBe(201);
+
+    const device = await prisma.devices.findUnique({ where: { id: testDeviceId } });
+    expect(device.lastVerificationAt).not.toBeNull();
+    expect(device.nextVerificationAt).not.toBeNull();
+    expect(new Date(device.nextVerificationAt).getTime()).toBeCloseTo(
+      new Date(validUntil).getTime(), -3
+    );
+  });
+
+  it('setează device.status=DEFECT la verificare NECONFORM', async () => {
     const res = await request(app)
       .post('/api/verifications')
       .set('Authorization', `Bearer ${token}`)
@@ -361,6 +439,9 @@ describe('Integrations & Atomicity', () => {
 
     expect(res.status).toBe(201);
 
+    const device = await prisma.devices.findUnique({ where: { id: testDeviceId } });
+    expect(device.status).toBe('DEFECT');
+
     // Verify audit log was created
     const auditLogs = await prisma.audit_logs.findMany({
       where: {
@@ -368,7 +449,82 @@ describe('Integrations & Atomicity', () => {
         entityId: String(res.body.id),
       },
     });
-
     expect(auditLogs.length).toBeGreaterThan(0);
+  });
+});
+
+describe('GET /api/verifications/:id/certificate — PDF Buletin', () => {
+  it('fără token → 401', async () => {
+    const res = await request(app).get(`/api/verifications/${testVerificationId}/certificate`);
+    expect(res.status).toBe(401);
+  });
+
+  it('generează PDF buletin pentru verificare existentă', async () => {
+    const res = await request(app)
+      .get(`/api/verifications/${testVerificationId}/certificate`)
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(res.status).toBe(200);
+    expect(res.headers['content-type']).toContain('application/pdf');
+  });
+
+  it('returnează 404 pentru verificare inexistentă', async () => {
+    const res = await request(app)
+      .get('/api/verifications/999999/certificate')
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(res.status).toBe(404);
+  });
+
+  it('returnează 400 pentru ID invalid', async () => {
+    const res = await request(app)
+      .get('/api/verifications/abc/certificate')
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(res.status).toBe(400);
+  });
+});
+
+describe('DELETE /api/verifications/:id — Ștergere verificare', () => {
+  let deleteId;
+
+  beforeAll(async () => {
+    const res = await request(app)
+      .post('/api/verifications')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        deviceId: testDeviceId,
+        type: 'LABORATOR',
+        performedAt: new Date().toISOString(),
+        validUntil: new Date(Date.now() + 6 * 30 * 24 * 60 * 60 * 1000).toISOString(),
+        result: 'CONFORM',
+      });
+    deleteId = res.body.id;
+  });
+
+  it('fara token → 401', async () => {
+    const res = await request(app).delete(`/api/verifications/${deleteId}`);
+    expect(res.status).toBe(401);
+  });
+
+  it('șterge verificarea și returnează 204', async () => {
+    const res = await request(app)
+      .delete(`/api/verifications/${deleteId}`)
+      .set('Authorization', `Bearer ${token}`);
+    expect(res.status).toBe(204);
+  });
+
+  it('returnează 404 după ștergere', async () => {
+    const res = await request(app)
+      .get(`/api/verifications/${deleteId}`)
+      .set('Authorization', `Bearer ${token}`);
+    expect(res.status).toBe(404);
+  });
+
+  it('returnează 400 pentru ID invalid', async () => {
+    const res = await request(app)
+      .delete('/api/verifications/abc')
+      .set('Authorization', `Bearer ${token}`);
+    expect(res.status).toBe(400);
   });
 });

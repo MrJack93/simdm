@@ -6,6 +6,7 @@ import {
   getCostAnalysis,
   createContract,
   rateProvider,
+  deleteContract,
 } from '../api/serviceContracts';
 import { getDevices } from '../api/devices';
 
@@ -42,6 +43,7 @@ export default function ServiceContractsPage() {
     mutationFn: createContract,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['serviceContracts'] });
+      queryClient.invalidateQueries({ queryKey: ['costAnalysis'] });
       setShowCreateModal(false);
     },
   });
@@ -51,6 +53,15 @@ export default function ServiceContractsPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['serviceProviders'] });
       setRatingProvider(null);
+    },
+  });
+
+  const deleteContractMutation = useMutation({
+    mutationFn: deleteContract,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['serviceContracts'] });
+      queryClient.invalidateQueries({ queryKey: ['costAnalysis'] });
+      setDeleteTarget(null);
     },
   });
 
@@ -65,7 +76,11 @@ export default function ServiceContractsPage() {
     return <div className="p-6 text-center">Încârcând...</div>;
   }
 
-  const handleDeleteConfirm = () => setDeleteTarget(null);
+  const handleDeleteConfirm = () => {
+    if (deleteTarget) {
+      deleteContractMutation.mutate(deleteTarget.id);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
@@ -97,24 +112,60 @@ export default function ServiceContractsPage() {
       {/* Cost Analysis */}
       {costAnalysis && (
         <section className="mb-8">
-          <h2 className="text-xl font-bold mb-4">Cost Analysis</h2>
-          <div className="grid grid-cols-3 gap-4">
-            <div className="bg-white p-4 rounded-lg shadow">
-              <p className="text-sm text-gray-600">Cost Intern</p>
-              <p className="text-2xl font-bold">{costAnalysis.internal?.totalCost}</p>
-              <p className="text-xs text-gray-500">{costAnalysis.internal?.count} reparații</p>
+          <h2 className="text-xl font-bold mb-4">Analiză Costuri & Status Contracte</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+            <div className="bg-white p-4 rounded-lg shadow border-l-4 border-blue-500">
+              <p className="text-sm text-gray-600">Cost Mentenanță Internă</p>
+              <p className="text-2xl font-bold text-gray-900">{costAnalysis.internal?.totalCost?.toLocaleString('ro-RO')} MDL</p>
+              <p className="text-xs text-gray-500">{costAnalysis.internal?.count} tichete reparație finalizate</p>
+              <p className="text-xs text-gray-400 mt-1">Medie per reparație: {parseFloat(costAnalysis.comparison?.internalAvgPerRepair || 0)?.toLocaleString('ro-RO')} MDL</p>
             </div>
-            <div className="bg-white p-4 rounded-lg shadow">
-              <p className="text-sm text-gray-600">Cost Extern</p>
-              <p className="text-2xl font-bold">{costAnalysis.external?.totalValue}</p>
-              <p className="text-xs text-gray-500">{costAnalysis.external?.contractCount} contracte</p>
+            <div className="bg-white p-4 rounded-lg shadow border-l-4 border-indigo-500">
+              <p className="text-sm text-gray-600">Cost Contracte Externe</p>
+              <p className="text-2xl font-bold text-gray-900">{costAnalysis.external?.totalValue?.toLocaleString('ro-RO')} MDL</p>
+              <p className="text-xs text-gray-500">{costAnalysis.external?.contractCount} contracte de service înregistrate</p>
+              <p className="text-xs text-gray-400 mt-1">Medie per contract: {parseFloat(costAnalysis.comparison?.externalAvgPerContract || 0)?.toLocaleString('ro-RO')} MDL</p>
             </div>
-            <div className="bg-white p-4 rounded-lg shadow">
-              <p className="text-sm text-gray-600">Economii</p>
-              <p className="text-2xl font-bold">{costAnalysis.comparison?.savings}</p>
-              <p className="text-xs text-gray-500">
-                Economii totale
+            <div className="bg-white p-4 rounded-lg shadow border-l-4 border-green-500">
+              <p className="text-sm text-gray-600">Diferență Cost (Economii)</p>
+              <p className={`text-2xl font-bold ${parseFloat(costAnalysis.comparison?.savings) >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                {parseFloat(costAnalysis.comparison?.savings)?.toLocaleString('ro-RO')} MDL
               </p>
+              <p className="text-xs text-gray-500">Valoare totală contracte vs reparații interne</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Status active vs expirate */}
+            <div className="bg-white p-4 rounded-lg shadow">
+              <h3 className="font-semibold text-sm text-gray-700 mb-3">Stare Contracte</h3>
+              <div className="flex justify-around items-center h-20">
+                <div className="text-center">
+                  <span className="text-xs text-gray-500 block">Active</span>
+                  <span className="text-xl font-bold text-green-600">{costAnalysis.contractStatus?.active ?? 0}</span>
+                </div>
+                <div className="w-px h-10 bg-gray-200"></div>
+                <div className="text-center">
+                  <span className="text-xs text-gray-500 block">Expirate</span>
+                  <span className="text-xl font-bold text-red-600">{costAnalysis.contractStatus?.expired ?? 0}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Valoare per furnizor */}
+            <div className="bg-white p-4 rounded-lg shadow max-h-32 overflow-y-auto">
+              <h3 className="font-semibold text-sm text-gray-700 mb-3">Distribuție Cost per Furnizor</h3>
+              <div className="space-y-2">
+                {(costAnalysis.byProvider || []).map((prov) => (
+                  <div key={prov.providerId} className="flex justify-between items-center text-xs">
+                    <span className="text-gray-600 font-medium">{prov.providerName}</span>
+                    <span className="text-gray-900 font-bold">{prov.totalValue?.toLocaleString('ro-RO')} MDL ({prov.contractCount})</span>
+                  </div>
+                ))}
+                {(!costAnalysis.byProvider || costAnalysis.byProvider.length === 0) && (
+                  <p className="text-xs text-gray-500 text-center py-2">Fără date disponibile</p>
+                )}
+              </div>
             </div>
           </div>
         </section>

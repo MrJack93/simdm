@@ -13,9 +13,13 @@ export default defineConfig({
     alias: {
       '@': path.resolve(__dirname, './src'),
     },
+    dedupe: ['react', 'react-dom'],
   },
   server: {
     host: '0.0.0.0',
+    watch: {
+      ignored: ['**/playwright-report/**', '**/test-results/**'],
+    },
     proxy: {
       '/api': {
         target: process.env.VITE_BACKEND_URL || 'http://localhost:3001',

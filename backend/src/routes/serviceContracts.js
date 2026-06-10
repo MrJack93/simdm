@@ -44,14 +44,28 @@ router.post('/providers', async (req, res) => {
 
     const { name, contact, email, phone } = parseBody.data;
 
-    const provider = await prisma.service_providers.create({
-      data: {
-        name,
-        contact: contact || null,
-        email: email || null,
-        phone: phone || null,
-        updatedAt: new Date(),
-      },
+    const provider = await prisma.$transaction(async (tx) => {
+      const created = await tx.service_providers.create({
+        data: {
+          name,
+          contact: contact || null,
+          email: email || null,
+          phone: phone || null,
+          updatedAt: new Date(),
+        },
+      });
+
+      await tx.audit_logs.create({
+        data: {
+          userId: req.user.sub,
+          action: 'CREATE',
+          entity: 'service_providers',
+          entityId: String(created.id),
+          changes: { name, contact, email },
+        },
+      });
+
+      return created;
     });
 
     res.status(201).json(provider);
@@ -304,7 +318,7 @@ router.get('/cost-analysis', async (req, res) => {
 
     // Get external contract costs
     const contracts = await prisma.service_contracts.findMany({
-      select: { value: true },
+      select: { value: true, endDate: true },
     });
 
     const externalStats = {
@@ -315,19 +329,47 @@ router.get('/cost-analysis', async (req, res) => {
       contractCount: contracts.length,
     };
 
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const activeContracts = contracts.filter(c => new Date(c.endDate) >= today).length;
+    const expiredContracts = contracts.length - activeContracts;
+
+    // Sume per furnizor
+    const providers = await prisma.service_providers.findMany({
+      include: {
+        contracts: { select: { value: true } },
+      },
+    });
+
+    const byProvider = providers.map(p => ({
+      providerId: p.id,
+      providerName: p.name,
+      totalValue: p.contracts.reduce(
+        (sum, c) => sum + (c.value ? parseFloat(c.value.toString()) : 0),
+        0
+      ),
+      contractCount: p.contracts.length,
+    }));
+
     // Calculate comparison
     const analysis = {
       internal: internalStats,
       external: externalStats,
       comparison: {
         internalAvgPerRepair:
-          internalStats.count > 0 ? (internalStats.totalCost / internalStats.count).toFixed(2) : 0,
+          internalStats.count > 0 ? (internalStats.totalCost / internalStats.count).toFixed(2) : '0.00',
         externalAvgPerContract:
           externalStats.contractCount > 0
             ? (externalStats.totalValue / externalStats.contractCount).toFixed(2)
-            : 0,
+            : '0.00',
         savings:
           (externalStats.totalValue - internalStats.totalCost).toFixed(2),
+      },
+      byProvider,
+      contractStatus: {
+        active: activeContracts,
+        expired: expiredContracts,
       },
     };
 
@@ -385,6 +427,88 @@ router.get('/providers/:id', async (req, res) => {
   } catch (error) {
     console.error('Error fetching provider:', error);
     res.status(500).json({ error: 'Eroare la preluarea furnizorului' });
+  }
+});
+
+// DELETE /api/service-contracts/contracts/:id - Delete contract
+router.delete('/contracts/:id', async (req, res) => {
+  try {
+    const idParse = idSchema.safeParse(req.params.id);
+    if (!idParse.success) {
+      return res.status(400).json({ error: 'ID contract invalid' });
+    }
+
+    const contractId = idParse.data;
+
+    const contract = await prisma.service_contracts.findUnique({
+      where: { id: contractId },
+    });
+
+    if (!contract) {
+      return res.status(404).json({ error: 'Contract nu găsit' });
+    }
+
+    await prisma.$transaction(async (tx) => {
+      await tx.service_contracts.delete({
+        where: { id: contractId },
+      });
+
+      await tx.audit_logs.create({
+        data: {
+          userId: req.user.sub,
+          action: 'DELETE',
+          entity: 'service_contracts',
+          entityId: String(contractId),
+          changes: { contractNo: contract.contractNo },
+        },
+      });
+    });
+
+    res.json({ message: 'Contract șters cu succes' });
+  } catch (error) {
+    console.error('Error deleting contract:', error);
+    res.status(500).json({ error: 'Eroare la ștergerea contractului' });
+  }
+});
+
+// DELETE /api/service-contracts/providers/:id - Delete provider
+router.delete('/providers/:id', async (req, res) => {
+  try {
+    const idParse = idSchema.safeParse(req.params.id);
+    if (!idParse.success) {
+      return res.status(400).json({ error: 'ID furnizor invalid' });
+    }
+
+    const providerId = idParse.data;
+
+    const provider = await prisma.service_providers.findUnique({
+      where: { id: providerId },
+    });
+
+    if (!provider) {
+      return res.status(404).json({ error: 'Furnizor nu găsit' });
+    }
+
+    await prisma.$transaction(async (tx) => {
+      await tx.service_providers.delete({
+        where: { id: providerId },
+      });
+
+      await tx.audit_logs.create({
+        data: {
+          userId: req.user.sub,
+          action: 'DELETE',
+          entity: 'service_providers',
+          entityId: String(providerId),
+          changes: { name: provider.name },
+        },
+      });
+    });
+
+    res.json({ message: 'Furnizor șters cu succes' });
+  } catch (error) {
+    console.error('Error deleting provider:', error);
+    res.status(500).json({ error: 'Eroare la ștergerea furnizorului' });
   }
 });
 

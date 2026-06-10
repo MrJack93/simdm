@@ -42,7 +42,7 @@ function calculateStatus(occurrence, executionId) {
   if (executionId) return 'EFECTUAT';
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  const scheduled = new Date(occurrence.scheduledDate);
+  const scheduled = new Date(occurrence.rescheduledTo ?? occurrence.scheduledDate);
   scheduled.setHours(0, 0, 0, 0);
 
   if (scheduled < today) return 'DEPASIT';
@@ -50,6 +50,60 @@ function calculateStatus(occurrence, executionId) {
   if (daysUntil <= 7) return 'SCADENT';
   return 'PROGRAMAT';
 }
+
+// Păstrat doar generatorul conform Fazei 3 (/generate, /calendar, etc.)
+
+// DELETE /api/maintenance-plans/:id
+router.delete('/:id', async (req, res) => {
+  try {
+    const idParse = idSchema.safeParse(req.params.id);
+    if (!idParse.success) {
+      return res.status(400).json({ error: 'ID invalid' });
+    }
+
+    const id = idParse.data;
+
+    let plan = await prisma.maintenance_plans.findUnique({
+      where: { id },
+    });
+
+    if (!plan) {
+      const occurrence = await prisma.mpp_occurrences.findUnique({
+        where: { id },
+      });
+      if (occurrence) {
+        plan = await prisma.maintenance_plans.findUnique({
+          where: { id: occurrence.planId },
+        });
+      }
+    }
+
+    if (!plan) {
+      return res.status(404).json({ error: 'Plan de mentenanță nu a fost găsit' });
+    }
+
+    await prisma.$transaction(async (tx) => {
+      await tx.maintenance_plans.delete({
+        where: { id: plan.id },
+      });
+
+      await tx.audit_logs.create({
+        data: {
+          userId: req.user.sub,
+          action: 'DELETE',
+          entity: 'maintenance_plans',
+          entityId: String(plan.id),
+          changes: { reason: 'Plan șters din panoul de control' },
+        },
+      });
+    });
+
+    res.json({ message: 'Plan de mentenanță șters cu succes' });
+  } catch (error) {
+    console.error('Error deleting plan:', error);
+    res.status(500).json({ error: 'Eroare la ștergerea planului' });
+  }
+});
 
 // POST /api/maintenance-plans/generate
 router.post('/generate', async (req, res) => {
@@ -155,7 +209,14 @@ router.get('/calendar', async (req, res) => {
       },
       include: {
         plan: {
-          select: { id: true, deviceId: true, frequency: true },
+          select: {
+            id: true,
+            deviceId: true,
+            frequency: true,
+            device: {
+              select: { id: true, name: true, inventoryNumber: true },
+            },
+          },
         },
       },
     });
@@ -268,6 +329,11 @@ router.patch('/occurrence/:id/reschedule', async (req, res) => {
   }
 });
 
+// Helper: Return text as-is since custom TTF fonts support Romanian diacritics natively
+function toSafePdfText(str) {
+  return str || '';
+}
+
 // GET /api/maintenance-plans/:year/formular5-pdf
 router.get('/:year/formular5-pdf', async (req, res) => {
   try {
@@ -298,71 +364,77 @@ router.get('/:year/formular5-pdf', async (req, res) => {
     }
 
     // Create PDF
+    const path = require('path');
     const pdf = new PDFDocument({ size: 'A4', layout: 'landscape' });
+    
+    // Register custom TTF fonts that support Romanian diacritics
+    pdf.registerFont('Times-Roman-Custom', path.join(__dirname, '../assets/fonts/times.ttf'));
+    pdf.registerFont('Times-Bold-Custom', path.join(__dirname, '../assets/fonts/timesbd.ttf'));
+
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `attachment; filename="Formular-5-${yearNum}.pdf"`);
 
     pdf.pipe(res);
 
     // Title
-    pdf.fontSize(14).font('Helvetica-Bold').text('PLAN DE MENTENANȚĂ PREVENTIVĂ', { align: 'center' });
-    pdf.fontSize(12).text(`pentru dispozitivele medicale pentru anul ${yearNum}`, { align: 'center' });
-    pdf.fontSize(10).text('Formular Nr. 5 – Anexa 16, Procedura MDM Nr. 6', { align: 'center' });
+    pdf.fontSize(14).font('Times-Bold-Custom').text(toSafePdfText('PLAN DE MENTENANȚĂ PREVENTIVĂ'), { align: 'center' });
+    pdf.fontSize(12).font('Times-Roman-Custom').text(toSafePdfText(`pentru dispozitivele medicale pentru anul ${yearNum}`), { align: 'center' });
+    pdf.fontSize(10).text(toSafePdfText('Formular Nr. 5 – Anexa 16, Procedura MDM Nr. 6'), { align: 'center' });
     pdf.moveDown(0.5);
 
     // Table header
     const columns = [
       { header: 'Nr', width: 30 },
-      { header: 'Denumire DM', width: 120 },
-      { header: 'Serie / Cod', width: 80 },
-      { header: 'Secție', width: 80 },
-      { header: 'Responsabil', width: 100 },
+      { header: toSafePdfText('Denumirea dispozitivului medical'), width: 130 },
+      { header: toSafePdfText('Cod DM / Nr. de serie'), width: 90 },
+      { header: toSafePdfText('Secția medicală'), width: 90 },
+      { header: toSafePdfText('Persoana responsabilă (Afiliat | Nume)'), width: 120 },
       ...Array.from({ length: 12 }, (_, i) => ({
         header: ['Ian', 'Feb', 'Mar', 'Apr', 'Mai', 'Iun', 'Iul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][i],
         width: 25,
       })),
     ];
 
-    const monthNames = ['Ian', 'Feb', 'Mar', 'Apr', 'Mai', 'Iun', 'Iul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
     // Draw header row
     let x = 20;
     const headerY = pdf.y;
-    columns.forEach((col, idx) => {
-      pdf.fontSize(9).font('Helvetica-Bold')
+    columns.forEach((col) => {
+      pdf.fontSize(9).font('Times-Bold-Custom')
         .text(col.header, x, headerY, { width: col.width, align: 'center', valign: 'center' });
       x += col.width;
     });
-    pdf.moveDown(1);
+    pdf.moveDown(1.5);
 
     // Draw data rows
     plans.forEach((plan, planIdx) => {
-      const rowHeight = 25;
       let x = 20;
       const rowY = pdf.y;
 
       // Row number
-      pdf.fontSize(9).font('Helvetica')
+      pdf.fontSize(9).font('Times-Roman-Custom')
         .text(String(planIdx + 1), x, rowY, { width: 30, align: 'center', valign: 'top' });
       x += 30;
 
       // Device name
-      pdf.text(plan.device.name, x, rowY, { width: 120, align: 'left', valign: 'top' });
-      x += 120;
+      pdf.text(toSafePdfText(plan.device.name), x, rowY, { width: 130, align: 'left', valign: 'top' });
+      x += 130;
 
       // Serial / Code
       const serial = plan.device.serialNumber || '-';
-      pdf.text(serial, x, rowY, { width: 80, align: 'left', valign: 'top' });
-      x += 80;
+      pdf.text(toSafePdfText(serial), x, rowY, { width: 90, align: 'left', valign: 'top' });
+      x += 90;
 
       // Section
       const section = plan.device.sections?.name || '-';
-      pdf.text(section, x, rowY, { width: 80, align: 'left', valign: 'top' });
-      x += 80;
+      pdf.text(toSafePdfText(section), x, rowY, { width: 90, align: 'left', valign: 'top' });
+      x += 90;
 
-      // Responsible
-      pdf.text(plan.responsibleName, x, rowY, { width: 100, align: 'left', valign: 'top' });
-      x += 100;
+      // Responsible (Afiliat | Nume)
+      const responsibleText = plan.responsibleAffil
+        ? `${plan.responsibleAffil} | ${plan.responsibleName}`
+        : plan.responsibleName;
+      pdf.text(toSafePdfText(responsibleText), x, rowY, { width: 120, align: 'left', valign: 'top' });
+      x += 120;
 
       // Months (X markers)
       for (let month = 1; month <= 12; month++) {
@@ -371,11 +443,12 @@ router.get('/:year/formular5-pdf', async (req, res) => {
         x += 25;
       }
 
-      pdf.moveDown(1.5);
+      pdf.moveDown(2);
     });
 
     // Footer
-    pdf.fontSize(9).text(`Data generării: ${new Date().toLocaleDateString('ro-RO')}`, { align: 'right' });
+    pdf.moveDown();
+    pdf.fontSize(9).font('Times-Roman-Custom').text(toSafePdfText(`Data generării: ${new Date().toLocaleDateString('ro-RO')}`), { align: 'right' });
 
     pdf.end();
   } catch (error) {

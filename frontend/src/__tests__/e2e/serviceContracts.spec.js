@@ -6,7 +6,7 @@
  * 4. Cost analysis (intern vs extern)
  */
 
-const { test, expect } = require('@playwright/test');
+import { test, expect } from '@playwright/test';
 
 const TEST_USERNAME = 'testuser';
 const TEST_PASSWORD = process.env.TEST_PASSWORD || 'Test123!';
@@ -16,22 +16,22 @@ test.describe('E2E — Contracte Externe & Cost Analysis (Faza 3.5)', () => {
     await page.goto('/login');
     await page.locator('input[name="username"]').fill(TEST_USERNAME);
     await page.locator('input[name="password"]').fill(TEST_PASSWORD);
-    await page.locator('button:has-text("Autentificare")').click();
+    await page.locator('button:has-text("Conectare")').click();
     await page.waitForURL('/');
   });
 
   test('navigare la Contracte Externe', async ({ page }) => {
     // Click Contracte menu
-    await page.locator('a:has-text(/Contracte|Briefcase/i)').click();
+    await page.locator('a', { hasText: 'Contracte' }).click();
 
     // Check page content
-    await expect(page.locator('text=/Contract|Furnizor|Provider/i')).toBeVisible({
+    await expect(page.locator('text=/Contract|Furnizor|Provider/i').first()).toBeVisible({
       timeout: 5000,
     });
   });
 
   test('afișare carduri furnizori cu rating', async ({ page }) => {
-    await page.locator('a:has-text(/Contracte|Briefcase/i)').click();
+    await page.locator('a', { hasText: 'Contracte' }).click();
     await page.waitForURL(/service-contracts/);
 
     // Check for provider cards/items
@@ -48,16 +48,16 @@ test.describe('E2E — Contracte Externe & Cost Analysis (Faza 3.5)', () => {
   });
 
   test('creare contract nou', async ({ page }) => {
-    await page.locator('a:has-text(/Contracte|Briefcase/i)').click();
+    await page.locator('a', { hasText: 'Contracte' }).click();
     await page.waitForURL(/service-contracts/);
 
     // Click "Contract Nou" button
-    const createBtn = page.locator('button:has-text(/Contract Nou|New|Creare/i)');
+    const createBtn = page.locator('button', { hasText: /Contract Nou|New|Creare/i });
     if (await createBtn.isVisible()) {
       await createBtn.click();
 
       // Wait for modal
-      await expect(page.locator('text=/Contract|Creare/i')).toBeVisible({
+      await expect(page.locator('text=/Contract|Creare/i').first()).toBeVisible({
         timeout: 5000,
       });
 
@@ -91,11 +91,11 @@ test.describe('E2E — Contracte Externe & Cost Analysis (Faza 3.5)', () => {
       }
 
       // Save
-      const saveBtn = page.locator('button:has-text(/Salvare|Creează/i)');
+      const saveBtn = page.locator('button', { hasText: /Salvare|Creează/i });
       if (await saveBtn.isVisible()) {
         await saveBtn.click();
 
-        await expect(page.locator('text=/creat|salvat|succes/i')).toBeVisible({
+        await expect(page.locator('text=/creat|salvat|succes/i').first()).toBeVisible({
           timeout: 5000,
         });
       }
@@ -103,7 +103,7 @@ test.describe('E2E — Contracte Externe & Cost Analysis (Faza 3.5)', () => {
   });
 
   test('evaluare furnizor (1-5 stele)', async ({ page }) => {
-    await page.locator('a:has-text(/Contracte|Briefcase/i)').click();
+    await page.locator('a', { hasText: 'Contracte' }).click();
     await page.waitForURL(/service-contracts/);
 
     // Find provider card
@@ -112,13 +112,13 @@ test.describe('E2E — Contracte Externe & Cost Analysis (Faza 3.5)', () => {
 
     if (await firstCard.isVisible()) {
       // Look for rate button
-      const rateBtn = page.locator('button:has-text(/Evaluare|Rate|★|Stele/i)').first();
+      const rateBtn = page.locator('button', { hasText: /Evaluare|Rate|★|Stele/i }).first();
 
       if (await rateBtn.isVisible()) {
         await rateBtn.click();
 
         // Wait for rating modal
-        await expect(page.locator('text=/Evaluare|Rating|Scor/i')).toBeVisible({
+        await expect(page.locator('text=/Evaluare|Rating|Scor/i').first()).toBeVisible({
           timeout: 5000,
         });
 
@@ -135,11 +135,11 @@ test.describe('E2E — Contracte Externe & Cost Analysis (Faza 3.5)', () => {
         }
 
         // Save rating
-        const saveBtn = page.locator('button:has-text(/Salvare|Salvați|Save/i)');
+        const saveBtn = page.locator('button', { hasText: /Salvare|Salvați|Save/i });
         if (await saveBtn.isVisible()) {
           await saveBtn.click();
 
-          await expect(page.locator('text=/salvat|succes|saved/i')).toBeVisible({
+          await expect(page.locator('text=/salvat|succes|saved/i').first()).toBeVisible({
             timeout: 5000,
           });
         }
@@ -148,11 +148,11 @@ test.describe('E2E — Contracte Externe & Cost Analysis (Faza 3.5)', () => {
   });
 
   test('cost analysis: comparație intern vs extern', async ({ page }) => {
-    await page.locator('a:has-text(/Contracte|Briefcase/i)').click();
+    await page.locator('a', { hasText: 'Contracte' }).click();
     await page.waitForURL(/service-contracts/);
 
     // Look for cost analysis section
-    const analysisSection = page.locator('text=/Cost Analysis|Analiză Cost|Comparație/i');
+    const analysisSection = page.locator('text=/Cost Analysis|Analiză Cost|Comparație/i').first();
 
     if (await analysisSection.isVisible()) {
       // Check internal cost is shown
@@ -168,16 +168,16 @@ test.describe('E2E — Contracte Externe & Cost Analysis (Faza 3.5)', () => {
   });
 
   test('filtrare contracte după status (active/expirat)', async ({ page }) => {
-    await page.locator('a:has-text(/Contracte|Briefcase/i)').click();
+    await page.locator('a', { hasText: 'Contracte' }).click();
     await page.waitForURL(/service-contracts/);
 
     // Look for filter
-    const filterBtn = page.locator('button:has-text(/Filtrare|Filter/i)');
+    const filterBtn = page.locator('button', { hasText: /Filtrare|Filter/i });
     if (await filterBtn.isVisible()) {
       await filterBtn.click();
 
       // Check for status checkboxes
-      const activeCheckbox = page.locator('label:has-text(/Active|Activ/i)');
+      const activeCheckbox = page.locator('label', { hasText: /Active|Activ/i });
       if (await activeCheckbox.isVisible()) {
         await activeCheckbox.click();
         await page.waitForTimeout(500);
@@ -188,7 +188,7 @@ test.describe('E2E — Contracte Externe & Cost Analysis (Faza 3.5)', () => {
   });
 
   test('tabel contracte arată daysUntilExpiry', async ({ page }) => {
-    await page.locator('a:has-text(/Contracte|Briefcase/i)').click();
+    await page.locator('a', { hasText: 'Contracte' }).click();
     await page.waitForURL(/service-contracts/);
 
     // Check for table
@@ -202,7 +202,7 @@ test.describe('E2E — Contracte Externe & Cost Analysis (Faza 3.5)', () => {
   });
 
   test('alert pentru contracte expirând în 30 zile', async ({ page }) => {
-    await page.locator('a:has-text(/Contracte|Briefcase/i)').click();
+    await page.locator('a', { hasText: 'Contracte' }).click();
     await page.waitForURL(/service-contracts/);
 
     // Look for alert element
@@ -214,27 +214,27 @@ test.describe('E2E — Contracte Externe & Cost Analysis (Faza 3.5)', () => {
   });
 
   test('ștergere contract cu confirmare', async ({ page }) => {
-    await page.locator('a:has-text(/Contracte|Briefcase/i)').click();
+    await page.locator('a', { hasText: 'Contracte' }).click();
     await page.waitForURL(/service-contracts/);
 
     // Look for delete button
-    const deleteBtn = page.locator('button:has-text(/Șterge|Delete|Șters/i)').first();
+    const deleteBtn = page.locator('button', { hasText: /Șterge|Delete|Șters/i }).first();
 
     if (await deleteBtn.isVisible()) {
       await deleteBtn.click();
 
       // Wait for confirmation dialog
-      await expect(page.locator('text=/Ești sigur|Confirm|Are you sure/i')).toBeVisible({
+      await expect(page.locator('text=/Ești sigur|Confirm|Are you sure/i').first()).toBeVisible({
         timeout: 5000,
       });
 
       // Click confirm
-      const confirmBtn = page.locator('button:has-text(/Confirmare|Confirm|Da/i)');
+      const confirmBtn = page.locator('button', { hasText: /Confirmare|Confirm|Da/i });
       if (await confirmBtn.isVisible()) {
         await confirmBtn.click();
 
         // Should be deleted
-        await expect(page.locator('text=/șters|deleted|removed/i')).toBeVisible({
+        await expect(page.locator('text=/șters|deleted|removed/i').first()).toBeVisible({
           timeout: 5000,
         });
       }

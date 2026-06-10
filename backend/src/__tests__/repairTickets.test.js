@@ -57,6 +57,7 @@ beforeAll(async () => {
 
 afterAll(async () => {
   if (testDeviceId) {
+    await prisma.maintenance_records.deleteMany({ where: { deviceId: testDeviceId } });
     await prisma.repair_tickets.deleteMany({ where: { deviceId: testDeviceId } });
   }
   if (testConsumableId) {
@@ -679,6 +680,12 @@ describe('GET /api/repair-tickets/:id/formular8-pdf — PDF Generation', () => {
     await prisma.repair_tickets.deleteMany({ where: { id: ticketWithRepairId } });
   });
 
+  it('fara token → 401', async () => {
+    const res = await request(app)
+      .get(`/api/repair-tickets/${ticketWithRepairId}/formular8-pdf`);
+    expect(res.status).toBe(401);
+  });
+
   it('returnează PDF valid pentru bilet complet', async () => {
     const res = await request(app)
       .get(`/api/repair-tickets/${ticketWithRepairId}/formular8-pdf`)
@@ -695,5 +702,41 @@ describe('GET /api/repair-tickets/:id/formular8-pdf — PDF Generation', () => {
       .set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(404);
+  });
+
+  it('returnează 400 pentru ID invalid', async () => {
+    const res = await request(app)
+      .get('/api/repair-tickets/abc/formular8-pdf')
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(res.status).toBe(400);
+  });
+});
+
+describe('GET /api/repair-tickets/formular7-pdf — Jurnal Chemări (Formular Nr. 7)', () => {
+  it('fără token → 401', async () => {
+    const res = await request(app).get('/api/repair-tickets/formular7-pdf');
+    expect(res.status).toBe(401);
+  });
+
+  it('generează PDF jurnal cu toate tichetele', async () => {
+    const res = await request(app)
+      .get('/api/repair-tickets/formular7-pdf')
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(res.status).toBe(200);
+    expect(res.headers['content-type']).toContain('application/pdf');
+  });
+
+  it('filtrează după perioadă (from/to)', async () => {
+    const from = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+    const to = new Date().toISOString();
+
+    const res = await request(app)
+      .get(`/api/repair-tickets/formular7-pdf?from=${from}&to=${to}`)
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(res.status).toBe(200);
+    expect(res.headers['content-type']).toContain('application/pdf');
   });
 });
