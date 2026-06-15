@@ -39,6 +39,13 @@
   --color-status-loaned: #5db8a6;
   --color-status-spare: #a78bfa;
 
+  /* Status Backgrounds */
+  --color-status-decommissioned-bg: rgba(107, 114, 128, 0.1);
+  --color-status-spare-bg: rgba(167, 139, 250, 0.1);
+
+  /* On-Primary: Text color for high contrast on accent/status backgrounds */
+  --color-on-primary: #faf9f5;
+
   /* ===== HEALTHCARE COLORS ===== */
   --healthcare-primary: #0891B2;
   --healthcare-primary-light: #22D3EE;
@@ -170,6 +177,13 @@
   --color-error-bg: rgba(198, 69, 69, 0.15);
   --color-warning-bg: rgba(212, 160, 23, 0.15);
   --color-info-bg: rgba(93, 184, 166, 0.15);
+
+  /* Status Backgrounds (dark mode) */
+  --color-status-decommissioned-bg: rgba(107, 114, 128, 0.2);
+  --color-status-spare-bg: rgba(167, 139, 250, 0.2);
+
+  /* On-Primary (dark mode): Remains light for contrast */
+  --color-on-primary: #faf9f5;
 
   --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.2);
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.25);

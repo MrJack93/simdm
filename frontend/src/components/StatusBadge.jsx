@@ -21,7 +21,7 @@ const STATUS_CONFIG = {
     symbol: '−',
     label: 'Casat',
     color: 'var(--color-status-decommissioned)',
-    bg: 'var(--color-status-decommissioned-bg, rgba(107, 114, 128, 0.1))',
+    bg: 'var(--color-status-decommissioned-bg)',
   },
   IMPRUMUTAT: {
     symbol: '→',
@@ -33,7 +33,7 @@ const STATUS_CONFIG = {
     symbol: '◻',
     label: 'Rezervă',
     color: 'var(--color-status-spare)',
-    bg: 'var(--color-status-spare-bg, rgba(167, 139, 250, 0.1))',
+    bg: 'var(--color-status-spare-bg)',
   },
 };
 
