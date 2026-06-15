@@ -93,7 +93,7 @@ export default function ServiceContractsPage() {
             </label>
           </div>
         )}
-        <div className="rounded-xl overflow-hidden" style={{ backgroundColor: 'var(--color-bg-secondary)', border: '1px solid var(--color-border)' }}>
+        <div className="rounded-xl overflow-auto" style={{ backgroundColor: 'var(--color-bg-secondary)', border: '1px solid var(--color-border)' }}>
           <table className="w-full text-sm">
             <thead style={{ backgroundColor: 'var(--color-bg-tertiary)' }}>
               <tr>

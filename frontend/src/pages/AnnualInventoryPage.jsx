@@ -70,7 +70,7 @@ function ChecklistModal({ year, section, devices, onClose, onSave }) {
           />
         </div>
 
-        <div className="overflow-y-auto mb-6" style={{ maxHeight: '400px' }}>
+        <div className="overflow-auto mb-6" style={{ maxHeight: '400px' }}>
           <table className="w-full text-sm">
             <thead className="sticky top-0" style={{ backgroundColor: 'var(--color-bg-primary)' }}>
               <tr className="border-b" style={{ borderColor: 'var(--color-border)' }}>
@@ -182,7 +182,7 @@ function DiscrepanciesModal({ year, discrepancies, onClose, onVerify }) {
             Nici o discrepanță! ✅
           </p>
         ) : (
-          <div className="overflow-y-auto mb-6" style={{ maxHeight: '400px' }}>
+          <div className="overflow-auto mb-6" style={{ maxHeight: '400px' }}>
             <table className="w-full text-sm">
               <thead className="sticky top-0" style={{ backgroundColor: 'var(--color-bg-primary)' }}>
                 <tr className="border-b" style={{ borderColor: 'var(--color-border)' }}>
