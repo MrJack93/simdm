@@ -85,7 +85,7 @@ export function AccessibleModalBackdrop({ isOpen, onClose, children }) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4" role="presentation" onClick={onClose}>
+    <div className="fixed inset-0 flex items-center justify-center p-4" style={{ backgroundColor: 'var(--overlay-medium)' }} role="presentation" onClick={onClose}>
       <div
         className="rounded-lg max-w-lg w-full p-6 focus:outline-none"
         role="dialog"
