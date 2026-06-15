@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { X, Keyboard } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -13,6 +13,7 @@ const SHORTCUTS = [
 export default function KeyboardShortcuts() {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
+  const dialogRef = useRef(null);
 
   useEffect(() => {
     const handler = (e) => {
@@ -38,16 +39,44 @@ export default function KeyboardShortcuts() {
         navigate('/maintenance/calendar');
         return;
       }
+
+      // Focus trap for dialog
+      if (open && e.key === 'Tab') {
+        const focusable = dialogRef.current?.querySelectorAll('button');
+        if (!focusable || focusable.length === 0) return;
+
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+
+        if (e.shiftKey) {
+          if (document.activeElement === first) {
+            last.focus();
+            e.preventDefault();
+          }
+        } else {
+          if (document.activeElement === last) {
+            first.focus();
+            e.preventDefault();
+          }
+        }
+      }
     };
+
+    // Focus on first button when dialog opens
+    if (open) {
+      const first = dialogRef.current?.querySelector('button');
+      first?.focus();
+    }
 
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);
-  }, [navigate]);
+  }, [navigate, open]);
 
   if (!open) return null;
 
   return (
     <div
+      ref={dialogRef}
       className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-modal-overlay"
       style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
       onClick={() => setOpen(false)}
