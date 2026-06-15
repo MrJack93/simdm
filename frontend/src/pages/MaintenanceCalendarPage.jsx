@@ -10,6 +10,7 @@ import {
 import { getDevices } from '../api/devices';
 import { Calendar } from '../components/ui/calendar';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '../components/ui/drawer';
+import { Button } from '../components/ui/button';
 import { useMediaQuery } from '../hooks/useMediaQuery';
 
 const MONTHS_RO = [
@@ -352,24 +353,24 @@ export default function MaintenanceCalendarPage() {
                     </span>
                   </div>
                   <div className="flex gap-2">
-                    <button
+                    <Button
+                      size="lg"
+                      variant="outline"
                       onClick={() => {
                         setRescheduleOccId(rescheduleOccId === occ.id ? null : occ.id);
                         setRescheduleError('');
                         setRescheduleData({ newDate: '', reason: '' });
                       }}
-                      className="px-3 py-1 text-xs border rounded-lg hover:bg-[var(--color-bg-elevated)] transition-all duration-150 font-semibold cursor-pointer"
-                      style={{ borderColor: 'var(--color-warning)', color: 'var(--color-warning)', backgroundColor: 'transparent' }}
                     >
                       Reprogramează
-                    </button>
-                    <button
+                    </Button>
+                    <Button
+                      size="lg"
+                      variant="outline"
                       onClick={() => navigate('/maintenance/execution')}
-                      className="px-3 py-1 text-xs border rounded-lg hover:bg-[var(--color-bg-elevated)] transition-all duration-150 font-semibold cursor-pointer"
-                      style={{ borderColor: 'var(--color-info)', color: 'var(--color-info)', backgroundColor: 'transparent' }}
                     >
                       Execută MPP
-                    </button>
+                    </Button>
                   </div>
                 </div>
 
