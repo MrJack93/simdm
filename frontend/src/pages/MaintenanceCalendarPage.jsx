@@ -8,6 +8,7 @@ import {
   downloadFormular5,
 } from '../api/maintenancePlans';
 import { getDevices } from '../api/devices';
+import { Calendar } from '../components/ui/calendar';
 
 const MONTHS_RO = [
   'Ianuarie', 'Februarie', 'Martie', 'Aprilie', 'Mai', 'Iunie',
@@ -46,6 +47,28 @@ export default function MaintenanceCalendarPage() {
   const [rescheduleError, setRescheduleError] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
   const [pdfError, setPdfError] = useState('');
+
+  const selectedDate = selectedDay != null ? new Date(selectedYear, currentMonth, selectedDay) : undefined;
+
+  const handleCalendarSelect = (day) => {
+    if (day) {
+      setSelectedDay(day.getDate());
+    } else {
+      setSelectedDay(null);
+    }
+    setRescheduleOccId(null);
+  };
+
+  const handleDayClick = (dayNum) => {
+    setSelectedDay(selectedDay === dayNum ? null : dayNum);
+    setRescheduleOccId(null);
+  };
+
+  const handleMonthChange = (date) => {
+    setCurrentMonth(date.getMonth());
+    setSelectedYear(date.getFullYear());
+    setSelectedDay(null);
+  };
 
   const { data: calendarData } = useQuery({
     queryKey: ['maintenancePlans', selectedYear],
@@ -167,8 +190,7 @@ export default function MaintenanceCalendarPage() {
       (occ) => new Date(occ.rescheduledTo || occ.scheduledDate || occ.dueDate).getDate() === day
     );
 
-  const daysInMonth = new Date(selectedYear, currentMonth + 1, 0).getDate();
-  const firstDayOffset = (new Date(selectedYear, currentMonth, 1).getDay() + 6) % 7;
+
 
   return (
     <div className="p-4 md:p-8 space-y-6">
@@ -206,7 +228,7 @@ export default function MaintenanceCalendarPage() {
         <div className="alert-success mb-4">{successMsg}</div>
       )}
       {pdfError && (
-        <div className="alert-error mb-4">{pdfError}</div>
+        <div className="alert-error mb-4" role="alert" aria-live="polite">{pdfError}</div>
       )}
 
       {/* Year dropdown + month navigation */}
@@ -265,44 +287,45 @@ export default function MaintenanceCalendarPage() {
         <span className="px-2.5 py-1 rounded" style={getStatusStyle('EFECTUAT')}>EFECTUAT</span>
       </div>
 
-      {/* Calendar grid */}
-      <div className="grid grid-cols-7 gap-1 mb-6">
-        {['Lun', 'Mar', 'Mie', 'Joi', 'Vin', 'Sâm', 'Dum'].map((d) => (
-          <div key={d} className="text-center text-xs font-semibold text-[var(--color-text-secondary)] py-1">
-            {d}
-          </div>
-        ))}
-        {Array.from({ length: firstDayOffset }, (_, i) => (
-          <div key={`empty-${i}`} />
-        ))}
-        {Array.from({ length: daysInMonth }, (_, i) => {
-          const day = i + 1;
-          const dayOccs = occurrencesForDay(day);
-          return (
-            <div
-              key={day}
-              onClick={() => { setSelectedDay(selectedDay === day ? null : day); setRescheduleOccId(null); }}
-              className="min-h-[64px] p-1.5 border rounded-lg cursor-pointer transition-all duration-150 ease-out hover:bg-[var(--color-bg-elevated)]"
-              style={{
-                borderColor: selectedDay === day ? 'var(--color-accent)' : 'var(--color-border)',
-                backgroundColor: selectedDay === day ? 'var(--color-accent-subtle)' : 'var(--color-bg-secondary)',
-                boxShadow: selectedDay === day ? '0 0 8px var(--color-accent-muted)' : 'none',
-              }}
-            >
-              <span className="text-sm font-semibold" style={{ color: 'var(--color-text-primary)' }}>{day}</span>
-              {dayOccs.map((occ) => (
-                <div
-                  key={occ.id}
-                  style={getStatusStyle(occ.status)}
-                  className="text-[10px] mt-1 rounded px-1.5 py-0.5 font-medium block truncate text-center"
-                >
-                  {occ.status}
-                </div>
-              ))}
-            </div>
-          );
-        })}
+      {/* Calendar */}
+      <div data-testid="maintenance-calendar">
+        <Calendar
+          mode="single"
+          selected={selectedDate}
+          onSelect={handleCalendarSelect}
+          month={new Date(selectedYear, currentMonth, 1)}
+          onMonthChange={handleMonthChange}
+          captionLayout="dropdown"
+          showOutsideDays={false}
+          startMonth={new Date(CURRENT_YEAR - 1, 0, 1)}
+          endMonth={new Date(CURRENT_YEAR + 3, 11, 31)}
+          className="mb-6"
+          classNames={{
+            day: "min-h-[64px] p-1",
+            day_button: "h-auto min-h-[64px] w-full p-1 font-normal",
+          }}
+        />
       </div>
+
+      {/* Occurrence indicators below calendar */}
+      {occurrencesForMonth.length > 0 && (
+        <div className="flex flex-wrap gap-2 mb-4">
+          {occurrencesForMonth.map((occ) => {
+            const occDay = new Date(occ.rescheduledTo || occ.scheduledDate || occ.dueDate).getDate();
+            return (
+              <button
+                key={occ.id}
+                onClick={() => handleDayClick(occDay)}
+                className="flex items-center gap-1.5 px-2 py-1 rounded text-xs font-medium cursor-pointer transition-all duration-150 hover:opacity-80"
+                style={getStatusStyle(occ.status)}
+              >
+                <span className="w-2 h-2 rounded-full" style={{ backgroundColor: getStatusStyle(occ.status).color }} />
+                {occDay} {MONTHS_RO[currentMonth]} — {occ.deviceName} ({occ.status})
+              </button>
+            );
+          })}
+        </div>
+      )}
 
       {/* Selected day details */}
       {selectedDay !== null && (
@@ -352,8 +375,9 @@ export default function MaintenanceCalendarPage() {
                   <div className="mt-4 p-4 rounded-lg border transition-all duration-150" style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-warning)' }}>
                     <h3 className="text-sm font-semibold mb-3" style={{ color: 'var(--color-text-primary)' }}>Reprogramare ocurență</h3>
                     <div className="mb-3">
-                      <label className="block text-xs font-medium mb-1" style={{ color: 'var(--color-text-secondary)' }}>Data nouă</label>
+                      <label htmlFor="cal-reschedule-date" className="block text-xs font-medium mb-1" style={{ color: 'var(--color-text-secondary)' }}>Data nouă</label>
                       <input
+                        id="cal-reschedule-date"
                         type="date"
                         value={rescheduleData.newDate}
                         onChange={(e) => setRescheduleData((d) => ({ ...d, newDate: e.target.value }))}
@@ -362,10 +386,11 @@ export default function MaintenanceCalendarPage() {
                       />
                     </div>
                     <div className="mb-3">
-                      <label className="block text-xs font-medium mb-1" style={{ color: 'var(--color-text-secondary)' }}>
+                      <label htmlFor="cal-reschedule-reason" className="block text-xs font-medium mb-1" style={{ color: 'var(--color-text-secondary)' }}>
                         Motiv <span style={{ color: 'var(--color-text-tertiary)' }}>(min 5 caractere)</span>
                       </label>
                       <textarea
+                        id="cal-reschedule-reason"
                         value={rescheduleData.reason}
                         onChange={(e) => setRescheduleData((d) => ({ ...d, reason: e.target.value }))}
                         rows={2}
@@ -375,7 +400,7 @@ export default function MaintenanceCalendarPage() {
                       />
                     </div>
                     {rescheduleError && (
-                      <p className="text-red-600 text-xs mb-3">{rescheduleError}</p>
+                      <p role="alert" aria-live="assertive" className="text-xs mb-3" style={{ color: 'var(--color-error)' }}>{rescheduleError}</p>
                     )}
                     <div className="flex gap-2">
                       <button
@@ -508,7 +533,7 @@ function CreatePlanModal({ devices, onClose, onCreate, year, isPending }) {
 
         <div className="mb-4">
           <label htmlFor="responsible-input" className="block text-sm font-semibold mb-1.5" style={{ color: 'var(--color-text-secondary)' }}>
-            Responsabil <span className="text-red-500">*</span>
+            Responsabil <span style={{ color: 'var(--color-error)' }}>*</span>
           </label>
           <input
             id="responsible-input"
@@ -536,7 +561,7 @@ function CreatePlanModal({ devices, onClose, onCreate, year, isPending }) {
           />
         </div>
 
-        {formError && <p className="text-red-600 text-sm mb-4">{formError}</p>}
+        {formError && <p role="alert" aria-live="assertive" className="text-sm mb-4" style={{ color: 'var(--color-error)' }}>{formError}</p>}
 
         <div className="flex gap-2 justify-end">
           <button

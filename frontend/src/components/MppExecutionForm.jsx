@@ -92,7 +92,7 @@ export default function MppExecutionForm({ occurrenceId }) {
     <div className="p-4 max-w-3xl mx-auto">
       <h1 className="text-2xl font-medium mb-4" style={{ fontFamily: 'var(--font-family-heading)' }}>Execuție Mentenanță</h1>
 
-      {error && <div className="alert-error mb-4">{error}</div>}
+      {error && <div className="alert-error mb-4" role="alert" aria-live="polite">{error}</div>}
 
       {success && (
         <div className="alert-success mb-4">
@@ -212,7 +212,7 @@ export default function MppExecutionForm({ occurrenceId }) {
           <button
             type="button"
             onClick={() => setEngineerSigned(false)}
-            className="mt-1 text-sm hover:opacity-70"
+            className="mt-1 text-sm hover:opacity-70 min-h-[40px] min-w-[40px]"
             style={{ color: 'var(--color-accent)' }}
           >
             Curăță
@@ -234,7 +234,7 @@ export default function MppExecutionForm({ occurrenceId }) {
           <button
             type="button"
             onClick={() => setManagerSigned(false)}
-            className="mt-1 text-sm hover:opacity-70"
+            className="mt-1 text-sm hover:opacity-70 min-h-[40px] min-w-[40px]"
             style={{ color: 'var(--color-accent)' }}
           >
             Curăță
