@@ -164,6 +164,10 @@
   animation: scaleIn 0.2s var(--ease-out);
 }
 
+.animate-bounce-in {
+  animation: scaleIn 0.2s var(--ease-out);
+}
+
 /* Toast slide-in from right */
 .animate-toast-in {
   animation: slideInFromRight 0.3s var(--ease-out);
