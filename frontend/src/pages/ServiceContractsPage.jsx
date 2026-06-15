@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getProviders, getContracts, getCostAnalysis, createContract, rateProvider, deleteContract } from '../api/serviceContracts';
 import { getDevices } from '../api/devices';
 import { Skeleton, SkeletonCard } from '../components/ui/skeleton';
+import { Button } from '../components/ui/button';
 
 export default function ServiceContractsPage() {
   const queryClient = useQueryClient();
@@ -115,7 +116,13 @@ export default function ServiceContractsPage() {
                     {contract.isExpired ? <span style={{ color: 'var(--color-error)' }}>Expirat</span> : <span style={{ color: 'var(--color-success)' }}>{contract.daysUntilExpiry}z</span>}
                   </td>
                   <td className="px-6 py-4 text-center">
-                    <button onClick={() => setDeleteTarget(contract)} className="text-xs px-2 py-1 rounded min-h-[40px]" style={{ backgroundColor: 'var(--color-error-bg)', color: 'var(--color-error)' }}>Șterge</button>
+                    <Button
+                      size="sm"
+                      variant="destructive"
+                      onClick={() => setDeleteTarget(contract)}
+                    >
+                      Șterge
+                    </Button>
                   </td>
                 </tr>
               ))}

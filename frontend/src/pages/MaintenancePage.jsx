@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import { Wrench, Plus, Edit2, Trash2, ChevronLeft, ChevronRight, X, Calendar, ClipboardList, Settings } from 'lucide-react';
+import { Button } from '../components/ui/button';
 import api from '../api/axios';
 import { Link } from 'react-router-dom';
 
@@ -422,28 +423,28 @@ export default function MaintenancePage() {
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex gap-2">
-                        <button
+                        <Button
+                          size="icon"
+                          variant="ghost"
                           onClick={() => setModal({ record: r })}
-                          className="p-1.5 rounded hover:opacity-70 min-h-[40px] min-w-[40px] flex items-center justify-center"
-                          style={{ color: 'var(--color-accent)' }}
                           aria-label="Editează"
                         >
-                          <Edit2 size={14} />
-                        </button>
+                          <Edit2 size={20} />
+                        </Button>
                         {deleteId === r.id ? (
                           <div className="flex gap-1">
                             <button onClick={() => deleteMutation.mutate(r.id)} className="text-xs px-2 py-1 rounded" style={{ backgroundColor: 'var(--color-error)', color: '#fff' }}>Confirm</button>
                             <button onClick={() => setDeleteId(null)} className="text-xs px-2 py-1 rounded btn-secondary">Nu</button>
                           </div>
                         ) : (
-                          <button
+                          <Button
+                            size="icon"
+                            variant="ghost"
                             onClick={() => setDeleteId(r.id)}
-                            className="p-1.5 rounded hover:opacity-70 min-h-[40px] min-w-[40px] flex items-center justify-center"
-                            style={{ color: 'var(--color-error)' }}
                             aria-label="Șterge"
                           >
-                            <Trash2 size={14} />
-                          </button>
+                            <Trash2 size={20} />
+                          </Button>
                         )}
                       </div>
                     </td>

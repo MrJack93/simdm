@@ -5,6 +5,7 @@ import SignatureCanvas from 'react-signature-canvas';
 import { useNavigate } from 'react-router-dom';
 import { Field, FieldLabel, FieldDescription, FieldError } from '../components/ui/field';
 import { InputGroup, InputGroupAddon, InputGroupInput, InputGroupTextarea, InputGroupText } from '../components/ui/input-group';
+import { Button } from '../components/ui/button';
 import { User, Clock, Hash } from 'lucide-react';
 
 export default function MppExecutionForm() {
@@ -516,14 +517,16 @@ export default function MppExecutionForm() {
                 }}
               />
             </div>
-            <button
+            <Button
               type="button"
+              size="sm"
+              variant="outline"
               onClick={() => signaturePadEngineerRef.current?.clear()}
-              className="mt-2 text-xs font-semibold hover:underline cursor-pointer transition-all"
-              style={{ color: 'var(--color-accent)' }}
+              className="mt-2"
+              aria-label="Șterge semnătura inginerului"
             >
               Șterge semnătură
-            </button>
+            </Button>
           </div>
 
           <div>
@@ -540,14 +543,16 @@ export default function MppExecutionForm() {
                 }}
               />
             </div>
-            <button
+            <Button
               type="button"
+              size="sm"
+              variant="outline"
               onClick={() => signaturePadManagerRef.current?.clear()}
-              className="mt-2 text-xs font-semibold hover:underline cursor-pointer transition-all"
-              style={{ color: 'var(--color-accent)' }}
+              className="mt-2"
+              aria-label="Șterge semnătura responsabilului"
             >
               Șterge semnătură
-            </button>
+            </Button>
           </div>
         </div>
 

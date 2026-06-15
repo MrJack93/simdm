@@ -111,7 +111,7 @@ function ChecklistModal({ year, section, devices, onClose, onSave }) {
                         type="checkbox"
                         checked={item.found}
                         onChange={() => handleToggleFound(device.id)}
-                        className="w-5 h-5 focusable"
+                        className="w-6 h-6 focusable"
                       />
                     </td>
                     <td className="px-3 py-3">

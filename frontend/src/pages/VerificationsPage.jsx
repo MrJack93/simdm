@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getVerifications, uploadVerification, getComplianceReport, deleteVerification, downloadCertificate } from '../api/verifications';
 import { getDevices } from '../api/devices';
+import { Button } from '../components/ui/button';
 
 const TYPES = ['LABORATOR', 'METROLOGIC'];
 
@@ -321,24 +322,26 @@ export default function VerificationsPage() {
       </div>
 
       {/* Pagination */}
-      <div className="flex justify-center gap-2">
-        <button
+      <div className="flex justify-center gap-2 items-center">
+        <Button
+          size="lg"
+          variant="outline"
           onClick={() => setPage((p) => Math.max(1, p - 1))}
           disabled={page <= 1}
-          className="px-3 py-1 border rounded disabled:opacity-40 hover:bg-[var(--color-bg-tertiary)] min-h-[40px]"
         >
           Pagina anterioară
-        </button>
-        <span className="px-3 py-1">
+        </Button>
+        <span className="px-3 py-2 min-h-[40px] flex items-center">
           {page} / {totalPages}
         </span>
-        <button
+        <Button
+          size="lg"
+          variant="outline"
           onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
           disabled={page >= totalPages}
-          className="px-3 py-1 border rounded disabled:opacity-40 hover:bg-[var(--color-bg-tertiary)] min-h-[40px]"
         >
           Pagina următoare
-        </button>
+        </Button>
       </div>
 
       {/* Modals */}

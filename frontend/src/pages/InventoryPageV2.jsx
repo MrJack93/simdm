@@ -3,6 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import { Edit2, Trash2, Plus, Grid3x3, List, Layout, Search } from 'lucide-react';
+import { Button } from '../components/ui/button';
 import { DeleteConfirmDialog } from '../components/DeleteConfirmDialog';
 import { useDevices } from '../hooks/useDevices';
 import { deleteDevice, deviceKeys } from '../api/devices';
@@ -74,20 +75,18 @@ function ViewToggle({ view, setView }) {
         { key: 'cards',  Icon: Grid3x3,  label: 'Carduri' },
         { key: 'kanban', Icon: Layout,   label: 'Kanban', hideOnMobile: true },
       ].map(({ key, Icon, label, hideOnMobile }) => (
-        <button
+        <Button
           key={key}
           onClick={() => setView(key)}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-medium transition-all min-h-[40px] min-w-[40px] ${hideOnMobile ? 'hidden md:flex' : ''}`}
-          style={{
-            backgroundColor: view === key ? 'var(--color-accent)' : 'transparent',
-            color: view === key ? 'var(--color-bg-primary)' : 'var(--color-text-secondary)',
-          }}
+          size="lg"
+          variant={view === key ? 'default' : 'ghost'}
+          className={hideOnMobile ? 'hidden md:flex' : ''}
           aria-pressed={view === key}
           aria-label={label}
           data-view-toggle={key}
         >
-          <Icon size={16} />{label}
-        </button>
+          <Icon size={20} />{label}
+        </Button>
       ))}
     </div>
   );
