@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import api from '../api/axios';
 import { Plus } from 'lucide-react';
 import { Skeleton, SkeletonTable } from '../components/ui/skeleton';
+import { Button } from '../components/ui/button';
 import { DeleteConfirmDialog } from '../components/DeleteConfirmDialog';
 import { Field, FieldLabel, FieldDescription } from '../components/ui/field';
 import { useConsumablesWithFilters } from '../hooks/useConsumables';
@@ -543,41 +544,33 @@ export default function ConsumablesPage() {
                         )}
                       </td>
                       <td className="px-4 py-3 text-center flex justify-center gap-2">
-                        <button
+                        <Button
+                          size="icon"
                           onClick={() => {
                             setAddStockConsumable(consumable);
                             setShowAddStockModal(true);
                           }}
-                          className="p-2 rounded text-xs font-semibold focusable hover:opacity-70 transition flex items-center justify-center"
-                          style={{
-                            backgroundColor: 'var(--color-success)',
-                            color: 'var(--color-on-primary)',
-                          }}
                           aria-label={`Adaugă stoc la ${consumable.name}`}
                         >
-                          <Plus size={14} />
-                        </button>
-                        <button
+                          <Plus size={20} />
+                        </Button>
+                        <Button
+                          size="sm"
                           onClick={() => handleEditClick(consumable)}
-                          className="px-3 py-1 rounded text-xs font-semibold focusable hover:opacity-70 transition"
-                          style={{
-                            backgroundColor: 'var(--color-accent)',
-                            color: 'var(--color-on-primary)',
-                          }}
                         >
                           ✎ Edit
-                        </button>
+                        </Button>
                         <DeleteConfirmDialog
                           name={consumable.name}
                           onConfirm={() => handleDelete(consumable.id)}
                           trigger={
-                            <button
+                            <Button
+                              size="sm"
+                              variant="destructive"
                               disabled={deleteMutation.isPending}
-                              className="px-3 py-1 rounded text-xs font-semibold focusable-danger hover:opacity-70 transition disabled:opacity-50"
-                              style={{ backgroundColor: 'var(--color-error)', color: 'var(--color-on-primary)' }}
                             >
                               {deleteMutation.isPending ? '...' : '✕'}
-                            </button>
+                            </Button>
                           }
                         />
                       </td>
