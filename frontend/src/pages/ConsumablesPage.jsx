@@ -35,7 +35,8 @@ function AddStockModal({ consumable, onClose, onSave }) {
 
   return (
     <div
-      className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 animate-fade-in"
+      className="fixed inset-0 flex items-center justify-center p-4 animate-fade-in"
+      style={{ backgroundColor: 'var(--overlay-medium)' }}
       onClick={onClose}
     >
       <div
@@ -100,7 +101,8 @@ function EditModal({ consumable, onClose, onSave }) {
 
   return (
     <div
-      className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 animate-fade-in"
+      className="fixed inset-0 flex items-center justify-center p-4 animate-fade-in"
+      style={{ backgroundColor: 'var(--overlay-medium)' }}
       onClick={onClose}
     >
       <div

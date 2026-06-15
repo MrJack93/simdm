@@ -49,7 +49,8 @@ function ChecklistModal({ year, section, devices, onClose, onSave }) {
 
   return (
     <div
-      className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 animate-fade-in z-50 overflow-y-auto"
+      className="fixed inset-0 flex items-center justify-center p-4 animate-fade-in z-50 overflow-y-auto"
+      style={{ backgroundColor: 'var(--overlay-medium)' }}
       onClick={onClose}
     >
       <div
@@ -162,7 +163,8 @@ function DiscrepanciesModal({ year, discrepancies, onClose, onVerify }) {
 
   return (
     <div
-      className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 animate-fade-in z-50 overflow-y-auto"
+      className="fixed inset-0 flex items-center justify-center p-4 animate-fade-in z-50 overflow-y-auto"
+      style={{ backgroundColor: 'var(--overlay-medium)' }}
       onClick={onClose}
     >
       <div

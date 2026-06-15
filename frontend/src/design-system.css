@@ -141,6 +141,11 @@
 
   /* Focus ring — 3px ring (WCAG AAA) */
   --focus-ring: 0 0 0 2px var(--color-bg-primary), 0 0 0 5px var(--color-accent);
+
+  /* ===== OVERLAY & MODAL TOKENS — Theme-aware ===== */
+  --overlay-light: rgba(0, 0, 0, 0.4);
+  --overlay-medium: rgba(0, 0, 0, 0.5);
+  --overlay-strong: rgba(0, 0, 0, 0.6);
 }
 
 /* ===== DARK MODE ===== */

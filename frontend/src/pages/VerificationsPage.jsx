@@ -285,7 +285,7 @@ export default function VerificationsPage() {
                         ? new Date(v.validUntil).toLocaleDateString('ro-RO')
                         : '—'}
                       {daysLeft !== null && daysLeft > 0 && daysLeft <= 30 && (
-                        <span className="ml-2 text-orange-600 text-xs">
+                        <span className="ml-2 text-xs" style={{ color: 'var(--color-warning)' }}>
                           Expiră în {daysLeft} zile
                         </span>
                       )}
@@ -390,7 +390,7 @@ function UploadModal({ devices, onClose, onUpload }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+    <div className="fixed inset-0 flex items-center justify-center z-50" style={{ backgroundColor: 'var(--overlay-light)' }}>
       <div className="bg-[var(--color-bg-secondary)] rounded-lg p-6 w-full max-w-md shadow-xl">
         <h2 className="text-xl font-bold mb-4">Încarcă Certificat</h2>
 
@@ -429,7 +429,7 @@ function UploadModal({ devices, onClose, onUpload }) {
           <input id="cert-file" type="file" accept=".pdf,.jpg,.png" onChange={(e) => setFile(e.target.files?.[0])} className="w-full" />
         </div>
 
-        {formError && <p className="text-red-600 text-sm mb-3">{formError}</p>}
+        {formError && <p className="text-sm mb-3" style={{ color: 'var(--color-error)' }}>{formError}</p>}
 
         <div className="flex gap-2 justify-end">
           <button type="button" onClick={onClose} className="px-4 py-2 border rounded hover:bg-[var(--color-bg-tertiary)]">Anulare</button>

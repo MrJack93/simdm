@@ -546,7 +546,7 @@ function CreatePlanModal({ devices, onClose, onCreate, year, isPending }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 transition-opacity">
+    <div className="fixed inset-0 flex items-center justify-center z-50 transition-opacity" style={{ backgroundColor: 'var(--overlay-strong)' }}>
       <div className="rounded-2xl p-6 w-full max-w-md shadow-2xl border transition-all duration-150" style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)' }}>
         <h2 className="text-xl font-bold mb-5" style={{ color: 'var(--color-text-primary)' }}>Creare Plan Mentenanță — {year}</h2>
 
