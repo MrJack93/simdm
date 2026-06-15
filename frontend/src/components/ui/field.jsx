@@ -40,7 +40,7 @@ const FieldDescription = forwardRef(({ className, ...props }, ref) => (
     data-slot="field-description"
     className={cn(
       'text-xs',
-      'text-[var(--color-text-tertiary)]',
+      'text-[var(--color-text-secondary)]',
       className,
     )}
     {...props}

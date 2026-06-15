@@ -271,10 +271,10 @@ export default function MaintenanceExecutionPage() {
                                 />
                               </div>
                               {hasSignature && (
-                                <p className="text-xs text-green-600">✅ Semnătură înregistrată</p>
+                                <p className="text-xs text-[var(--color-success)]">✅ Semnătură înregistrată</p>
                               )}
                               {!hasSignature && (
-                                <p className="text-xs text-orange-600">⚠️ Semnătură obligatorie</p>
+                                <p className="text-xs text-[var(--color-warning)]">⚠️ Semnătură obligatorie</p>
                               )}
                               <Button
                                 type="button"

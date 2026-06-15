@@ -172,6 +172,11 @@
     color: var(--color-disabled-text);
   }
 
+  /* Dark mode button contrast improvement */
+  [data-theme="dark"] .btn-primary {
+    color: var(--color-text-primary);
+  }
+
   /* Button Secondary — Cream + hairline border */
   .btn-secondary {
     @apply inline-flex items-center justify-center px-5 py-2.5 min-h-[40px]
@@ -217,6 +222,11 @@
 
   .btn-danger:disabled {
     color: var(--color-disabled-text);
+  }
+
+  /* Dark mode button contrast improvement */
+  [data-theme="dark"] .btn-danger {
+    color: var(--color-text-primary);
   }
 
   /* Input Base — Cream + hairline border */
