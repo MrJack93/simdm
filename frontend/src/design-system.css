@@ -139,8 +139,8 @@
   --color-disabled-text: #6c6a64;
   --color-disabled-bg: #e6dfd8;
 
-  /* Focus ring */
-  --focus-ring: 0 0 0 2px var(--color-bg-primary), 0 0 0 4px var(--color-accent);
+  /* Focus ring — 3px ring (WCAG AAA) */
+  --focus-ring: 0 0 0 2px var(--color-bg-primary), 0 0 0 5px var(--color-accent);
 }
 
 /* ===== DARK MODE ===== */

@@ -59,7 +59,7 @@
     @apply border-border outline-ring/50;
   }
 
-  /* WCAG 2024: 2.4.7 Focus Visible — Apply to ALL interactive elements */
+  /* WCAG 2024: 2.4.7 Focus Visible — 3px ring (WCAG AAA) */
   button:not(.no-focus),
   a[href]:not(.no-focus),
   input:not(.no-focus):not([type="hidden"]),
@@ -70,12 +70,12 @@
   [role="menuitem"]:not(.no-focus),
   [role="tab"]:not(.no-focus),
   [tabindex]:not(.no-focus) {
-    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2;
+    @apply focus-visible:outline-none focus-visible:ring focus-visible:ring-offset-2;
     --tw-ring-color: var(--color-accent);
     --tw-ring-offset-color: var(--color-bg-primary);
   }
 
-  /* Dark mode: Adjust ring offset color for dark backgrounds */
+  /* Dark mode: Brighter ring for visibility */
   [data-theme="dark"] button:not(.no-focus),
   [data-theme="dark"] a[href]:not(.no-focus),
   [data-theme="dark"] input:not(.no-focus):not([type="hidden"]),
@@ -86,6 +86,7 @@
   [data-theme="dark"] [role="menuitem"]:not(.no-focus),
   [data-theme="dark"] [role="tab"]:not(.no-focus),
   [data-theme="dark"] [tabindex]:not(.no-focus) {
+    --tw-ring-color: var(--color-accent-bright);
     --tw-ring-offset-color: var(--color-bg-primary);
   }
 }
@@ -160,6 +161,10 @@
 
   .btn-primary:active {
     transform: scale(0.97);
+  }
+
+  .btn-primary:focus-visible {
+    background-color: var(--color-accent-hover);
   }
 
   .btn-primary:disabled {
@@ -311,6 +316,26 @@
     th {
       border: 1px solid #ccc;
       padding: 0.5rem;
+    }
+  }
+
+  /* Accessibility: Reduce Motion Support — WCAG 2.4.3 */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+
+    /* Instant focus change (no animation) */
+    button:focus-visible,
+    a:focus-visible,
+    input:focus-visible,
+    select:focus-visible,
+    textarea:focus-visible {
+      transition: none;
     }
   }
 }
