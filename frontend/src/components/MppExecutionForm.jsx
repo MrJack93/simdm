@@ -2,6 +2,8 @@ import { useState, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getConsumables } from '../api/consumables';
 import { executeMpp } from '../api/mppExecutions';
+import { InputGroup, InputGroupTextarea, InputGroupText } from '../components/ui/input-group';
+import { Field, FieldLabel, FieldDescription } from '../components/ui/field';
 
 const DEFAULT_CHECKLIST = [
   { id: 'check1', label: 'Verificare componentă', checked: false },
@@ -17,12 +19,15 @@ export default function MppExecutionForm({ occurrenceId }) {
   const [stockError, setStockError] = useState('');
   const [beforePhoto, setBeforePhoto] = useState(null);
   const [afterPhoto, setAfterPhoto] = useState(null);
+  const [observations, setObservations] = useState('');
   const [engineerSigned, setEngineerSigned] = useState(false);
   const [managerSigned, setManagerSigned] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [pdfUrl, setPdfUrl] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  const MAX_OBSERVATIONS = 500;
 
   const { data: consumablesData } = useQuery({
     queryKey: ['consumables-mpp'],
@@ -192,6 +197,27 @@ export default function MppExecutionForm({ occurrenceId }) {
           />
           {afterPhoto && <img src={afterPhoto} alt="Preview După" className="mt-2 h-24 object-cover" />}
         </div>
+      </section>
+
+      {/* Observations */}
+      <section className="mb-6">
+        <Field className="flex-col">
+          <FieldLabel htmlFor="observations">Observații (Opțional)</FieldLabel>
+          <FieldDescription>Spații și note suplimentare despre mentenanță</FieldDescription>
+          <InputGroup className="mt-2">
+            <InputGroupTextarea
+              id="observations"
+              placeholder="Adaugă observații despre lucrările efectuate..."
+              value={observations}
+              onChange={(e) => setObservations(e.target.value.slice(0, MAX_OBSERVATIONS))}
+              maxLength={MAX_OBSERVATIONS}
+              rows={4}
+            />
+            <InputGroupText className="ml-2 text-xs whitespace-nowrap">
+              {observations.length}/{MAX_OBSERVATIONS}
+            </InputGroupText>
+          </InputGroup>
+        </Field>
       </section>
 
       {/* Signatures */}

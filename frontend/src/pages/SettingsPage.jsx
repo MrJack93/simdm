@@ -9,6 +9,7 @@ import { toast } from 'react-toastify';
 import api from '../api/axios';
 import { Switch } from '../components/ui/switch';
 import { Button } from '../components/ui/button';
+import { Field, FieldLabel, FieldDescription } from '../components/ui/field';
 import {
   Dialog,
   DialogContent,
@@ -87,18 +88,20 @@ export default function SettingsPage() {
         <section className="p-6 rounded-xl border" style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)' }}>
           <h3 className="text-lg font-bold mb-6" style={{ color: 'var(--color-accent)' }}>Preferințe de Afișare</h3>
 
-          <div className="flex items-center justify-between p-4 rounded-lg mb-4" style={{ backgroundColor: 'var(--color-bg-tertiary)' }}>
+          <Field className="flex-row items-center justify-between p-4 rounded-lg mb-4" style={{ backgroundColor: 'var(--color-bg-tertiary)' }}>
             <div className="flex items-center gap-3">
               {theme === 'dark' ? <Moon size={20} style={{ color: 'var(--color-accent)' }} /> : <Sun size={20} style={{ color: 'var(--color-accent)' }} />}
               <div>
-                <p className="font-medium text-sm" style={{ color: 'var(--color-text-primary)' }}>Mod {theme === 'dark' ? 'întunecat' : 'clar'}</p>
-                <p className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>Schimbă tema de culori a interfeței</p>
+                <FieldLabel className="mb-1">Mod {theme === 'dark' ? 'întunecat' : 'clar'}</FieldLabel>
+                <FieldDescription className="text-xs">Schimbă tema de culori a interfeței</FieldDescription>
               </div>
             </div>
-            <button onClick={toggleTheme} className="px-4 py-2 rounded-lg font-semibold text-sm transition-all" style={{ backgroundColor: 'var(--color-accent)', color: 'var(--color-bg-primary)' }}>
-              Comută
-            </button>
-          </div>
+            <Switch
+              checked={theme === 'dark'}
+              onCheckedChange={toggleTheme}
+              aria-label="Comută modul de afișare"
+            />
+          </Field>
 
           <div className="p-4 rounded-lg text-sm" style={{ backgroundColor: 'var(--color-accent-subtle)', color: 'var(--color-accent)' }}>
             <p className="font-medium mb-1">💡 Sfat</p>
