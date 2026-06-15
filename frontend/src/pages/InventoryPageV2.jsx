@@ -218,8 +218,8 @@ function CardView({ devices, isLoading, onDelete }) {
   );
 }
 
-/** @param {{ devices: Device[] }} props */
-function KanbanView({ devices }) {
+/** @param {{ devices: Device[], isLoading: boolean, onDelete: (id: number) => void }} props */
+function KanbanView({ devices, isLoading, onDelete }) {
   const STATUS_ORDER = ['FUNCTIONAL', 'REZERVA', 'IN_REPARATIE', 'DEFECT', 'IMPRUMUTAT', 'CASAT'];
   const KANBAN_LIMIT = 10;
   const grouped = Object.fromEntries(
@@ -228,57 +228,81 @@ function KanbanView({ devices }) {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-4">
-      {STATUS_ORDER.map(status => {
-        const allItems = grouped[status];
-        const visibleItems = allItems.slice(0, KANBAN_LIMIT);
-        const hiddenCount = Math.max(0, allItems.length - KANBAN_LIMIT);
-
-        return (
-          <div key={status}>
+      {isLoading ? (
+        // Skeleton loading: 6 coloane cu skeleton cards
+        Array.from({ length: 6 }).map((_, colIndex) => (
+          <div key={`skeleton-col-${colIndex}`}>
             <div
-              className="p-3 rounded-lg mb-3 font-bold text-sm"
-              style={{ backgroundColor: STATUS_COLORS[status], color: STATUS_TEXT_COLORS[status] || 'var(--color-text-primary)' }}
-            >
-              {STATUS_ICONS[status]} {STATUS_LABELS[status]} ({allItems.length})
-            </div>
+              className="p-3 rounded-lg mb-3 skeleton skeleton-text h-6"
+            />
             <div className="space-y-2">
-              {visibleItems.length === 0 ? (
-                <div className="p-4 rounded-lg border text-center" style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)' }}>
-                  <p className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>Niciun dispozitiv</p>
-                </div>
-              ) : (
-                visibleItems.map(device => (
-                  <div
-                    key={device.id}
-                    className="p-4 rounded-lg border"
-                    style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)' }}
-                  >
-                    <p className="font-semibold text-sm" style={{ color: 'var(--color-text-primary)' }}>{device.name}</p>
-                    <p className="text-xs mt-1" style={{ color: 'var(--color-text-secondary)' }}>{device.inventoryNumber}</p>
-                    <div className="flex gap-2 mt-3">
-                      <Link
-                        to={`/devices/${device.id}/edit`}
-                        className="flex-1 py-1 px-2 rounded text-xs font-medium text-center"
-                        style={{ backgroundColor: 'var(--color-accent)', color: 'var(--color-bg-primary)' }}
-                      >
-                        Editare
-                      </Link>
-                    </div>
-                  </div>
-                ))
-              )}
-              {hiddenCount > 0 && (
+              {Array.from({ length: 3 }).map((_, i) => (
                 <div
-                  className="p-3 rounded-lg border text-center text-xs font-medium"
-                  style={{ backgroundColor: 'var(--color-bg-tertiary)', borderColor: 'var(--color-border)', color: 'var(--color-text-secondary)' }}
+                  key={`skeleton-card-${i}`}
+                  className="p-4 rounded-lg border"
+                  style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)' }}
                 >
-                  +{hiddenCount} mai mult{hiddenCount === 1 ? '' : 'e'}
+                  <div className="skeleton skeleton-text mb-2"></div>
+                  <div className="skeleton skeleton-text mb-3 w-2/3"></div>
+                  <div className="skeleton skeleton-button"></div>
                 </div>
-              )}
+              ))}
             </div>
           </div>
-        );
-      })}
+        ))
+      ) : (
+        STATUS_ORDER.map(status => {
+          const allItems = grouped[status];
+          const visibleItems = allItems.slice(0, KANBAN_LIMIT);
+          const hiddenCount = Math.max(0, allItems.length - KANBAN_LIMIT);
+
+          return (
+            <div key={status}>
+              <div
+                className="p-3 rounded-lg mb-3 font-bold text-sm"
+                style={{ backgroundColor: STATUS_COLORS[status], color: STATUS_TEXT_COLORS[status] || 'var(--color-text-primary)' }}
+              >
+                {STATUS_ICONS[status]} {STATUS_LABELS[status]} ({allItems.length})
+              </div>
+              <div className="space-y-2">
+                {visibleItems.length === 0 ? (
+                  <div className="p-4 rounded-lg border text-center" style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)' }}>
+                    <p className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>Niciun dispozitiv</p>
+                  </div>
+                ) : (
+                  visibleItems.map(device => (
+                    <div
+                      key={device.id}
+                      className="p-4 rounded-lg border"
+                      style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)' }}
+                    >
+                      <p className="font-semibold text-sm" style={{ color: 'var(--color-text-primary)' }}>{device.name}</p>
+                      <p className="text-xs mt-1" style={{ color: 'var(--color-text-secondary)' }}>{device.inventoryNumber}</p>
+                      <div className="flex gap-2 mt-3">
+                        <Link
+                          to={`/devices/${device.id}/edit`}
+                          className="flex-1 py-1 px-2 rounded text-xs font-medium text-center"
+                          style={{ backgroundColor: 'var(--color-accent)', color: 'var(--color-bg-primary)' }}
+                        >
+                          Editare
+                        </Link>
+                      </div>
+                    </div>
+                  ))
+                )}
+                {hiddenCount > 0 && (
+                  <div
+                    className="p-3 rounded-lg border text-center text-xs font-medium"
+                    style={{ backgroundColor: 'var(--color-bg-tertiary)', borderColor: 'var(--color-border)', color: 'var(--color-text-secondary)' }}
+                  >
+                    +{hiddenCount} mai mult{hiddenCount === 1 ? '' : 'e'}
+                  </div>
+                )}
+              </div>
+            </div>
+          );
+        })
+      )}
     </div>
   );
 }
@@ -476,7 +500,7 @@ export default function InventoryPage() {
         ) : view === 'cards' ? (
           <CardView devices={isLoading ? [] : paginatedDevices} isLoading={isLoading} onDelete={handleDelete} />
         ) : (
-          <KanbanView devices={filteredDevices} />
+          <KanbanView devices={isLoading ? [] : filteredDevices} isLoading={isLoading} onDelete={handleDelete} />
         )}
 
         {/* Pagination */}
