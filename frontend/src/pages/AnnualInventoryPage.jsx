@@ -2,7 +2,7 @@ import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import api from '../api/axios';
-import Skeleton from '../components/Skeleton';
+import { Skeleton, SkeletonCard, SkeletonTable, SkeletonLines } from '../components/ui/skeleton';
 
 function ChecklistModal({ year, section, devices, onClose, onSave }) {
   const initialItemsRef = useRef(

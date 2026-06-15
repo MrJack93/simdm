@@ -6,7 +6,7 @@ import { ErrorBoundary } from './components/ErrorBoundary';
 import Login from './pages/Login';
 import ProtectedRoute from './components/ProtectedRoute';
 import SkipLink from './components/SkipLink';
-import Skeleton from './components/Skeleton';
+import { Skeleton } from './components/ui/skeleton';
 import { Menu, X, Home, Warehouse, Package, Calendar, Cog, LogOut, Wrench, AlertTriangle, FileText, TicketCheck, CheckSquare, Briefcase } from 'lucide-react';
 
 // Lazy-loaded pages - code splitting pentru perf boost

@@ -11,7 +11,7 @@ import {
   downloadFormular9Pdf,
 } from '../api/repairTickets';
 import { getDevices } from '../api/devices';
-import Skeleton, { SkeletonCard } from '../components/Skeleton';
+import { Skeleton, SkeletonCard, SkeletonTable } from '../components/ui/skeleton';
 import {
   Dialog,
   DialogContent,
@@ -235,12 +235,15 @@ export default function RepairTicketsPage() {
       </div>
 
       {isLoading ? (
-        <div className="space-y-4 py-8">
-          <Skeleton variant="line" width="w-1/4" height="h-6" />
+        <div aria-busy="true" aria-label="Se încarcă tichetele de reparație...">
+          <Skeleton className="h-6 w-1/4 mb-6" />
           <div className="grid grid-cols-5 gap-4">
-            {[1, 2, 3, 4, 5].map((i) => (
-              <div key={i} className="space-y-3">
-                <SkeletonCard lines={2} />
+            {['URGENT', 'HIGH', 'MEDIUM', 'LOW', 'CLOSED'].map((status) => (
+              <div key={status} className="space-y-3">
+                <Skeleton className="h-6 w-full" />
+                {[1, 2, 3].map((i) => (
+                  <Skeleton key={i} className="h-24 w-full rounded-lg" />
+                ))}
               </div>
             ))}
           </div>

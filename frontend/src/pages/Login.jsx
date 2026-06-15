@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { Eye, EyeOff } from 'lucide-react';
 import SkipLink from '../components/SkipLink';
-import Skeleton from '../components/Skeleton';
+import { Skeleton } from '../components/ui/skeleton';
 
 // Schema validare — mesaje în română, consistente cu restul aplicației
 const loginSchema = z.object({

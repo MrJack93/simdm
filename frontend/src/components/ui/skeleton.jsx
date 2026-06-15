@@ -1,57 +1,66 @@
+import { cn } from "@/lib/utils"
+
 /**
- * Skeleton component — placeholder loading indicator
- * WCAG 2024 compliant with prefers-reduced-motion support
- * Per DESIGN.md: "Skeleton screens — NU spinners pentru loading"
+ * Skeleton component — shadcn/ui v4 pattern
+ * Simplified composable API with just className
+ * Per context7: Use data attributes + Tailwind classes
+ * 
+ * WCAG 2024: aria-busy on parent container
+ * Animation respects prefers-reduced-motion
  */
-
-export function Skeleton({ className = '', variant = 'line', height = 'h-4', width = 'w-full' }) {
-  const variants = {
-    line: 'rounded-md',
-    card: 'rounded-lg',
-    circle: 'rounded-full w-12 h-12',
-    button: 'rounded-lg h-10',
-  };
-
+export function Skeleton({ className, ...props }) {
   return (
     <div
-      className={`bg-[var(--color-bg-tertiary)] ${variants[variant]} ${height} ${width} ${className} animate-pulse`}
+      data-slot="skeleton"
+      className={cn(
+        "bg-[var(--color-bg-tertiary)] animate-pulse rounded-md",
+        className
+      )}
       role="status"
       aria-label="Se încarcă..."
+      {...props}
     />
-  );
+  )
 }
 
 /**
- * SkeletonGroup — multiple skeleton lines for card loading
+ * Utility: Create skeleton lines for text loading
+ * @param {number} lines - Number of skeleton lines to render
+ * @param {string} className - Additional Tailwind classes
  */
-export function SkeletonGroup({ lines = 3, className = '' }) {
+export function SkeletonLines({ lines = 3, className = "" }) {
   return (
-    <div className={`space-y-3 ${className}`}>
+    <div className={`space-y-2 ${className}`}>
       {Array.from({ length: lines }).map((_, i) => (
         <Skeleton
           key={i}
-          height={i === 0 ? 'h-5' : i === lines - 1 ? 'h-3' : 'h-4'}
-          width={i === lines - 1 ? 'w-1/3' : 'w-full'}
+          className={`h-4 rounded-md ${
+            i === lines - 1 ? "w-2/3" : "w-full"
+          }`}
         />
       ))}
     </div>
-  );
+  )
 }
 
 /**
- * SkeletonCard — full card skeleton for loading state
+ * Utility: Create skeleton card with header + content
+ * @param {number} lines - Lines in content area
+ * @param {string} className - Additional Tailwind classes
  */
-export function SkeletonCard({ lines = 4, className = '' }) {
+export function SkeletonCard({ lines = 3, className = "" }) {
   return (
-    <div className={`p-4 rounded-lg border bg-[var(--color-bg-secondary)] border-[var(--color-border)] ${className}`}>
-      <Skeleton variant="line" height="h-6" width="w-2/3" className="mb-4" />
-      <SkeletonGroup lines={lines} />
+    <div className={`p-4 rounded-lg border space-y-3 ${className}`}>
+      <Skeleton className="h-5 w-2/3" /> {/* Header */}
+      <SkeletonLines lines={lines} />
     </div>
-  );
+  )
 }
 
 /**
- * SkeletonTable — skeleton for table rows
+ * Utility: Create skeleton table rows
+ * @param {number} rows - Number of rows
+ * @param {number} cols - Number of columns
  */
 export function SkeletonTable({ rows = 5, cols = 4 }) {
   return (
@@ -59,10 +68,13 @@ export function SkeletonTable({ rows = 5, cols = 4 }) {
       {Array.from({ length: rows }).map((_, rowIdx) => (
         <div key={rowIdx} className="flex gap-3">
           {Array.from({ length: cols }).map((_, colIdx) => (
-            <Skeleton key={colIdx} width={colIdx === 0 ? 'w-1/4' : 'w-full'} />
+            <Skeleton
+              key={colIdx}
+              className={`h-4 ${colIdx === 0 ? "w-1/4" : "w-full"}`}
+            />
           ))}
         </div>
       ))}
     </div>
-  );
+  )
 }

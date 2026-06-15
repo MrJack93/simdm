@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import api from '../api/axios';
 import { Plus } from 'lucide-react';
-import Skeleton from '../components/Skeleton';
+import { Skeleton, SkeletonTable } from '../components/ui/skeleton';
 import { DeleteConfirmDialog } from '../components/DeleteConfirmDialog';
 import { Field, FieldLabel, FieldDescription } from '../components/ui/field';
 import { useConsumablesWithFilters } from '../hooks/useConsumables';

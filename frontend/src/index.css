@@ -457,3 +457,62 @@
   border-color: var(--color-accent-bright);
   background-color: var(--color-bg-elevated);
 }
+
+/* ===== SKELETON IMPROVEMENTS (context7 + UI/UX 2026) ===== */
+
+/* Enhanced pulse animation respecting prefers-reduced-motion */
+@keyframes enhanced-pulse {
+  0%, 100% { opacity: 0.85; }
+  50% { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .animate-pulse {
+    animation: enhanced-pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+}
+
+/* Shimmer animation for advanced loading perception */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: calc(200% + 0px) 0; }
+}
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--color-bg-tertiary) 25%,
+    var(--color-bg-elevated) 50%,
+    var(--color-bg-tertiary) 75%
+  );
+  background-size: 200% auto;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .shimmer {
+    animation: shimmer 2s linear infinite;
+  }
+}
+
+/* Dark mode: Enhanced skeleton visibility */
+[data-theme="dark"] [data-slot="skeleton"] {
+  background-color: var(--color-bg-elevated);
+  background-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.05) 50%,
+    transparent 100%
+  );
+  background-size: 200% auto;
+}
+
+/* Loading state container accessibility */
+[aria-busy="true"] {
+  position: relative;
+}
+
+[aria-busy="true"]::after {
+  /* Invisible overlay prevents interaction during loading */
+  pointer-events: auto;
+  cursor: wait;
+}

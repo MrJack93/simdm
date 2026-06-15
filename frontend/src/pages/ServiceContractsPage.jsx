@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getProviders, getContracts, getCostAnalysis, createContract, rateProvider, deleteContract } from '../api/serviceContracts';
 import { getDevices } from '../api/devices';
-import Skeleton, { SkeletonCard } from '../components/Skeleton';
+import { Skeleton, SkeletonCard } from '../components/ui/skeleton';
 
 export default function ServiceContractsPage() {
   const queryClient = useQueryClient();
