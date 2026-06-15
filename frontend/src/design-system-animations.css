@@ -177,14 +177,16 @@
   animation: slideOutToRight 0.2s ease-in forwards;
 }
 
-/* Modal overlay */
-.animate-modal-overlay {
-  animation: fadeIn 0.15s ease-out;
-}
+/* Modal overlay & content — only when motion is safe */
+@media (prefers-reduced-motion: no-preference) {
+  .animate-modal-overlay {
+    animation: fadeIn 0.15s ease-out;
+  }
 
-/* Modal content */
-.animate-modal-content {
-  animation: scaleIn 0.2s var(--ease-out);
+  /* Modal content */
+  .animate-modal-content {
+    animation: scaleIn 0.2s var(--ease-out);
+  }
 }
 
 /* Smooth transitions */
