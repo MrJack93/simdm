@@ -8,6 +8,15 @@ import { Moon, Sun, LogOut, User, Lock } from 'lucide-react';
 import { toast } from 'react-toastify';
 import api from '../api/axios';
 import { Switch } from '../components/ui/switch';
+import { Button } from '../components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '../components/ui/dialog';
 
 const changePasswordSchema = z.object({
   currentPassword: z.string().min(1, 'Parolă curentă obligatorie'),
@@ -208,67 +217,51 @@ export default function SettingsPage() {
 
         {/* Logout */}
         <div className="space-y-4">
-          <button onClick={() => setShowLogoutConfirm(true)} className="w-full px-4 py-3 rounded-lg font-semibold transition-all flex items-center justify-center gap-2" style={{ backgroundColor: 'var(--color-error)', color: '#ffffff' }}>
-            <LogOut size={18} /> Deconectare
-          </button>
+          <Button
+            onClick={() => setShowLogoutConfirm(true)}
+            className="w-full"
+            size="lg"
+            variant="destructive"
+          >
+            <LogOut size={18} className="mr-2" /> Deconectare
+          </Button>
           <p className="text-xs text-center" style={{ color: 'var(--color-text-secondary)' }}>© 2026 SIMDM. Toate drepturile rezervate.</p>
         </div>
 
         {/* Logout Confirmation Dialog */}
-        {showLogoutConfirm && (
-          <div
-            className="fixed inset-0 z-50 flex items-center justify-center p-4"
-            style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="logout-dialog-title"
-            onKeyDown={(e) => e.key === 'Escape' && setShowLogoutConfirm(false)}
-          >
-            <div
-              className="w-full max-w-sm rounded-xl p-6"
-              style={{
-                backgroundColor: 'var(--color-bg-secondary)',
-                border: '1px solid var(--color-border)',
-              }}
-            >
-              <h2
-                id="logout-dialog-title"
-                className="text-lg font-medium text-center mb-2"
-                style={{
-                  fontFamily: 'var(--font-family-heading)',
-                  color: 'var(--color-text-primary)',
+        <Dialog open={showLogoutConfirm} onOpenChange={setShowLogoutConfirm}>
+          <DialogContent showCloseButton={false}>
+            <DialogHeader className="text-center">
+              <DialogTitle>Confirmare deconectare</DialogTitle>
+              <DialogDescription>
+                Ești sigur că vrei să te deconectezi?
+              </DialogDescription>
+            </DialogHeader>
+
+            <div className="text-sm text-center" style={{ color: 'var(--color-text-secondary)' }}>
+              <p>⚠️ Datele nesalvate vor fi pierdute.</p>
+            </div>
+
+            <DialogFooter>
+              <Button
+                variant="outline"
+                onClick={() => setShowLogoutConfirm(false)}
+                autoFocus
+              >
+                Anulare
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={() => {
+                  setShowLogoutConfirm(false);
+                  logout();
                 }}
               >
-                Confirmare deconectare
-              </h2>
-
-              <p className="text-sm text-center mb-6" style={{ color: 'var(--color-text-secondary)' }}>
-                Ești sigur că vrei să te deconectezi?
-                <br />
-                <span style={{ color: 'var(--color-text-tertiary)', fontSize: '0.875rem' }}>Datele nesalvate vor fi pierdute.</span>
-              </p>
-
-              <div className="flex gap-3">
-                <button
-                  onClick={() => setShowLogoutConfirm(false)}
-                  className="flex-1 btn-secondary"
-                  autoFocus
-                >
-                  Anulare
-                </button>
-                <button
-                  onClick={() => {
-                    setShowLogoutConfirm(false);
-                    logout();
-                  }}
-                  className="flex-1 btn-danger"
-                >
-                  Deconectare
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
+                Deconectare
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );

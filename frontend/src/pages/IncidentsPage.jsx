@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import { AlertTriangle, Plus, Edit2, Trash2, ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { Button } from '../components/ui/button';
 import api from '../api/axios';
 
 const ITEMS_PER_PAGE = 25;
@@ -225,15 +226,18 @@ function StatusChanger({ incident, onChanged }) {
   return (
     <div className="relative">
       <StatusBadge status={incident.status} />
-      <button
+      <Button
         onClick={() => setOpen(!open)}
-        className="ml-1 px-3 py-2 rounded min-h-[40px] flex items-center justify-center"
-        style={{ backgroundColor: 'var(--color-bg-tertiary)', color: 'var(--color-text-secondary)' }}
+        variant="ghost"
+        size="lg"
         aria-label="Schimbă status"
+        aria-expanded={open}
+        aria-haspopup="listbox"
         disabled={loading}
+        className="ml-1"
       >
         ▼
-      </button>
+      </Button>
       {open && (
         <div
           className="absolute top-8 left-0 z-10 rounded-lg border shadow-lg overflow-hidden"
