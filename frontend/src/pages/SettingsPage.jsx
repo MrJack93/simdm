@@ -153,14 +153,14 @@ export default function SettingsPage() {
               )}
             </div>
 
-            <button
+            <Button
               type="submit"
               disabled={isChanging}
-              className="w-full px-4 py-3 rounded-lg font-semibold transition-all"
-              style={{ backgroundColor: 'var(--color-accent)', color: 'var(--color-bg-primary)', opacity: isChanging ? 0.6 : 1 }}
+              className="w-full"
+              size="lg"
             >
               {isChanging ? 'Se salvează...' : 'Schimbă parolă'}
-            </button>
+            </Button>
           </form>
 
           <div className="p-3 rounded text-xs mt-4" style={{ backgroundColor: 'var(--color-warning-bg)', color: 'var(--color-warning)' }}>

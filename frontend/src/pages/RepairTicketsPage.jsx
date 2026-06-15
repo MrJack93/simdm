@@ -12,6 +12,7 @@ import {
 } from '../api/repairTickets';
 import { getDevices } from '../api/devices';
 import { Skeleton, SkeletonCard, SkeletonTable } from '../components/ui/skeleton';
+import { Button } from '../components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -178,26 +179,27 @@ export default function RepairTicketsPage() {
 
         {/* View toggle */}
         <div className="flex gap-3 mb-4 flex-wrap">
-          <button
+          <Button
+            size="lg"
+            variant={viewMode === 'kanban' ? 'default' : 'outline'}
             onClick={() => setViewMode('kanban')}
-            className={`px-4 py-2 rounded-lg text-sm font-medium border transition-colors ${viewMode === 'kanban' ? 'btn-primary' : ''}`}
-            style={viewMode !== 'kanban' ? { borderColor: 'var(--color-border)', color: 'var(--color-text-primary)' } : {}}
           >
             Kanban
-          </button>
-          <button
+          </Button>
+          <Button
+            size="lg"
+            variant={viewMode === 'jurnal' ? 'default' : 'outline'}
             onClick={() => setViewMode('jurnal')}
-            className={`px-4 py-2 rounded-lg text-sm font-medium border transition-colors ${viewMode === 'jurnal' ? 'btn-primary' : ''}`}
-            style={viewMode !== 'jurnal' ? { borderColor: 'var(--color-border)', color: 'var(--color-text-primary)' } : {}}
           >
             Jurnal Chemari (F7)
-          </button>
-          <button
+          </Button>
+          <Button
+            size="lg"
+            variant="outline"
             onClick={() => setShowFilters((v) => !v)}
-            className="px-4 py-2 border border-[var(--color-border)] rounded-lg text-sm hover:bg-[var(--color-bg-tertiary)]"
           >
             Filtrare
-          </button>
+          </Button>
         </div>
 
         {showFilters && (
