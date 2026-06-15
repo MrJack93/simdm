@@ -260,14 +260,20 @@ export default function RepairTicketsPage() {
                 <span className="text-[var(--color-text-tertiary)] ml-2">({ticketsByStatus[status].length})</span>
               </h2>
               <div className="space-y-3 flex-1">
-                {ticketsByStatus[status].map((ticket) => (
-                  <TicketCard
-                    key={ticket.id}
-                    ticket={ticket}
-                    onOpen={() => handleOpenDetails(ticket)}
-                    onDownloadF8={() => handleDownloadF8(ticket.id)}
-                  />
-                ))}
+                {ticketsByStatus[status].length === 0 ? (
+                  <div className="p-4 rounded-lg text-center border-2 border-dashed" style={{ borderColor: 'var(--color-border)', color: 'var(--color-text-secondary)' }}>
+                    <p className="text-xs">Niciun tichet</p>
+                  </div>
+                ) : (
+                  ticketsByStatus[status].map((ticket) => (
+                    <TicketCard
+                      key={ticket.id}
+                      ticket={ticket}
+                      onOpen={() => handleOpenDetails(ticket)}
+                      onDownloadF8={() => handleDownloadF8(ticket.id)}
+                    />
+                  ))
+                )}
               </div>
             </div>
           ))}

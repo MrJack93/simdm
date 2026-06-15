@@ -242,25 +242,31 @@ function KanbanView({ devices }) {
               {STATUS_ICONS[status]} {STATUS_LABELS[status]} ({allItems.length})
             </div>
             <div className="space-y-2">
-              {visibleItems.map(device => (
-                <div
-                  key={device.id}
-                  className="p-4 rounded-lg border"
-                  style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)' }}
-                >
-                  <p className="font-semibold text-sm" style={{ color: 'var(--color-text-primary)' }}>{device.name}</p>
-                  <p className="text-xs mt-1" style={{ color: 'var(--color-text-secondary)' }}>{device.inventoryNumber}</p>
-                  <div className="flex gap-2 mt-3">
-                    <Link
-                      to={`/devices/${device.id}/edit`}
-                      className="flex-1 py-1 px-2 rounded text-xs font-medium text-center"
-                      style={{ backgroundColor: 'var(--color-accent)', color: 'var(--color-bg-primary)' }}
-                    >
-                      Editare
-                    </Link>
-                  </div>
+              {visibleItems.length === 0 ? (
+                <div className="p-4 rounded-lg border text-center" style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)' }}>
+                  <p className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>Niciun dispozitiv</p>
                 </div>
-              ))}
+              ) : (
+                visibleItems.map(device => (
+                  <div
+                    key={device.id}
+                    className="p-4 rounded-lg border"
+                    style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)' }}
+                  >
+                    <p className="font-semibold text-sm" style={{ color: 'var(--color-text-primary)' }}>{device.name}</p>
+                    <p className="text-xs mt-1" style={{ color: 'var(--color-text-secondary)' }}>{device.inventoryNumber}</p>
+                    <div className="flex gap-2 mt-3">
+                      <Link
+                        to={`/devices/${device.id}/edit`}
+                        className="flex-1 py-1 px-2 rounded text-xs font-medium text-center"
+                        style={{ backgroundColor: 'var(--color-accent)', color: 'var(--color-bg-primary)' }}
+                      >
+                        Editare
+                      </Link>
+                    </div>
+                  </div>
+                ))
+              )}
               {hiddenCount > 0 && (
                 <div
                   className="p-3 rounded-lg border text-center text-xs font-medium"

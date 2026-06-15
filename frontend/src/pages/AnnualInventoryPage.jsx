@@ -410,6 +410,11 @@ export default function AnnualInventoryPage() {
           <div className="py-12"><Skeleton variant="card" lines={3} /></div>
         ) : (
           <>
+            {sections.length === 0 ? (
+              <div className="card-base p-12 text-center mb-6">
+                <p style={{ color: 'var(--color-text-secondary)' }}>Nu există secțiuni de inventariere</p>
+              </div>
+            ) : (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
               {sections.map((section) => {
                 const progressPercent = section.percentage || 0;
@@ -478,6 +483,7 @@ export default function AnnualInventoryPage() {
                 );
               })}
             </div>
+            )}
 
             {/* Show Discrepancies Button */}
             {sections.some(s => s.foundCount < s.totalCount) && (

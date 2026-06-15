@@ -53,11 +53,17 @@ export default function ServiceContractsPage() {
 
       <section className="mb-8">
         <h2 className="text-xl mb-4">Furnizori</h2>
+        {(Array.isArray(providers) ? providers : []).length === 0 ? (
+          <div className="p-8 rounded-lg text-center" style={{ backgroundColor: 'var(--color-bg-secondary)', border: '1px solid var(--color-border)' }}>
+            <p style={{ color: 'var(--color-text-secondary)' }}>Nu sunt furnizori înregistrați</p>
+          </div>
+        ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {(Array.isArray(providers) ? providers : []).map((provider) => (
             <ProviderCard key={provider.id} provider={provider} onRate={() => setRatingProvider(provider)} />
           ))}
         </div>
+        )}
       </section>
 
       {costAnalysis && (
