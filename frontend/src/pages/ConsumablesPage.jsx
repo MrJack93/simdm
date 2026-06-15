@@ -6,28 +6,30 @@ import { Plus } from 'lucide-react';
 import { Skeleton, SkeletonTable } from '../components/ui/skeleton';
 import { Button } from '../components/ui/button';
 import { DeleteConfirmDialog } from '../components/DeleteConfirmDialog';
-import { Field, FieldLabel, FieldDescription } from '../components/ui/field';
+import { Field, FieldLabel, FieldDescription, FieldError } from '../components/ui/field';
 import { useConsumablesWithFilters } from '../hooks/useConsumables';
 import { deleteConsumable, consumableKeys } from '../api/consumables';
 
 function AddStockModal({ consumable, onClose, onSave }) {
   const [quantity, setQuantity] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleSave = async () => {
     const addQty = parseInt(quantity);
     if (!addQty || addQty <= 0) {
-      toast.error('Cantitate trebuie să fie un număr pozitiv');
+      setError('Cantitate trebuie să fie un număr pozitiv');
       return;
     }
 
+    setError('');
     setLoading(true);
     try {
       await api.post(`/consumables/${consumable.id}/stock`, { quantity: addQty });
       toast.success('Stoc actualizat cu succes');
       onSave();
     } catch {
-      toast.error('Eroare la actualizarea stocului');
+      setError('Eroare la actualizarea stocului');
     } finally {
       setLoading(false);
     }
@@ -53,14 +55,16 @@ function AddStockModal({ consumable, onClose, onSave }) {
               type="number"
               min="1"
               value={quantity}
-              onChange={(e) => setQuantity(e.target.value)}
+              onChange={(e) => { setQuantity(e.target.value); setError(''); }}
               className="input-base w-full"
               placeholder="ex. 10"
               autoFocus
+              aria-describedby={error ? 'add-qty-error' : undefined}
             />
             <FieldDescription>
               Stoc curent: <strong>{consumable.quantity}</strong> → După: <strong>{parseInt(quantity || 0) + consumable.quantity}</strong>
             </FieldDescription>
+            <FieldError id="add-qty-error">{error}</FieldError>
           </Field>
         </div>
         <div className="flex gap-2">
@@ -79,9 +83,31 @@ function AddStockModal({ consumable, onClose, onSave }) {
 function EditModal({ consumable, onClose, onSave }) {
   const [formData, setFormData] = useState(consumable || { quantity: 0, minQuantity: 0, unitOfMeasure: 'buc' });
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
   const isNew = !consumable || !consumable.id;
 
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.name || formData.name.trim() === '') {
+      newErrors.name = 'Denumirea consumabilului este obligatorie';
+    }
+    if (formData.quantity < 0) {
+      newErrors.quantity = 'Cantitatea nu poate fi negativă';
+    }
+    if (formData.minQuantity < 0) {
+      newErrors.minQuantity = 'Cantitatea minimă nu poate fi negativă';
+    }
+    return newErrors;
+  };
+
   const handleSave = async () => {
+    const newErrors = validateForm();
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    setErrors({});
     setLoading(true);
     try {
       if (isNew) {
@@ -118,9 +144,11 @@ function EditModal({ consumable, onClose, onSave }) {
               id="name"
               type="text"
               value={formData.name || ''}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              onChange={(e) => { setFormData({ ...formData, name: e.target.value }); setErrors({ ...errors, name: '' }); }}
               className="input-base w-full"
+              aria-describedby={errors.name ? 'name-error' : undefined}
             />
+            <FieldError id="name-error">{errors.name}</FieldError>
           </Field>
           <Field>
             <FieldLabel htmlFor="model">Model</FieldLabel>
@@ -139,9 +167,11 @@ function EditModal({ consumable, onClose, onSave }) {
               type="number"
               min="0"
               value={formData.quantity || 0}
-              onChange={(e) => setFormData({ ...formData, quantity: parseInt(e.target.value) || 0 })}
+              onChange={(e) => { setFormData({ ...formData, quantity: parseInt(e.target.value) || 0 }); setErrors({ ...errors, quantity: '' }); }}
               className="input-base w-full"
+              aria-describedby={errors.quantity ? 'quantity-error' : undefined}
             />
+            <FieldError id="quantity-error">{errors.quantity}</FieldError>
           </Field>
           <Field>
             <FieldLabel htmlFor="minQuantity">Cantitate Minimă</FieldLabel>
@@ -150,9 +180,11 @@ function EditModal({ consumable, onClose, onSave }) {
               type="number"
               min="0"
               value={formData.minQuantity || 0}
-              onChange={(e) => setFormData({ ...formData, minQuantity: parseInt(e.target.value) || 0 })}
+              onChange={(e) => { setFormData({ ...formData, minQuantity: parseInt(e.target.value) || 0 }); setErrors({ ...errors, minQuantity: '' }); }}
               className="input-base w-full"
+              aria-describedby={errors.minQuantity ? 'minQuantity-error' : undefined}
             />
+            <FieldError id="minQuantity-error">{errors.minQuantity}</FieldError>
           </Field>
           <Field>
             <FieldLabel htmlFor="expiryDate">Data Expirare</FieldLabel>
