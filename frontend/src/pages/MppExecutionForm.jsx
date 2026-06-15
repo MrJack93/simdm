@@ -507,13 +507,13 @@ export default function MppExecutionForm() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-5 rounded-xl border transition-all duration-150" style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)' }}>
           <div>
             <label className="block text-sm font-semibold mb-2" style={{ color: 'var(--color-text-secondary)' }}>Semnătură Inginer *</label>
-            <div className="border rounded-lg bg-[var(--color-bg-primary)] overflow-hidden transition-all duration-150" style={{ borderColor: 'var(--color-border)' }} aria-label="Zonă semnătură inginer">
+            <div className="border rounded-lg bg-[var(--color-bg-primary)] overflow-hidden transition-all duration-150" style={{ borderColor: 'var(--color-border)', aspectRatio: '2 / 1' }} aria-label="Zonă semnătură inginer">
               <SignatureCanvas
                 ref={signaturePadEngineerRef}
+                responsive={true}
                 canvasProps={{
-                  width: 300,
-                  height: 150,
-                  className: 'w-full rounded-lg',
+                  className: 'w-full h-full',
+                  style: { touchAction: 'none' },
                 }}
               />
             </div>
@@ -533,13 +533,13 @@ export default function MppExecutionForm() {
             <label className="block text-sm font-semibold mb-2" style={{ color: 'var(--color-text-secondary)' }}>
               Semnătură Responsabil Secție
             </label>
-            <div className="border rounded-lg bg-[var(--color-bg-primary)] overflow-hidden transition-all duration-150" style={{ borderColor: 'var(--color-border)' }} aria-label="Zonă semnătură responsabil secție">
+            <div className="border rounded-lg bg-[var(--color-bg-primary)] overflow-hidden transition-all duration-150" style={{ borderColor: 'var(--color-border)', aspectRatio: '2 / 1' }} aria-label="Zonă semnătură responsabil secție">
               <SignatureCanvas
                 ref={signaturePadManagerRef}
+                responsive={true}
                 canvasProps={{
-                  width: 300,
-                  height: 150,
-                  className: 'w-full rounded-lg',
+                  className: 'w-full h-full',
+                  style: { touchAction: 'none' },
                 }}
               />
             </div>
