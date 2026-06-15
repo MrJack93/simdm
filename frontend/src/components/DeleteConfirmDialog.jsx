@@ -62,7 +62,7 @@ export function DeleteConfirmDialog({ name, onConfirm, trigger, description }) {
         <div
           ref={dialogRef}
           className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-modal-overlay"
-          style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
+          style={{ backgroundColor: 'var(--overlay-medium)' }}
           role="dialog"
           aria-modal="true"
           aria-labelledby="delete-dialog-title"

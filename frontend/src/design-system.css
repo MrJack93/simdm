@@ -196,6 +196,11 @@
 
   /* Dark mode enhancements */
   --color-accent-bright: #e08a6e; /* Brighter accent for focus rings */
+
+  /* ===== OVERLAY & MODAL TOKENS — Dark mode (higher opacity for visibility) ===== */
+  --overlay-light: rgba(0, 0, 0, 0.6);
+  --overlay-medium: rgba(0, 0, 0, 0.75);
+  --overlay-strong: rgba(0, 0, 0, 0.85);
 }
 
 /* Legacy support: html.light-mode does nothing now (cream is default) */

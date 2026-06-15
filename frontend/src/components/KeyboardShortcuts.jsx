@@ -78,7 +78,7 @@ export default function KeyboardShortcuts() {
     <div
       ref={dialogRef}
       className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-modal-overlay"
-      style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
+      style={{ backgroundColor: 'var(--overlay-medium)' }}
       onClick={() => setOpen(false)}
       role="dialog"
       aria-modal="true"
