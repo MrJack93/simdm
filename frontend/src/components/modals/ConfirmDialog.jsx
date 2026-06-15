@@ -1,12 +1,11 @@
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogTrigger,
 } from '../ui/dialog';
 
 /**
@@ -26,32 +25,34 @@ export function ConfirmDialog({
   description,
   onConfirm,
   isDestructive = false,
-  confirmText = 'Confirma',
+  confirmText = 'Confirmă',
   cancelText = 'Anulare',
   children,
 }) {
   return (
-    <AlertDialog>
-      <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>{title}</AlertDialogTitle>
+    <Dialog>
+      <DialogTrigger asChild>{children}</DialogTrigger>
+      <DialogContent role="alertdialog" showCloseButton={false}>
+        <DialogHeader>
+          <DialogTitle>{title}</DialogTitle>
           {description && (
-            <AlertDialogDescription>{description}</AlertDialogDescription>
+            <DialogDescription>{description}</DialogDescription>
           )}
-        </AlertDialogHeader>
+        </DialogHeader>
         <div className="flex justify-end gap-3">
-          <AlertDialogCancel className="btn-secondary">
-            {cancelText}
-          </AlertDialogCancel>
-          <AlertDialogAction
-            onClick={onConfirm}
-            className={isDestructive ? 'btn-danger' : 'btn-primary'}
-          >
-            {confirmText}
-          </AlertDialogAction>
+          <DialogClose asChild>
+            <button className="btn-secondary">{cancelText}</button>
+          </DialogClose>
+          <DialogClose asChild>
+            <button
+              onClick={onConfirm}
+              className={isDestructive ? 'btn-danger' : 'btn-primary'}
+            >
+              {confirmText}
+            </button>
+          </DialogClose>
         </div>
-      </AlertDialogContent>
-    </AlertDialog>
+      </DialogContent>
+    </Dialog>
   );
 }

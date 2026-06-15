@@ -71,32 +71,32 @@ describe('TicketDetailsModal — Extra Coverage', () => {
   describe('status transitions', () => {
     it('shows INCHIS transitions (ESCALADAT only)', () => {
       renderModal({ ticket: { ...BASE_TICKET, status: 'INCHIS' } });
-      expect(screen.getByText('ESCALADAT')).toBeInTheDocument();
-      expect(screen.queryByText('REZOLVAT')).not.toBeInTheDocument();
+      expect(screen.getByText('Escaladat extern')).toBeInTheDocument();
+      expect(screen.queryByText('Rezolvat')).not.toBeInTheDocument();
     });
 
     it('shows ESCALADAT transitions', () => {
       renderModal({ ticket: { ...BASE_TICKET, status: 'ESCALADAT' } });
-      expect(screen.getByText('IN_LUCRU')).toBeInTheDocument();
-      expect(screen.getByText('DESCHIS')).toBeInTheDocument();
+      expect(screen.getByText('În lucru')).toBeInTheDocument();
+      expect(screen.getByText('Deschis')).toBeInTheDocument();
     });
 
     it('shows REZOLVAT transitions', () => {
       renderModal({ ticket: { ...BASE_TICKET, status: 'REZOLVAT' } });
-      expect(screen.getByText('TESTAT')).toBeInTheDocument();
-      expect(screen.getByText('IN_LUCRU')).toBeInTheDocument();
-      expect(screen.getByText('ESCALADAT')).toBeInTheDocument();
+      expect(screen.getByText('Testat')).toBeInTheDocument();
+      expect(screen.getByText('În lucru')).toBeInTheDocument();
+      expect(screen.getByText('Escaladat extern')).toBeInTheDocument();
     });
 
     it('shows TESTAT transitions', () => {
       renderModal({ ticket: { ...BASE_TICKET, status: 'TESTAT' } });
-      expect(screen.getByText('INCHIS')).toBeInTheDocument();
+      expect(screen.getByText('Închis')).toBeInTheDocument();
     });
 
     it('shows IN_LUCRU transitions', () => {
       renderModal({ ticket: { ...BASE_TICKET, status: 'IN_LUCRU' } });
-      expect(screen.getByText('REZOLVAT')).toBeInTheDocument();
-      expect(screen.getByText('DESCHIS')).toBeInTheDocument();
+      expect(screen.getByText('Rezolvat')).toBeInTheDocument();
+      expect(screen.getByText('Deschis')).toBeInTheDocument();
     });
 
     it('updates status via mutation', async () => {

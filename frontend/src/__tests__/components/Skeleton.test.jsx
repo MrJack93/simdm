@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import Skeleton from '../../components/Skeleton';
+import { Skeleton, SkeletonLines, SkeletonCard, SkeletonTable } from '../../components/ui/skeleton';
 
 describe('Skeleton', () => {
   it('renders with role status', () => {
@@ -10,48 +10,12 @@ describe('Skeleton', () => {
 
   it('has aria-label for accessibility', () => {
     render(<Skeleton />);
-    expect(screen.getByRole('status')).toHaveAttribute('aria-label', 'Se încarcă');
+    expect(screen.getByRole('status')).toHaveAttribute('aria-label', 'Se încarcă...');
   });
 
-  it('renders screen reader text', () => {
-    render(<Skeleton />);
-    expect(screen.getByText('Se încarcă...')).toBeInTheDocument();
-  });
-
-  it('renders text variant by default', () => {
+  it('renders with data-slot', () => {
     const { container } = render(<Skeleton />);
-    expect(container.querySelectorAll('.skeleton-text').length).toBeGreaterThan(0);
-  });
-
-  it('renders specified number of text lines', () => {
-    const { container } = render(<Skeleton lines={5} variant="text" />);
-    const textElements = container.querySelectorAll('.skeleton-text');
-    expect(textElements.length).toBe(5);
-  });
-
-  it('renders last text line with 60% width', () => {
-    const { container } = render(<Skeleton lines={3} variant="text" />);
-    const textElements = container.querySelectorAll('.skeleton-text');
-    expect(textElements[textElements.length - 1]).toHaveStyle({ width: '60%' });
-  });
-
-  it('renders card variant', () => {
-    const { container } = render(<Skeleton variant="card" />);
-    expect(container.querySelector('.card-base')).toBeInTheDocument();
-    expect(container.querySelector('.skeleton-heading')).toBeInTheDocument();
-  });
-
-  it('renders table variant', () => {
-    const { container } = render(<Skeleton variant="table" />);
-    const rows = container.querySelectorAll('.skeleton-row');
-    expect(rows.length).toBeGreaterThan(0);
-  });
-
-  it('renders table variant with specified rows', () => {
-    const { container } = render(<Skeleton variant="table" lines={4} />);
-    const rows = container.querySelectorAll('.skeleton-row');
-    // 1 header row + 4 data rows
-    expect(rows.length).toBe(5);
+    expect(container.querySelector('[data-slot="skeleton"]')).toBeInTheDocument();
   });
 
   it('applies custom className', () => {
@@ -59,8 +23,57 @@ describe('Skeleton', () => {
     expect(container.firstChild.className).toContain('custom-skeleton');
   });
 
-  it('falls back to text variant for unknown variant', () => {
-    const { container } = render(<Skeleton variant="unknown" />);
-    expect(container.querySelectorAll('.skeleton-text').length).toBeGreaterThan(0);
+  it('has animate-pulse class', () => {
+    const { container } = render(<Skeleton />);
+    expect(container.firstChild.className).toContain('animate-pulse');
+  });
+});
+
+describe('SkeletonLines', () => {
+  it('renders default 3 lines', () => {
+    const { container } = render(<SkeletonLines />);
+    const skeletons = container.querySelectorAll('[data-slot="skeleton"]');
+    expect(skeletons.length).toBe(3);
+  });
+
+  it('renders specified number of lines', () => {
+    const { container } = render(<SkeletonLines lines={5} />);
+    const skeletons = container.querySelectorAll('[data-slot="skeleton"]');
+    expect(skeletons.length).toBe(5);
+  });
+
+  it('last line has w-2/3 class', () => {
+    const { container } = render(<SkeletonLines lines={3} />);
+    const skeletons = container.querySelectorAll('[data-slot="skeleton"]');
+    expect(skeletons[skeletons.length - 1].className).toContain('w-2/3');
+  });
+});
+
+describe('SkeletonCard', () => {
+  it('renders card with header and lines', () => {
+    const { container } = render(<SkeletonCard />);
+    expect(container.querySelector('.rounded-lg')).toBeInTheDocument();
+    const skeletons = container.querySelectorAll('[data-slot="skeleton"]');
+    expect(skeletons.length).toBeGreaterThan(1);
+  });
+
+  it('renders with custom lines', () => {
+    const { container } = render(<SkeletonCard lines={5} />);
+    const skeletons = container.querySelectorAll('[data-slot="skeleton"]');
+    expect(skeletons.length).toBe(6);
+  });
+});
+
+describe('SkeletonTable', () => {
+  it('renders table with default rows', () => {
+    const { container } = render(<SkeletonTable />);
+    const rows = container.querySelectorAll('.flex.gap-3');
+    expect(rows.length).toBe(5);
+  });
+
+  it('renders table with specified rows', () => {
+    const { container } = render(<SkeletonTable rows={3} />);
+    const rows = container.querySelectorAll('.flex.gap-3');
+    expect(rows.length).toBe(3);
   });
 });

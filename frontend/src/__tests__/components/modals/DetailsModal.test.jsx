@@ -95,7 +95,8 @@ describe('TicketDetailsModal', () => {
 
   it('calls onClose when close button clicked', () => {
     const { onClose } = renderModal();
-    fireEvent.click(screen.getByText('×'));
+    const closeBtn = screen.getByRole('button', { name: /close/i });
+    fireEvent.click(closeBtn);
     expect(onClose).toHaveBeenCalled();
   });
 
@@ -130,7 +131,7 @@ describe('TicketDetailsModal', () => {
 
   it('shows ESCALADAT as only transition for INCHIS status', () => {
     renderModal({ ticket: { ...mockTicket, status: 'INCHIS' } });
-    expect(screen.getByText('ESCALADAT')).toBeInTheDocument();
+    expect(screen.getByText('Escaladat extern')).toBeInTheDocument();
   });
 
   it('shows actions taken section when present', () => {
