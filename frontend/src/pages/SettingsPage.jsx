@@ -157,7 +157,7 @@ export default function SettingsPage() {
               type="submit"
               disabled={isChanging}
               className="w-full"
-              size="lg"
+              size="xl"
             >
               {isChanging ? 'Se salvează...' : 'Schimbă parolă'}
             </Button>

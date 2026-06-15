@@ -519,7 +519,7 @@ export default function MppExecutionForm() {
             </div>
             <Button
               type="button"
-              size="sm"
+              size="lg"
               variant="outline"
               onClick={() => signaturePadEngineerRef.current?.clear()}
               className="mt-2"

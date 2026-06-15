@@ -354,7 +354,7 @@ export default function MaintenanceCalendarPage() {
                   </div>
                   <div className="flex gap-2">
                     <Button
-                      size="lg"
+                      size="xl"
                       variant="outline"
                       onClick={() => {
                         setRescheduleOccId(rescheduleOccId === occ.id ? null : occ.id);
@@ -365,7 +365,7 @@ export default function MaintenanceCalendarPage() {
                       Reprogramează
                     </Button>
                     <Button
-                      size="lg"
+                      size="xl"
                       variant="outline"
                       onClick={() => navigate('/maintenance/execution')}
                     >

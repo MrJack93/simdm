@@ -324,18 +324,18 @@ export default function VerificationsPage() {
       {/* Pagination */}
       <div className="flex justify-center gap-2 items-center">
         <Button
-          size="lg"
+          size="xl"
           variant="outline"
           onClick={() => setPage((p) => Math.max(1, p - 1))}
           disabled={page <= 1}
         >
           Pagina anterioară
         </Button>
-        <span className="px-3 py-2 min-h-[40px] flex items-center">
+        <span className="px-3 py-2 min-h-[44px] flex items-center">
           {page} / {totalPages}
         </span>
         <Button
-          size="lg"
+          size="xl"
           variant="outline"
           onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
           disabled={page >= totalPages}

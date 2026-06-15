@@ -180,21 +180,21 @@ export default function RepairTicketsPage() {
         {/* View toggle */}
         <div className="flex gap-3 mb-4 flex-wrap">
           <Button
-            size="lg"
+            size="xl"
             variant={viewMode === 'kanban' ? 'default' : 'outline'}
             onClick={() => setViewMode('kanban')}
           >
             Kanban
           </Button>
           <Button
-            size="lg"
+            size="xl"
             variant={viewMode === 'jurnal' ? 'default' : 'outline'}
             onClick={() => setViewMode('jurnal')}
           >
             Jurnal Chemari (F7)
           </Button>
           <Button
-            size="lg"
+            size="xl"
             variant="outline"
             onClick={() => setShowFilters((v) => !v)}
           >

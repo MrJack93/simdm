@@ -551,11 +551,12 @@ export default function ConsumablesPage() {
                             setShowAddStockModal(true);
                           }}
                           aria-label={`Adaugă stoc la ${consumable.name}`}
+                          className="h-12 w-12"
                         >
                           <Plus size={20} />
                         </Button>
                         <Button
-                          size="sm"
+                          size="lg"
                           onClick={() => handleEditClick(consumable)}
                         >
                           ✎ Edit
@@ -565,7 +566,7 @@ export default function ConsumablesPage() {
                           onConfirm={() => handleDelete(consumable.id)}
                           trigger={
                             <Button
-                              size="sm"
+                              size="lg"
                               variant="destructive"
                               disabled={deleteMutation.isPending}
                             >

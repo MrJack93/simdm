@@ -428,6 +428,7 @@ export default function MaintenancePage() {
                           variant="ghost"
                           onClick={() => setModal({ record: r })}
                           aria-label="Editează"
+                          className="h-12 w-12"
                         >
                           <Edit2 size={20} />
                         </Button>
@@ -442,6 +443,7 @@ export default function MaintenancePage() {
                             variant="ghost"
                             onClick={() => setDeleteId(r.id)}
                             aria-label="Șterge"
+                            className="h-12 w-12"
                           >
                             <Trash2 size={20} />
                           </Button>

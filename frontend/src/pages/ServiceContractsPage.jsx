@@ -117,7 +117,7 @@ export default function ServiceContractsPage() {
                   </td>
                   <td className="px-6 py-4 text-center">
                     <Button
-                      size="sm"
+                      size="lg"
                       variant="destructive"
                       onClick={() => setDeleteTarget(contract)}
                     >

@@ -78,7 +78,7 @@ function ViewToggle({ view, setView }) {
         <Button
           key={key}
           onClick={() => setView(key)}
-          size="lg"
+          size="xl"
           variant={view === key ? 'default' : 'ghost'}
           className={hideOnMobile ? 'hidden md:flex' : ''}
           aria-pressed={view === key}
