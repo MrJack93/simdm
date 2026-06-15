@@ -19,6 +19,15 @@ const STATUS_FLOW = {
   ESCALADAT: ['IN_LUCRU', 'DESCHIS'],
 };
 
+const STATUS_LABELS = {
+  DESCHIS: 'Deschis',
+  IN_LUCRU: 'În lucru',
+  REZOLVAT: 'Rezolvat',
+  TESTAT: 'Testat',
+  INCHIS: 'Închis',
+  ESCALADAT: 'Escaladat extern',
+};
+
 const api = axios.create({ baseURL: '/api' });
 
 export default function TicketDetailsModal({ ticket, onClose, onRefresh }) {
@@ -107,7 +116,7 @@ export default function TicketDetailsModal({ ticket, onClose, onRefresh }) {
               <div className="space-y-3">
                 <select value={selectedStatus} onChange={(e) => setSelectedStatus(e.target.value)} className="input-base">
                   <option value="">Selectează nouul status</option>
-                  {validTransitions.map((s) => <option key={s} value={s}>{s}</option>)}
+                  {validTransitions.map((s) => <option key={s} value={s}>{STATUS_LABELS[s] || s}</option>)}
                 </select>
                 <button onClick={() => updateStatusMutation.mutate(selectedStatus)} disabled={!selectedStatus || updateStatusMutation.isPending} className="w-full btn-primary">
                   {updateStatusMutation.isPending ? 'Se actualizează...' : 'Actualizează Status'}

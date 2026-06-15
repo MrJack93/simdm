@@ -537,7 +537,7 @@ export default function ConsumablesPage() {
                       <td className="px-4 py-3 text-center">
                         {urgencyBadge ? (
                           <span
-                            className="px-3 py-1 rounded text-xs font-semibold inline-block animate-bounce-in"
+                            className="px-3 py-1 rounded text-xs font-semibold inline-block animate-fade-in"
                             style={{
                               backgroundColor: urgencyBadge.color,
                               color: urgencyBadge.textColor,
