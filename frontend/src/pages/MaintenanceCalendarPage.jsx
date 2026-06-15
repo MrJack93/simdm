@@ -26,15 +26,15 @@ const YEAR_OPTIONS = Array.from({ length: 5 }, (_, i) => CURRENT_YEAR - 1 + i);
 // spec §2.3: PROGRAMAT=verde (success), SCADENT=portocaliu (warning), DEPASIT=roșu (error), EFECTUAT=albastru (info)
 function getStatusStyle(status) {
   if (status === 'DEPASIT') {
-    return { backgroundColor: 'var(--color-error-bg)', color: 'var(--color-error)', border: '1px solid rgba(248, 113, 113, 0.2)' };
+    return { backgroundColor: 'var(--color-error-bg)', color: 'var(--color-error)', borderColor: 'var(--color-error-bg)', borderWidth: '1px', borderStyle: 'solid' };
   }
   if (status === 'SCADENT') {
-    return { backgroundColor: 'var(--color-warning-bg)', color: 'var(--color-warning)', border: '1px solid rgba(251, 191, 36, 0.2)' };
+    return { backgroundColor: 'var(--color-warning-bg)', color: 'var(--color-warning)', borderColor: 'var(--color-warning-bg)', borderWidth: '1px', borderStyle: 'solid' };
   }
   if (status === 'EFECTUAT') {
-    return { backgroundColor: 'var(--color-info-bg)', color: 'var(--color-info)', border: '1px solid rgba(96, 165, 250, 0.2)' };
+    return { backgroundColor: 'var(--color-info-bg)', color: 'var(--color-info)', borderColor: 'var(--color-info-bg)', borderWidth: '1px', borderStyle: 'solid' };
   }
-  return { backgroundColor: 'var(--color-success-bg)', color: 'var(--color-success)', border: '1px solid rgba(52, 211, 153, 0.2)' }; // PROGRAMAT
+  return { backgroundColor: 'var(--color-success-bg)', color: 'var(--color-success)', borderColor: 'var(--color-success-bg)', borderWidth: '1px', borderStyle: 'solid' }; // PROGRAMAT
 }
 
 export default function MaintenanceCalendarPage() {
