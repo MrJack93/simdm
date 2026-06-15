@@ -105,7 +105,7 @@ function IncidentModal({ incident, devices, onClose, onSaved }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 animate-fade-in z-50" onClick={onClose}>
+    <div className="fixed inset-0 flex items-center justify-center p-4 animate-fade-in z-50" style={{ backgroundColor: 'var(--overlay-medium)' }} onClick={onClose}>
       <div
         className="rounded-xl w-full max-w-lg max-h-[90vh] overflow-y-auto animate-slide-up"
         style={{ backgroundColor: 'var(--color-bg-secondary)' }}
@@ -404,14 +404,14 @@ export default function IncidentsPage() {
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex gap-2">
-                        <button onClick={() => setModal({ incident: inc })} className="p-1.5 rounded hover:opacity-70" style={{ color: 'var(--color-accent)' }} aria-label="Editează"><Edit2 size={14} /></button>
+                        <button onClick={() => setModal({ incident: inc })} className="p-2.5 rounded hover:opacity-70" style={{ color: 'var(--color-accent)' }} aria-label="Editează"><Edit2 size={18} /></button>
                         {deleteId === inc.id ? (
                           <div className="flex gap-1">
-                            <button onClick={() => deleteMutation.mutate(inc.id)} className="text-xs px-2 py-1 rounded" style={{ backgroundColor: 'var(--color-error)', color: 'var(--color-on-primary)' }}>Confirm</button>
-                            <button onClick={() => setDeleteId(null)} className="text-xs px-2 py-1 rounded btn-secondary">Nu</button>
+                            <button onClick={() => deleteMutation.mutate(inc.id)} className="px-3 py-2 rounded text-sm font-medium" style={{ backgroundColor: 'var(--color-error)', color: 'var(--color-on-primary)' }}>Confirm</button>
+                            <button onClick={() => setDeleteId(null)} className="px-3 py-2 rounded text-sm font-medium btn-secondary">Nu</button>
                           </div>
                         ) : (
-                          <button onClick={() => setDeleteId(inc.id)} className="p-1.5 rounded hover:opacity-70" style={{ color: 'var(--color-error)' }} aria-label="Șterge"><Trash2 size={14} /></button>
+                          <button onClick={() => setDeleteId(inc.id)} className="p-2.5 rounded hover:opacity-70" style={{ color: 'var(--color-error)' }} aria-label="Șterge"><Trash2 size={18} /></button>
                         )}
                       </div>
                     </td>

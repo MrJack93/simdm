@@ -12,7 +12,7 @@ const TYPE_CONFIG = {
   PREVENTIVA: { label: 'Preventivă', color: 'var(--color-success)' },
   CORECTIVA:  { label: 'Corectivă',  color: 'var(--color-warning)' },
   VERIFICARE: { label: 'Verificare', color: 'var(--color-accent)' },
-  CALIBRARE:  { label: 'Calibrare',  color: '#a855f7' },
+  CALIBRARE:  { label: 'Calibrare',  color: 'var(--color-maintenance-calibrare)' },
 };
 
 function TypeBadge({ type }) {
@@ -88,7 +88,7 @@ function MaintenanceModal({ record, devices, onClose, onSaved }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 animate-fade-in z-50" onClick={onClose}>
+    <div className="fixed inset-0 flex items-center justify-center p-4 animate-fade-in z-50" style={{ backgroundColor: 'var(--overlay-medium)' }} onClick={onClose}>
       <div
         className="rounded-xl w-full max-w-lg max-h-[90vh] overflow-y-auto animate-slide-up"
         style={{ backgroundColor: 'var(--color-bg-secondary)' }}
@@ -320,7 +320,7 @@ export default function MaintenancePage() {
             style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)', textDecoration: 'none', color: 'inherit' }}
           >
             <div className="flex items-center gap-4 mb-3">
-              <div className="p-3 rounded-lg" style={{ backgroundColor: 'rgba(167, 139, 250, 0.1)', color: '#a78bfa' }}>
+              <div className="p-3 rounded-lg" style={{ backgroundColor: 'var(--color-maintenance-calibrare-bg)', color: 'var(--color-maintenance-calibrare)' }}>
                 <ClipboardList size={24} />
               </div>
               <h3 className="text-lg font-bold">Execuție MPP</h3>

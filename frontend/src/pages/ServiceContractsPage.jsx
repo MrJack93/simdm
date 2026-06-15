@@ -175,7 +175,7 @@ function CreateContractModal({ providers, devices: _devices, onClose, onCreate }
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 animate-modal-overlay">
+    <div className="fixed inset-0 flex items-center justify-center z-50 animate-modal-overlay" style={{ backgroundColor: 'var(--overlay-medium)' }}>
       <div className="rounded-xl p-6 w-full max-w-md animate-modal-content" style={{ backgroundColor: 'var(--color-bg-secondary)', border: '1px solid var(--color-border)' }}>
         <h2 className="text-xl mb-4">Creare Contract</h2>
         <div className="space-y-3">
@@ -195,7 +195,7 @@ function RateProviderModal({ provider, onClose, onRate }) {
   const [score, setScore] = useState('5');
   const [comment, setComment] = useState('');
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 animate-modal-overlay">
+    <div className="fixed inset-0 flex items-center justify-center z-50 animate-modal-overlay" style={{ backgroundColor: 'var(--overlay-medium)' }}>
       <div className="rounded-xl p-6 w-full max-w-sm animate-modal-content" style={{ backgroundColor: 'var(--color-bg-secondary)', border: '1px solid var(--color-border)' }}>
         <h2 className="text-xl mb-4">Evaluare: {provider.name}</h2>
         <div className="space-y-3">
@@ -210,7 +210,7 @@ function RateProviderModal({ provider, onClose, onRate }) {
 
 function ConfirmModal({ message, onConfirm, onCancel }) {
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 animate-modal-overlay">
+    <div className="fixed inset-0 flex items-center justify-center z-50 animate-modal-overlay" style={{ backgroundColor: 'var(--overlay-medium)' }}>
       <div className="rounded-xl p-6 w-full max-w-sm animate-modal-content" style={{ backgroundColor: 'var(--color-bg-secondary)', border: '1px solid var(--color-border)' }}>
         <p className="mb-4" style={{ color: 'var(--color-text-primary)' }}>{message}</p>
         <div className="flex gap-2 justify-end"><button onClick={onCancel} className="btn-secondary">Anulare</button><button onClick={onConfirm} className="btn-danger">Confirmare</button></div>

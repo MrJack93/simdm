@@ -39,6 +39,10 @@
   --color-status-loaned: #5db8a6;
   --color-status-spare: #a78bfa;
 
+  /* Maintenance Type Colors */
+  --color-maintenance-calibrare: #a78bfa;
+  --color-maintenance-calibrare-bg: rgba(167, 139, 250, 0.1);
+
   /* Status Backgrounds */
   --color-status-decommissioned-bg: rgba(107, 114, 128, 0.1);
   --color-status-spare-bg: rgba(167, 139, 250, 0.1);
