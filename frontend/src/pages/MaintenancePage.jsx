@@ -417,14 +417,14 @@ export default function MaintenancePage() {
                       {r.externalService ? (
                         <span style={{ color: 'var(--color-success)' }}>✓</span>
                       ) : (
-                        <span style={{ color: 'var(--color-text-muted)' }}>—</span>
+                        <span style={{ color: 'var(--color-text-secondary)' }}>—</span>
                       )}
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex gap-2">
                         <button
                           onClick={() => setModal({ record: r })}
-                          className="p-1.5 rounded hover:opacity-70"
+                          className="p-1.5 rounded hover:opacity-70 min-h-[40px] min-w-[40px] flex items-center justify-center"
                           style={{ color: 'var(--color-accent)' }}
                           aria-label="Editează"
                         >
@@ -438,7 +438,7 @@ export default function MaintenancePage() {
                         ) : (
                           <button
                             onClick={() => setDeleteId(r.id)}
-                            className="p-1.5 rounded hover:opacity-70"
+                            className="p-1.5 rounded hover:opacity-70 min-h-[40px] min-w-[40px] flex items-center justify-center"
                             style={{ color: 'var(--color-error)' }}
                             aria-label="Șterge"
                           >

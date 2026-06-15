@@ -393,10 +393,10 @@ export default function IncidentsPage() {
                       <span className="line-clamp-2">{inc.description}</span>
                     </td>
                     <td className="px-4 py-3 text-center">
-                      {inc.patientAffected ? <span style={{ color: 'var(--color-error)' }} title={inc.patientHarm || 'Da'}>⚠️</span> : <span style={{ color: 'var(--color-text-muted)' }}>—</span>}
+                      {inc.patientAffected ? <span style={{ color: 'var(--color-error)' }} title={inc.patientHarm || 'Da'}>⚠️</span> : <span style={{ color: 'var(--color-text-secondary)' }}>—</span>}
                     </td>
                     <td className="px-4 py-3 text-center">
-                      {inc.reportedToAmdm ? <span style={{ color: 'var(--color-success)' }} title={inc.amdmReportRef || 'Da'}>✓</span> : <span style={{ color: 'var(--color-text-muted)' }}>—</span>}
+                      {inc.reportedToAmdm ? <span style={{ color: 'var(--color-success)' }} title={inc.amdmReportRef || 'Da'}>✓</span> : <span style={{ color: 'var(--color-text-secondary)' }}>—</span>}
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex gap-2">
