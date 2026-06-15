@@ -30,7 +30,7 @@ export default function SkipLink() {
       `}
       style={{
         backgroundColor: 'var(--color-accent)',
-        color: 'var(--color-on-primary, #ffffff)',
+        color: 'var(--color-bg-primary)',
       }}
       aria-label="Sari la conținut principal"
     >

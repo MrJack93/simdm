@@ -169,7 +169,7 @@ export default function VerificationsPage() {
             </div>
             <div className="bg-[var(--color-bg-secondary)] p-4 rounded-lg shadow text-center">
               <p className="text-sm text-[var(--color-text-secondary)]">Valide</p>
-              <p className="text-2xl font-bold text-[var(--color-success)]">{report.conform}</p>
+              <p className="text-2xl font-bold" style={{ color: 'var(--color-text-primary)' }}>{report.conform}</p>
             </div>
             <div className="bg-[var(--color-bg-secondary)] p-4 rounded-lg shadow text-center">
               <p className="text-sm text-[var(--color-text-secondary)]">Expira curand</p>

@@ -196,7 +196,7 @@ export default function SettingsPage() {
             {[
               { label: 'Versiune SIMDM',     value: '2.0.0' },
               { label: 'Faza implementare',  value: 'Faza 2 (Inventar)' },
-              { label: 'Conformitate WCAG',  value: '2.1 AA', color: 'var(--color-success)' },
+              { label: 'Conformitate WCAG',  value: '2.1 AA', color: 'var(--color-text-primary)' },
             ].map(({ label, value, color }) => (
               <div key={label} className="flex justify-between">
                 <span style={{ color: 'var(--color-text-secondary)' }}>{label}</span>
