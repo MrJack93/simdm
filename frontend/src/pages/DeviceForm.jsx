@@ -772,7 +772,7 @@ export default function DeviceForm() {
                         {...register('electricalSafetyClass')}
                         id="electricalSafetyClass"
                         className="input-base w-full"
-                        placeholder="Ex: Class I, Class II, Class III"
+                        placeholder="Ex: Clasa I, Clasa II, Clasa III"
                       />
                     </div>
                   </div>

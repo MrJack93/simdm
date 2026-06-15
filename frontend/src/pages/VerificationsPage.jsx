@@ -78,7 +78,7 @@ export default function VerificationsPage() {
   const handleDownloadComplianceReport = () => {
     if (!report || !report.devices) return;
     const rows = [
-      ['Dispozitiv', 'Nr. Inventar', 'Tip Verificare', 'Status', 'Zile Ramase', 'Data Ultima Verificare', 'Valabil Pana'],
+      ['Dispozitiv', 'Nr. Inventar', 'Tip Verificare', 'Status', 'Zile Ramase', 'Data Ultima Verificare', 'Valabil Până'],
       ...report.devices.map(d => [
         d.deviceName,
         d.inventoryNumber,
@@ -146,7 +146,7 @@ export default function VerificationsPage() {
           onClick={() => setShowUploadModal(true)}
           className="btn-primary"
         >
-          Upload Certificat
+          Încarcă Certificat
         </button>
       </div>
 
@@ -248,7 +248,7 @@ export default function VerificationsPage() {
                 className="px-6 py-3 text-left text-sm font-semibold cursor-pointer hover:bg-[var(--color-bg-elevated)]"
                 onClick={() => setSortByExpiry((v) => !v)}
               >
-                Valid Until
+                Valabil Până la
               </th>
               <th role="columnheader" scope="col" className="px-6 py-3 text-center text-sm font-semibold">Status</th>
               <th role="columnheader" scope="col" className="px-6 py-3 text-center text-sm font-semibold">Buletin</th>

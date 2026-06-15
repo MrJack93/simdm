@@ -27,10 +27,10 @@ const STATUSES = ['DESCHIS', 'IN_LUCRU', 'REZOLVAT', 'TESTAT', 'INCHIS'];
 
 const STATUS_LABELS = {
   DESCHIS: 'Deschis',
-  IN_LUCRU: 'In lucru',
+  IN_LUCRU: 'În lucru',
   REZOLVAT: 'Rezolvat',
   TESTAT: 'Testat',
-  INCHIS: 'Inchis',
+  INCHIS: 'Închis',
   ESCALADAT: 'Escaladat extern',
 };
 

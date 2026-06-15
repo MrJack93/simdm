@@ -574,7 +574,7 @@ export default function AnnualInventoryPage() {
                   onClick={confirmReset}
                   className="flex-1 btn-danger"
                 >
-                  Reset
+                  Resetare
                 </button>
               </div>
             </div>

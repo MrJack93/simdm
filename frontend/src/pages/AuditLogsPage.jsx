@@ -151,7 +151,7 @@ export default function AuditLogsPage() {
           <input
             id="filter-entity"
             className="input-base w-full"
-            placeholder="ex: Device"
+            placeholder="ex: Dispozitiv"
             value={filters.entity}
             onChange={(e) => handleFilterChange('entity', e.target.value)}
           />
