@@ -122,6 +122,8 @@ function ChecklistModal({ year, section, devices, onClose, onSave }) {
                         onChange={(e) => handleLocationChange(device.id, e.target.value)}
                         placeholder="Localizare actuala..."
                         className="input-base text-xs w-full"
+                        required
+                        aria-label={`Localizare pentru ${device.name}`}
                       />
                     </td>
                   </tr>
