@@ -98,7 +98,7 @@ function MaintenanceModal({ record, devices, onClose, onSaved }) {
           <h2 className="text-xl font-bold" style={{ color: 'var(--color-text-primary)' }}>
             {isNew ? 'Adaugă Înregistrare Mentenanță' : 'Editează Înregistrare'}
           </h2>
-          <button onClick={onClose} style={{ color: 'var(--color-text-secondary)' }}><X size={20} /></button>
+          <button onClick={onClose} aria-label="Închide" className="focusable" style={{ color: 'var(--color-text-secondary)' }}><X size={20} /></button>
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
