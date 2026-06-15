@@ -227,7 +227,7 @@ function StatusChanger({ incident, onChanged }) {
       <StatusBadge status={incident.status} />
       <button
         onClick={() => setOpen(!open)}
-        className="ml-1 text-xs px-1.5 py-0.5 rounded"
+        className="ml-1 px-3 py-2 rounded min-h-[40px] flex items-center justify-center"
         style={{ backgroundColor: 'var(--color-bg-tertiary)', color: 'var(--color-text-secondary)' }}
         aria-label="Schimbă status"
         disabled={loading}
