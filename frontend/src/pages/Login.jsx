@@ -140,6 +140,7 @@ export default function Login() {
                 <p
                   id="username-error"
                   role="alert"
+                  aria-live="polite"
                   className="text-sm mt-1"
                   style={{ color: 'var(--color-error)' }}
                 >
@@ -181,6 +182,7 @@ export default function Login() {
                 <p
                   id="password-error"
                   role="alert"
+                  aria-live="polite"
                   className="text-sm mt-1"
                   style={{ color: 'var(--color-error)' }}
                 >
@@ -210,6 +212,7 @@ export default function Login() {
             {rateLimited && (
               <div
                 role="alert"
+                aria-live="assertive"
                 className="p-4 rounded-lg border flex items-start gap-3"
                 style={{ backgroundColor: 'var(--color-warning-bg)', borderColor: 'var(--color-warning)', color: 'var(--color-warning)' }}
               >
@@ -220,6 +223,7 @@ export default function Login() {
             {serverError && (
               <div
                 role="alert"
+                aria-live="assertive"
                 className="p-4 rounded-lg border flex items-start gap-3"
                 style={{ backgroundColor: 'var(--color-error-bg)', borderColor: 'var(--color-error)', color: 'var(--color-error)' }}
               >

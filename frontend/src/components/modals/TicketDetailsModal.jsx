@@ -56,7 +56,7 @@ export default function TicketDetailsModal({ ticket, onClose, onRefresh }) {
         </DialogHeader>
 
         <div className="space-y-6 py-4">
-          {error && <div role="alert" className="alert-error">{error}</div>}
+          {error && <div role="alert" aria-live="assertive" className="alert-error">{error}</div>}
 
           <div>
             <h3 className="font-medium mb-2" style={{ color: 'var(--color-text-primary)' }}>Dispozitiv Medical</h3>

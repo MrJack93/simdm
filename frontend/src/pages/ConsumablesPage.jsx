@@ -419,7 +419,7 @@ export default function ConsumablesPage() {
 
         {/* Error Message */}
         {consumablesError && (
-          <div className="alert-error mb-6" role="alert">
+          <div className="alert-error mb-6" role="alert" aria-live="assertive">
             Eroare la încărcarea consumabilelor: {consumablesError.message}
           </div>
         )}

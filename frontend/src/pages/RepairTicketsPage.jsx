@@ -707,7 +707,7 @@ function DetailsModal({ ticket, onClose, onStatusChange, onRepairSubmit, onExter
                   className="input-base text-sm"
                 />
               </div>
-              {repairError && <p role="alert" className="text-sm" style={{ color: 'var(--color-error)' }}>{repairError}</p>}
+              {repairError && <p role="alert" aria-live="assertive" className="text-sm" style={{ color: 'var(--color-error)' }}>{repairError}</p>}
             </div>
           )}
         </div>

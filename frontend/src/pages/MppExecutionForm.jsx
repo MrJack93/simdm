@@ -242,7 +242,7 @@ export default function MppExecutionForm() {
       </div>
 
       {error && (
-        <div role="alert" className="p-4 mb-4 rounded-xl text-sm font-medium border" style={{ backgroundColor: 'var(--color-error-bg)', color: 'var(--color-error)', borderColor: 'var(--color-error)' }}>
+        <div role="alert" aria-live="assertive" className="p-4 mb-4 rounded-xl text-sm font-medium border" style={{ backgroundColor: 'var(--color-error-bg)', color: 'var(--color-error)', borderColor: 'var(--color-error)' }}>
           {error}
         </div>
       )}
