@@ -404,14 +404,14 @@ export default function IncidentsPage() {
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex gap-2">
-                        <button onClick={() => setModal({ incident: inc })} className="p-2.5 rounded hover:opacity-70" style={{ color: 'var(--color-accent)' }} aria-label="Editează"><Edit2 size={18} /></button>
+                        <button onClick={() => setModal({ incident: inc })} className="p-3 rounded hover:opacity-70" style={{ color: 'var(--color-accent)' }} aria-label="Editează"><Edit2 size={20} /></button>
                         {deleteId === inc.id ? (
                           <div className="flex gap-1">
-                            <button onClick={() => deleteMutation.mutate(inc.id)} className="px-3 py-2 rounded text-sm font-medium" style={{ backgroundColor: 'var(--color-error)', color: 'var(--color-on-primary)' }}>Confirm</button>
-                            <button onClick={() => setDeleteId(null)} className="px-3 py-2 rounded text-sm font-medium btn-secondary">Nu</button>
+                            <button onClick={() => deleteMutation.mutate(inc.id)} className="px-4 py-2.5 rounded text-sm font-medium" style={{ backgroundColor: 'var(--color-error)', color: 'var(--color-on-primary)' }}>Confirm</button>
+                            <button onClick={() => setDeleteId(null)} className="px-4 py-2.5 rounded text-sm font-medium btn-secondary">Nu</button>
                           </div>
                         ) : (
-                          <button onClick={() => setDeleteId(inc.id)} className="p-2.5 rounded hover:opacity-70" style={{ color: 'var(--color-error)' }} aria-label="Șterge"><Trash2 size={18} /></button>
+                          <button onClick={() => setDeleteId(inc.id)} className="p-3 rounded hover:opacity-70" style={{ color: 'var(--color-error)' }} aria-label="Șterge"><Trash2 size={20} /></button>
                         )}
                       </div>
                     </td>

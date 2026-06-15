@@ -509,7 +509,8 @@ export default function AnnualInventoryPage() {
         {showChecklistModal && selectedSection && (
           devicesLoading ? (
             <div
-              className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+              className="fixed inset-0 flex items-center justify-center z-50"
+              style={{ backgroundColor: 'var(--overlay-medium)' }}
               onClick={() => setShowChecklistModal(false)}
             >
               <div
@@ -544,7 +545,8 @@ export default function AnnualInventoryPage() {
         {/* Reset Confirmation Modal */}
         {resetTarget && (
           <div
-            className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 animate-fade-in"
+            className="fixed inset-0 flex items-center justify-center p-4 z-50 animate-fade-in"
+            style={{ backgroundColor: 'var(--overlay-medium)' }}
             onClick={() => setResetTarget(null)}
           >
             <div
