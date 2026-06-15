@@ -7,6 +7,7 @@ import { useAuth } from '../hooks/useAuth';
 import { Moon, Sun, LogOut, User, Lock } from 'lucide-react';
 import { toast } from 'react-toastify';
 import api from '../api/axios';
+import { Switch } from '../components/ui/switch';
 
 const changePasswordSchema = z.object({
   currentPassword: z.string().min(1, 'Parolă curentă obligatorie'),
@@ -21,6 +22,7 @@ export default function SettingsPage() {
   const { theme, toggleTheme } = useTheme();
   const { user, logout } = useAuth();
   const [isChanging, setIsChanging] = useState(false);
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const { register, handleSubmit, formState: { errors }, reset } = useForm({
     resolver: zodResolver(changePasswordSchema),
   });
@@ -168,17 +170,17 @@ export default function SettingsPage() {
           <h3 className="text-lg font-bold mb-6" style={{ color: 'var(--color-accent)' }}>Accesibilitate</h3>
           <div className="space-y-3">
             {[
-              { label: 'Inele de focus mai evidente', desc: 'Afișează inele de focus mai vizibile pentru navigarea cu tastatură', defaultChecked: true },
-              { label: 'Respectare preferință animații', desc: 'Dezactivează animațiile dacă sistemul preferă mișcări reduse', defaultChecked: true },
-              { label: 'Contrast mai înalt', desc: 'Crește contrastul pentru o citire mai ușoară', defaultChecked: false },
-            ].map(({ label, desc, defaultChecked }) => (
-              <label key={label} className="flex items-center gap-3 p-4 rounded-lg cursor-pointer" style={{ backgroundColor: 'var(--color-bg-tertiary)' }}>
-                <input type="checkbox" defaultChecked={defaultChecked} className="rounded" />
-                <div>
+              { id: 'focus-rings', label: 'Inele de focus mai evidente', desc: 'Afișează inele de focus mai vizibile pentru navigarea cu tastatură', defaultChecked: true },
+              { id: 'reduce-motion', label: 'Respectare preferință animații', desc: 'Dezactivează animațiile dacă sistemul preferă mișcări reduse', defaultChecked: true },
+              { id: 'high-contrast', label: 'Contrast mai înalt', desc: 'Crește contrastul pentru o citire mai ușoară', defaultChecked: false },
+            ].map(({ id, label, desc, defaultChecked }) => (
+              <div key={id} className="flex items-center gap-3 p-4 rounded-lg" style={{ backgroundColor: 'var(--color-bg-tertiary)' }}>
+                <Switch id={id} checked={defaultChecked} onCheckedChange={() => {}} aria-label={label} />
+                <label htmlFor={id} className="cursor-pointer">
                   <p className="font-medium text-sm" style={{ color: 'var(--color-text-primary)' }}>{label}</p>
                   <p className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>{desc}</p>
-                </div>
-              </label>
+                </label>
+              </div>
             ))}
           </div>
         </section>
@@ -206,11 +208,67 @@ export default function SettingsPage() {
 
         {/* Logout */}
         <div className="space-y-4">
-          <button onClick={logout} className="w-full px-4 py-3 rounded-lg font-semibold transition-all flex items-center justify-center gap-2" style={{ backgroundColor: 'var(--color-error)', color: '#ffffff' }}>
+          <button onClick={() => setShowLogoutConfirm(true)} className="w-full px-4 py-3 rounded-lg font-semibold transition-all flex items-center justify-center gap-2" style={{ backgroundColor: 'var(--color-error)', color: '#ffffff' }}>
             <LogOut size={18} /> Deconectare
           </button>
           <p className="text-xs text-center" style={{ color: 'var(--color-text-secondary)' }}>© 2026 SIMDM. Toate drepturile rezervate.</p>
         </div>
+
+        {/* Logout Confirmation Dialog */}
+        {showLogoutConfirm && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="logout-dialog-title"
+            onKeyDown={(e) => e.key === 'Escape' && setShowLogoutConfirm(false)}
+          >
+            <div
+              className="w-full max-w-sm rounded-xl p-6"
+              style={{
+                backgroundColor: 'var(--color-bg-secondary)',
+                border: '1px solid var(--color-border)',
+              }}
+            >
+              <h2
+                id="logout-dialog-title"
+                className="text-lg font-medium text-center mb-2"
+                style={{
+                  fontFamily: 'var(--font-family-heading)',
+                  color: 'var(--color-text-primary)',
+                }}
+              >
+                Confirmare deconectare
+              </h2>
+
+              <p className="text-sm text-center mb-6" style={{ color: 'var(--color-text-secondary)' }}>
+                Ești sigur că vrei să te deconectezi?
+                <br />
+                <span style={{ color: 'var(--color-text-tertiary)', fontSize: '0.875rem' }}>Datele nesalvate vor fi pierdute.</span>
+              </p>
+
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setShowLogoutConfirm(false)}
+                  className="flex-1 btn-secondary"
+                  autoFocus
+                >
+                  Anulare
+                </button>
+                <button
+                  onClick={() => {
+                    setShowLogoutConfirm(false);
+                    logout();
+                  }}
+                  className="flex-1 btn-danger"
+                >
+                  Deconectare
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
