@@ -11,6 +11,7 @@ import {
   downloadFormular9Pdf,
 } from '../api/repairTickets';
 import { getDevices } from '../api/devices';
+import Skeleton, { SkeletonCard } from '../components/Skeleton';
 import {
   Dialog,
   DialogContent,
@@ -234,7 +235,16 @@ export default function RepairTicketsPage() {
       </div>
 
       {isLoading ? (
-        <div className="text-center py-8">Incarcand...</div>
+        <div className="space-y-4 py-8">
+          <Skeleton variant="line" width="w-1/4" height="h-6" />
+          <div className="grid grid-cols-5 gap-4">
+            {[1, 2, 3, 4, 5].map((i) => (
+              <div key={i} className="space-y-3">
+                <SkeletonCard lines={2} />
+              </div>
+            ))}
+          </div>
+        </div>
       ) : viewMode === 'kanban' ? (
         <div className="grid grid-cols-5 gap-4">
           {STATUSES.map((status) => (

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getProviders, getContracts, getCostAnalysis, createContract, rateProvider, deleteContract } from '../api/serviceContracts';
 import { getDevices } from '../api/devices';
+import Skeleton, { SkeletonCard } from '../components/Skeleton';
 
 export default function ServiceContractsPage() {
   const queryClient = useQueryClient();
@@ -27,7 +28,20 @@ export default function ServiceContractsPage() {
   if (sortExpiry === 'desc') contracts = [...contracts].sort((a, b) => b.daysUntilExpiry - a.daysUntilExpiry);
   const devices = _devicesData?.devices || _devicesData?.data || [];
 
-  if (loadingProviders || loadingContracts) return <div className="p-6 text-center" style={{ color: 'var(--color-text-secondary)' }}>Încărcând...</div>;
+  if (loadingProviders || loadingContracts) {
+    return (
+      <div className="min-h-screen p-6" style={{ backgroundColor: 'var(--color-bg-primary)' }}>
+        <div className="mb-6">
+          <Skeleton variant="line" width="w-1/3" height="h-8" className="mb-2" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {[1, 2, 3].map((i) => (
+              <SkeletonCard key={i} />
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen p-6" style={{ backgroundColor: 'var(--color-bg-primary)' }}>
