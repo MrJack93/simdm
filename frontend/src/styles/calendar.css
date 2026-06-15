@@ -75,17 +75,17 @@
 }
 
 .rbc-toolbar button.rbc-active {
-  background-color: #3b82f6;
-  color: white;
-  border-color: #2563eb;
+  background-color: var(--color-info);
+  color: var(--color-bg-primary);
+  border-color: var(--color-info);
 }
 
 /* Today highlighting */
 .rbc-today {
-  background-color: #f0f9ff;
+  background-color: var(--color-info-bg);
 }
 
 /* Off-month days */
 .rbc-off-range {
-  color: #9ca3af;
+  color: var(--color-text-tertiary);
 }

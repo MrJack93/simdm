@@ -434,7 +434,7 @@ export default function MaintenancePage() {
                         </Button>
                         {deleteId === r.id ? (
                           <div className="flex gap-1">
-                            <button onClick={() => deleteMutation.mutate(r.id)} className="text-xs px-2 py-1 rounded" style={{ backgroundColor: 'var(--color-error)', color: '#fff' }}>Confirm</button>
+                            <button onClick={() => deleteMutation.mutate(r.id)} className="text-xs px-2 py-1 rounded" style={{ backgroundColor: 'var(--color-error)', color: 'var(--color-bg-primary)' }}>Confirm</button>
                             <button onClick={() => setDeleteId(null)} className="text-xs px-2 py-1 rounded btn-secondary">Nu</button>
                           </div>
                         ) : (

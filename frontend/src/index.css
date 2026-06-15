@@ -149,7 +149,7 @@
            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
            disabled:opacity-50 disabled:cursor-not-allowed;
     background-color: var(--color-accent);
-    color: var(--color-on-primary, #ffffff);
+    color: var(--color-bg-primary);
     --tw-ring-color: var(--color-accent);
     --tw-ring-offset-color: var(--color-bg-primary);
     transition: all var(--transition-fast);
@@ -201,7 +201,7 @@
            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
            disabled:opacity-50 disabled:cursor-not-allowed;
     background-color: var(--color-error);
-    color: #ffffff;
+    color: var(--color-bg-primary);
     --tw-ring-color: var(--color-error);
     --tw-ring-offset-color: var(--color-bg-primary);
     transition: all var(--transition-fast);

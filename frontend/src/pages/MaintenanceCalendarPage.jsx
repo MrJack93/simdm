@@ -221,7 +221,7 @@ export default function MaintenanceCalendarPage() {
           <button
             onClick={() => setShowCreateModal(true)}
             className="px-4 py-2 rounded-lg transition-all duration-150 text-sm font-semibold flex items-center gap-2 cursor-pointer"
-            style={{ backgroundColor: 'var(--healthcare-primary)', color: '#fff' }}
+            style={{ backgroundColor: 'var(--healthcare-primary)', color: 'var(--color-bg-primary)' }}
           >
             Creare Plan
           </button>
@@ -636,7 +636,7 @@ function CreatePlanModal({ devices, onClose, onCreate, year, isPending }) {
             onClick={handleSubmit}
             disabled={isPending}
             className="px-4 py-2 rounded-lg hover:opacity-90 disabled:opacity-50 transition-all duration-150 font-semibold cursor-pointer text-sm"
-            style={{ backgroundColor: 'var(--healthcare-primary)', color: '#fff' }}
+            style={{ backgroundColor: 'var(--healthcare-primary)', color: 'var(--color-bg-primary)' }}
           >
             {isPending ? 'Se salvează...' : 'Salvare Plan'}
           </button>
