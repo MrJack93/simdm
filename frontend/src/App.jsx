@@ -7,7 +7,7 @@ import Login from './pages/Login';
 import ProtectedRoute from './components/ProtectedRoute';
 import SkipLink from './components/SkipLink';
 import { Skeleton } from './components/ui/skeleton';
-import { Menu, X, Home, Warehouse, Package, Calendar, Cog, LogOut, Wrench, AlertTriangle, FileText, TicketCheck, CheckSquare, Briefcase } from 'lucide-react';
+import { Menu, X, Home, Warehouse, Package, Calendar, Cog, LogOut, Wrench, AlertTriangle, FileText, TicketCheck, CheckSquare, Briefcase, Sun, Moon } from 'lucide-react';
 
 // Lazy-loaded pages - code splitting pentru perf boost
 const Dashboard = lazy(() => import('./pages/Dashboard'));
@@ -100,7 +100,7 @@ function Header({ logout, theme, toggleTheme, isMobileMenuOpen, setIsMobileMenuO
           aria-label={theme === 'dark' ? 'Comută la modul clar' : 'Comută la modul închis'}
           style={{ color: 'var(--color-text-secondary)' }}
         >
-          {theme === 'dark' ? '☀️' : '🌙'}
+          {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
         </button>
 
         <Link

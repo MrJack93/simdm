@@ -78,8 +78,8 @@ export default function ServiceContractsPage() {
               <div key={card.label} className="p-4 rounded-xl" style={{ backgroundColor: 'var(--color-bg-secondary)', borderLeft: `4px solid ${card.border}` }}>
                 <p className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>{card.label}</p>
                 <p className="text-2xl font-medium" style={{ color: 'var(--color-text-primary)' }}>{card.value?.toLocaleString('ro-RO')} MDL</p>
-                <p className="text-xs" style={{ color: 'var(--color-text-tertiary)' }}>{card.sub}</p>
-                {card.avg && <p className="text-xs mt-1" style={{ color: 'var(--color-text-tertiary)' }}>Medie: {parseFloat(card.avg)?.toLocaleString('ro-RO')} MDL</p>}
+                <p className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>{card.sub}</p>
+                {card.avg && <p className="text-xs mt-1" style={{ color: 'var(--color-text-secondary)' }}>Medie: {parseFloat(card.avg)?.toLocaleString('ro-RO')} MDL</p>}
               </div>
             ))}
           </div>
@@ -152,7 +152,7 @@ function ProviderCard({ provider, onRate }) {
       {provider.contact && <p className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>Contact: {provider.contact}</p>}
       {provider.email && <p className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>Email: {provider.email}</p>}
       {ratingAvg !== null && <p className="text-sm font-medium my-2" style={{ color: 'var(--color-warning)' }}>Rating: {ratingAvg.toFixed(1)} / 5</p>}
-      <p className="text-xs mb-3" style={{ color: 'var(--color-text-tertiary)' }}>{provider._count?.contracts ?? 0} contracte · {provider._count?.ratings ?? 0} evaluări</p>
+      <p className="text-xs mb-3" style={{ color: 'var(--color-text-secondary)' }}>{provider._count?.contracts ?? 0} contracte · {provider._count?.ratings ?? 0} evaluări</p>
       <button onClick={onRate} className="w-full btn-secondary text-sm py-1">Evaluare</button>
     </div>
   );

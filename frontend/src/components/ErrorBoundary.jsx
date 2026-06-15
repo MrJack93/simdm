@@ -110,7 +110,7 @@ export class ErrorBoundary extends React.Component {
 
             <p
               className="text-center mt-6 text-xs"
-              style={{ color: 'var(--color-text-tertiary)' }}
+              style={{ color: 'var(--color-text-secondary)' }}
             >
               ID eroare: {Date.now()}
             </p>
