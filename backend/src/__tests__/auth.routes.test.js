@@ -71,7 +71,7 @@ describe('POST /api/auth/login', () => {
     const cookie = extractRefreshCookie(res);
     expect(cookie).not.toBeNull();
     expect(cookie).toMatch(/HttpOnly/i);
-    expect(cookie).toMatch(/Path=\/api\/auth/i);
+    expect(cookie).toMatch(/Path=\//i);
   });
 
   it('permite login și cu email în loc de username', async () => {

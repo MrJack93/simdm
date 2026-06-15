@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import DeviceTimeline from '../components/DeviceTimeline';
+import Skeleton from '../components/Skeleton';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -32,7 +33,7 @@ const SELECT_STYLES = {
   option: (base, state) => ({
     ...base,
     backgroundColor: state.isSelected ? 'var(--color-accent)' : 'transparent',
-    color: state.isSelected ? '#1a1a1a' : 'var(--color-text-primary)',
+    color: state.isSelected ? 'var(--color-on-primary)' : 'var(--color-text-primary)',
   }),
   singleValue: (base) => ({
     ...base,
@@ -95,17 +96,17 @@ function StepIndicator({ currentStep, totalSteps, steps, stepErrors = [] }) {
           if (hasError && isCompleted) {
             bgColor     = 'var(--color-error)';
             borderColor = 'transparent';
-            textColor   = '#ffffff';
+            textColor   = 'var(--color-on-primary)';
             label       = '✗';
           } else if (isCompleted) {
             bgColor     = 'var(--color-success)';
             borderColor = 'transparent';
-            textColor   = '#1a1a1a';
+            textColor   = 'var(--color-text-primary)';
             label       = '✓';
           } else if (isCurrent) {
             bgColor     = 'var(--color-accent)';
             borderColor = 'transparent';
-            textColor   = '#1a1a1a';
+            textColor   = 'var(--color-on-primary)';
           }
 
           const connectorColor = isCompleted
@@ -134,7 +135,7 @@ function StepIndicator({ currentStep, totalSteps, steps, stepErrors = [] }) {
       <div className="md:hidden flex items-center gap-3 p-3 rounded-lg" style={{ backgroundColor: 'var(--color-bg-secondary)' }}>
         <div
           className="flex items-center justify-center w-8 h-8 rounded-full font-bold flex-shrink-0"
-          style={{ backgroundColor: 'var(--color-accent)', color: '#1a1a1a' }}
+          style={{ backgroundColor: 'var(--color-accent)', color: 'var(--color-on-primary)' }}
         >
           {currentStep + 1}
         </div>
@@ -274,9 +275,8 @@ export default function DeviceForm() {
 
   if (deviceLoading) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center gap-4" role="status" style={{ backgroundColor: 'var(--color-bg-primary)' }}>
-        <div className="loading-spinner"></div>
-        <p style={{ color: 'var(--color-text-secondary)' }}>Se încarcă dispozitivul…</p>
+      <div className="min-h-screen flex flex-col items-center justify-center gap-4" style={{ backgroundColor: 'var(--color-bg-primary)' }}>
+        <Skeleton variant="card" lines={4} />
       </div>
     );
   }

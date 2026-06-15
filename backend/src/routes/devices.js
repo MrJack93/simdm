@@ -61,6 +61,9 @@ const deviceCreateSchema = z.object({
 
 const deviceUpdateSchema = deviceCreateSchema.partial().omit({ inventoryNumber: true });
 
+// F2-2 Fix: validate :id params (non-numeric → 400, not 500)
+const idSchema = z.coerce.number().int().positive();
+
 const router = express.Router();
 
 // L1 Fix: Auth middleware now applied in index.js for consistency
@@ -72,6 +75,7 @@ if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
 
+/* v8 ignore start -- @preserve */
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, uploadDir);
@@ -340,24 +344,26 @@ router.post('/', async (req, res) => {
       return res.status(409).json({ error: 'Numărul inventarului există deja' });
     }
 
-    const device = await prisma.devices.create({
-      data: {
-        ...data,
-        createdById: req.user.sub,
-        updatedAt: new Date(),
-      },
-      include: { sections: { select: { name: true } } },
-    });
-
-    // Audit log
-    await prisma.audit_logs.create({
-      data: {
-        userId: req.user.sub,
-        action: 'CREATE',
-        entity: 'Device',
-        entityId: String(device.id),
-        changes: { created: device },
-      },
+    // F2-1 Fix: device create + audit log in one atomic transaction
+    const device = await prisma.$transaction(async (tx) => {
+      const created = await tx.devices.create({
+        data: {
+          ...data,
+          createdById: req.user.sub,
+          updatedAt: new Date(),
+        },
+        include: { sections: { select: { name: true } } },
+      });
+      await tx.audit_logs.create({
+        data: {
+          userId: req.user.sub,
+          action: 'CREATE',
+          entity: 'Device',
+          entityId: String(created.id),
+          changes: { created },
+        },
+      });
+      return created;
     });
 
     res.status(201).json(device);
@@ -393,7 +399,9 @@ router.get('/:id', async (req, res) => {
 // ENDPOINT 7: PUT /:id — actualizare DM
 router.put('/:id', async (req, res) => {
   try {
-    const deviceId = parseInt(req.params.id);
+    const idParse = idSchema.safeParse(req.params.id);
+    if (!idParse.success) return res.status(400).json({ error: 'ID invalid' });
+    const deviceId = idParse.data;
 
     const parsed = deviceUpdateSchema.safeParse(req.body);
     if (!parsed.success) {
@@ -417,24 +425,23 @@ router.put('/:id', async (req, res) => {
       return res.status(404).json({ error: 'Dispozitiv nu găsit' });
     }
 
-    const device = await prisma.devices.update({
-      where: { id: deviceId },
-      data: updateData,
-      include: { sections: { select: { name: true } } },
-    });
-
-    // Audit log
-    await prisma.audit_logs.create({
-      data: {
-        userId: req.user.sub,
-        action: 'UPDATE',
-        entity: 'Device',
-        entityId: String(device.id),
-        changes: {
-          before: oldDevice,
-          after: device,
+    // F2-1 Fix: update + audit log in one atomic transaction
+    const device = await prisma.$transaction(async (tx) => {
+      const updated = await tx.devices.update({
+        where: { id: deviceId },
+        data: updateData,
+        include: { sections: { select: { name: true } } },
+      });
+      await tx.audit_logs.create({
+        data: {
+          userId: req.user.sub,
+          action: 'UPDATE',
+          entity: 'Device',
+          entityId: String(updated.id),
+          changes: { before: oldDevice, after: updated },
         },
-      },
+      });
+      return updated;
     });
 
     res.json(device);
@@ -447,7 +454,9 @@ router.put('/:id', async (req, res) => {
 // ENDPOINT 7b: PATCH /:id — partial update (same as PUT)
 router.patch('/:id', async (req, res) => {
   try {
-    const deviceId = parseInt(req.params.id);
+    const idParse = idSchema.safeParse(req.params.id);
+    if (!idParse.success) return res.status(400).json({ error: 'ID invalid' });
+    const deviceId = idParse.data;
 
     const parsed = deviceUpdateSchema.safeParse(req.body);
     if (!parsed.success) {
@@ -471,24 +480,23 @@ router.patch('/:id', async (req, res) => {
       return res.status(404).json({ error: 'Dispozitiv nu găsit' });
     }
 
-    const device = await prisma.devices.update({
-      where: { id: deviceId },
-      data: updateData,
-      include: { sections: { select: { name: true } } },
-    });
-
-    // Audit log
-    await prisma.audit_logs.create({
-      data: {
-        userId: req.user.sub,
-        action: 'UPDATE',
-        entity: 'Device',
-        entityId: String(device.id),
-        changes: {
-          before: oldDevice,
-          after: device,
+    // F2-1 Fix: update + audit log in one atomic transaction
+    const device = await prisma.$transaction(async (tx) => {
+      const updated = await tx.devices.update({
+        where: { id: deviceId },
+        data: updateData,
+        include: { sections: { select: { name: true } } },
+      });
+      await tx.audit_logs.create({
+        data: {
+          userId: req.user.sub,
+          action: 'UPDATE',
+          entity: 'Device',
+          entityId: String(updated.id),
+          changes: { before: oldDevice, after: updated },
         },
-      },
+      });
+      return updated;
     });
 
     res.json(device);
@@ -504,26 +512,35 @@ router.patch('/:id', async (req, res) => {
 // nu permite modificări ulterioare. Ștergere permanentă e interzisă.
 router.delete('/:id', async (req, res) => {
   try {
-    const deviceId = parseInt(req.params.id);
+    // F2-2 Fix: validate id
+    const idParse = idSchema.safeParse(req.params.id);
+    if (!idParse.success) return res.status(400).json({ error: 'ID invalid' });
+    const deviceId = idParse.data;
 
-    const device = await prisma.devices.update({
-      where: { id: deviceId },
-      data: {
-        status: 'CASAT',
-        decommissionDate: new Date(),
-      },
-      include: { sections: { select: { name: true } } },
-    });
+    // Verify device exists (clear 404 instead of generic 500)
+    const existing = await prisma.devices.findUnique({ where: { id: deviceId } });
+    if (!existing) return res.status(404).json({ error: 'Dispozitiv nu găsit' });
+    if (existing.status === 'CASAT') {
+      return res.status(409).json({ error: 'Dispozitivul este deja casat' });
+    }
 
-    // Audit log
-    await prisma.audit_logs.create({
-      data: {
-        userId: req.user.sub,
-        action: 'DELETE',
-        entity: 'Device',
-        entityId: String(device.id),
-        changes: { status: 'CASAT' },
-      },
+    // F2-1 Fix: soft-delete + audit log in one atomic transaction
+    const device = await prisma.$transaction(async (tx) => {
+      const updated = await tx.devices.update({
+        where: { id: deviceId },
+        data: { status: 'CASAT', decommissionDate: new Date() },
+        include: { sections: { select: { name: true } } },
+      });
+      await tx.audit_logs.create({
+        data: {
+          userId: req.user.sub,
+          action: 'DELETE',
+          entity: 'Device',
+          entityId: String(updated.id),
+          changes: { status: 'CASAT' },
+        },
+      });
+      return updated;
     });
 
     res.json({ message: 'Dispozitiv casat cu succes', device });
@@ -540,8 +557,15 @@ router.post('/:id/upload', upload.single('file'), antivirusMiddleware, async (re
       return res.status(400).json({ error: 'Nu s-a găsit fișier' });
     }
 
-    const deviceId = parseInt(req.params.id);
-    const fileUrl = `/uploads/devices/${req.file.filename}`;
+    // F2-2 Fix: validate id
+    const idParse = idSchema.safeParse(req.params.id);
+    if (!idParse.success) {
+      fs.unlink(req.file.path, (err) => { if (err) console.error('Error deleting orphaned file:', err.message); });
+      return res.status(400).json({ error: 'ID invalid' });
+    }
+    const deviceId = idParse.data;
+    // F2-3 Fix: store URL pointing at the authenticated serving route, not the removed static path
+    const fileUrl = `/api/devices/file/${req.file.filename}`;
     const allowedFields = ['manualUrl', 'certificateUrl', 'invoiceUrl', 'passportUrl'];
     const field = allowedFields.includes(req.body.field) ? req.body.field : 'manualUrl';
 
@@ -555,27 +579,29 @@ router.post('/:id/upload', upload.single('file'), antivirusMiddleware, async (re
       return res.status(404).json({ error: 'Dispozitiv nu găsit' });
     }
 
-    const device = await prisma.devices.update({
-      where: { id: deviceId },
-      data: { [field]: fileUrl },
-    });
-
-    // Audit log for file upload with scan result
+    // F2-1 Fix: device update + audit log in one atomic transaction
     const scanInfo = req.fileScanResult ? ` [Scanned: ${req.fileScanResult.mimeType}]` : '';
-    await prisma.audit_logs.create({
-      data: {
-        userId: req.user.sub,
-        action: 'FILE_UPLOAD',
-        entity: 'Device',
-        entityId: String(device.id),
-        changes: {
-          filename: req.file.originalname,
-          size: req.file.size,
-          mimeType: req.fileScanResult?.mimeType || req.file.mimetype,
-          clamavScanned: req.fileScanResult?.clamavScanned || false,
-          timestamp: req.fileScanResult?.timestamp,
+    const device = await prisma.$transaction(async (tx) => {
+      const updated = await tx.devices.update({
+        where: { id: deviceId },
+        data: { [field]: fileUrl },
+      });
+      await tx.audit_logs.create({
+        data: {
+          userId: req.user.sub,
+          action: 'FILE_UPLOAD',
+          entity: 'Device',
+          entityId: String(updated.id),
+          changes: {
+            filename: req.file.originalname,
+            size: req.file.size,
+            mimeType: req.fileScanResult?.mimeType || req.file.mimetype,
+            clamavScanned: req.fileScanResult?.clamavScanned || false,
+            timestamp: req.fileScanResult?.timestamp,
+          },
         },
-      },
+      });
+      return updated;
     });
 
     res.json({

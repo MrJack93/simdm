@@ -39,10 +39,11 @@ const repairSchema = z.object({
   })).optional(),
   functionalTest: z.enum(['FUNCTIONAL', 'NEFUNCTIONAL']),
   engineerName: z.string().min(1).max(255),
-  engineerSignature: z.string().optional(), // Base64
-  managerSignature: z.string().optional(), // Base64
-  beforePhoto: z.string().optional(), // Base64
-  afterPhoto: z.string().optional(), // Base64
+  // F3-2: cap base64 payloads (~2MB signatures, ~10MB photos) to prevent DB bloat
+  engineerSignature: z.string().max(2_000_000).optional(), // Base64
+  managerSignature: z.string().max(2_000_000).optional(), // Base64
+  beforePhoto: z.string().max(10_000_000).optional(), // Base64
+  afterPhoto: z.string().max(10_000_000).optional(), // Base64
 });
 
 const statusTransitionSchema = z.object({

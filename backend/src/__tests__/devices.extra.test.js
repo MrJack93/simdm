@@ -160,7 +160,7 @@ describe('/api/devices — căi de eroare DB (spy)', () => {
   it('POST / -> 500 când create aruncă', async () => {
     const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     vi.spyOn(prisma.devices, 'findUnique').mockResolvedValueOnce(null); // fără duplicat
-    vi.spyOn(prisma.devices, 'create').mockRejectedValueOnce(new Error('DB write fail'));
+    vi.spyOn(prisma, '$transaction').mockRejectedValueOnce(new Error('DB write fail'));
     const res = await request(app)
       .post('/api/devices')
       .set('Authorization', `Bearer ${token}`)
@@ -184,7 +184,7 @@ describe('/api/devices — căi de eroare DB (spy)', () => {
   it('PUT /:id -> 500 când update aruncă', async () => {
     const created = await createDevice({ name: 'Eroare update' });
     const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-    vi.spyOn(prisma.devices, 'update').mockRejectedValueOnce(new Error('DB update fail'));
+    vi.spyOn(prisma, '$transaction').mockRejectedValueOnce(new Error('DB update fail'));
     const res = await request(app)
       .put(`/api/devices/${created.body.id}`)
       .set('Authorization', `Bearer ${token}`)
@@ -197,7 +197,7 @@ describe('/api/devices — căi de eroare DB (spy)', () => {
   it('DELETE /:id -> 500 când update (soft delete) aruncă', async () => {
     const created = await createDevice({ name: 'Eroare delete' });
     const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-    vi.spyOn(prisma.devices, 'update').mockRejectedValueOnce(new Error('DB delete fail'));
+    vi.spyOn(prisma, '$transaction').mockRejectedValueOnce(new Error('DB delete fail'));
     const res = await request(app)
       .delete(`/api/devices/${created.body.id}`)
       .set('Authorization', `Bearer ${token}`);

@@ -49,7 +49,7 @@ describe('App (entry point + router)', () => {
   });
 
   afterEach(() => {
-    document.documentElement.classList.remove('light-mode');
+    document.documentElement.removeAttribute('data-theme');
   });
 
   it('afișează spinner-ul de încărcare (role="status") cât timp auth-ul se verifică', () => {
@@ -87,7 +87,7 @@ describe('App (entry point + router)', () => {
     expect(await screen.findByText('Filtrare și Căutare')).toBeInTheDocument();
   });
 
-  it('comutatorul de temă adaugă clasa light-mode pe <html> și persistă în localStorage', async () => {
+  it('comutatorul de temă setează data-theme pe <html> și persistă în localStorage', async () => {
     const user = userEvent.setup();
     renderApp({ user: { id: 1, username: 'bioinginer' }, loading: false, logout: vi.fn() });
 
@@ -95,7 +95,7 @@ describe('App (entry point + router)', () => {
     await user.click(themeToggle);
 
     await waitFor(() => {
-      expect(document.documentElement.classList.contains('light-mode')).toBe(true);
+      expect(document.documentElement.getAttribute('data-theme')).toBeNull();
     });
     expect(localStorage.getItem('simdm_theme')).toBe('light');
   });
@@ -105,7 +105,7 @@ describe('App (entry point + router)', () => {
     renderApp({ user: { id: 1, username: 'bioinginer' }, loading: false, logout: vi.fn() });
 
     await waitFor(() => {
-      expect(document.documentElement.classList.contains('light-mode')).toBe(true);
+      expect(document.documentElement.getAttribute('data-theme')).toBeNull();
     });
   });
 });

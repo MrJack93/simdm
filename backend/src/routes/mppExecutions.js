@@ -22,8 +22,8 @@ const createExecutionSchema = z.object({
   })).optional(),
   result: z.enum(['FUNCTIONAL', 'DEFECT']),
   engineerName: z.string().min(1).max(255),
-  signature: z.string().optional(), // base64 dataURL
-  notes: z.string().optional(),
+  signature: z.string().max(2_000_000).optional(), // base64 dataURL (F3-2: cap ~2MB)
+  notes: z.string().max(2000).optional(),
 });
 
 // Standard checklist template (6 operații)

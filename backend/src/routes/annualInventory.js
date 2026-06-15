@@ -220,6 +220,43 @@ router.post('/:year/section/:sectionId', async (req, res) => {
   }
 });
 
+// DELETE /api/annual-inventory/:year/section/:sectionId — reset inventory for section
+router.delete('/:year/section/:sectionId', async (req, res) => {
+  try {
+    const { year, sectionId } = req.params;
+    const yearNum = parseInt(year);
+    const sectionIdNum = parseInt(sectionId);
+
+    if (!yearNum || !sectionIdNum) {
+      return res.status(400).json({ error: 'Parametri invalizi' });
+    }
+
+    const inventory = await prisma.annual_inventories.findFirst({
+      where: { year: yearNum, sectionId: sectionIdNum },
+    });
+
+    if (!inventory) {
+      return res.status(404).json({ error: 'Inventariere negăsită' });
+    }
+
+    // Delete all items first, then the inventory
+    await prisma.$transaction([
+      prisma.inventory_check_items.deleteMany({ where: { inventoryId: inventory.id } }),
+      prisma.annual_inventories.delete({ where: { id: inventory.id } }),
+    ]);
+
+    await logAudit(req.user.sub, 'DELETE', 'annual_inventories', inventory.id, {
+      year: yearNum,
+      sectionId: sectionIdNum,
+    });
+
+    res.json({ message: 'Inventariere resetată cu succes' });
+  } catch (error) {
+    console.error('Error resetting annual inventory:', error);
+    res.status(500).json({ error: 'Eroare la resetare inventariere' });
+  }
+});
+
 // GET /api/annual-inventory/:year/discrepancies — lista discrepanțe
 // [ORD-889-SEC-2.2] Discrepancies = devices în DB dar not found în physical count
 // Require investigation: misplaced, stolen, wrongly recorded, or actual loss.
@@ -332,24 +369,24 @@ router.get('/:year/report-pdf', async (req, res) => {
     doc.pipe(res);
 
     // Header
-    doc.fontSize(18).font('Helvetica-Bold-Custom').text(toSafePdfText('RAPORT INVENTARIERE ANUALĂ'), { align: 'center' });
-    doc.fontSize(12).font('Helvetica-Custom').text(toSafePdfText(`An: ${yearNum}`), { align: 'center' });
+    doc.fontSize(18).font('Times-Bold-Custom').text(toSafePdfText('RAPORT INVENTARIERE ANUALĂ'), { align: 'center' });
+    doc.fontSize(12).font('Times-Roman-Custom').text(toSafePdfText(`An: ${yearNum}`), { align: 'center' });
     doc.text(toSafePdfText(`Data: ${new Date().toLocaleDateString('ro-RO')}`), { align: 'center' });
-    doc.fontSize(9).font('Helvetica-Custom').text(
+    doc.fontSize(9).font('Times-Roman-Custom').text(
       toSafePdfText('Conform Ordinului MS nr. 763/2023 și Procedurii MDM Nr. 1 (Ordinul MS nr. 889/2024)'),
       { align: 'center' }
     );
     doc.moveDown(1);
 
     // Summary
-    doc.fontSize(14).font('Helvetica-Bold-Custom').text(toSafePdfText('REZUMAT'));
-    doc.fontSize(10).font('Helvetica-Custom');
+    doc.fontSize(14).font('Times-Bold-Custom').text(toSafePdfText('REZUMAT'));
+    doc.fontSize(10).font('Times-Roman-Custom');
     doc.text(toSafePdfText(`Total discrepanțe: ${discrepancies.length}`), { indent: 20 });
     doc.moveDown(0.5);
 
     // Discrepancies section
-    doc.fontSize(14).font('Helvetica-Bold-Custom').text(toSafePdfText('DISCREPANȚE IDENTIFICATE:'));
-    doc.fontSize(10).font('Helvetica-Custom');
+    doc.fontSize(14).font('Times-Bold-Custom').text(toSafePdfText('DISCREPANȚE IDENTIFICATE:'));
+    doc.fontSize(10).font('Times-Roman-Custom');
 
     if (discrepancies.length === 0) {
       doc.text(toSafePdfText('✓ Nicio discrepanță găsită'), { color: '#4ade80', indent: 20 });
@@ -371,7 +408,7 @@ router.get('/:year/report-pdf', async (req, res) => {
 
     // Footer
     doc.moveDown(1);
-    doc.fontSize(10).font('Helvetica-Custom').text('─'.repeat(80), { align: 'center' });
+    doc.fontSize(10).font('Times-Roman-Custom').text('─'.repeat(80), { align: 'center' });
     doc.text(toSafePdfText(`Raport generat: ${new Date().toLocaleString('ro-RO')}`), {
       align: 'center',
       color: '#6b7280',

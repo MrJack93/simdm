@@ -29,7 +29,14 @@ export default defineConfig({
         'src/main.jsx',
         'src/**/*.test.{js,jsx}',
         'src/__tests__/**',
+        'src/types/index.js',
       ],
+      thresholds: {
+        statements: 90,
+        branches: 90,
+        functions: 90,
+        lines: 90,
+      },
     },
   },
 });

@@ -8,7 +8,17 @@ async function main() {
   // ============================================
   // 1. ADMIN USER
   // ============================================
-  const passwordHash = await bcrypt.hash('admin', 12);
+  // F1-2 Fix: use ADMIN_PASSWORD_HASH (or ADMIN_PASSWORD) from .env;
+  // fall back to weak default 'admin' only with an explicit warning.
+  let passwordHash;
+  if (process.env.ADMIN_PASSWORD_HASH) {
+    passwordHash = process.env.ADMIN_PASSWORD_HASH;
+  } else if (process.env.ADMIN_PASSWORD) {
+    passwordHash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 12);
+  } else {
+    passwordHash = await bcrypt.hash('admin', 12);
+    console.warn('⚠️  ATENȚIE: parolă admin implicită "admin". Setează ADMIN_PASSWORD_HASH în .env și schimbă parola la prima logare.');
+  }
   const admin = await prisma.users.upsert({
     where: { email: 'bioinginer@spital.md' },
     update: { username: 'admin', passwordHash },

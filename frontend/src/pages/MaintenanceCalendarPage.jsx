@@ -203,10 +203,10 @@ export default function MaintenanceCalendarPage() {
       </div>
 
       {successMsg && (
-        <div className="bg-green-100 text-green-700 p-3 mb-4 rounded">{successMsg}</div>
+        <div className="alert-success mb-4">{successMsg}</div>
       )}
       {pdfError && (
-        <div className="bg-red-100 text-red-700 p-3 mb-4 rounded">{pdfError}</div>
+        <div className="alert-error mb-4">{pdfError}</div>
       )}
 
       {/* Year dropdown + month navigation */}
@@ -268,7 +268,7 @@ export default function MaintenanceCalendarPage() {
       {/* Calendar grid */}
       <div className="grid grid-cols-7 gap-1 mb-6">
         {['Lun', 'Mar', 'Mie', 'Joi', 'Vin', 'Sâm', 'Dum'].map((d) => (
-          <div key={d} className="text-center text-xs font-semibold text-gray-600 py-1">
+          <div key={d} className="text-center text-xs font-semibold text-[var(--color-text-secondary)] py-1">
             {d}
           </div>
         ))}
@@ -413,7 +413,7 @@ export default function MaintenanceCalendarPage() {
             return (
               <span
                 key={item.id}
-                className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs"
+                className="px-2 py-1 bg-[var(--color-info-bg)] text-[var(--color-info)] rounded text-xs"
               >
                 {deviceName} — {frequency}
               </span>

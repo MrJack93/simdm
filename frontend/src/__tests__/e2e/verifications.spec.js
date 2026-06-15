@@ -6,7 +6,6 @@
  */
 
 import { test, expect } from '@playwright/test';
-import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -69,7 +68,7 @@ test.describe('E2E — Verificări Periodice & Conformitate (Faza 3.4)', () => {
       const fileInput = page.locator('input[type="file"]');
       if (await fileInput.isVisible()) {
         // Create a temporary test PDF
-        const testFile = path.join(__dirname, 'test-cert.pdf');
+        const _testFile = path.join(__dirname, 'test-cert.pdf');
         // In real test, would use actual PDF file
         // For now, just check input is there
         expect(fileInput).toBeDefined();

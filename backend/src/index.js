@@ -49,6 +49,10 @@ try {
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+// F1-3 Fix: trust the first proxy so req.ip / rate-limit / audit use the real client IP
+// when deployed behind a reverse proxy (hospital network). Safe for direct localhost too.
+app.set('trust proxy', 1);
+
 // Security middleware
 app.use(helmet());
 // L4 Fix: CORS origin from .env for flexible deployment
@@ -56,7 +60,9 @@ app.use(cors({
   origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
   credentials: true,
 }));
-app.use(express.json());
+// F1-1 / F3-1 Fix: raise body limit so base64 signatures + before/after photos
+// (MPP execution, repair tickets) are not rejected with 413. Default was 100kb.
+app.use(express.json({ limit: process.env.JSON_BODY_LIMIT || '25mb' }));
 app.use(cookieParser());
 
 // M3 Fix: Remove public /uploads serving — medical documents require authentication
@@ -107,6 +113,13 @@ app.use('/api/service-contracts', authMiddleware, serviceContractsRoutes);
 app.use((err, req, res, next) => {
   log('ERROR HANDLER: ' + err.message);
   log(err.stack);
+  // F1-4 Fix: clear message for oversized payloads (e.g. foto prea mare) and malformed JSON
+  if (err.type === 'entity.too.large' || err.status === 413) {
+    return res.status(413).json({ error: 'Fișierul/datele depășesc limita permisă (max 25MB). Reduceți dimensiunea fotografiilor.' });
+  }
+  if (err.type === 'entity.parse.failed' || err.status === 400) {
+    return res.status(400).json({ error: 'Date JSON invalide' });
+  }
   res.status(500).json({ error: 'Eroare interna de server' });
 });
 
@@ -115,7 +128,9 @@ process.on('uncaughtException', (err) => {
   console.error('UNCAUGHT EXCEPTION:', err.message);
   console.error(err.stack);
   log('FATAL: Exiting process due to uncaught exception');
-  process.exit(1); // Exit so supervisor can restart
+  if (process.env.NODE_ENV !== 'test') {
+    process.exit(1);
+  }
 });
 
 process.on('unhandledRejection', (reason, promise) => {

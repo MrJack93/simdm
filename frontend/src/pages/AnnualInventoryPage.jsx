@@ -1,38 +1,40 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import api from '../api/axios';
+import Skeleton from '../components/Skeleton';
 
 function ChecklistModal({ year, section, devices, onClose, onSave }) {
-  const [items, setItems] = useState(
+  const initialItemsRef = useRef(
     devices.map(d => ({
       deviceId: d.id,
       found: false,
       locationFound: '',
     }))
   );
+  const [items, setItems] = useState(initialItemsRef.current);
   const [loading, setLoading] = useState(false);
 
-  const handleToggleFound = (deviceId) => {
+  const handleToggleFound = useCallback((deviceId) => {
     setItems(prev =>
       prev.map(item =>
         item.deviceId === deviceId ? { ...item, found: !item.found } : item
       )
     );
-  };
+  }, []);
 
-  const handleLocationChange = (deviceId, value) => {
+  const handleLocationChange = useCallback((deviceId, value) => {
     setItems(prev =>
       prev.map(item =>
         item.deviceId === deviceId ? { ...item, locationFound: value } : item
       )
     );
-  };
+  }, []);
 
   const handleSave = async () => {
     setLoading(true);
     try {
-      await api.post(`/annual-inventory/${year}/section/${section.id}`, { items });
+      await api.post(`/annual-inventory/${year}/section/${section.sectionId || section.id}`, { items });
       toast.success('Inventariere salvată cu succes');
       onSave();
     } catch (err) {
@@ -60,9 +62,9 @@ function ChecklistModal({ year, section, devices, onClose, onSave }) {
           Progres: {foundCount} / {devices.length} dispozitive
         </p>
 
-        <div className="mb-6 w-full bg-gray-600 rounded-full h-2">
+        <div className="mb-6 w-full bg-[var(--color-border)] rounded-full h-2">
           <div
-            className="bg-green-400 h-2 rounded-full transition-all"
+            className="bg-[var(--color-success)] h-2 rounded-full transition-all"
             style={{ width: `${(foundCount / devices.length) * 100}%` }}
           />
         </div>
@@ -90,7 +92,7 @@ function ChecklistModal({ year, section, devices, onClose, onSave }) {
             </thead>
             <tbody>
               {devices.map((device, idx) => {
-                const item = items[idx];
+                const item = items[idx] || { found: false, locationFound: '' };
                 return (
                   <tr
                     key={device.id}
@@ -214,8 +216,8 @@ function DiscrepanciesModal({ year, discrepancies, onClose, onVerify }) {
                         disabled={loading || disc.status === 'VERIFIED'}
                         className="px-2 py-1 rounded text-xs font-semibold focusable hover:opacity-70"
                         style={{
-                          backgroundColor: disc.status === 'VERIFIED' ? '#9ca3af' : 'var(--color-accent)',
-                          color: '#1a1a1a',
+                          backgroundColor: disc.status === 'VERIFIED' ? 'var(--color-disabled-bg)' : 'var(--color-accent)',
+                          color: 'var(--color-on-primary)',
                         }}
                       >
                         {disc.status === 'VERIFIED' ? '✓ Verificată' : 'Verifica'}
@@ -245,6 +247,7 @@ export default function AnnualInventoryPage() {
   const [showChecklistModal, setShowChecklistModal] = useState(false);
   const [showDiscrepanciesModal, setShowDiscrepanciesModal] = useState(false);
   const [importLoading, setImportLoading] = useState(false);
+  const [resetTarget, setResetTarget] = useState(null);
 
   // Fetch available years
   const { data: yearsData } = useQuery({
@@ -261,7 +264,7 @@ export default function AnnualInventoryPage() {
   });
 
   // Fetch all devices for a section (for checklist modal)
-  const { data: devicesData } = useQuery({
+  const { data: devicesData, isLoading: devicesLoading } = useQuery({
     queryKey: ['devices-for-inventory', selectedSection?.sectionId],
     queryFn: () =>
       api.get(`/devices?sectionId=${selectedSection?.sectionId}&limit=1000`).then(res => res.data),
@@ -287,6 +290,24 @@ export default function AnnualInventoryPage() {
     setShowChecklistModal(false);
     setSelectedSection(null);
     queryClient.invalidateQueries({ queryKey: ['annual-inventory-status'] });
+  };
+
+  const handleResetInventory = (sectionId) => {
+    setResetTarget(sectionId);
+  };
+
+  const confirmReset = async () => {
+    if (!resetTarget) return;
+    try {
+      await api.delete(`/annual-inventory/${selectedYear}/section/${resetTarget}`);
+      toast.success('Inventarierea a fost resetată');
+      queryClient.invalidateQueries({ queryKey: ['annual-inventory-status'] });
+    } catch (err) {
+      console.error(err);
+      toast.error('Eroare la resetare inventariere');
+    } finally {
+      setResetTarget(null);
+    }
   };
 
   const handleImportExcel = async (event) => {
@@ -337,7 +358,7 @@ export default function AnnualInventoryPage() {
   };
 
   const sections = statusData || [];
-  const devices = devicesData?.devices || [];
+  const devices = useMemo(() => devicesData?.devices || [], [devicesData]);
 
   return (
     <main id="main" className="p-6 min-h-screen" style={{ backgroundColor: 'var(--color-bg-primary)' }}>
@@ -382,17 +403,17 @@ export default function AnnualInventoryPage() {
 
         {/* Sections Grid */}
         {statusLoading ? (
-          <div className="text-center py-12">Se încarcă...</div>
+          <div className="py-12"><Skeleton variant="card" lines={3} /></div>
         ) : (
           <>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
               {sections.map((section) => {
                 const progressPercent = section.percentage || 0;
                 const statusColor = {
-                  NOT_STARTED: '#ef4444',
-                  IN_PROGRESS: '#eab308',
-                  COMPLETED: '#22c55e',
-                }[section.status] || '#6b7280';
+                  NOT_STARTED: 'var(--color-error)',
+                  IN_PROGRESS: 'var(--color-warning)',
+                  COMPLETED: 'var(--color-success)',
+                }[section.status] || 'var(--color-status-decommissioned)';
 
                 const statusLabel = {
                   NOT_STARTED: 'Nu a început',
@@ -401,19 +422,33 @@ export default function AnnualInventoryPage() {
                 }[section.status] || section.status;
 
                 return (
-                  <button
+                  <div
                     key={section.sectionId}
-                    onClick={() => handleSectionClick(section)}
-                    className="card-base p-4 text-left focusable hover:opacity-70 transition"
+                    className="card-base p-4 relative"
                   >
-                    <h3 className="font-bold text-lg mb-3">{section.sectionName}</h3>
+                    <div className="flex justify-between items-start mb-3">
+                      <button
+                        onClick={() => handleSectionClick(section)}
+                        className="text-left focusable flex-1"
+                      >
+                        <h3 className="font-bold text-lg">{section.sectionName}</h3>
+                      </button>
+                      <button
+                        onClick={() => handleResetInventory(section.sectionId)}
+                        className="text-xs px-2 py-1 rounded opacity-50 hover:opacity-100 transition flex-shrink-0 ml-2"
+                        style={{ color: 'var(--color-error)', border: '1px solid var(--color-error)' }}
+                        title="Resetare inventariere"
+                      >
+                        Reset
+                      </button>
+                    </div>
 
                     <div className="mb-3">
                       <span
                         className="px-2 py-1 rounded text-xs font-semibold inline-block"
                         style={{
                           backgroundColor: statusColor,
-                          color: 'white',
+                          color: 'var(--color-on-primary)',
                         }}
                       >
                         {statusLabel}
@@ -424,9 +459,9 @@ export default function AnnualInventoryPage() {
                       <p className="text-sm mb-1" style={{ color: 'var(--color-text-secondary)' }}>
                         {section.foundCount} / {section.totalCount} dispozitive
                       </p>
-                      <div className="w-full bg-gray-600 rounded-full h-2">
+                      <div className="w-full bg-[var(--color-border)] rounded-full h-2">
                         <div
-                          className="bg-green-400 h-2 rounded-full transition-all"
+                          className="bg-[var(--color-success)] h-2 rounded-full transition-all"
                           style={{ width: `${progressPercent}%` }}
                         />
                       </div>
@@ -435,7 +470,7 @@ export default function AnnualInventoryPage() {
                     <p className="text-lg font-bold" style={{ color: 'var(--color-accent)' }}>
                       {progressPercent}%
                     </p>
-                  </button>
+                  </div>
                 );
               })}
             </div>
@@ -462,13 +497,28 @@ export default function AnnualInventoryPage() {
 
         {/* Checklist Modal */}
         {showChecklistModal && selectedSection && (
-          <ChecklistModal
-            year={selectedYear}
-            section={selectedSection}
-            devices={devices}
-            onClose={() => setShowChecklistModal(false)}
-            onSave={handleChecklistSave}
-          />
+          devicesLoading ? (
+            <div
+              className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+              onClick={() => setShowChecklistModal(false)}
+            >
+              <div
+                className="rounded-xl p-8 text-center"
+                style={{ backgroundColor: 'var(--color-bg-secondary)' }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <Skeleton variant="table" lines={3} />
+              </div>
+            </div>
+          ) : (
+            <ChecklistModal
+              year={selectedYear}
+              section={selectedSection}
+              devices={devices}
+              onClose={() => setShowChecklistModal(false)}
+              onSave={handleChecklistSave}
+            />
+          )
         )}
 
         {/* Discrepancies Modal */}
@@ -479,6 +529,54 @@ export default function AnnualInventoryPage() {
             onClose={() => setShowDiscrepanciesModal(false)}
             onVerify={() => queryClient.invalidateQueries({ queryKey: ['annual-inventory-discrepancies'] })}
           />
+        )}
+
+        {/* Reset Confirmation Modal */}
+        {resetTarget && (
+          <div
+            className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 animate-fade-in"
+            onClick={() => setResetTarget(null)}
+          >
+            <div
+              className="rounded-xl p-6 w-full max-w-sm animate-slide-up"
+              style={{ backgroundColor: 'var(--color-bg-secondary)', border: '1px solid var(--color-border)' }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex justify-center mb-4">
+                <div
+                  className="w-12 h-12 rounded-full flex items-center justify-center"
+                  style={{ backgroundColor: 'var(--color-error-bg)' }}
+                >
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ color: 'var(--color-error)' }}>
+                    <path d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+                  </svg>
+                </div>
+              </div>
+              <h3
+                className="text-lg font-medium text-center mb-2"
+                style={{ fontFamily: 'var(--font-family-heading)', color: 'var(--color-text-primary)' }}
+              >
+                Resetare Inventariere
+              </h3>
+              <p className="text-sm text-center mb-6" style={{ color: 'var(--color-text-secondary)' }}>
+                Sigur vrei să resetezi inventarierea pentru această secțiune? Datele existente vor fi șterse.
+              </p>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setResetTarget(null)}
+                  className="flex-1 btn-secondary"
+                >
+                  Anulare
+                </button>
+                <button
+                  onClick={confirmReset}
+                  className="flex-1 btn-danger"
+                >
+                  Reset
+                </button>
+              </div>
+            </div>
+          </div>
         )}
       </div>
     </main>

@@ -1,6 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
 
-// eslint-disable-next-line no-process-env
 const isCI = typeof process !== 'undefined' && process.env.CI;
 
 export default defineConfig({

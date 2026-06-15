@@ -10,12 +10,21 @@ import { deleteDevice, deviceKeys } from '../api/devices';
 /** @typedef {import('../types').Device} Device */
 
 const STATUS_COLORS = {
-  FUNCTIONAL:  '#34d399',
-  IN_REPARATIE:'#fbbf24',
-  DEFECT:      '#f87171',
-  CASAT:       '#6b7280',
-  IMPRUMUTAT:  '#60a5fa',
-  REZERVA:     '#a78bfa',
+  FUNCTIONAL:  'var(--color-status-functional)',
+  IN_REPARATIE:'var(--color-status-in-repair)',
+  DEFECT:      'var(--color-status-defect)',
+  CASAT:       'var(--color-status-decommissioned)',
+  IMPRUMUTAT:  'var(--color-status-loaned)',
+  REZERVA:     'var(--color-status-spare)',
+};
+
+const STATUS_TEXT_COLORS = {
+  FUNCTIONAL:  'var(--color-text-primary)',
+  IN_REPARATIE:'var(--color-text-primary)',
+  DEFECT:      'var(--color-on-primary)',
+  CASAT:       'var(--color-on-primary)',
+  IMPRUMUTAT:  'var(--color-text-primary)',
+  REZERVA:     'var(--color-on-primary)',
 };
 
 const STATUS_LABELS = {
@@ -44,11 +53,11 @@ const RADIUS_MAP = { full: 'rounded-full', md: 'rounded-md' };
 
 /** @param {{ status: Device['status'], rounded?: string }} props */
 function StatusBadge({ status, rounded = 'full' }) {
-  const color = STATUS_COLORS[status] || '#6b7280';
+  const color = STATUS_COLORS[status] || 'var(--color-status-decommissioned)';
   return (
     <span
       className={`inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold ${RADIUS_MAP[rounded] || 'rounded-full'}`}
-      style={{ backgroundColor: color, color: status === 'CASAT' ? '#ffffff' : '#1a1a1a' }}
+      style={{ backgroundColor: color, color: STATUS_TEXT_COLORS[status] || 'var(--color-text-primary)' }}
     >
       <span aria-hidden="true">{STATUS_ICONS[status]}</span>
       {STATUS_LABELS[status]}
@@ -229,7 +238,7 @@ function KanbanView({ devices }) {
           <div key={status}>
             <div
               className="p-3 rounded-lg mb-3 font-bold text-sm"
-              style={{ backgroundColor: STATUS_COLORS[status], color: status === 'CASAT' ? '#fff' : '#1a1a1a' }}
+              style={{ backgroundColor: STATUS_COLORS[status], color: STATUS_TEXT_COLORS[status] || 'var(--color-text-primary)' }}
             >
               {STATUS_ICONS[status]} {STATUS_LABELS[status]} ({allItems.length})
             </div>

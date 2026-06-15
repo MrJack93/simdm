@@ -11,23 +11,6 @@ const idSchema = z.coerce.number().int().positive();
 // L1 Fix: Auth middleware now applied in index.js for consistency
 // router.use(authMiddleware); // REMOVED - auth is applied in index.js
 
-// Helper: Log audit trail (for non-transactional use only)
-async function logAudit(userId, action, entity, entityId, changes = null) {
-  try {
-    await prisma.audit_logs.create({
-      data: {
-        userId,
-        action,
-        entity,
-        entityId: entityId?.toString(),
-        changes,
-      },
-    });
-  } catch (error) {
-    console.error('Error logging audit:', error.message);
-  }
-}
-
 // Helper: Create audit log data (for use in transactions)
 function createAuditLogData(userId, action, entity, entityId, changes = null) {
   return {

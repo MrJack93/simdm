@@ -27,7 +27,6 @@ const ACTION_LABEL = {
 
 function ChangesList({ changes }) {
   if (!changes || typeof changes !== 'object') return null;
-
   const entries = Object.entries(changes).filter(([k]) => !['updatedAt', 'createdAt'].includes(k));
   if (entries.length === 0) return null;
 
@@ -40,7 +39,7 @@ function ChangesList({ changes }) {
         </li>
       ))}
       {entries.length > 6 && (
-        <li className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
+        <li className="text-xs" style={{ color: 'var(--color-text-tertiary)' }}>
           +{entries.length - 6} câmpuri...
         </li>
       )}
@@ -67,11 +66,23 @@ export default function DeviceTimeline({ deviceId }) {
     <section aria-label="Istoric modificări dispozitiv" className="mt-8">
       <div className="flex items-center gap-2 mb-4">
         <History size={18} style={{ color: 'var(--color-accent)' }} />
-        <h2 className="text-lg font-semibold" style={{ color: 'var(--color-text-primary)' }}>
+        <h2
+          className="text-lg font-medium"
+          style={{
+            fontFamily: 'var(--font-family-heading)',
+            color: 'var(--color-text-primary)',
+          }}
+        >
           Istoric Modificări
         </h2>
         {!isLoading && (
-          <span className="text-xs px-2 py-0.5 rounded-full" style={{ backgroundColor: 'var(--color-bg-tertiary)', color: 'var(--color-text-secondary)' }}>
+          <span
+            className="text-xs px-2 py-0.5 rounded-full"
+            style={{
+              backgroundColor: 'var(--color-bg-tertiary)',
+              color: 'var(--color-text-secondary)',
+            }}
+          >
             {logs.length} intrări
           </span>
         )}
@@ -116,7 +127,7 @@ export default function DeviceTimeline({ deviceId }) {
                     left: '-15px',
                     width: '28px',
                     height: '28px',
-                    backgroundColor: color + '22',
+                    backgroundColor: `color-mix(in srgb, ${color} 10%, transparent)`,
                     color,
                     border: `2px solid ${color}`,
                   }}
@@ -127,12 +138,18 @@ export default function DeviceTimeline({ deviceId }) {
 
                 <div className="ml-2">
                   <div className="flex items-center flex-wrap gap-2">
-                    <span className="text-sm font-semibold" style={{ color }}>{label}</span>
-                    <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
+                    <span className="text-sm font-medium" style={{ color }}>{label}</span>
+                    <span className="text-xs" style={{ color: 'var(--color-text-tertiary)' }}>
                       {new Date(log.timestamp).toLocaleString('ro-RO', { dateStyle: 'short', timeStyle: 'short' })}
                     </span>
                     {log.users && (
-                      <span className="text-xs px-1.5 py-0.5 rounded" style={{ backgroundColor: 'var(--color-bg-tertiary)', color: 'var(--color-text-secondary)' }}>
+                      <span
+                        className="text-xs px-1.5 py-0.5 rounded"
+                        style={{
+                          backgroundColor: 'var(--color-bg-tertiary)',
+                          color: 'var(--color-text-secondary)',
+                        }}
+                      >
                         {log.users.username}
                       </span>
                     )}

@@ -347,7 +347,7 @@ describe('POST /api/devices/:id/upload — încărcare fișier (cu antivirus)', 
 
     expect(res.status).toBe(200);
     expect(res.body.message).toMatch(/încărcat cu succes/i);
-    expect(res.body.fileUrl).toMatch(/^\/uploads\/devices\//);
+    expect(res.body.fileUrl).toMatch(/^\/api\/devices\/file\//);
     expect(res.body.device.manualUrl).toBe(res.body.fileUrl);
 
     // curăță fișierul fizic încărcat

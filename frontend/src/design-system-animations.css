@@ -1,95 +1,95 @@
-/* SIMDM Animations & Micro-interactions */
+/* SIMDM Animations & Micro-interactions v4 */
+/* Cream canvas theme — minimal shadows, color-block elevation */
 
 /* ============ KEYFRAMES ============ */
 
 @keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 @keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
 
 @keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes slideRight {
-  from {
-    opacity: 0;
-    transform: translateX(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+  from { opacity: 0; transform: translateX(-10px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInFromRight {
+  from { opacity: 0; transform: translateX(100%); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideOutToRight {
+  from { opacity: 1; transform: translateX(0); }
+  to { opacity: 0; transform: translateX(100%); }
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-@keyframes ripple {
-  to {
-    width: 300px;
-    height: 300px;
-    opacity: 0;
-  }
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
 }
 
-@keyframes bounceIn {
-  0% {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: scale(1); }
 }
 
-/* ============ UTILITY CLASSES ============ */
+@keyframes scaleOut {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(0.97); }
+}
 
-/* Loading Spinner */
+/* ============ MICRO-INTERACTIONS ============ */
+
+/* Button press — subtle scale feedback */
+.btn-press {
+  transition: transform 0.1s ease-out;
+}
+.btn-press:active {
+  transform: scale(0.97);
+}
+
+/* Card hover — subtle lift (color-block first, shadow rare) */
+.card-lift {
+  transition: box-shadow var(--transition-normal), transform var(--transition-normal);
+}
+.card-lift:hover {
+  box-shadow: var(--shadow-sm);
+}
+
+/* ============ LOADING STATES ============ */
+
+/* Spinner */
 .loading-spinner {
   display: inline-block;
   width: 20px;
   height: 20px;
-  border: 2px solid var(--color-accent);
-  border-right-color: transparent;
+  border: 2px solid var(--color-border);
+  border-top-color: var(--color-accent);
   border-radius: 50%;
   animation: spin 0.6s linear infinite;
 }
@@ -97,15 +97,25 @@
 .loading-spinner-sm {
   width: 16px;
   height: 16px;
-  border: 2px solid var(--color-accent);
-  border-right-color: transparent;
+  border-width: 2px;
 }
 
-/* Skeleton Screen */
+.loading-spinner-lg {
+  width: 32px;
+  height: 32px;
+  border-width: 3px;
+}
+
+/* Skeleton Screen — shimmer on cream-bg */
 .skeleton {
-  background: linear-gradient(90deg, var(--color-bg-tertiary) 0%, var(--color-bg-elevated) 50%, var(--color-bg-tertiary) 100%);
+  background: linear-gradient(
+    90deg,
+    var(--color-bg-tertiary) 0%,
+    var(--color-bg-elevated) 50%,
+    var(--color-bg-tertiary) 100%
+  );
   background-size: 200% 100%;
-  animation: pulse 1.5s ease-in-out infinite;
+  animation: shimmer 1.5s ease-in-out infinite;
   border-radius: var(--radius-md);
 }
 
@@ -131,6 +141,8 @@
   margin-bottom: 16px;
 }
 
+/* ============ UTILITY CLASSES ============ */
+
 /* Slide animations */
 .animate-slide-up {
   animation: slideUp 0.3s var(--ease-out);
@@ -148,8 +160,27 @@
   animation: fadeIn 0.3s var(--ease-out);
 }
 
-.animate-bounce-in {
-  animation: bounceIn 0.4s var(--ease-spring);
+.animate-scale-in {
+  animation: scaleIn 0.2s var(--ease-out);
+}
+
+/* Toast slide-in from right */
+.animate-toast-in {
+  animation: slideInFromRight 0.3s var(--ease-out);
+}
+
+.animate-toast-out {
+  animation: slideOutToRight 0.2s ease-in forwards;
+}
+
+/* Modal overlay */
+.animate-modal-overlay {
+  animation: fadeIn 0.15s ease-out;
+}
+
+/* Modal content */
+.animate-modal-content {
+  animation: scaleIn 0.2s var(--ease-out);
 }
 
 /* Smooth transitions */
@@ -167,15 +198,13 @@
 
 /* Hover lift effect */
 .hover-lift {
-  transition: all var(--transition-normal);
+  transition: box-shadow var(--transition-normal);
 }
-
 .hover-lift:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--shadow-sm);
 }
 
-/* Reduced motion support */
+/* ============ REDUCED MOTION ============ */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -183,18 +212,23 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .skeleton {
+    animation: none;
+    background: var(--color-bg-tertiary);
   }
 }
 
 /* ============ RESPONSIVE ANIMATIONS ============ */
-
 @media (max-width: 768px) {
-  /* Faster animations on mobile */
-  .animate-slide-up {
-    animation-duration: 0.2s;
-  }
-
-  .animate-slide-down {
-    animation-duration: 0.2s;
+  @media (prefers-reduced-motion: no-preference) {
+    .animate-slide-up {
+      animation-duration: 0.2s;
+    }
+    .animate-slide-down {
+      animation-duration: 0.2s;
+    }
   }
 }

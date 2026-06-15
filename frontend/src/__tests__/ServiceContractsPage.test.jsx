@@ -146,7 +146,7 @@ describe('ServiceContractsPage — Contracte Externe & Cost Analysis', () => {
 
     await waitFor(() => {
       expect(screen.getAllByText('Service Pro').length).toBeGreaterThan(0);
-      expect(screen.getByText('Tech Solutions')).toBeInTheDocument();
+      expect(screen.getAllByText('Tech Solutions').length).toBeGreaterThan(0);
     });
   });
 
@@ -216,7 +216,7 @@ describe('ServiceContractsPage — Contracte Externe & Cost Analysis', () => {
     await user.type(valueInput, '50000');
 
     // Submit
-    const submitBtn = screen.getByRole('button', { name: /Salvare Contract/i });
+    const submitBtn = screen.getByRole('button', { name: /^Salvare$/i });
     await user.click(submitBtn);
 
     await waitFor(() => {
@@ -240,7 +240,7 @@ describe('ServiceContractsPage — Contracte Externe & Cost Analysis', () => {
     });
 
     // Try submit empty
-    const submitBtn = screen.getByRole('button', { name: /Salvare Contract/i });
+    const submitBtn = screen.getByRole('button', { name: /^Salvare$/i });
     await user.click(submitBtn);
 
     await waitFor(() => {
@@ -387,14 +387,14 @@ describe('ServiceContractsPage — Contracte Externe & Cost Analysis', () => {
 
     // Confirmation dialog
     await waitFor(() => {
-      expect(screen.getByText(/Ești sigur\?/i)).toBeInTheDocument();
+      expect(screen.getByText(/Ștergi contractul/i)).toBeInTheDocument();
     });
 
     const confirmBtn = screen.getByRole('button', { name: /Confirmare/i });
     await user.click(confirmBtn);
 
     await waitFor(() => {
-      expect(screen.queryByText(/Ești sigur\?/i)).not.toBeInTheDocument();
+      expect(screen.queryByText(/Ștergi contractul/i)).not.toBeInTheDocument();
     });
   });
 });

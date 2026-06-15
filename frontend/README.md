@@ -1,174 +1,112 @@
 # Frontend SIMDM — React 19 + Vite + Tailwind
 
-**Versiune:** 2.2  
-**Status:** ✅ Faza 1-2 Complete (Login + Inventory module, 91.99% coverage) + Faza 3 Ready  
-**Data:** 2026-06-02
+**Versiune:** 3.0 (Claude.ai editorial theme)
+**Status:** ✅ Faza 1-4 Complete | **Data:** 2026-06-13
 
 ---
 
-## 📦 Structură
+## Structură
 
 ```
 frontend/
 ├── src/
-│   ├── context/          # Authentication context
-│   │   ├── AuthProvider.jsx
-│   │   └── auth.context.js
-│   ├── pages/            # Route pages
-│   │   ├── Login.jsx
-│   │   ├── InventoryPage.jsx
-│   │   ├── Dashboard.jsx
-│   │   └── ...
-│   ├── components/       # Reusable components
-│   │   ├── ProtectedRoute.jsx
-│   │   ├── DataGrid.jsx
-│   │   ├── StatusBadge.jsx
-│   │   └── ...
-│   ├── hooks/            # Custom React hooks
-│   ├── api/
-│   │   ├── axios.js      # Axios instance + JWT interceptor
-│   │   └── [resources].js # API calls by resource
-│   ├── schemas/          # Zod validation schemas (frontend)
-│   ├── App.jsx           # Router
-│   ├── main.jsx          # Entry point
-│   └── index.css         # Tailwind + globals
-├── e2e/                  # Playwright E2E tests
-│   ├── *.spec.js
-│   └── playwright.config.js
-├── vite.config.js        # Vite config (proxy /api → backend)
+│   ├── pages/              # 16 pagini (Login, Dashboard, Inventar, Mentenanță...)
+│   ├── components/         # 14 componente reutilizabile
+│   │   ├── ui/             # 9 Shadcn/UI primitives
+│   │   └── modals/         # 3 modals (Triage, Repair, TicketDetails)
+│   ├── hooks/              # Custom React hooks
+│   ├── api/                # Axios + service calls
+│   ├── schemas/            # Zod validation schemas
+│   ├── context/            # React Context (theme, auth)
+│   ├── design-system.css   # Token-uri CSS (cream default)
+│   ├── design-system-animations.css  # Animații + reduced-motion
+│   ├── index.css           # Clase utilitare + Shadcn bridge
+│   ├── tokens.json         # Token-uri JSON pentru JS
+│   ├── App.jsx             # Router
+│   └── main.jsx            # Entry point
+├── e2e/                    # Playwright E2E tests
+├── vite.config.js          # Vite config (proxy /api → backend)
 ├── package.json
-├── vitest.config.js      # Vitest config
-└── README.md             # This file
+└── vitest.config.js        # Vitest config
 ```
 
 ---
 
-## 🚀 Development
+## Design System
+
+**Sursa de adevăr:** [`DESIGN.md`](../DESIGN.md) la rădăcina proiectului.
+
+- **Canvas:** Cream (#faf9f5) — warm, deliberat nu alb pur
+- **Accent:** Coral (#cc785c) — doar pe CTA-uri primare
+- **Display:** Cormorant Garamond serif (weight 400, negative tracking)
+- **Body:** Inter sans (weight 400-500)
+- **Dark mode:** `[data-theme="dark"]` — complet funcțional
+
+**Fișiere CSS:**
+- `design-system.css` — Token-uri + heading styles + print + high contrast
+- `design-system-animations.css` — Skeleton shimmer, toast, modal, reduced-motion
+- `index.css` — Clase utilitare (btn-primary, input-base, card-base, focusable)
+
+---
+
+## Componente UI
+
+### Noi (Faza 3)
+- `Skeleton.jsx` — Loading placeholder cu shimmer
+- `EmptyState.jsx` — Placeholder date goale
+- `ErrorState.jsx` — Eroare + retry
+- `Toast.jsx` — Notificări (success/error/warning/info)
+- `Spinner.jsx` — Loading inline
+- `KeyboardShortcuts.jsx` — Ctrl+K/N/M// + help overlay
+
+### Shadcn/UI
+- `Button`, `Input`, `Card`, `Dialog`, `Select`, `Table`, `Badge`, `Tabs`, `Tooltip`
+
+---
+
+## Development
 
 ```bash
-# Install dependencies
 npm install
-
-# Start dev server (port 5173)
-npm run dev
-
-# Build for production
-npm run build
-
-# Run tests
-npm run test              # Run once
-npm run test:watch       # Watch mode
-npm run test:coverage    # With coverage report
-
-# E2E tests (Playwright)
-npm run test:e2e         # Run all
-npm run test:e2e:ui      # Interactive UI
+npm run dev           # Vite server — http://localhost:5173
+npm run build         # Build producție → dist/
+npm run lint          # ESLint check
+npm run test          # Vitest unit tests
+npm run test:coverage # Coverage report
+npm run test:e2e      # Playwright E2E
 ```
 
 ---
 
-## 🎨 Design System
+## API Integration
 
-**Colors & Tokens:**
-- **Accent:** Cyan-400 (#22d3ee) — headings, buttons, active states
-- **Secondary:** Gray-400 — labels, helpers
-- **Background:** Gray-950 — page background
-- **Surfaces:** Gray-900, Gray-800, Gray-600
-- **Text:** White (#ffffff) — primary, Gray-400 — secondary
-- **Status:** Green (FUNCTIONAL), Red (DEFECT), Yellow (IN_REPARATIE), Gray (CASAT)
-
-**Components:**
-- StatusBadge (6 statuses with icons)
-- DataGrid with sorting/filtering
-- DeviceForm (multi-step, Zod validation)
-- Forms with error handling
-- Modals, Toasts, Alerts
-- Dark/Light mode toggle
-
-**Accessibility:** WCAG 2.1 AA certified
-
-See [docs/DESIGN-SYSTEM.md](../docs/DESIGN-SYSTEM.md) for full design system.
+Toate apelurile API prin `src/api/axios.js`:
+- JWT interceptor (auto-refresh pe 401)
+- Proxy `/api` → `localhost:3001`
 
 ---
 
-## 🔐 Authentication
+## Accesibilitate
 
-1. **Login:** POST \/api/auth/login\ → accessToken + refreshToken (httpOnly)
-2. **Auto-refresh:** Axios interceptor → new accessToken on 401
-3. **Logout:** POST \/api/auth/logout\ → clear token
-4. **Rate limiting:** 5 tries per 15 minutes
+**Standard:** WCAG 2.2 AA
+- SkipLink, focus ring coral, ARIA attributes
+- Skeleton screens (nu spinners)
+- Empty states pe fiecare pagină
+- `prefers-reduced-motion` respectat
+- Print styles pentru formulare medicale
 
-See [src/api/axios.js](src/api/axios.js) for interceptor.
-
----
-
-## 📡 API Integration
-
-All API calls via \src/api/axios.js\:
-
-```javascript
-import api from '@/api/axios';
-
-// Devices
-const devices = await api.get('/devices', { params: { status: 'FUNCTIONAL' } });
-const device = await api.post('/devices', { inventoryNumber, name, ... });
-
-// Export
-const csv = await api.get('/devices/export/csv', { responseType: 'blob' });
-const pdf = await api.get('/devices/:id/fisa-pdf', { responseType: 'blob' });
-
-// File upload
-const formData = new FormData();
-formData.append('file', file);
-await api.post('/devices/:id/upload', formData);
-```
+Vezi [`docs/ACCESSIBILITY-CHECKLIST.md`](../docs/ACCESSIBILITY-CHECKLIST.md)
 
 ---
 
-## 🧪 Testing
+## Testing
 
-**Unit/Integration (Vitest + React Testing Library):**
-- 91.99% coverage (103 tests)
-- Target Faza 3: ≥95%
-
-**E2E (Playwright):**
-- 15 tests, 5 scenarios
-- Login, Device CRUD, Token refresh, Inventory, PDF export
-
-Run:
-```bash
-npm run test
-npm run test:coverage
-npm run test:e2e
-```
+| Tip | Comandă | Coverage |
+|-----|---------|----------|
+| Unit/Integration | `npm run test` | ≥91% |
+| E2E | `npm run test:e2e` | 15 scenarios |
+| Accessibility | `npm run test:a11y` | axe-core |
 
 ---
 
-## 📚 Resources
-
-- [docs/DESIGN-SYSTEM.md](../docs/DESIGN-SYSTEM.md)
-- [docs/2-DEVELOPER-GUIDE.md](../docs/2-DEVELOPER-GUIDE.md)
-- [docs/CONTRIBUTING.md](../docs/CONTRIBUTING.md)
-- [CLAUDE.md](../CLAUDE.md)
-- [SPEC.md](../SPEC.md)
-
----
-
-## 🔧 Faza 3: Mentenanță (⏳ PLANNED — 2026-06-05)
-
-Frontend components:
-- MaintenanceCalendarPage (react-big-calendar)
-- MppExecutionForm (semnătură digitală)
-- RepairTicketsPage (Kanban board)
-- VerificationsPage (registru)
-- ServiceContractsPage (contracte + rating)
-
-Dependencies: react-big-calendar, date-fns, react-signature-canvas
-
-See [tasks/PLAN-FAZA3-DETALIAT.md](../tasks/PLAN-FAZA3-DETALIAT.md) for details.
-
----
-
-**Ready to contribute? Read [docs/CONTRIBUTING.md](../docs/CONTRIBUTING.md).**
-
-**Versiune:** 2.2 | **Status:** Faza 1-2 ✅ | Faza 3 ⏳ | **Data:** 2026-06-02
+**Design system:** [`DESIGN.md`](../DESIGN.md) · **Ghid dev:** [`docs/2-DEVELOPER-GUIDE.md`](../docs/2-DEVELOPER-GUIDE.md) · **a11y:** [`docs/ACCESSIBILITY-CHECKLIST.md`](../docs/ACCESSIBILITY-CHECKLIST.md)

@@ -13,9 +13,9 @@ export function useTheme() {
   useEffect(() => {
     const html = document.documentElement;
     if (theme === 'light') {
-      html.classList.add('light-mode');
+      html.removeAttribute('data-theme');
     } else {
-      html.classList.remove('light-mode');
+      html.setAttribute('data-theme', 'dark');
     }
     localStorage.setItem('simdm_theme', theme);
   }, [theme]);

@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import SignatureCanvas from 'react-signature-canvas';
+import Skeleton from '../components/Skeleton';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -24,8 +25,8 @@ const executionSchema = z.object({
 });
 
 const STATUS_COLORS = {
-  completed: 'bg-green-100 text-green-800',
-  scheduled: 'bg-blue-100 text-blue-800',
+  completed: 'bg-[var(--color-success-bg)] text-[var(--color-success)]',
+  scheduled: 'bg-[var(--color-info-bg)] text-[var(--color-info)]',
 };
 
 export default function MaintenanceExecutionPage() {
@@ -120,7 +121,7 @@ export default function MaintenanceExecutionPage() {
   };
 
   if (isLoading) {
-    return <div className="flex items-center justify-center min-h-screen">Se încarcă...</div>;
+    return <div className="flex items-center justify-center min-h-screen"><Skeleton variant="card" lines={5} /></div>;
   }
 
   // Planuri care așteptă execuție
@@ -140,7 +141,7 @@ export default function MaintenanceExecutionPage() {
 
       {/* Planuri în așteptare */}
       {pendingPlans.length > 0 && (
-        <Card className="border-l-4 border-l-yellow-500 bg-yellow-50">
+        <Card className="border-l-4" style={{ borderLeftColor: 'var(--color-warning)', backgroundColor: 'var(--color-warning-bg)' }}>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Wrench size={20} />
@@ -255,7 +256,7 @@ export default function MaintenanceExecutionPage() {
                             {/* Semnătură digitală */}
                             <div className="space-y-2">
                               <label className="block text-sm font-medium">Semnătură digitală *</label>
-                              <div className="border-2 border-dashed rounded-lg p-4 bg-white">
+                              <div className="border-2 border-dashed rounded-lg p-4 bg-[var(--color-bg-primary)]">
                                 <p className="text-xs text-secondary-foreground mb-2">
                                   Desenați semnătura dvs. mai jos
                                 </p>
@@ -264,7 +265,7 @@ export default function MaintenanceExecutionPage() {
                                   canvasProps={{
                                     width: 500,
                                     height: 120,
-                                    className: 'border rounded w-full cursor-crosshair bg-white',
+                                    className: 'border rounded w-full cursor-crosshair bg-[var(--color-bg-primary)]',
                                   }}
                                   onEnd={handleSignatureEnd}
                                 />

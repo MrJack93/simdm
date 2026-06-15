@@ -303,12 +303,12 @@ export default function MaintenancePage() {
             style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)', textDecoration: 'none', color: 'inherit' }}
           >
             <div className="flex items-center gap-4 mb-3">
-              <div className="p-3 rounded-lg bg-green-100 text-green-600">
+              <div className="p-3 rounded-lg" style={{ backgroundColor: 'var(--color-success-bg)', color: 'var(--color-success)' }}>
                 <Calendar size={24} />
               </div>
               <h3 className="text-lg font-bold">Planificare & Calendar MPP</h3>
             </div>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-[var(--color-text-tertiary)]">
               Configurarea frecvenței, generarea planurilor anuale de mentenanță preventivă (Formularul Nr. 5) și vizualizarea calendaristică.
             </p>
           </Link>
@@ -319,12 +319,12 @@ export default function MaintenancePage() {
             style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)', textDecoration: 'none', color: 'inherit' }}
           >
             <div className="flex items-center gap-4 mb-3">
-              <div className="p-3 rounded-lg bg-purple-100 text-purple-600">
+              <div className="p-3 rounded-lg" style={{ backgroundColor: 'rgba(167, 139, 250, 0.1)', color: '#a78bfa' }}>
                 <ClipboardList size={24} />
               </div>
               <h3 className="text-lg font-bold">Execuție MPP</h3>
             </div>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-[var(--color-text-tertiary)]">
               Înregistrarea mentenanțelor cu checklist, consumabile și semnătură olografă (Formularul Nr. 6).
             </p>
           </Link>
@@ -335,12 +335,12 @@ export default function MaintenancePage() {
             style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)', textDecoration: 'none', color: 'inherit' }}
           >
             <div className="flex items-center gap-4 mb-3">
-              <div className="p-3 rounded-lg bg-orange-100 text-orange-600">
+              <div className="p-3 rounded-lg" style={{ backgroundColor: 'var(--color-warning-bg)', color: 'var(--color-warning)' }}>
                 <Wrench size={24} />
               </div>
               <h3 className="text-lg font-bold">Bilete de Reparație</h3>
             </div>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-[var(--color-text-tertiary)]">
               Managementul defecțiunilor prin tichete de service, cu fișă de deservire (Formularul Nr. 8).
             </p>
           </Link>

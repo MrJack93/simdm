@@ -1,0 +1,488 @@
+﻿
+[1m[46m RUN [49m[22m [36mv3.2.6 [39m[90mC:/Users/janea/simdm/frontend[39m
+      [2mCoverage enabled with [22m[33mv8[39m
+
+ [32mтЬУ[39m src/__tests__/pages/InventoryPage.integration.test.jsx [2m([22m[2m11 tests[22m[2m)[22m[33m 3936[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ paginare client-side[2m > [22mpaginatorul se afi╚Щeaz─Г c├вnd exist─Г mai mult de 20 de dispozitive [33m 973[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ paginare client-side[2m > [22mbutonul de pagin─Г ├Оnapoi este dezactivat pe prima pagin─Г [33m 403[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ paginare client-side[2m > [22mbutonul ├Оnainte avanseaz─Г pagina [33m 509[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ paginare client-side[2m > [22mbutonul ├Оnainte este dezactivat pe ultima pagin─Г [33m 462[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ paginare client-side[2m > [22mpaginatorul nu se afi╚Щeaz─Г c├вnd sunt maxim 20 de dispozitive [33m 327[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ combina╚Ыii de filtre (client-side)[2m > [22mc─Гutarea + filtrul de status func╚Ыioneaz─Г ├оmpreun─Г [33m 375[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/MaintenancePage.functions.test.jsx [2m([22m[2m30 tests[22m[2m)[22m[33m 4932[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenancePage тАФ function coverage[2m > [22msubmits new record via POST [33m 384[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenancePage тАФ function coverage[2m > [22mform fields are fillable [33m 881[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenancePage тАФ function coverage[2m > [22mexternal service checkbox toggles provider field [33m 321[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenancePage тАФ function coverage[2m > [22mpost error shows toast [33m 303[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/IncidentsPage.functions.test.jsx [2m([22m[2m26 tests[22m[2m)[22m[33m 5983[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m IncidentsPage тАФ function coverage[2m > [22mopens new incident modal via "Raporteaz─Г Incident" button [33m 566[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m IncidentsPage тАФ function coverage[2m > [22mcloses modal via close X button [33m 510[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m IncidentsPage тАФ function coverage[2m > [22msubmits new incident with POST [33m 390[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m IncidentsPage тАФ function coverage[2m > [22mtoggles patientAffected checkbox [33m 360[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m IncidentsPage тАФ function coverage[2m > [22mpagination: next and prev buttons [33m 440[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m IncidentsPage тАФ function coverage[2m > [22mfills all form fields in new incident modal [33m 465[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/InventoryPage.functions.test.jsx [2m([22m[2m25 tests[22m[2m)[22m[33m 5886[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ function coverage[2m > [22mswitches to cards view [33m 436[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ function coverage[2m > [22msearch filters devices by name [33m 551[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ function coverage[2m > [22msearch filters by inventory number [33m 446[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ function coverage[2m > [22mcombining search and filters [33m 505[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ function coverage[2m > [22mpagination: shows next page [33m 383[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ function coverage[2m > [22msearch resets page to 1 [33m 1203[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/DeviceForm.functions.test.jsx [2m([22m[2m20 tests[22m[2m)[22m[33m 6974[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm тАФ function coverage[2m > [22madvances to step 1 with valid data [33m 787[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm тАФ function coverage[2m > [22mgoes back to step 0 from step 1 [33m 613[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm тАФ function coverage[2m > [22mstep 1 has riskClass, status, section selects [33m 506[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm тАФ function coverage[2m > [22mstep 1 shows date pickers [33m 506[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm тАФ function coverage[2m > [22madvances to step 2 with all valid data [33m 549[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm тАФ function coverage[2m > [22mstep 2 shows summary and advanced toggle [33m 644[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm тАФ function coverage[2m > [22madvanced toggle hides fields on second click [33m 702[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm тАФ function coverage[2m > [22mform submit calls createDevice in new mode [33m 626[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm тАФ function coverage[2m > [22mEnter key advances steps [33m 495[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm тАФ function coverage[2m > [22mstep 2 advanced fields include all optional fields [33m 650[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/InventoryPage.coverage.test.jsx [2m([22m[2m25 tests[22m[2m)[22m[33m 8073[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage Coverage[2m > [22mall filter combinations[2m > [22mfilters by FUNCTIONAL status [33m 699[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage Coverage[2m > [22mall filter combinations[2m > [22mcombines status and section filters [33m 309[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage Coverage[2m > [22mall filter combinations[2m > [22msearches by name [33m 643[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage Coverage[2m > [22mall filter combinations[2m > [22msearches by inventory number [33m 595[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage Coverage[2m > [22mdelete with confirmation[2m > [22mshows confirmation dialog before delete [33m 302[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage Coverage[2m > [22mdelete with confirmation[2m > [22mcancels delete when Cancel clicked [33m 388[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage Coverage[2m > [22mdelete with confirmation[2m > [22mcalls DELETE API on confirm [33m 344[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage Coverage[2m > [22mempty states[2m > [22mshows empty state when search has no results [33m 601[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage Coverage[2m > [22mempty states[2m > [22mresets page when filter changes [33m 644[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage Coverage[2m > [22mview modes[2m > [22mswitches to cards view [33m 325[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/DeviceForm.coverage.test.jsx [2m([22m[2m24 tests[22m[2m)[22m[33m 9527[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm Coverage[2m > [22mwizard step navigation[2m > [22madvances to step 1 with valid fields [33m 846[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm Coverage[2m > [22mwizard step navigation[2m > [22mgoes back to step 0 from step 1 [33m 592[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm Coverage[2m > [22mwizard step navigation[2m > [22mdoes not advance past last step [33m 724[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm Coverage[2m > [22mform validation[2m > [22mvalidates step 1 fields on advance [33m 597[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm Coverage[2m > [22mform submission[2m > [22mcreates device with all fields [33m 959[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm Coverage[2m > [22mform submission[2m > [22mshows loading state during save [33m 603[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm Coverage[2m > [22mform submission[2m > [22mshows error toast on create failure [33m 639[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm Coverage[2m > [22madvanced fields[2m > [22mtoggles advanced fields section [33m 769[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm Coverage[2m > [22madvanced fields[2m > [22mfills advanced fields [33m 1240[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm Coverage[2m > [22mkeyboard navigation[2m > [22mEnter key advances wizard [33m 480[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm Coverage[2m > [22merror states[2m > [22mshows generic error on create failure without response error [33m 645[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/InventoryPage.extended.test.jsx [2m([22m[2m16 tests[22m[2m)[22m[33m 3441[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ Extended Tests[2m > [22mcomut─Г la vizualizarea carduri [33m 526[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ Extended Tests[2m > [22mfiltrul de status func╚Ыioneaz─Г pe toate statusurile [33m 629[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/DeviceForm.integration.test.jsx [2m([22m[2m4 tests[22m[2m)[22m[33m 2971[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm тАФ wizard: navigare ├оnapoi ╚Щi persisten╚Ыa st─Гrii[2m > [22mbutonul ├Оnapoi este dezactivat la primul pas [33m 406[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm тАФ wizard: navigare ├оnapoi ╚Щi persisten╚Ыa st─Гrii[2m > [22mp─Гstreaz─Г valorile introduse c├вnd utilizatorul navigheaz─Г ├Оnainte apoi ├Оnapoi [33m 916[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm тАФ wizard: navigare ├оnapoi ╚Щi persisten╚Ыa st─Гrii[2m > [22mindicatorul de pas reflect─Г mi╚Щcarea ├оnainte ╚Щi ├оnapoi prin wizard [33m 715[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm тАФ wizard: navigare ├оnapoi ╚Щi persisten╚Ыa st─Гrii[2m > [22mselec╚Ыia sec╚Ыiei persist─Г dup─Г navigare ├Оnainte/├Оnapoi ├оntre pa╚Щi [33m 931[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/MppExecutionForm.test.jsx [2m([22m[2m17 tests[22m[2m)[22m[33m 3309[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MppExecutionForm тАФ Execu╚Ыie Mentenan╚Ы─Г cu Semn─Гtur─Г[2m > [22mvalideaz─Г cantitate consumabil (nu mai mult dec├вt stoc) [33m 380[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MppExecutionForm тАФ Execu╚Ыie Mentenan╚Ы─Г cu Semn─Гtur─Г[2m > [22mpermite upload ╚Щi salvare executare mentenan╚Ы─Г [33m 533[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/InventoryPage.test.jsx [2m([22m[2m13 tests[22m[2m)[22m[33m 3541[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage[2m > [22mrandeaz─Г tabelul cu lista de dispozitive ╚Щi sec╚Ыiunea de filtre [33m 417[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage[2m > [22mc─Гutarea filtreaz─Г dispozitivele ├оn timp real [33m 462[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage[2m > [22mcombinarea filtrelor de status ╚Щi sec╚Ыie afi╚Щeaz─Г rezultatele corecte [33m 418[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage[2m > [22m╚Щtergerea textului de c─Гutare restaureaz─Г toate dispozitivele [33m 560[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage[2m > [22m╚Щtergerea unui dispozitiv dup─Г confirmare apeleaz─Г DELETE [33m 400[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/MaintenanceCalendarPage.test.jsx [2m([22m[2m11 tests[22m[2m)[22m[33m 3228[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenanceCalendarPage тАФ Calendar & Apari╚Ыii MPP[2m > [22mpermite navigare lun─Г anterioar─Г [33m 485[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenanceCalendarPage тАФ Calendar & Apari╚Ыii MPP[2m > [22mafi╚Щeaz─Г mesaj dup─Г creare plan reu╚Щit─Г [33m 1058[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/MaintenanceExecutionPage.functions.test.jsx [2m([22m[2m14 tests[22m[2m)[22m[33m 3751[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenanceExecutionPage тАФ function coverage[2m > [22mdelete execution button calls deleteMutation [33m 511[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenanceExecutionPage тАФ function coverage[2m > [22mopens execution dialog when "Execut─Г mentenan╚Ы─Г" is clicked [33m 614[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenanceExecutionPage тАФ function coverage[2m > [22mshows form fields in execution dialog [33m 441[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenanceExecutionPage тАФ function coverage[2m > [22msubmit button disabled when no signature [33m 397[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenanceExecutionPage тАФ function coverage[2m > [22mshows signature clear button [33m 337[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenanceExecutionPage тАФ function coverage[2m > [22mcancel button closes the dialog [33m 538[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenanceExecutionPage тАФ function coverage[2m > [22msignature canvas is rendered in dialog [33m 344[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/RepairTicketsPage.test.jsx [2m([22m[2m11 tests[22m[2m)[22m[33m 3734[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m RepairTicketsPage тАФ Kanban Board cu State Machine[2m > [22mdeschide modal detalii la click pe tichet [33m 378[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m RepairTicketsPage тАФ Kanban Board cu State Machine[2m > [22mpermite creare tichet nou [33m 1058[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m RepairTicketsPage тАФ Kanban Board cu State Machine[2m > [22mvalideaz─Г form creare tichet [33m 637[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m RepairTicketsPage тАФ Kanban Board cu State Machine[2m > [22mpermite schimbare status tichet din modal [33m 762[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m RepairTicketsPage тАФ Kanban Board cu State Machine[2m > [22mfiltreaz─Г tichetele dup─Г prioritate [33m 327[2mms[22m[39m
+node.exe : [90mstderr[2m | src/__tests__/pages/Login.functions.test.jsx[2m > [22m[2mLogin тАФ function 
+coverage[2m > [22m[2msubmit button shows loading state
+строка:1 знак:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Users\janea\AppData\Roaming\ ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([90mstderr[2m...s loading state:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+[22m[39mAn update to MemoryRouter inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at 
+https://react.dev/link/wrap-tests-with-act
+
+[90mstderr[2m | src/__tests__/pages/Login.functions.test.jsx[2m > [22m[2mLogin тАФ function coverage[2m > 
+[22m[2msubmit button shows loading state
+[22m[39mAn update to Login inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at 
+https://react.dev/link/wrap-tests-with-act
+
+ [32mтЬУ[39m src/__tests__/pages/IncidentsPage.extra.test.jsx [2m([22m[2m19 tests[22m[2m)[22m[33m 3990[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m IncidentsPage тАФ Extra Coverage[2m > [22mmodal open/close[2m > [22mopens modal when report button clicked [33m 336[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m IncidentsPage тАФ Extra Coverage[2m > [22mpagination[2m > [22mshows page count and navigation [33m 786[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/ConsumablesPage.integration.test.jsx [2m([22m[2m6 tests[22m[2m)[22m[33m 5437[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ConsumablesPage тАФ c─Гutare, expirare ╚Щi creare[2m > [22mc─Гutarea declan╚Щeaz─Г un nou fetch cu ?search= [33m 1003[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ConsumablesPage тАФ c─Гutare, expirare ╚Щi creare[2m > [22mselectarea unei sugestii de autocomplete completeaz─Г c├вmpul de c─Гutare [33m 1287[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ConsumablesPage тАФ c─Гutare, expirare ╚Щi creare[2m > [22mbutonul Resetare cur─Г╚Ы─Г c├вmpul de c─Гutare [33m 987[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ConsumablesPage тАФ c─Гutare, expirare ╚Щi creare[2m > [22mcreeaz─Г un consumabil nou prin POST din formularul de ad─Гugare [33m 1952[2mms[22m[39m
+[90mstderr[2m | src/__tests__/pages/Login.functions.test.jsx[2m > [22m[2mLogin тАФ function coverage[2m > 
+[22m[2mdisabled state during submission
+[22m[39mAn update to MemoryRouter inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at 
+https://react.dev/link/wrap-tests-with-act
+
+[90mstderr[2m | src/__tests__/pages/Login.functions.test.jsx[2m > [22m[2mLogin тАФ function coverage[2m > 
+[22m[2mdisabled state during submission
+[22m[39mAn update to Login inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at 
+https://react.dev/link/wrap-tests-with-act
+
+ [32mтЬУ[39m src/__tests__/pages/Login.functions.test.jsx [2m([22m[2m21 tests[22m[2m)[22m[33m 7247[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Login тАФ function coverage[2m > [22mrenders all form elements [33m 391[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Login тАФ function coverage[2m > [22mform submits with valid credentials [33m 601[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Login тАФ function coverage[2m > [22mform submits with rememberMe checked [33m 685[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Login тАФ function coverage[2m > [22mvalidates password required [33m 330[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Login тАФ function coverage[2m > [22mvalidation clears on typing [33m 384[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Login тАФ function coverage[2m > [22mshows server error on failed login [33m 449[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Login тАФ function coverage[2m > [22mshows generic error on network failure [33m 472[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Login тАФ function coverage[2m > [22mEnter key on password field submits [33m 441[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Login тАФ function coverage[2m > [22msubmit button shows loading state [33m 739[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Login тАФ function coverage[2m > [22mrate limiting blocks rapid submissions [33m 1002[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Login тАФ function coverage[2m > [22msubmit button shows A╚Щteapt─Г when rate limited [33m 447[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Login тАФ function coverage[2m > [22mdisabled state during submission [33m 503[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/DeviceForm.test.jsx [2m([22m[2m7 tests[22m[2m)[22m[33m 5556[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm[2m > [22mrandeaz─Г dropdown-ul de sec╚Ыii populat din API la pasul de clasificare [33m 1523[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm[2m > [22mexpune c├вmpurile de clasificare obligatorii: clasa de risc, status ╚Щi sec╚Ыie [33m 1073[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm[2m > [22mtrimite un POST la /devices cu date valide la salvare [33m 1600[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm[2m > [22mrandeaz─Г c├вmpul de upload document ├оn modul editare, la pasul de confirmare [33m 830[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/MaintenancePage.coverage.test.jsx [2m([22m[2m19 tests[22m[2m)[22m[33m 4481[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenancePage Coverage[2m > [22mfilter by type[2m > [22mfilters records by Preventiv─Г type [33m 574[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenancePage Coverage[2m > [22mfilter by type[2m > [22mfilters records by Verificare type [33m 329[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenancePage Coverage[2m > [22mfilter by type[2m > [22mfilters records by Calibrare type [33m 341[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenancePage Coverage[2m > [22mfilter by type[2m > [22mshows all records when Toate filter selected [33m 409[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenancePage Coverage[2m > [22mCRUD operations[2m > [22mcreates new record with valid data [33m 712[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenancePage Coverage[2m > [22mCRUD operations[2m > [22mopens edit modal for existing record [33m 340[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/Login.test.jsx [2m([22m[2m11 tests[22m[2m)[22m[33m 6103[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Login[2m > [22mrandeaz─Г inputurile de utilizator ╚Щi parol─Г plus butonul de conectare [33m 644[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Login[2m > [22mactualizeaz─Г valorile inputurilor pe m─Гsur─Г ce utilizatorul tasteaz─Г [33m 850[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Login[2m > [22mla submit valid apeleaz─Г login(username, password) [33m 1436[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Login[2m > [22mafi╚Щeaz─Г mesajul de eroare din r─Гspunsul serverului (role="alert") [33m 620[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Login[2m > [22mafi╚Щeaz─Г mesaj generic c├вnd eroarea nu are r─Гspuns de la server [33m 486[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Login[2m > [22mtrimite formularul la ap─Гsarea tastei Enter ├оn c├вmpul parol─Г [33m 1273[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Login[2m > [22meroarea de validare se curat─Г la tasta╚Ыie (mode: all) [33m 502[2mms[22m[39m
+[90mstderr[2m | src/__tests__/pages/RepairTicketsPage.coverage.test.jsx[2m > [22m[2mRepairTicketsPage 
+Coverage[2m > [22m[2mPDF downloads[2m > [22m[2mdownloads Formular 7 from jurnal view
+[22m[39mNot implemented: navigation to another Document
+
+[90mstderr[2m | src/__tests__/pages/RepairTicketsPage.coverage.test.jsx[2m > [22m[2mRepairTicketsPage 
+Coverage[2m > [22m[2mPDF downloads[2m > [22m[2mdownloads Formular 8 from details modal
+[22m[39mNot implemented: navigation to another Document
+
+ [32mтЬУ[39m src/__tests__/pages/RepairTicketsPage.coverage.test.jsx [2m([22m[2m29 tests[22m[2m)[22m[33m 4384[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m RepairTicketsPage Coverage[2m > [22mtriage and repair modals[2m > [22msubmits repair with valid data [33m 427[2mms[22m[39m
+[90mstderr[2m | src/__tests__/pages/RepairTicketsPage.extended.test.jsx[2m > [22m[2mRepairTicketsPage тАФ 
+Extended Tests[2m > [22m[2mdescarc─Г Formular 7
+[22m[39mNot implemented: navigation to another Document
+
+[90mstderr[2m | src/__tests__/pages/MaintenanceCalendarPage.coverage.test.jsx[2m > [22m[2mMaintenanceCalendarPage 
+Coverage[2m > [22m[2mPDF download[2m > [22m[2mdownloads Formular 5
+[22m[39mNot implemented: navigation to another Document
+
+ [32mтЬУ[39m src/__tests__/pages/MaintenanceCalendarPage.coverage.test.jsx [2m([22m[2m23 tests[22m[2m)[22m[33m 3491[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenanceCalendarPage Coverage[2m > [22mcalendar navigation[2m > [22mnavigates to previous month [33m 322[2mms[22m[39m
+[90mstderr[2m | src/__tests__/pages/RepairTicketsPage.extended.test.jsx[2m > [22m[2mRepairTicketsPage тАФ 
+Extended Tests[2m > [22m[2mdescarc─Г Formular 8 din detalii
+[22m[39mNot implemented: navigation to another Document
+
+ [32mтЬУ[39m src/__tests__/pages/ConsumablesPage.test.jsx [2m([22m[2m9 tests[22m[2m)[22m[33m 3186[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ConsumablesPage[2m > [22mrandeaz─Г tabelul de consumabile ╚Щi c├вmpul de c─Гutare [33m 626[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ConsumablesPage[2m > [22mbutonul "+ Adaug─Г Consumabil" deschide formularul de ad─Гugare [33m 429[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ConsumablesPage[2m > [22m╚Щterge un consumabil dup─Г confirmare (DELETE) [33m 576[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ConsumablesPage[2m > [22mediteaz─Г un consumabil existent ╚Щi salveaz─Г prin PUT [33m 580[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/VerificationsPage.test.jsx [2m([22m[2m13 tests[22m[2m)[22m[33m 4047[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m VerificationsPage тАФ Verific─Гri Periodice & Conformitate[2m > [22mpermite upload certificat pentru dispozitiv [33m 1745[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m VerificationsPage тАФ Verific─Гri Periodice & Conformitate[2m > [22mvalideaz─Г date upload (dispozitiv, tip, fi╚Щier) [33m 530[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m VerificationsPage тАФ Verific─Гri Periodice & Conformitate[2m > [22mpermite filtrare dup─Г tip verificare [33m 424[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m VerificationsPage тАФ Verific─Гri Periodice & Conformitate[2m > [22mpermite filtrare dup─Г status (CONFORM, EXPIRAT) [33m 345[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/RepairTicketsPage.extended.test.jsx [2m([22m[2m21 tests[22m[2m)[22m[33m 2549[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/AuditLogsPage.extra.test.jsx [2m([22m[2m15 tests[22m[2m)[22m[33m 3248[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m AuditLogsPage тАФ Extra Coverage[2m > [22mdate filters[2m > [22msends dateFrom param when filter set [33m 465[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m AuditLogsPage тАФ Extra Coverage[2m > [22mchanges expand/collapse[2m > [22mexpands changes cell [33m 958[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/App.extra.test.jsx [2m([22m[2m13 tests[22m[2m)[22m[33m 4968[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m App тАФ Extra Coverage[2m > [22mloading state[2m > [22mshows loading spinner when auth is loading [33m 516[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m App тАФ Extra Coverage[2m > [22mauthenticated routes[2m > [22mrenders dashboard on / [33m 453[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m App тАФ Extra Coverage[2m > [22mauthenticated routes[2m > [22mrenders inventory page on /inventory [33m 511[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m App тАФ Extra Coverage[2m > [22mauthenticated routes[2m > [22mrenders audit logs page on /audit-logs [33m 428[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m App тАФ Extra Coverage[2m > [22mmobile menu[2m > [22mopens and closes mobile menu [33m 569[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m App тАФ Extra Coverage[2m > [22mtheme toggle[2m > [22mtoggles between light and dark [33m 815[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m App тАФ Extra Coverage[2m > [22mnavigation links[2m > [22mrenders desktop nav links [33m 657[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m App тАФ Extra Coverage[2m > [22mlogout[2m > [22mcalls logout function [33m 302[2mms[22m[39m
+[90mstderr[2m | src/__tests__/pages/AuditLogsPage.test.jsx[2m > [22m[2mAuditLogsPage[2m > [22m[2mhandles CSV 
+export success
+[22m[39mNot implemented: navigation to another Document
+
+ [32mтЬУ[39m src/__tests__/pages/AuditLogsPage.test.jsx [2m([22m[2m15 tests[22m[2m)[22m[33m 2390[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m AuditLogsPage[2m > [22mrenders export CSV button [33m 382[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m AuditLogsPage[2m > [22mshows pagination for multiple pages [33m 388[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/InventoryPageV2.extra.test.jsx [2m([22m[2m8 tests[22m[2m)[22m[33m 3367[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ Extra Branch Coverage[2m > [22mkanban view details[2m > [22mshows kanban view with grouped columns [33m 939[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ Extra Branch Coverage[2m > [22mcards view details[2m > [22mshows card details for devices [33m 502[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ Extra Branch Coverage[2m > [22mview toggle state[2m > [22mswitches between views [33m 672[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ Extra Branch Coverage[2m > [22mdelete[2m > [22mcalls DELETE API on confirm [33m 564[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/App.integration.test.jsx [2m([22m[2m7 tests[22m[2m)[22m[33m 2327[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m App (entry point + router)[2m > [22mafi╚Щeaz─Г spinner-ul de ├оnc─Гrcare (role="status") c├вt timp auth-ul se verific─Г [33m 567[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m App (entry point + router)[2m > [22mrandeaz─Г Dashboard-ul cu numele utilizatorului c├вnd este autentificat [33m 483[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m App (entry point + router)[2m > [22mguard de rut─Г: ruta protejat─Г "/inventory" randeaz─Г con╚Ыinutul c├вnd e autentificat [33m 384[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m App (entry point + router)[2m > [22mcomutatorul de tem─Г seteaz─Г data-theme pe <html> ╚Щi persist─Г ├оn localStorage [33m 459[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/SettingsPage.test.jsx [2m([22m[2m18 tests[22m[2m)[22m[33m 2745[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m SettingsPage[2m > [22mshows submit button [33m 430[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m SettingsPage[2m > [22msubmits password change successfully [33m 331[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/ServiceContractsPage.test.jsx [2m([22m[2m15 tests[22m[2m)[22m[33m 7954[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ServiceContractsPage тАФ Contracte Externe & Cost Analysis[2m > [22mpermite creare contract nou [33m 4281[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ServiceContractsPage тАФ Contracte Externe & Cost Analysis[2m > [22mvalideaz─Г form creare contract [33m 894[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ServiceContractsPage тАФ Contracte Externe & Cost Analysis[2m > [22mpermite rating furnizor (1-5 stele + comment) [33m 427[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ServiceContractsPage тАФ Contracte Externe & Cost Analysis[2m > [22mpermite filtrare contracte dup─Г status (active/expirat) [33m 498[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ServiceContractsPage тАФ Contracte Externe & Cost Analysis[2m > [22mpermite sortare contracte dup─Г data expirare [33m 400[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ServiceContractsPage тАФ Contracte Externe & Cost Analysis[2m > [22mpermite ╚Щtergere contract (cu confirmare) [33m 628[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/MppExecutionForm.test.jsx [2m([22m[2m25 tests[22m[2m)[22m[33m 2598[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MppExecutionForm[2m > [22mselectarea DEFECT arat─Г avertizare [33m 742[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/AnnualInventoryPage.test.jsx [2m([22m[2m8 tests[22m[2m)[22m[33m 3284[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m AnnualInventoryPage[2m > [22mrandeaz─Г selectorul de an cu anii disponibili [33m 525[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m AnnualInventoryPage[2m > [22mpermite marcarea dispozitivelor ca g─Гsite ├оn modalul de inventariere [33m 946[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m AnnualInventoryPage[2m > [22mafi╚Щeaz─Г butonul de generare raport PDF [33m 360[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m AnnualInventoryPage[2m > [22mdeschide modalul de discrepan╚Ыe ╚Щi marcheaz─Г o discrepan╚Ы─Г ca verificat─Г [33m 642[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m AnnualInventoryPage[2m > [22mdescarc─Г raportul PDF prin endpoint-ul de raport [33m 402[2mms[22m[39m
+[90mstderr[2m | src/__tests__/components/modals/RepairModal.extra.test.jsx[2m > [22m[2mRepairModal тАФ Extra 
+Coverage[2m > [22m[2msubmit validation complete flow[2m > [22m[2mvalidates all fields step by step
+[22m[39mNot implemented: HTMLCanvasElement's toDataURL() method: without installing the canvas npm package
+
+ [32mтЬУ[39m src/__tests__/components/ui/Select.test.jsx [2m([22m[2m9 tests[22m[2m)[22m[33m 2200[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Select UI Components[2m > [22mrenders Select with trigger [33m 808[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/components/modals/RepairModal.extra.test.jsx [2m([22m[2m16 tests[22m[2m)[22m[33m 1903[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m RepairModal тАФ Extra Coverage[2m > [22mform field interactions[2m > [22mupdates repair report [33m 300[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m RepairModal тАФ Extra Coverage[2m > [22msubmit validation complete flow[2m > [22mvalidates all fields step by step [33m 391[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/components/AlertsWidget.test.jsx [2m([22m[2m13 tests[22m[2m)[22m[33m 1766[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m AlertsWidget[2m > [22mnavigheaz─Г c─Гtre pagina de consumabile la click pe alerta de stoc [33m 585[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/MaintenanceExecutionPage.test.jsx [2m([22m[2m12 tests[22m[2m)[22m[33m 2113[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenanceExecutionPage[2m > [22mbutonul de ╚Щtergere apeleaz─Г DELETE [33m 624[2mms[22m[39m
+[90mstderr[2m | src/__tests__/pages/MaintenanceExecutionPage.coverage.test.jsx[2m > 
+[22m[2mMaintenanceExecutionPage Coverage[2m > [22m[2mpending plans[2m > [22m[2mshows pending plans when 
+available
+[22m[39mIn HTML, <div> cannot be a child of <select>.
+This will cause a hydration error.
+
+  ...
+    <div>
+      <div className="grid grid-...">
+        <div className="cursor-poi...">
+          <div className="pt-6">
+            <div className="space-y-2">
+              <p>
+              <p>
+              <p>
+              <Dialog open={false} onOpenChange={function onOpenChange}>
+                <div data-testid="dialog" data-open={false}>
+                  <DialogTrigger>
+                  <DialogContent className="max-w-2xl ...">
+                    <div data-testid="dialog-con..." className="max-w-2xl ...">
+                      <DialogHeader>
+                      <form onSubmit={function} className="space-y-4">
+                        <div className="space-y-2">
+                          <label>
+                          <Select value="" onValueChange={function onValueChange}>
+>                           <select value="" onChange={function onChange}>
+                              <SelectTrigger>
+>                               <div>
+                              ...
+                        ...
+
+<select> cannot contain a nested <div>.
+See this log for the ancestor stack trace.
+
+ [32mтЬУ[39m src/__tests__/pages/MaintenanceExecutionPage.coverage.test.jsx [2m([22m[2m10 tests[22m[2m)[22m[33m 1278[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenanceExecutionPage Coverage[2m > [22mexecution list[2m > [22mdeletes execution on button click [33m 598[2mms[22m[39m
+[90mstderr[2m | src/__tests__/pages/AuthProvider.integration.test.jsx[2m > [22m[2mAuthProvider + useAuth 
+(lifecycle)[2m > [22m[2mlogout cur─Г╚Ы─Г starea local─Г chiar dac─Г apelul c─Гtre server e╚Щueaz─Г
+[22m[39m[AuthContext] Logout error: server down
+
+ [32mтЬУ[39m src/__tests__/pages/AuthProvider.integration.test.jsx [2m([22m[2m8 tests[22m[2m)[22m[33m 1428[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m AuthProvider + useAuth (lifecycle)[2m > [22mlogin stocheaz─Г accessToken ├оn tokenStore ╚Щi seteaz─Г user-ul [33m 630[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/IncidentsPage.test.jsx [2m([22m[2m12 tests[22m[2m)[22m[33m 1416[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/components/modals/RepairModal.test.jsx [2m([22m[2m21 tests[22m[2m)[22m[33m 1492[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/DeviceForm.extra.test.jsx [2m([22m[2m9 tests[22m[2m)[22m[33m 1293[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm тАФ Extra Coverage[2m > [22mgoes back to step 1 from step 2 [33m 369[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/accessibility.test.jsx [2m([22m[2m11 tests[22m[2m)[22m[33m 1461[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Accessibility Compliance (WCAG 2.1 AA)[2m > [22mStatusBadge - trebuie s─Г aib─Г role ╚Щi aria-label [33m 499[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/MaintenanceExecutionPage.extra.test.jsx [2m([22m[2m7 tests[22m[2m)[22m[33m 1372[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenanceExecutionPage тАФ Extra Coverage[2m > [22mpending plans[2m > [22mrenders pending plan card with execute button [33m 317[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenanceExecutionPage тАФ Extra Coverage[2m > [22mdelete execution[2m > [22mcalls delete on trash button click [33m 579[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/MaintenancePage.test.jsx [2m([22m[2m10 tests[22m[2m)[22m[33m 1148[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/components/ui/Dialog.test.jsx [2m([22m[2m10 tests[22m[2m)[22m[33m 1092[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Dialog UI Components[2m > [22mrenders DialogTrigger button [33m 554[2mms[22m[39m
+[90mstderr[2m | src/__tests__/components/modals/TicketDetailsModal.extra.test.jsx[2m > [22m[2mTicketDetailsModal 
+тАФ Extra Coverage[2m > [22m[2mformular8 download[2m > [22m[2mdownloads formular8 PDF when actionsTaken present
+[22m[39mNot implemented: navigation to another Document
+
+ [32mтЬУ[39m src/__tests__/components/Alert.test.jsx [2m([22m[2m10 tests[22m[2m)[22m[33m 499[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Alert[2m > [22mapplies correct role for info type [33m 305[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/hooks/useDevices.test.js [2m([22m[2m11 tests[22m[2m)[22m[33m 906[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/components/modals/DetailsModal.test.jsx [2m([22m[2m19 tests[22m[2m)[22m[33m 849[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/components/DeviceTimeline.test.jsx [2m([22m[2m10 tests[22m[2m)[22m[33m 1035[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/components/modals/TicketDetailsModal.extra.test.jsx [2m([22m[2m20 tests[22m[2m)[22m[33m 1234[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m TicketDetailsModal тАФ Extra Coverage[2m > [22mstatus transitions[2m > [22mupdates status via mutation [33m 475[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/components/EmptyState.test.jsx [2m([22m[2m8 tests[22m[2m)[22m[33m 476[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m EmptyState[2m > [22mhas status role [33m 301[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/components/ui/UIComponents.test.jsx [2m([22m[2m24 tests[22m[2m)[22m[33m 827[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m UI Components[2m > [22mTabs[2m > [22mrenders tab triggers [33m 521[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/components/ProtectedRoute.test.jsx [2m([22m[2m6 tests[22m[2m)[22m[33m 412[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ProtectedRoute[2m > [22mafi╚Щeaz─Г skeleton-ul de ├оnc─Гrcare ├оn timpul verific─Гrii [33m 310[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/components/ErrorState.test.jsx [2m([22m[2m10 tests[22m[2m)[22m[33m 514[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/components/ShadcnComponents.test.jsx [2m([22m[2m27 tests[22m[2m)[22m[33m 917[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Shadcn Components - Unit Tests[2m > [22mButton Component[2m > [22mrenders button with text [33m 428[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/components/modals/TriageModal.test.jsx [2m([22m[2m15 tests[22m[2m)[22m[33m 551[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/utils/AccessibilityUtils.test.jsx [2m([22m[2m22 tests[22m[2m)[22m[33m 637[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m AccessibilityUtils[2m > [22mSkipLink[2m > [22mrenders skip link with href #main [33m 354[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/components/KeyboardShortcuts.test.jsx [2m([22m[2m8 tests[22m[2m)[22m[33m 683[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m KeyboardShortcuts[2m > [22mshows dialog on Ctrl+/ [33m 378[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/components/SkipLink.test.jsx [2m([22m[2m8 tests[22m[2m)[22m[33m 744[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m SkipLink[2m > [22mrenders skip link with correct text [33m 535[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/components/Spinner.test.jsx [2m([22m[2m9 tests[22m[2m)[22m[33m 554[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Spinner[2m > [22mrenders with role status [33m 355[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/components/ErrorBoundary.test.jsx [2m([22m[2m7 tests[22m[2m)[22m[33m 817[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ErrorBoundary[2m > [22mlinks to home page [33m 383[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/components/Skeleton.test.jsx [2m([22m[2m11 tests[22m[2m)[22m[33m 449[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Skeleton[2m > [22mrenders with role status [33m 354[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/components/Toast.test.jsx [2m([22m[2m11 tests[22m[2m)[22m[33m 737[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Toast[2m > [22mhas status role and aria-live [33m 395[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/hooks/hooks.test.js [2m([22m[2m10 tests[22m[2m)[22m[32m 196[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/components/ui/Tooltip.test.jsx [2m([22m[2m6 tests[22m[2m)[22m[33m 983[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Tooltip UI Components[2m > [22mrenders Tooltip root without errors [33m 663[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/api/apiFiles.test.js [2m([22m[2m36 tests[22m[2m)[22m[32m 70[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/axios.integration.test.jsx [2m([22m[2m8 tests[22m[2m)[22m[32m 32[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/api/consumables.test.js [2m([22m[2m17 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/api/axios.functions.test.js [2m([22m[2m2 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/schemas/deviceSchema.test.js [2m([22m[2m6 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/api/axios.interceptors.test.js [2m([22m[2m9 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/api/tokenStore.test.js [2m([22m[2m10 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m74 passed[39m[22m[90m (74)[39m
+[2m      Tests [22m [1m[32m1037 passed[39m[22m[90m (1037)[39m
+[2m   Start at [22m 17:15:15
+[2m   Duration [22m 88.11s[2m (transform 10.58s, setup 39.50s, collect 33.45s, tests 186.78s, environment 220.09s, prepare 20.88s)[22m
+
+[34m % [39m[2mCoverage report from [22m[33mv8[39m
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+All files          |   89.99 |    88.17 |   78.87 |   89.99 |                   
+ src               |   90.29 |      100 |   72.72 |   90.29 |                   
+  App.jsx          |   90.29 |      100 |   72.72 |   90.29 | 142-167           
+ src/api           |   95.37 |    95.34 |   98.11 |   95.37 |                   
+  axios.js         |   85.91 |    81.81 |      50 |   85.91 | 42-51             
+  consumables.js   |     100 |      100 |     100 |     100 |                   
+  devices.js       |     100 |      100 |     100 |     100 |                   
+  ...nancePlans.js |     100 |      100 |     100 |     100 |                   
+  mppExecutions.js |     100 |      100 |     100 |     100 |                   
+  repairTickets.js |     100 |      100 |     100 |     100 |                   
+  sections.js      |     100 |      100 |     100 |     100 |                   
+  ...eContracts.js |     100 |    95.23 |     100 |     100 | 15                
+  tokenStore.js    |   80.64 |       50 |     100 |   80.64 | 17-18,25-26,33-34 
+  verifications.js |     100 |      100 |     100 |     100 |                   
+ src/components    |   98.87 |    90.98 |   91.66 |   98.87 |                   
+  Alert.jsx        |     100 |      100 |     100 |     100 |                   
+  AlertsWidget.jsx |     100 |    96.92 |   81.81 |     100 | 38,129            
+  ...irmDialog.jsx |     100 |      100 |      80 |     100 |                   
+  ...eTimeline.jsx |   96.29 |    81.81 |     100 |   96.29 | 42-44,103-105     
+  EmptyState.jsx   |     100 |      100 |     100 |     100 |                   
+  ...rBoundary.jsx |     100 |      100 |     100 |     100 |                   
+  ErrorState.jsx   |     100 |      100 |     100 |     100 |                   
+  ...Shortcuts.jsx |     100 |    86.95 |      80 |     100 | 24,30-36          
+  ...utionForm.jsx |   96.36 |    81.25 |    92.3 |   96.36 | 49-52,85,165-167  
+  ...ctedRoute.jsx |     100 |      100 |     100 |     100 |                   
+  Skeleton.jsx     |     100 |      100 |     100 |     100 |                   
+  SkipLink.jsx     |     100 |      100 |     100 |     100 |                   
+  Spinner.jsx      |     100 |      100 |     100 |     100 |                   
+  StatusBadge.jsx  |     100 |       50 |     100 |     100 | 41                
+  Toast.jsx        |     100 |      100 |     100 |     100 |                   
+ ...ponents/modals |     100 |    88.11 |      80 |     100 |                   
+  RepairModal.jsx  |     100 |    84.61 |      70 |     100 | 26,48-50,155,197  
+  ...ailsModal.jsx |     100 |    95.83 |     100 |     100 | 111               
+  TriageModal.jsx  |     100 |       88 |    87.5 |     100 | 18,22,82          
+ src/components/ui |   95.86 |    97.72 |   95.55 |   95.86 |                   
+  badge.jsx        |     100 |      100 |     100 |     100 |                   
+  button.jsx       |     100 |      100 |     100 |     100 |                   
+  card.jsx         |   70.45 |      100 |   71.42 |   70.45 | 62-75,89-102      
+  dialog.jsx       |    98.3 |     90.9 |     100 |    98.3 | 106-108           
+  input.jsx        |     100 |      100 |     100 |     100 |                   
+  select.jsx       |     100 |      100 |     100 |     100 |                   
+  table.jsx        |     100 |      100 |     100 |     100 |                   
+  tabs.jsx         |     100 |      100 |     100 |     100 |                   
+  tooltip.jsx      |     100 |      100 |     100 |     100 |                   
+ src/context       |      95 |    81.25 |     100 |      95 |                   
+  AuthProvider.jsx |   94.82 |    81.25 |     100 |   94.82 | 37-39             
+  auth.context.js  |     100 |      100 |     100 |     100 |                   
+ src/hooks         |   97.81 |    93.87 |      96 |   97.81 |                   
+  ...essibility.js |     100 |      100 |     100 |     100 |                   
+  useAuth.js       |     100 |      100 |     100 |     100 |                   
+  ...onsumables.js |   89.13 |      100 |      75 |   89.13 | 18-22             
+  useDevices.js    |     100 |      100 |     100 |     100 |                   
+  usePageTitle.js  |     100 |      100 |     100 |     100 |                   
+  useSections.js   |     100 |      100 |     100 |     100 |                   
+  useTheme.js      |     100 |    81.25 |     100 |     100 | 6-7               
+ src/lib           |     100 |      100 |     100 |     100 |                   
+  utils.js         |     100 |      100 |     100 |     100 |                   
+ src/pages         |   86.45 |    85.66 |   70.93 |   86.45 |                   
+  ...ntoryPage.jsx |   77.14 |       80 |      50 |   77.14 | ...00-512,536-579 
+  ...tLogsPage.jsx |     100 |    87.09 |    92.3 |     100 | ...10-113,251-255 
+  ...ablesPage.jsx |   83.66 |    77.98 |   68.57 |   83.66 | ...20-622,633-644 
+  Dashboard.jsx    |     100 |    90.47 |     100 |     100 | 29,59             
+  DeviceForm.jsx   |   89.55 |    83.62 |   58.82 |   89.55 | ...35-737,841,844 
+  ...dentsPage.jsx |     100 |     87.8 |    92.5 |     100 | ...00,213,382-399 
+  ...oryPageV2.jsx |   95.28 |    93.75 |      85 |   95.28 | ...67,343,351-355 
+  Login.jsx        |     100 |      100 |     100 |     100 |                   
+  ...endarPage.jsx |    82.8 |    86.58 |   62.06 |    82.8 | ...31-334,352-397 
+  ...utionPage.jsx |   90.65 |    82.14 |      60 |   90.65 | ...03,215,229,273 
+  ...nancePage.jsx |   96.87 |    92.06 |   94.59 |   96.87 | 460-472           
+  ...utionForm.jsx |   63.75 |       68 |   29.03 |   63.75 | ...49-454,468-473 
+  ...cketsPage.jsx |   95.65 |    84.37 |   79.59 |   95.65 | ...88,591,692-698 
+  ...ractsPage.jsx |       0 |        0 |       0 |       0 | 1-193             
+  SettingsPage.jsx |     100 |    85.71 |     100 |     100 | 60,154-156        
+  ...tionsPage.jsx |   88.94 |    82.05 |      70 |   88.94 | ...80,285,287-289 
+ src/schemas       |     100 |      100 |   33.33 |     100 |                   
+  deviceSchema.js  |     100 |      100 |   33.33 |     100 |                   
+ src/utils         |   79.82 |    94.44 |      90 |   79.82 |                   
+  ...lityUtils.jsx |   79.82 |    94.44 |      90 |   79.82 | 26-48             
+-------------------|---------|----------|---------|---------|-------------------
+ERROR: Coverage for lines (89.99%) does not meet global threshold (90%)
+ERROR: Coverage for functions (78.87%) does not meet global threshold (90%)
+ERROR: Coverage for statements (89.99%) does not meet global threshold (90%)
+ERROR: Coverage for branches (88.17%) does not meet global threshold (90%)

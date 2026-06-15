@@ -1,15 +1,17 @@
-import { useState } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { Eye, EyeOff } from 'lucide-react';
+import SkipLink from '../components/SkipLink';
 
 // Schema validare — mesaje în română, consistente cu restul aplicației
 const loginSchema = z.object({
   username: z.string().min(1, 'Utilizatorul este obligatoriu'),
   password: z.string().min(1, 'Parola este obligatorie'),
+  rememberMe: z.boolean().optional(),
 });
 
 const features = [
@@ -25,6 +27,8 @@ export default function Login() {
   // Separate de erorile de validare client gestionate de RHF.
   const [serverError, setServerError] = useState('');
   const { login } = useAuth();
+  const lastSubmitRef = useRef(0);
+  const [rateLimited, setRateLimited] = useState(false);
 
   const {
     register,
@@ -32,13 +36,20 @@ export default function Login() {
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: zodResolver(loginSchema),
-    mode: 'onBlur', // Validare la pierderea focusului — feedback rapid, non-intruziv
+    mode: 'all', // Validare la blur + la tastație — erorile se curată imediat
   });
 
-  const onSubmit = async ({ username, password }) => {
+  const onSubmit = async ({ username, password, rememberMe }) => {
+    const now = Date.now();
+    if (now - lastSubmitRef.current < 3000) {
+      setRateLimited(true);
+      setTimeout(() => setRateLimited(false), 3000);
+      return;
+    }
+    lastSubmitRef.current = now;
     setServerError('');
     try {
-      await login(username, password);
+      await login(username, password, { rememberMe });
       navigate('/');
     } catch (err) {
       setServerError(err.response?.data?.error || 'Eroare de conectare. Încearcă din nou.');
@@ -47,6 +58,7 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row" style={{ backgroundColor: 'var(--color-bg-primary)' }}>
+      <SkipLink />
 
       {/* Hero — desktop */}
       <div
@@ -94,7 +106,7 @@ export default function Login() {
       </div>
 
       {/* Form */}
-      <div className="w-full md:w-1/2 flex items-center justify-center p-4 md:p-8">
+      <div id="main" tabIndex={-1} className="w-full md:w-1/2 flex items-center justify-center p-4 md:p-8">
         <div
           className="w-full max-w-md p-8 rounded-2xl border"
           style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)' }}
@@ -176,7 +188,34 @@ export default function Login() {
               )}
             </div>
 
+            {/* Remember me */}
+            <div className="flex items-center gap-2">
+              <input
+                {...register('rememberMe')}
+                id="rememberMe"
+                type="checkbox"
+                className="h-4 w-4 rounded border-[var(--color-border)] bg-[var(--color-bg-primary)] accent-[var(--color-accent)]"
+              />
+              <label
+                htmlFor="rememberMe"
+                className="text-sm cursor-pointer select-none"
+                style={{ color: 'var(--color-text-secondary)' }}
+              >
+                Ține-mă minte
+              </label>
+            </div>
+
             {/* Eroare server (credențiale invalide, eroare rețea etc.) */}
+            {rateLimited && (
+              <div
+                role="alert"
+                className="p-4 rounded-lg border flex items-start gap-3"
+                style={{ backgroundColor: 'var(--color-warning-bg)', borderColor: 'var(--color-warning)', color: 'var(--color-warning)' }}
+              >
+                <span className="text-lg mt-0.5" aria-hidden="true">⏳</span>
+                <p className="text-sm">Prea multe încercări. Așteaptă 3 secunde.</p>
+              </div>
+            )}
             {serverError && (
               <div
                 role="alert"
@@ -190,22 +229,24 @@ export default function Login() {
 
             <button
               type="submit"
-              disabled={isSubmitting}
+              disabled={isSubmitting || rateLimited}
               aria-busy={isSubmitting}
               className="btn-primary w-full mt-6 flex items-center justify-center gap-2"
             >
-              {isSubmitting && <div className="loading-spinner loading-spinner-sm" />}
-              {isSubmitting ? 'Se conectează…' : 'Conectare'}
+              {isSubmitting && <div className="loading-spinner loading-spinner-sm" aria-label="Se procesează" />}
+              {isSubmitting ? 'Se conectează…' : rateLimited ? 'Așteaptă…' : 'Conectare'}
             </button>
           </form>
 
-          <div
-            className="mt-8 pt-6 border-t text-center text-xs"
-            style={{ borderColor: 'var(--color-border)', color: 'var(--color-text-secondary)' }}
-          >
-            <p className="mb-1">Demo:</p>
-            <p className="font-mono" style={{ color: 'var(--color-text-primary)' }}>bioinginer / parola</p>
-          </div>
+          {import.meta.env.DEV && (
+            <div
+              className="mt-8 pt-6 border-t text-center text-xs"
+              style={{ borderColor: 'var(--color-border)', color: 'var(--color-text-secondary)' }}
+            >
+              <p className="mb-1">Demo:</p>
+              <p className="font-mono" style={{ color: 'var(--color-text-primary)' }}>bioinginer / parola</p>
+            </div>
+          )}
         </div>
       </div>
     </div>

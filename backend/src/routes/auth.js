@@ -27,20 +27,24 @@ const loginLimiter = rateLimit({
 const refreshCookieOptions = {
   httpOnly: true,
   secure: process.env.COOKIE_SECURE === 'true',
-  sameSite: 'strict',
+  sameSite: 'lax',
   maxAge: 7 * 24 * 60 * 60 * 1000, // 7 zile
-  path: '/api/auth',
+  path: '/',
 };
 
 // POST /api/auth/login
 router.post('/login', loginLimiter, validateBody(loginSchema), async (req, res) => {
   try {
-    const { username, password } = req.validated;
+    const { username, password, rememberMe } = req.validated;
 
     const result = await AuthService.login(username, password, req);
 
     // Refresh token în httpOnly cookie
-    res.cookie('refreshToken', result.refreshToken, refreshCookieOptions);
+    // rememberMe = 30 zile; fără = session cookie (browser close = logout)
+    const cookieOpts = rememberMe
+      ? { ...refreshCookieOptions, maxAge: 30 * 24 * 60 * 60 * 1000 }
+      : { httpOnly: true, secure: process.env.COOKIE_SECURE === 'true', sameSite: 'lax', path: '/' };
+    res.cookie('refreshToken', result.refreshToken, cookieOpts);
 
     // Access token în JSON response
     res.json({
@@ -72,7 +76,7 @@ router.post('/refresh', async (req, res) => {
     });
   } catch (error) {
     console.error('[Refresh Error]', error.message);
-    res.clearCookie('refreshToken', { path: '/api/auth' });
+    res.clearCookie('refreshToken', { path: '/' });
     res.status(401).json({ error: error.message });
   }
 });
@@ -83,7 +87,7 @@ router.post('/logout', authMiddleware, async (req, res) => {
     const refreshToken = req.cookies.refreshToken;
     await AuthService.logout(refreshToken, req.user.sub, req);
 
-    res.clearCookie('refreshToken', { path: '/api/auth' });
+    res.clearCookie('refreshToken', { path: '/' });
     res.json({ message: 'Logout reușit' });
   } catch (error) {
     console.error('[Logout Error]', error.message);

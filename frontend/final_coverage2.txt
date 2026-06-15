@@ -1,0 +1,3176 @@
+﻿
+[1m[46m RUN [49m[22m [36mv3.2.6 [39m[90mC:/Users/janea/simdm/frontend[39m
+      [2mCoverage enabled with [22m[33mv8[39m
+
+ [31mтЭп[39m src/__tests__/pages/MaintenanceCalendarPage.functions.test.jsx [2m([22m[2m32 tests[22m[2m | [22m[31m6 failed[39m[2m)[22m[33m 10775[2mms[22m[39m
+   [32mтЬУ[39m MaintenanceCalendarPage тАФ function coverage[2m > [22mrenders heading and description[32m 207[2mms[22m[39m
+   [32mтЬУ[39m MaintenanceCalendarPage тАФ function coverage[2m > [22mcalendar navigation: previous month[32m 107[2mms[22m[39m
+   [32mтЬУ[39m MaintenanceCalendarPage тАФ function coverage[2m > [22mcalendar navigation: next month[32m 87[2mms[22m[39m
+   [32mтЬУ[39m MaintenanceCalendarPage тАФ function coverage[2m > [22mprevious month from January goes to December and decrements year[32m 43[2mms[22m[39m
+   [32mтЬУ[39m MaintenanceCalendarPage тАФ function coverage[2m > [22mnext month from December goes to January and increments year[32m 41[2mms[22m[39m
+   [32mтЬУ[39m MaintenanceCalendarPage тАФ function coverage[2m > [22mchanges year via dropdown[32m 81[2mms[22m[39m
+   [32mтЬУ[39m MaintenanceCalendarPage тАФ function coverage[2m > [22mopens create plan modal[32m 144[2mms[22m[39m
+   [32mтЬУ[39m MaintenanceCalendarPage тАФ function coverage[2m > [22mvalidates device required in create modal[32m 130[2mms[22m[39m
+   [32mтЬУ[39m MaintenanceCalendarPage тАФ function coverage[2m > [22mvalidates frequency required[32m 125[2mms[22m[39m
+   [32mтЬУ[39m MaintenanceCalendarPage тАФ function coverage[2m > [22mvalidates responsible required[32m 125[2mms[22m[39m
+   [32mтЬУ[39m MaintenanceCalendarPage тАФ function coverage[2m > [22mcreates plan successfully[32m 157[2mms[22m[39m
+   [32mтЬУ[39m MaintenanceCalendarPage тАФ function coverage[2m > [22mcloses create modal on cancel[32m 129[2mms[22m[39m
+   [32mтЬУ[39m MaintenanceCalendarPage тАФ function coverage[2m > [22mselects a day and shows details[32m 69[2mms[22m[39m
+   [32mтЬУ[39m MaintenanceCalendarPage тАФ function coverage[2m > [22mtoggles day selection off[32m 104[2mms[22m[39m
+   [32mтЬУ[39m MaintenanceCalendarPage тАФ function coverage[2m > [22mshows empty day message[32m 79[2mms[22m[39m
+   [32mтЬУ[39m MaintenanceCalendarPage тАФ function coverage[2m > [22mdownloads Formular 5 PDF[32m 56[2mms[22m[39m
+   [32mтЬУ[39m MaintenanceCalendarPage тАФ function coverage[2m > [22mshows PDF error on failure[32m 85[2mms[22m[39m
+   [32mтЬУ[39m MaintenanceCalendarPage тАФ function coverage[2m > [22mcolor legend is displayed[32m 64[2mms[22m[39m
+   [32mтЬУ[39m MaintenanceCalendarPage тАФ function coverage[2m > [22mdisplays calendar grid with day headers[32m 66[2mms[22m[39m
+   [32mтЬУ[39m MaintenanceCalendarPage тАФ function coverage[2m > [22mdisplays plan frequency summary when plans exist[32m 58[2mms[22m[39m
+   [32mтЬУ[39m MaintenanceCalendarPage тАФ function coverage[2m > [22mdisplays occurrences from plan with occurrences array[32m 105[2mms[22m[39m
+[31m   [31m├Ч[31m MaintenanceCalendarPage тАФ function coverage[2m > [22mreschedule validates reason min length[39m[33m 1158[2mms[22m[39m
+[31m     тЖТ Found a label with the text of: Data nou─Г, however no form control was found associated to that label. Make sure you're using the "for" attribute or "aria-labelledby" attribute correctly.
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"p-4 md:p-8 space-y-6"[31m
+    [36m>[31m
+      [36m<span[31m
+        [33mclass[31m=[32m"sr-only"[31m
+      [36m>[31m
+        [0mMaintenanceCalendarPage[0m
+      [36m</span>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4"[31m
+      [36m>[31m
+        [36m<div>[31m
+          [36m<h1[31m
+            [33mclass[31m=[32m"text-3xl font-bold mb-2"[31m
+            [33mstyle[31m=[32m"color: var(--healthcare-primary);"[31m
+          [36m>[31m
+            [0mCalendar Mentenan╚Ы─Г[0m
+          [36m</h1>[31m
+          [36m<p[31m
+            [33mclass[31m=[32m"text-sm"[31m
+            [33mstyle[31m=[32m"color: var(--color-text-secondary);"[31m
+          [36m>[31m
+            [0mVizualiza╚Ыi program─Гrile de mentenan╚Ы─Г preventiv─Г ╚Щi reprograma╚Ыi ocuren╚Ыele scadente[0m
+          [36m</p>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"flex gap-2 flex-wrap"[31m
+        [36m>[31m
+          [36m<button[31m
+            [33mclass[31m=[32m"px-4 py-2 border rounded-lg hover:bg-[var(--color-bg-elevated)] transition-all duration-150 text-sm font-semibold flex items-center gap-2 cursor-pointer"[31m
+            [33mstyle[31m=[32m"border-color: var(--color-border); color: var(--color-text-primary); background-color: var(--color-bg-secondary);"[31m
+          [36m>[31m
+            [0mDescarc─Г Formular Nr. 5 (PDF)[0m
+          [36m</button>[31m
+          [36m<button[31m
+            [33mclass[31m=[32m"px-4 py-2 rounded-lg transition-all duration-150 text-sm font-semibold flex items-center gap-2 cursor-pointer"[31m
+            [33mstyle[31m=[32m"background-color: var(--healthcare-primary); color: rgb(255, 255, 255);"[31m
+          [36m>[31m
+            [0mCreare Plan[0m
+          [36m</button>[31m
+        [36m</div>[31m
+      [36m</div>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"flex items-center gap-3 mb-4 flex-wrap"[31m
+      [36m>[31m
+        [36m<label[31m
+          [33mclass[31m=[32m"font-medium text-sm"[31m
+          [33mfor[31m=[32m"year-select"[31m
+          [33mstyle[31m=[32m"color: var(--color-text-secondary);"[31m
+        [36m>[31m
+          [0mAn:[0m
+        [36m</label>[31m
+        [36m<select[31m
+          [33mclass[31m=[32m"border rounded-lg px-3 py-1.5 text-sm cursor-pointer outline-none transition-all duration-150"[31m
+          [33mid[31m=[32m"year-select"[31m
+          [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary); border-color: var(--color-border);"[31m
+        [36m>[31m
+          [36m<option[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+            [33mvalue[31m=[32m"2025"[31m
+          [36m>[31m
+            [0m2025[0m
+          [36m</option>[31m
+          [36m<option[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+            [33mvalue[31m=[32m"2026"[31m
+          [36m>[31m
+            [0m2026[0m
+          [36m</option>[31m
+          [36m<option[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+            [33mvalue[31m=[32m"2027"[31m
+          [36m>[31m
+            [0m2027[0m
+          [36m</option>[31m
+          [36m<option[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+            [33mvalue[31m=[32m"2028"[31m
+          [36m>[31m
+            [0m2028[0m
+          [36m</option>[31m
+          [36m<option[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+            [33mvalue[31m=[32m"2029"[31m
+          [36m>[31m
+            [0m2029[0m
+          [36m</option>[31m
+        [36m</select>[31m
+        [36m<button[31m
+          [33maria-label[31m=[32m"Luna anterioar─Г"[31m
+          [33mclass[31m=[32m"px-3 py-1.5 border rounded-lg transition-all duration-150 text-sm font-medium hover:bg-[var(--color-bg-elevated)] cursor-pointer"[31m
+          [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary); border-color: var(--color-border);"[31m
+        [36m>[31m
+          [0mтА╣ Luna anterioar─Г[0m
+        [36m</button>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"font-semibold text-sm px-2"[31m
+          [33mstyle[31m=[32m"color: var(--color-text-primary);"[31m
+        [36m>[31m
+          [0mIunie[0m
+          [0m [0m
+          [0m2026[0m
+        [36m</span>[31m
+        [36m<button[31m
+          [33maria-label[31m=[32m"Luna urm─Гtoare"[31m
+          [33mclass[31m=[32m"px-3 py-1.5 border rounded-lg transition-all duration-150 text-sm font-medium hover:bg-[var(--color-bg-elevated)] cursor-pointer"[31m
+          [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary); border-color: var(--color-border);"[31m
+        [36m>[31m
+          [0mLuna urm─Гtoare тА║[0m
+        [36m</button>[31m
+      [36m</div>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"flex gap-3 mb-4 text-xs flex-wrap font-medium"[31m
+      [36m>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+          [33mstyle[31m=[32m"background-color: var(--color-success-bg); color: var(--color-success); border: 1px solid rgba(52, 211, 153, 0.2);"[31m
+        [36m>[31m
+          [0mPROGRAMAT[0m
+        [36m</span>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+          [33mstyle[31m=[32m"background-color: var(--color-warning-bg); color: var(--color-warning); border: 1px solid rgba(251, 191, 36, 0.2);"[31m
+        [36m>[31m
+          [0mSCADENT[0m
+        [36m</span>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+          [33mstyle[31m=[32m"background-color: var(--color-error-bg); color: var(--color-error); border: 1px solid rgba(248, 113, 113, 0.2);"[31m
+        [36m>[31m
+          [0mDEPASIT[0m
+        [36m</span>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+          [33mstyle[31m=[32m"background-color: var(--color-info-bg); color: var(--color-info); border: 1px solid rgba(96, 165, 250, 0.2);"[31m
+        [36m>[31m
+          [0mEFECTUAT[0m
+        [36m</span>[31m
+      [36m</div>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"grid grid-cols-7 gap-1 mb-6"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"text-center text-xs font-semibold text...
+
+Ignored nodes: comments, script, style
+[36m<html>[31m
+  [36m<head />[31m
+  [36m<body>[31m
+    [36m<div>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"p-4 md:p-8 space-y-6"[31m
+      [36m>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"sr-only"[31m
+        [36m>[31m
+          [0mMaintenanceCalendarPage[0m
+        [36m</span>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4"[31m
+        [36m>[31m
+          [36m<div>[31m
+            [36m<h1[31m
+              [33mclass[31m=[32m"text-3xl font-bold mb-2"[31m
+              [33mstyle[31m=[32m"color: var(--healthcare-primary);"[31m
+            [36m>[31m
+              [0mCalendar Mentenan╚Ы─Г[0m
+            [36m</h1>[31m
+            [36m<p[31m
+              [33mclass[31m=[32m"text-sm"[31m
+              [33mstyle[31m=[32m"color: var(--color-text-secondary);"[31m
+            [36m>[31m
+              [0mVizualiza╚Ыi program─Гrile de mentenan╚Ы─Г preventiv─Г ╚Щi reprograma╚Ыi ocuren╚Ыele scadente[0m
+            [36m</p>[31m
+          [36m</div>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"flex gap-2 flex-wrap"[31m
+          [36m>[31m
+            [36m<button[31m
+              [33mclass[31m=[32m"px-4 py-2 border rounded-lg hover:bg-[var(--color-bg-elevated)] transition-all duration-150 text-sm font-semibold flex items-center gap-2 cursor-pointer"[31m
+              [33mstyle[31m=[32m"border-color: var(--color-border); color: var(--color-text-primary); background-color: var(--color-bg-secondary);"[31m
+            [36m>[31m
+              [0mDescarc─Г Formular Nr. 5 (PDF)[0m
+            [36m</button>[31m
+            [36m<button[31m
+              [33mclass[31m=[32m"px-4 py-2 rounded-lg transition-all duration-150 text-sm font-semibold flex items-center gap-2 cursor-pointer"[31m
+              [33mstyle[31m=[32m"background-color: var(--healthcare-primary); color: rgb(255, 255, 255);"[31m
+            [36m>[31m
+              [0mCreare Plan[0m
+            [36m</button>[31m
+          [36m</div>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"flex items-center gap-3 mb-4 flex-wrap"[31m
+        [36m>[31m
+          [36m<label[31m
+            [33mclass[31m=[32m"font-medium text-sm"[31m
+            [33mfor[31m=[32m"year-select"[31m
+            [33mstyle[31m=[32m"color: var(--color-text-secondary);"[31m
+          [36m>[31m
+            [0mAn:[0m
+          [36m</label>[31m
+          [36m<select[31m
+            [33mclass[31m=[32m"border rounded-lg px-3 py-1.5 text-sm cursor-pointer outline-none transition-all duration-150"[31m
+            [33mid[31m=[32m"year-select"[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary); border-color: var(--color-border);"[31m
+          [36m>[31m
+            [36m<option[31m
+              [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+              [33mvalue[31m=[32m"2025"[31m
+            [36m>[31m
+              [0m2025[0m
+            [36m</option>[31m
+            [36m<option[31m
+              [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+              [33mvalue[31m=[32m"2026"[31m
+            [36m>[31m
+              [0m2026[0m
+            [36m</option>[31m
+            [36m<option[31m
+              [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+              [33mvalue[31m=[32m"2027"[31m
+            [36m>[31m
+              [0m2027[0m
+            [36m</option>[31m
+            [36m<option[31m
+              [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+              [33mvalue[31m=[32m"2028"[31m
+            [36m>[31m
+              [0m2028[0m
+            [36m</option>[31m
+            [36m<option[31m
+              [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+              [33mvalue[31m=[32m"2029"[31m
+            [36m>[31m
+              [0m2029[0m
+            [36m</option>[31m
+          [36m</select>[31m
+          [36m<button[31m
+            [33maria-label[31m=[32m"Luna anterioar─Г"[31m
+            [33mclass[31m=[32m"px-3 py-1.5 border rounded-lg transition-all duration-150 text-sm font-medium hover:bg-[var(--color-bg-elevated)] cursor-pointer"[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary); border-color: var(--color-border);"[31m
+          [36m>[31m
+            [0mтА╣ Luna anterioar─Г[0m
+          [36m</button>[31m
+          [36m<span[31m
+            [33mclass[31m=[32m"font-semibold text-sm px-2"[31m
+            [33mstyle[31m=[32m"color: var(--color-text-primary);"[31m
+          [36m>[31m
+            [0mIunie[0m
+            [0m [0m
+            [0m2026[0m
+          [36m</span>[31m
+          [36m<button[31m
+            [33maria-label[31m=[32m"Luna urm─Гtoare"[31m
+            [33mclass[31m=[32m"px-3 py-1.5 border rounded-lg transition-all duration-150 text-sm font-medium hover:bg-[var(--color-bg-elevated)] cursor-pointer"[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary); border-color: var(--color-border);"[31m
+          [36m>[31m
+            [0mLuna urm─Гtoare тА║[0m
+          [36m</button>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"flex gap-3 mb-4 text-xs flex-wrap font-medium"[31m
+        [36m>[31m
+          [36m<span[31m
+            [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+            [33mstyle[31m=[32m"background-color: var(--color-success-bg); color: var(--color-success); border: 1px solid rgba(52, 211, 153, 0.2);"[31m
+          [36m>[31m
+            [0mPROGRAMAT[0m
+          [36m</span>[31m
+          [36m<span[31m
+            [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+            [33mstyle[31m=[32m"background-color: var(--color-warning-bg); color: var(--color-warning); border: 1px solid rgba(251, 191, 36, 0.2);"[31m
+          [36m>[31m
+            [0mSCADENT[0m
+          [36m</span>[31m
+          [36m<span[31m
+            [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+            [33mstyle[31m=[32m"background-color: var(--color-error-bg); color: var(--color-error); border: 1px solid rgba(248, 113, 113, 0.2);"[31m
+          [36m>[31m
+            [0mDEPASIT[0m
+          [36m</span>[31m
+          [36m<span[31m
+            [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+            [33mstyle[31m=[32m"background-color: var(--color-info-bg); color: var(--color-info); border: 1px solid rgba(96, 16...[39m
+[31m   [31m├Ч[31m MaintenanceCalendarPage тАФ function coverage[2m > [22mreschedule submits successfully[39m[33m 1117[2mms[22m[39m
+[31m     тЖТ Found a label with the text of: Data nou─Г, however no form control was found associated to that label. Make sure you're using the "for" attribute or "aria-labelledby" attribute correctly.
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"p-4 md:p-8 space-y-6"[31m
+    [36m>[31m
+      [36m<span[31m
+        [33mclass[31m=[32m"sr-only"[31m
+      [36m>[31m
+        [0mMaintenanceCalendarPage[0m
+      [36m</span>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4"[31m
+      [36m>[31m
+        [36m<div>[31m
+          [36m<h1[31m
+            [33mclass[31m=[32m"text-3xl font-bold mb-2"[31m
+            [33mstyle[31m=[32m"color: var(--healthcare-primary);"[31m
+          [36m>[31m
+            [0mCalendar Mentenan╚Ы─Г[0m
+          [36m</h1>[31m
+          [36m<p[31m
+            [33mclass[31m=[32m"text-sm"[31m
+            [33mstyle[31m=[32m"color: var(--color-text-secondary);"[31m
+          [36m>[31m
+            [0mVizualiza╚Ыi program─Гrile de mentenan╚Ы─Г preventiv─Г ╚Щi reprograma╚Ыi ocuren╚Ыele scadente[0m
+          [36m</p>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"flex gap-2 flex-wrap"[31m
+        [36m>[31m
+          [36m<button[31m
+            [33mclass[31m=[32m"px-4 py-2 border rounded-lg hover:bg-[var(--color-bg-elevated)] transition-all duration-150 text-sm font-semibold flex items-center gap-2 cursor-pointer"[31m
+            [33mstyle[31m=[32m"border-color: var(--color-border); color: var(--color-text-primary); background-color: var(--color-bg-secondary);"[31m
+          [36m>[31m
+            [0mDescarc─Г Formular Nr. 5 (PDF)[0m
+          [36m</button>[31m
+          [36m<button[31m
+            [33mclass[31m=[32m"px-4 py-2 rounded-lg transition-all duration-150 text-sm font-semibold flex items-center gap-2 cursor-pointer"[31m
+            [33mstyle[31m=[32m"background-color: var(--healthcare-primary); color: rgb(255, 255, 255);"[31m
+          [36m>[31m
+            [0mCreare Plan[0m
+          [36m</button>[31m
+        [36m</div>[31m
+      [36m</div>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"flex items-center gap-3 mb-4 flex-wrap"[31m
+      [36m>[31m
+        [36m<label[31m
+          [33mclass[31m=[32m"font-medium text-sm"[31m
+          [33mfor[31m=[32m"year-select"[31m
+          [33mstyle[31m=[32m"color: var(--color-text-secondary);"[31m
+        [36m>[31m
+          [0mAn:[0m
+        [36m</label>[31m
+        [36m<select[31m
+          [33mclass[31m=[32m"border rounded-lg px-3 py-1.5 text-sm cursor-pointer outline-none transition-all duration-150"[31m
+          [33mid[31m=[32m"year-select"[31m
+          [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary); border-color: var(--color-border);"[31m
+        [36m>[31m
+          [36m<option[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+            [33mvalue[31m=[32m"2025"[31m
+          [36m>[31m
+            [0m2025[0m
+          [36m</option>[31m
+          [36m<option[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+            [33mvalue[31m=[32m"2026"[31m
+          [36m>[31m
+            [0m2026[0m
+          [36m</option>[31m
+          [36m<option[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+            [33mvalue[31m=[32m"2027"[31m
+          [36m>[31m
+            [0m2027[0m
+          [36m</option>[31m
+          [36m<option[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+            [33mvalue[31m=[32m"2028"[31m
+          [36m>[31m
+            [0m2028[0m
+          [36m</option>[31m
+          [36m<option[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+            [33mvalue[31m=[32m"2029"[31m
+          [36m>[31m
+            [0m2029[0m
+          [36m</option>[31m
+        [36m</select>[31m
+        [36m<button[31m
+          [33maria-label[31m=[32m"Luna anterioar─Г"[31m
+          [33mclass[31m=[32m"px-3 py-1.5 border rounded-lg transition-all duration-150 text-sm font-medium hover:bg-[var(--color-bg-elevated)] cursor-pointer"[31m
+          [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary); border-color: var(--color-border);"[31m
+        [36m>[31m
+          [0mтА╣ Luna anterioar─Г[0m
+        [36m</button>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"font-semibold text-sm px-2"[31m
+          [33mstyle[31m=[32m"color: var(--color-text-primary);"[31m
+        [36m>[31m
+          [0mIunie[0m
+          [0m [0m
+          [0m2026[0m
+        [36m</span>[31m
+        [36m<button[31m
+          [33maria-label[31m=[32m"Luna urm─Гtoare"[31m
+          [33mclass[31m=[32m"px-3 py-1.5 border rounded-lg transition-all duration-150 text-sm font-medium hover:bg-[var(--color-bg-elevated)] cursor-pointer"[31m
+          [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary); border-color: var(--color-border);"[31m
+        [36m>[31m
+          [0mLuna urm─Гtoare тА║[0m
+        [36m</button>[31m
+      [36m</div>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"flex gap-3 mb-4 text-xs flex-wrap font-medium"[31m
+      [36m>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+          [33mstyle[31m=[32m"background-color: var(--color-success-bg); color: var(--color-success); border: 1px solid rgba(52, 211, 153, 0.2);"[31m
+        [36m>[31m
+          [0mPROGRAMAT[0m
+        [36m</span>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+          [33mstyle[31m=[32m"background-color: var(--color-warning-bg); color: var(--color-warning); border: 1px solid rgba(251, 191, 36, 0.2);"[31m
+        [36m>[31m
+          [0mSCADENT[0m
+        [36m</span>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+          [33mstyle[31m=[32m"background-color: var(--color-error-bg); color: var(--color-error); border: 1px solid rgba(248, 113, 113, 0.2);"[31m
+        [36m>[31m
+          [0mDEPASIT[0m
+        [36m</span>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+          [33mstyle[31m=[32m"background-color: var(--color-info-bg); color: var(--color-info); border: 1px solid rgba(96, 165, 250, 0.2);"[31m
+        [36m>[31m
+          [0mEFECTUAT[0m
+        [36m</span>[31m
+      [36m</div>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"grid grid-cols-7 gap-1 mb-6"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"text-center text-xs font-semibold text...
+
+Ignored nodes: comments, script, style
+[36m<html>[31m
+  [36m<head />[31m
+  [36m<body>[31m
+    [36m<div>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"p-4 md:p-8 space-y-6"[31m
+      [36m>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"sr-only"[31m
+        [36m>[31m
+          [0mMaintenanceCalendarPage[0m
+        [36m</span>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4"[31m
+        [36m>[31m
+          [36m<div>[31m
+            [36m<h1[31m
+              [33mclass[31m=[32m"text-3xl font-bold mb-2"[31m
+              [33mstyle[31m=[32m"color: var(--healthcare-primary);"[31m
+            [36m>[31m
+              [0mCalendar Mentenan╚Ы─Г[0m
+            [36m</h1>[31m
+            [36m<p[31m
+              [33mclass[31m=[32m"text-sm"[31m
+              [33mstyle[31m=[32m"color: var(--color-text-secondary);"[31m
+            [36m>[31m
+              [0mVizualiza╚Ыi program─Гrile de mentenan╚Ы─Г preventiv─Г ╚Щi reprograma╚Ыi ocuren╚Ыele scadente[0m
+            [36m</p>[31m
+          [36m</div>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"flex gap-2 flex-wrap"[31m
+          [36m>[31m
+            [36m<button[31m
+              [33mclass[31m=[32m"px-4 py-2 border rounded-lg hover:bg-[var(--color-bg-elevated)] transition-all duration-150 text-sm font-semibold flex items-center gap-2 cursor-pointer"[31m
+              [33mstyle[31m=[32m"border-color: var(--color-border); color: var(--color-text-primary); background-color: var(--color-bg-secondary);"[31m
+            [36m>[31m
+              [0mDescarc─Г Formular Nr. 5 (PDF)[0m
+            [36m</button>[31m
+            [36m<button[31m
+              [33mclass[31m=[32m"px-4 py-2 rounded-lg transition-all duration-150 text-sm font-semibold flex items-center gap-2 cursor-pointer"[31m
+              [33mstyle[31m=[32m"background-color: var(--healthcare-primary); color: rgb(255, 255, 255);"[31m
+            [36m>[31m
+              [0mCreare Plan[0m
+            [36m</button>[31m
+          [36m</div>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"flex items-center gap-3 mb-4 flex-wrap"[31m
+        [36m>[31m
+          [36m<label[31m
+            [33mclass[31m=[32m"font-medium text-sm"[31m
+            [33mfor[31m=[32m"year-select"[31m
+            [33mstyle[31m=[32m"color: var(--color-text-secondary);"[31m
+          [36m>[31m
+            [0mAn:[0m
+          [36m</label>[31m
+          [36m<select[31m
+            [33mclass[31m=[32m"border rounded-lg px-3 py-1.5 text-sm cursor-pointer outline-none transition-all duration-150"[31m
+            [33mid[31m=[32m"year-select"[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary); border-color: var(--color-border);"[31m
+          [36m>[31m
+            [36m<option[31m
+              [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+              [33mvalue[31m=[32m"2025"[31m
+            [36m>[31m
+              [0m2025[0m
+            [36m</option>[31m
+            [36m<option[31m
+              [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+              [33mvalue[31m=[32m"2026"[31m
+            [36m>[31m
+              [0m2026[0m
+            [36m</option>[31m
+            [36m<option[31m
+              [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+              [33mvalue[31m=[32m"2027"[31m
+            [36m>[31m
+              [0m2027[0m
+            [36m</option>[31m
+            [36m<option[31m
+              [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+              [33mvalue[31m=[32m"2028"[31m
+            [36m>[31m
+              [0m2028[0m
+            [36m</option>[31m
+            [36m<option[31m
+              [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+              [33mvalue[31m=[32m"2029"[31m
+            [36m>[31m
+              [0m2029[0m
+            [36m</option>[31m
+          [36m</select>[31m
+          [36m<button[31m
+            [33maria-label[31m=[32m"Luna anterioar─Г"[31m
+            [33mclass[31m=[32m"px-3 py-1.5 border rounded-lg transition-all duration-150 text-sm font-medium hover:bg-[var(--color-bg-elevated)] cursor-pointer"[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary); border-color: var(--color-border);"[31m
+          [36m>[31m
+            [0mтА╣ Luna anterioar─Г[0m
+          [36m</button>[31m
+          [36m<span[31m
+            [33mclass[31m=[32m"font-semibold text-sm px-2"[31m
+            [33mstyle[31m=[32m"color: var(--color-text-primary);"[31m
+          [36m>[31m
+            [0mIunie[0m
+            [0m [0m
+            [0m2026[0m
+          [36m</span>[31m
+          [36m<button[31m
+            [33maria-label[31m=[32m"Luna urm─Гtoare"[31m
+            [33mclass[31m=[32m"px-3 py-1.5 border rounded-lg transition-all duration-150 text-sm font-medium hover:bg-[var(--color-bg-elevated)] cursor-pointer"[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary); border-color: var(--color-border);"[31m
+          [36m>[31m
+            [0mLuna urm─Гtoare тА║[0m
+          [36m</button>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"flex gap-3 mb-4 text-xs flex-wrap font-medium"[31m
+        [36m>[31m
+          [36m<span[31m
+            [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+            [33mstyle[31m=[32m"background-color: var(--color-success-bg); color: var(--color-success); border: 1px solid rgba(52, 211, 153, 0.2);"[31m
+          [36m>[31m
+            [0mPROGRAMAT[0m
+          [36m</span>[31m
+          [36m<span[31m
+            [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+            [33mstyle[31m=[32m"background-color: var(--color-warning-bg); color: var(--color-warning); border: 1px solid rgba(251, 191, 36, 0.2);"[31m
+          [36m>[31m
+            [0mSCADENT[0m
+          [36m</span>[31m
+          [36m<span[31m
+            [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+            [33mstyle[31m=[32m"background-color: var(--color-error-bg); color: var(--color-error); border: 1px solid rgba(248, 113, 113, 0.2);"[31m
+          [36m>[31m
+            [0mDEPASIT[0m
+          [36m</span>[31m
+          [36m<span[31m
+            [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+            [33mstyle[31m=[32m"background-color: var(--color-info-bg); color: var(--color-info); border: 1px solid rgba(96, 16...[39m
+[31m   [31m├Ч[31m MaintenanceCalendarPage тАФ function coverage[2m > [22mreschedule error shows error message[39m[33m 1215[2mms[22m[39m
+[31m     тЖТ Found a label with the text of: Data nou─Г, however no form control was found associated to that label. Make sure you're using the "for" attribute or "aria-labelledby" attribute correctly.
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"p-4 md:p-8 space-y-6"[31m
+    [36m>[31m
+      [36m<span[31m
+        [33mclass[31m=[32m"sr-only"[31m
+      [36m>[31m
+        [0mMaintenanceCalendarPage[0m
+      [36m</span>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4"[31m
+      [36m>[31m
+        [36m<div>[31m
+          [36m<h1[31m
+            [33mclass[31m=[32m"text-3xl font-bold mb-2"[31m
+            [33mstyle[31m=[32m"color: var(--healthcare-primary);"[31m
+          [36m>[31m
+            [0mCalendar Mentenan╚Ы─Г[0m
+          [36m</h1>[31m
+          [36m<p[31m
+            [33mclass[31m=[32m"text-sm"[31m
+            [33mstyle[31m=[32m"color: var(--color-text-secondary);"[31m
+          [36m>[31m
+            [0mVizualiza╚Ыi program─Гrile de mentenan╚Ы─Г preventiv─Г ╚Щi reprograma╚Ыi ocuren╚Ыele scadente[0m
+          [36m</p>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"flex gap-2 flex-wrap"[31m
+        [36m>[31m
+          [36m<button[31m
+            [33mclass[31m=[32m"px-4 py-2 border rounded-lg hover:bg-[var(--color-bg-elevated)] transition-all duration-150 text-sm font-semibold flex items-center gap-2 cursor-pointer"[31m
+            [33mstyle[31m=[32m"border-color: var(--color-border); color: var(--color-text-primary); background-color: var(--color-bg-secondary);"[31m
+          [36m>[31m
+            [0mDescarc─Г Formular Nr. 5 (PDF)[0m
+          [36m</button>[31m
+          [36m<button[31m
+            [33mclass[31m=[32m"px-4 py-2 rounded-lg transition-all duration-150 text-sm font-semibold flex items-center gap-2 cursor-pointer"[31m
+            [33mstyle[31m=[32m"background-color: var(--healthcare-primary); color: rgb(255, 255, 255);"[31m
+          [36m>[31m
+            [0mCreare Plan[0m
+          [36m</button>[31m
+        [36m</div>[31m
+      [36m</div>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"flex items-center gap-3 mb-4 flex-wrap"[31m
+      [36m>[31m
+        [36m<label[31m
+          [33mclass[31m=[32m"font-medium text-sm"[31m
+          [33mfor[31m=[32m"year-select"[31m
+          [33mstyle[31m=[32m"color: var(--color-text-secondary);"[31m
+        [36m>[31m
+          [0mAn:[0m
+        [36m</label>[31m
+        [36m<select[31m
+          [33mclass[31m=[32m"border rounded-lg px-3 py-1.5 text-sm cursor-pointer outline-none transition-all duration-150"[31m
+          [33mid[31m=[32m"year-select"[31m
+          [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary); border-color: var(--color-border);"[31m
+        [36m>[31m
+          [36m<option[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+            [33mvalue[31m=[32m"2025"[31m
+          [36m>[31m
+            [0m2025[0m
+          [36m</option>[31m
+          [36m<option[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+            [33mvalue[31m=[32m"2026"[31m
+          [36m>[31m
+            [0m2026[0m
+          [36m</option>[31m
+          [36m<option[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+            [33mvalue[31m=[32m"2027"[31m
+          [36m>[31m
+            [0m2027[0m
+          [36m</option>[31m
+          [36m<option[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+            [33mvalue[31m=[32m"2028"[31m
+          [36m>[31m
+            [0m2028[0m
+          [36m</option>[31m
+          [36m<option[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+            [33mvalue[31m=[32m"2029"[31m
+          [36m>[31m
+            [0m2029[0m
+          [36m</option>[31m
+        [36m</select>[31m
+        [36m<button[31m
+          [33maria-label[31m=[32m"Luna anterioar─Г"[31m
+          [33mclass[31m=[32m"px-3 py-1.5 border rounded-lg transition-all duration-150 text-sm font-medium hover:bg-[var(--color-bg-elevated)] cursor-pointer"[31m
+          [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary); border-color: var(--color-border);"[31m
+        [36m>[31m
+          [0mтА╣ Luna anterioar─Г[0m
+        [36m</button>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"font-semibold text-sm px-2"[31m
+          [33mstyle[31m=[32m"color: var(--color-text-primary);"[31m
+        [36m>[31m
+          [0mIunie[0m
+          [0m [0m
+          [0m2026[0m
+        [36m</span>[31m
+        [36m<button[31m
+          [33maria-label[31m=[32m"Luna urm─Гtoare"[31m
+          [33mclass[31m=[32m"px-3 py-1.5 border rounded-lg transition-all duration-150 text-sm font-medium hover:bg-[var(--color-bg-elevated)] cursor-pointer"[31m
+          [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary); border-color: var(--color-border);"[31m
+        [36m>[31m
+          [0mLuna urm─Гtoare тА║[0m
+        [36m</button>[31m
+      [36m</div>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"flex gap-3 mb-4 text-xs flex-wrap font-medium"[31m
+      [36m>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+          [33mstyle[31m=[32m"background-color: var(--color-success-bg); color: var(--color-success); border: 1px solid rgba(52, 211, 153, 0.2);"[31m
+        [36m>[31m
+          [0mPROGRAMAT[0m
+        [36m</span>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+          [33mstyle[31m=[32m"background-color: var(--color-warning-bg); color: var(--color-warning); border: 1px solid rgba(251, 191, 36, 0.2);"[31m
+        [36m>[31m
+          [0mSCADENT[0m
+        [36m</span>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+          [33mstyle[31m=[32m"background-color: var(--color-error-bg); color: var(--color-error); border: 1px solid rgba(248, 113, 113, 0.2);"[31m
+        [36m>[31m
+          [0mDEPASIT[0m
+        [36m</span>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+          [33mstyle[31m=[32m"background-color: var(--color-info-bg); color: var(--color-info); border: 1px solid rgba(96, 165, 250, 0.2);"[31m
+        [36m>[31m
+          [0mEFECTUAT[0m
+        [36m</span>[31m
+      [36m</div>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"grid grid-cols-7 gap-1 mb-6"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"text-center text-xs font-semibold text...
+
+Ignored nodes: comments, script, style
+[36m<html>[31m
+  [36m<head />[31m
+  [36m<body>[31m
+    [36m<div>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"p-4 md:p-8 space-y-6"[31m
+      [36m>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"sr-only"[31m
+        [36m>[31m
+          [0mMaintenanceCalendarPage[0m
+        [36m</span>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4"[31m
+        [36m>[31m
+          [36m<div>[31m
+            [36m<h1[31m
+              [33mclass[31m=[32m"text-3xl font-bold mb-2"[31m
+              [33mstyle[31m=[32m"color: var(--healthcare-primary);"[31m
+            [36m>[31m
+              [0mCalendar Mentenan╚Ы─Г[0m
+            [36m</h1>[31m
+            [36m<p[31m
+              [33mclass[31m=[32m"text-sm"[31m
+              [33mstyle[31m=[32m"color: var(--color-text-secondary);"[31m
+            [36m>[31m
+              [0mVizualiza╚Ыi program─Гrile de mentenan╚Ы─Г preventiv─Г ╚Щi reprograma╚Ыi ocuren╚Ыele scadente[0m
+            [36m</p>[31m
+          [36m</div>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"flex gap-2 flex-wrap"[31m
+          [36m>[31m
+            [36m<button[31m
+              [33mclass[31m=[32m"px-4 py-2 border rounded-lg hover:bg-[var(--color-bg-elevated)] transition-all duration-150 text-sm font-semibold flex items-center gap-2 cursor-pointer"[31m
+              [33mstyle[31m=[32m"border-color: var(--color-border); color: var(--color-text-primary); background-color: var(--color-bg-secondary);"[31m
+            [36m>[31m
+              [0mDescarc─Г Formular Nr. 5 (PDF)[0m
+            [36m</button>[31m
+            [36m<button[31m
+              [33mclass[31m=[32m"px-4 py-2 rounded-lg transition-all duration-150 text-sm font-semibold flex items-center gap-2 cursor-pointer"[31m
+              [33mstyle[31m=[32m"background-color: var(--healthcare-primary); color: rgb(255, 255, 255);"[31m
+            [36m>[31m
+              [0mCreare Plan[0m
+            [36m</button>[31m
+          [36m</div>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"flex items-center gap-3 mb-4 flex-wrap"[31m
+        [36m>[31m
+          [36m<label[31m
+            [33mclass[31m=[32m"font-medium text-sm"[31m
+            [33mfor[31m=[32m"year-select"[31m
+            [33mstyle[31m=[32m"color: var(--color-text-secondary);"[31m
+          [36m>[31m
+            [0mAn:[0m
+          [36m</label>[31m
+          [36m<select[31m
+            [33mclass[31m=[32m"border rounded-lg px-3 py-1.5 text-sm cursor-pointer outline-none transition-all duration-150"[31m
+            [33mid[31m=[32m"year-select"[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary); border-color: var(--color-border);"[31m
+          [36m>[31m
+            [36m<option[31m
+              [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+              [33mvalue[31m=[32m"2025"[31m
+            [36m>[31m
+              [0m2025[0m
+            [36m</option>[31m
+            [36m<option[31m
+              [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+              [33mvalue[31m=[32m"2026"[31m
+            [36m>[31m
+              [0m2026[0m
+            [36m</option>[31m
+            [36m<option[31m
+              [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+              [33mvalue[31m=[32m"2027"[31m
+            [36m>[31m
+              [0m2027[0m
+            [36m</option>[31m
+            [36m<option[31m
+              [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+              [33mvalue[31m=[32m"2028"[31m
+            [36m>[31m
+              [0m2028[0m
+            [36m</option>[31m
+            [36m<option[31m
+              [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+              [33mvalue[31m=[32m"2029"[31m
+            [36m>[31m
+              [0m2029[0m
+            [36m</option>[31m
+          [36m</select>[31m
+          [36m<button[31m
+            [33maria-label[31m=[32m"Luna anterioar─Г"[31m
+            [33mclass[31m=[32m"px-3 py-1.5 border rounded-lg transition-all duration-150 text-sm font-medium hover:bg-[var(--color-bg-elevated)] cursor-pointer"[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary); border-color: var(--color-border);"[31m
+          [36m>[31m
+            [0mтА╣ Luna anterioar─Г[0m
+          [36m</button>[31m
+          [36m<span[31m
+            [33mclass[31m=[32m"font-semibold text-sm px-2"[31m
+            [33mstyle[31m=[32m"color: var(--color-text-primary);"[31m
+          [36m>[31m
+            [0mIunie[0m
+            [0m [0m
+            [0m2026[0m
+          [36m</span>[31m
+          [36m<button[31m
+            [33maria-label[31m=[32m"Luna urm─Гtoare"[31m
+            [33mclass[31m=[32m"px-3 py-1.5 border rounded-lg transition-all duration-150 text-sm font-medium hover:bg-[var(--color-bg-elevated)] cursor-pointer"[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary); border-color: var(--color-border);"[31m
+          [36m>[31m
+            [0mLuna urm─Гtoare тА║[0m
+          [36m</button>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"flex gap-3 mb-4 text-xs flex-wrap font-medium"[31m
+        [36m>[31m
+          [36m<span[31m
+            [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+            [33mstyle[31m=[32m"background-color: var(--color-success-bg); color: var(--color-success); border: 1px solid rgba(52, 211, 153, 0.2);"[31m
+          [36m>[31m
+            [0mPROGRAMAT[0m
+          [36m</span>[31m
+          [36m<span[31m
+            [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+            [33mstyle[31m=[32m"background-color: var(--color-warning-bg); color: var(--color-warning); border: 1px solid rgba(251, 191, 36, 0.2);"[31m
+          [36m>[31m
+            [0mSCADENT[0m
+          [36m</span>[31m
+          [36m<span[31m
+            [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+            [33mstyle[31m=[32m"background-color: var(--color-error-bg); color: var(--color-error); border: 1px solid rgba(248, 113, 113, 0.2);"[31m
+          [36m>[31m
+            [0mDEPASIT[0m
+          [36m</span>[31m
+          [36m<span[31m
+            [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+            [33mstyle[31m=[32m"background-color: var(--color-info-bg); color: var(--color-info); border: 1px solid rgba(96, 16...[39m
+   [33m[2mтЬУ[22m[39m MaintenanceCalendarPage тАФ function coverage[2m > [22mreschedule button appears and toggles form [33m 427[2mms[22m[39m
+   [32mтЬУ[39m MaintenanceCalendarPage тАФ function coverage[2m > [22mreschedule validates empty date[32m 283[2mms[22m[39m
+[31m   [31m├Ч[31m MaintenanceCalendarPage тАФ function coverage[2m > [22mreschedule validates reason min length[39m[33m 1406[2mms[22m[39m
+[31m     тЖТ Found a label with the text of: Data nou─Г, however no form control was found associated to that label. Make sure you're using the "for" attribute or "aria-labelledby" attribute correctly.
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"p-4 md:p-8 space-y-6"[31m
+    [36m>[31m
+      [36m<span[31m
+        [33mclass[31m=[32m"sr-only"[31m
+      [36m>[31m
+        [0mMaintenanceCalendarPage[0m
+      [36m</span>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4"[31m
+      [36m>[31m
+        [36m<div>[31m
+          [36m<h1[31m
+            [33mclass[31m=[32m"text-3xl font-bold mb-2"[31m
+            [33mstyle[31m=[32m"color: var(--healthcare-primary);"[31m
+          [36m>[31m
+            [0mCalendar Mentenan╚Ы─Г[0m
+          [36m</h1>[31m
+          [36m<p[31m
+            [33mclass[31m=[32m"text-sm"[31m
+            [33mstyle[31m=[32m"color: var(--color-text-secondary);"[31m
+          [36m>[31m
+            [0mVizualiza╚Ыi program─Гrile de mentenan╚Ы─Г preventiv─Г ╚Щi reprograma╚Ыi ocuren╚Ыele scadente[0m
+          [36m</p>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"flex gap-2 flex-wrap"[31m
+        [36m>[31m
+          [36m<button[31m
+            [33mclass[31m=[32m"px-4 py-2 border rounded-lg hover:bg-[var(--color-bg-elevated)] transition-all duration-150 text-sm font-semibold flex items-center gap-2 cursor-pointer"[31m
+            [33mstyle[31m=[32m"border-color: var(--color-border); color: var(--color-text-primary); background-color: var(--color-bg-secondary);"[31m
+          [36m>[31m
+            [0mDescarc─Г Formular Nr. 5 (PDF)[0m
+          [36m</button>[31m
+          [36m<button[31m
+            [33mclass[31m=[32m"px-4 py-2 rounded-lg transition-all duration-150 text-sm font-semibold flex items-center gap-2 cursor-pointer"[31m
+            [33mstyle[31m=[32m"background-color: var(--healthcare-primary); color: rgb(255, 255, 255);"[31m
+          [36m>[31m
+            [0mCreare Plan[0m
+          [36m</button>[31m
+        [36m</div>[31m
+      [36m</div>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"flex items-center gap-3 mb-4 flex-wrap"[31m
+      [36m>[31m
+        [36m<label[31m
+          [33mclass[31m=[32m"font-medium text-sm"[31m
+          [33mfor[31m=[32m"year-select"[31m
+          [33mstyle[31m=[32m"color: var(--color-text-secondary);"[31m
+        [36m>[31m
+          [0mAn:[0m
+        [36m</label>[31m
+        [36m<select[31m
+          [33mclass[31m=[32m"border rounded-lg px-3 py-1.5 text-sm cursor-pointer outline-none transition-all duration-150"[31m
+          [33mid[31m=[32m"year-select"[31m
+          [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary); border-color: var(--color-border);"[31m
+        [36m>[31m
+          [36m<option[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+            [33mvalue[31m=[32m"2025"[31m
+          [36m>[31m
+            [0m2025[0m
+          [36m</option>[31m
+          [36m<option[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+            [33mvalue[31m=[32m"2026"[31m
+          [36m>[31m
+            [0m2026[0m
+          [36m</option>[31m
+          [36m<option[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+            [33mvalue[31m=[32m"2027"[31m
+          [36m>[31m
+            [0m2027[0m
+          [36m</option>[31m
+          [36m<option[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+            [33mvalue[31m=[32m"2028"[31m
+          [36m>[31m
+            [0m2028[0m
+          [36m</option>[31m
+          [36m<option[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+            [33mvalue[31m=[32m"2029"[31m
+          [36m>[31m
+            [0m2029[0m
+          [36m</option>[31m
+        [36m</select>[31m
+        [36m<button[31m
+          [33maria-label[31m=[32m"Luna anterioar─Г"[31m
+          [33mclass[31m=[32m"px-3 py-1.5 border rounded-lg transition-all duration-150 text-sm font-medium hover:bg-[var(--color-bg-elevated)] cursor-pointer"[31m
+          [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary); border-color: var(--color-border);"[31m
+        [36m>[31m
+          [0mтА╣ Luna anterioar─Г[0m
+        [36m</button>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"font-semibold text-sm px-2"[31m
+          [33mstyle[31m=[32m"color: var(--color-text-primary);"[31m
+        [36m>[31m
+          [0mIunie[0m
+          [0m [0m
+          [0m2026[0m
+        [36m</span>[31m
+        [36m<button[31m
+          [33maria-label[31m=[32m"Luna urm─Гtoare"[31m
+          [33mclass[31m=[32m"px-3 py-1.5 border rounded-lg transition-all duration-150 text-sm font-medium hover:bg-[var(--color-bg-elevated)] cursor-pointer"[31m
+          [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary); border-color: var(--color-border);"[31m
+        [36m>[31m
+          [0mLuna urm─Гtoare тА║[0m
+        [36m</button>[31m
+      [36m</div>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"flex gap-3 mb-4 text-xs flex-wrap font-medium"[31m
+      [36m>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+          [33mstyle[31m=[32m"background-color: var(--color-success-bg); color: var(--color-success); border: 1px solid rgba(52, 211, 153, 0.2);"[31m
+        [36m>[31m
+          [0mPROGRAMAT[0m
+        [36m</span>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+          [33mstyle[31m=[32m"background-color: var(--color-warning-bg); color: var(--color-warning); border: 1px solid rgba(251, 191, 36, 0.2);"[31m
+        [36m>[31m
+          [0mSCADENT[0m
+        [36m</span>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+          [33mstyle[31m=[32m"background-color: var(--color-error-bg); color: var(--color-error); border: 1px solid rgba(248, 113, 113, 0.2);"[31m
+        [36m>[31m
+          [0mDEPASIT[0m
+        [36m</span>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+          [33mstyle[31m=[32m"background-color: var(--color-info-bg); color: var(--color-info); border: 1px solid rgba(96, 165, 250, 0.2);"[31m
+        [36m>[31m
+          [0mEFECTUAT[0m
+        [36m</span>[31m
+      [36m</div>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"grid grid-cols-7 gap-1 mb-6"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"text-center text-xs font-semibold text...
+
+Ignored nodes: comments, script, style
+[36m<html>[31m
+  [36m<head />[31m
+  [36m<body>[31m
+    [36m<div>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"p-4 md:p-8 space-y-6"[31m
+      [36m>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"sr-only"[31m
+        [36m>[31m
+          [0mMaintenanceCalendarPage[0m
+        [36m</span>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4"[31m
+        [36m>[31m
+          [36m<div>[31m
+            [36m<h1[31m
+              [33mclass[31m=[32m"text-3xl font-bold mb-2"[31m
+              [33mstyle[31m=[32m"color: var(--healthcare-primary);"[31m
+            [36m>[31m
+              [0mCalendar Mentenan╚Ы─Г[0m
+            [36m</h1>[31m
+            [36m<p[31m
+              [33mclass[31m=[32m"text-sm"[31m
+              [33mstyle[31m=[32m"color: var(--color-text-secondary);"[31m
+            [36m>[31m
+              [0mVizualiza╚Ыi program─Гrile de mentenan╚Ы─Г preventiv─Г ╚Щi reprograma╚Ыi ocuren╚Ыele scadente[0m
+            [36m</p>[31m
+          [36m</div>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"flex gap-2 flex-wrap"[31m
+          [36m>[31m
+            [36m<button[31m
+              [33mclass[31m=[32m"px-4 py-2 border rounded-lg hover:bg-[var(--color-bg-elevated)] transition-all duration-150 text-sm font-semibold flex items-center gap-2 cursor-pointer"[31m
+              [33mstyle[31m=[32m"border-color: var(--color-border); color: var(--color-text-primary); background-color: var(--color-bg-secondary);"[31m
+            [36m>[31m
+              [0mDescarc─Г Formular Nr. 5 (PDF)[0m
+            [36m</button>[31m
+            [36m<button[31m
+              [33mclass[31m=[32m"px-4 py-2 rounded-lg transition-all duration-150 text-sm font-semibold flex items-center gap-2 cursor-pointer"[31m
+              [33mstyle[31m=[32m"background-color: var(--healthcare-primary); color: rgb(255, 255, 255);"[31m
+            [36m>[31m
+              [0mCreare Plan[0m
+            [36m</button>[31m
+          [36m</div>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"flex items-center gap-3 mb-4 flex-wrap"[31m
+        [36m>[31m
+          [36m<label[31m
+            [33mclass[31m=[32m"font-medium text-sm"[31m
+            [33mfor[31m=[32m"year-select"[31m
+            [33mstyle[31m=[32m"color: var(--color-text-secondary);"[31m
+          [36m>[31m
+            [0mAn:[0m
+          [36m</label>[31m
+          [36m<select[31m
+            [33mclass[31m=[32m"border rounded-lg px-3 py-1.5 text-sm cursor-pointer outline-none transition-all duration-150"[31m
+            [33mid[31m=[32m"year-select"[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary); border-color: var(--color-border);"[31m
+          [36m>[31m
+            [36m<option[31m
+              [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+              [33mvalue[31m=[32m"2025"[31m
+            [36m>[31m
+              [0m2025[0m
+            [36m</option>[31m
+            [36m<option[31m
+              [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+              [33mvalue[31m=[32m"2026"[31m
+            [36m>[31m
+              [0m2026[0m
+            [36m</option>[31m
+            [36m<option[31m
+              [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+              [33mvalue[31m=[32m"2027"[31m
+            [36m>[31m
+              [0m2027[0m
+            [36m</option>[31m
+            [36m<option[31m
+              [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+              [33mvalue[31m=[32m"2028"[31m
+            [36m>[31m
+              [0m2028[0m
+            [36m</option>[31m
+            [36m<option[31m
+              [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+              [33mvalue[31m=[32m"2029"[31m
+            [36m>[31m
+              [0m2029[0m
+            [36m</option>[31m
+          [36m</select>[31m
+          [36m<button[31m
+            [33maria-label[31m=[32m"Luna anterioar─Г"[31m
+            [33mclass[31m=[32m"px-3 py-1.5 border rounded-lg transition-all duration-150 text-sm font-medium hover:bg-[var(--color-bg-elevated)] cursor-pointer"[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary); border-color: var(--color-border);"[31m
+          [36m>[31m
+            [0mтА╣ Luna anterioar─Г[0m
+          [36m</button>[31m
+          [36m<span[31m
+            [33mclass[31m=[32m"font-semibold text-sm px-2"[31m
+            [33mstyle[31m=[32m"color: var(--color-text-primary);"[31m
+          [36m>[31m
+            [0mIunie[0m
+            [0m [0m
+            [0m2026[0m
+          [36m</span>[31m
+          [36m<button[31m
+            [33maria-label[31m=[32m"Luna urm─Гtoare"[31m
+            [33mclass[31m=[32m"px-3 py-1.5 border rounded-lg transition-all duration-150 text-sm font-medium hover:bg-[var(--color-bg-elevated)] cursor-pointer"[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary); border-color: var(--color-border);"[31m
+          [36m>[31m
+            [0mLuna urm─Гtoare тА║[0m
+          [36m</button>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"flex gap-3 mb-4 text-xs flex-wrap font-medium"[31m
+        [36m>[31m
+          [36m<span[31m
+            [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+            [33mstyle[31m=[32m"background-color: var(--color-success-bg); color: var(--color-success); border: 1px solid rgba(52, 211, 153, 0.2);"[31m
+          [36m>[31m
+            [0mPROGRAMAT[0m
+          [36m</span>[31m
+          [36m<span[31m
+            [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+            [33mstyle[31m=[32m"background-color: var(--color-warning-bg); color: var(--color-warning); border: 1px solid rgba(251, 191, 36, 0.2);"[31m
+          [36m>[31m
+            [0mSCADENT[0m
+          [36m</span>[31m
+          [36m<span[31m
+            [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+            [33mstyle[31m=[32m"background-color: var(--color-error-bg); color: var(--color-error); border: 1px solid rgba(248, 113, 113, 0.2);"[31m
+          [36m>[31m
+            [0mDEPASIT[0m
+          [36m</span>[31m
+          [36m<span[31m
+            [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+            [33mstyle[31m=[32m"background-color: var(--color-info-bg); color: var(--color-info); border: 1px solid rgba(96, 16...[39m
+[31m   [31m├Ч[31m MaintenanceCalendarPage тАФ function coverage[2m > [22mreschedule submits successfully[39m[33m 1228[2mms[22m[39m
+[31m     тЖТ Found a label with the text of: Data nou─Г, however no form control was found associated to that label. Make sure you're using the "for" attribute or "aria-labelledby" attribute correctly.
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"p-4 md:p-8 space-y-6"[31m
+    [36m>[31m
+      [36m<span[31m
+        [33mclass[31m=[32m"sr-only"[31m
+      [36m>[31m
+        [0mMaintenanceCalendarPage[0m
+      [36m</span>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4"[31m
+      [36m>[31m
+        [36m<div>[31m
+          [36m<h1[31m
+            [33mclass[31m=[32m"text-3xl font-bold mb-2"[31m
+            [33mstyle[31m=[32m"color: var(--healthcare-primary);"[31m
+          [36m>[31m
+            [0mCalendar Mentenan╚Ы─Г[0m
+          [36m</h1>[31m
+          [36m<p[31m
+            [33mclass[31m=[32m"text-sm"[31m
+            [33mstyle[31m=[32m"color: var(--color-text-secondary);"[31m
+          [36m>[31m
+            [0mVizualiza╚Ыi program─Гrile de mentenan╚Ы─Г preventiv─Г ╚Щi reprograma╚Ыi ocuren╚Ыele scadente[0m
+          [36m</p>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"flex gap-2 flex-wrap"[31m
+        [36m>[31m
+          [36m<button[31m
+            [33mclass[31m=[32m"px-4 py-2 border rounded-lg hover:bg-[var(--color-bg-elevated)] transition-all duration-150 text-sm font-semibold flex items-center gap-2 cursor-pointer"[31m
+            [33mstyle[31m=[32m"border-color: var(--color-border); color: var(--color-text-primary); background-color: var(--color-bg-secondary);"[31m
+          [36m>[31m
+            [0mDescarc─Г Formular Nr. 5 (PDF)[0m
+          [36m</button>[31m
+          [36m<button[31m
+            [33mclass[31m=[32m"px-4 py-2 rounded-lg transition-all duration-150 text-sm font-semibold flex items-center gap-2 cursor-pointer"[31m
+            [33mstyle[31m=[32m"background-color: var(--healthcare-primary); color: rgb(255, 255, 255);"[31m
+          [36m>[31m
+            [0mCreare Plan[0m
+          [36m</button>[31m
+        [36m</div>[31m
+      [36m</div>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"flex items-center gap-3 mb-4 flex-wrap"[31m
+      [36m>[31m
+        [36m<label[31m
+          [33mclass[31m=[32m"font-medium text-sm"[31m
+          [33mfor[31m=[32m"year-select"[31m
+          [33mstyle[31m=[32m"color: var(--color-text-secondary);"[31m
+        [36m>[31m
+          [0mAn:[0m
+        [36m</label>[31m
+        [36m<select[31m
+          [33mclass[31m=[32m"border rounded-lg px-3 py-1.5 text-sm cursor-pointer outline-none transition-all duration-150"[31m
+          [33mid[31m=[32m"year-select"[31m
+          [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary); border-color: var(--color-border);"[31m
+        [36m>[31m
+          [36m<option[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+            [33mvalue[31m=[32m"2025"[31m
+          [36m>[31m
+            [0m2025[0m
+          [36m</option>[31m
+          [36m<option[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+            [33mvalue[31m=[32m"2026"[31m
+          [36m>[31m
+            [0m2026[0m
+          [36m</option>[31m
+          [36m<option[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+            [33mvalue[31m=[32m"2027"[31m
+          [36m>[31m
+            [0m2027[0m
+          [36m</option>[31m
+          [36m<option[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+            [33mvalue[31m=[32m"2028"[31m
+          [36m>[31m
+            [0m2028[0m
+          [36m</option>[31m
+          [36m<option[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+            [33mvalue[31m=[32m"2029"[31m
+          [36m>[31m
+            [0m2029[0m
+          [36m</option>[31m
+        [36m</select>[31m
+        [36m<button[31m
+          [33maria-label[31m=[32m"Luna anterioar─Г"[31m
+          [33mclass[31m=[32m"px-3 py-1.5 border rounded-lg transition-all duration-150 text-sm font-medium hover:bg-[var(--color-bg-elevated)] cursor-pointer"[31m
+          [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary); border-color: var(--color-border);"[31m
+        [36m>[31m
+          [0mтА╣ Luna anterioar─Г[0m
+        [36m</button>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"font-semibold text-sm px-2"[31m
+          [33mstyle[31m=[32m"color: var(--color-text-primary);"[31m
+        [36m>[31m
+          [0mIunie[0m
+          [0m [0m
+          [0m2026[0m
+        [36m</span>[31m
+        [36m<button[31m
+          [33maria-label[31m=[32m"Luna urm─Гtoare"[31m
+          [33mclass[31m=[32m"px-3 py-1.5 border rounded-lg transition-all duration-150 text-sm font-medium hover:bg-[var(--color-bg-elevated)] cursor-pointer"[31m
+          [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary); border-color: var(--color-border);"[31m
+        [36m>[31m
+          [0mLuna urm─Гtoare тА║[0m
+        [36m</button>[31m
+      [36m</div>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"flex gap-3 mb-4 text-xs flex-wrap font-medium"[31m
+      [36m>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+          [33mstyle[31m=[32m"background-color: var(--color-success-bg); color: var(--color-success); border: 1px solid rgba(52, 211, 153, 0.2);"[31m
+        [36m>[31m
+          [0mPROGRAMAT[0m
+        [36m</span>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+          [33mstyle[31m=[32m"background-color: var(--color-warning-bg); color: var(--color-warning); border: 1px solid rgba(251, 191, 36, 0.2);"[31m
+        [36m>[31m
+          [0mSCADENT[0m
+        [36m</span>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+          [33mstyle[31m=[32m"background-color: var(--color-error-bg); color: var(--color-error); border: 1px solid rgba(248, 113, 113, 0.2);"[31m
+        [36m>[31m
+          [0mDEPASIT[0m
+        [36m</span>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+          [33mstyle[31m=[32m"background-color: var(--color-info-bg); color: var(--color-info); border: 1px solid rgba(96, 165, 250, 0.2);"[31m
+        [36m>[31m
+          [0mEFECTUAT[0m
+        [36m</span>[31m
+      [36m</div>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"grid grid-cols-7 gap-1 mb-6"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"text-center text-xs font-semibold text...
+
+Ignored nodes: comments, script, style
+[36m<html>[31m
+  [36m<head />[31m
+  [36m<body>[31m
+    [36m<div>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"p-4 md:p-8 space-y-6"[31m
+      [36m>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"sr-only"[31m
+        [36m>[31m
+          [0mMaintenanceCalendarPage[0m
+        [36m</span>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4"[31m
+        [36m>[31m
+          [36m<div>[31m
+            [36m<h1[31m
+              [33mclass[31m=[32m"text-3xl font-bold mb-2"[31m
+              [33mstyle[31m=[32m"color: var(--healthcare-primary);"[31m
+            [36m>[31m
+              [0mCalendar Mentenan╚Ы─Г[0m
+            [36m</h1>[31m
+            [36m<p[31m
+              [33mclass[31m=[32m"text-sm"[31m
+              [33mstyle[31m=[32m"color: var(--color-text-secondary);"[31m
+            [36m>[31m
+              [0mVizualiza╚Ыi program─Гrile de mentenan╚Ы─Г preventiv─Г ╚Щi reprograma╚Ыi ocuren╚Ыele scadente[0m
+            [36m</p>[31m
+          [36m</div>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"flex gap-2 flex-wrap"[31m
+          [36m>[31m
+            [36m<button[31m
+              [33mclass[31m=[32m"px-4 py-2 border rounded-lg hover:bg-[var(--color-bg-elevated)] transition-all duration-150 text-sm font-semibold flex items-center gap-2 cursor-pointer"[31m
+              [33mstyle[31m=[32m"border-color: var(--color-border); color: var(--color-text-primary); background-color: var(--color-bg-secondary);"[31m
+            [36m>[31m
+              [0mDescarc─Г Formular Nr. 5 (PDF)[0m
+            [36m</button>[31m
+            [36m<button[31m
+              [33mclass[31m=[32m"px-4 py-2 rounded-lg transition-all duration-150 text-sm font-semibold flex items-center gap-2 cursor-pointer"[31m
+              [33mstyle[31m=[32m"background-color: var(--healthcare-primary); color: rgb(255, 255, 255);"[31m
+            [36m>[31m
+              [0mCreare Plan[0m
+            [36m</button>[31m
+          [36m</div>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"flex items-center gap-3 mb-4 flex-wrap"[31m
+        [36m>[31m
+          [36m<label[31m
+            [33mclass[31m=[32m"font-medium text-sm"[31m
+            [33mfor[31m=[32m"year-select"[31m
+            [33mstyle[31m=[32m"color: var(--color-text-secondary);"[31m
+          [36m>[31m
+            [0mAn:[0m
+          [36m</label>[31m
+          [36m<select[31m
+            [33mclass[31m=[32m"border rounded-lg px-3 py-1.5 text-sm cursor-pointer outline-none transition-all duration-150"[31m
+            [33mid[31m=[32m"year-select"[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary); border-color: var(--color-border);"[31m
+          [36m>[31m
+            [36m<option[31m
+              [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+              [33mvalue[31m=[32m"2025"[31m
+            [36m>[31m
+              [0m2025[0m
+            [36m</option>[31m
+            [36m<option[31m
+              [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+              [33mvalue[31m=[32m"2026"[31m
+            [36m>[31m
+              [0m2026[0m
+            [36m</option>[31m
+            [36m<option[31m
+              [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+              [33mvalue[31m=[32m"2027"[31m
+            [36m>[31m
+              [0m2027[0m
+            [36m</option>[31m
+            [36m<option[31m
+              [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+              [33mvalue[31m=[32m"2028"[31m
+            [36m>[31m
+              [0m2028[0m
+            [36m</option>[31m
+            [36m<option[31m
+              [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+              [33mvalue[31m=[32m"2029"[31m
+            [36m>[31m
+              [0m2029[0m
+            [36m</option>[31m
+          [36m</select>[31m
+          [36m<button[31m
+            [33maria-label[31m=[32m"Luna anterioar─Г"[31m
+            [33mclass[31m=[32m"px-3 py-1.5 border rounded-lg transition-all duration-150 text-sm font-medium hover:bg-[var(--color-bg-elevated)] cursor-pointer"[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary); border-color: var(--color-border);"[31m
+          [36m>[31m
+            [0mтА╣ Luna anterioar─Г[0m
+          [36m</button>[31m
+          [36m<span[31m
+            [33mclass[31m=[32m"font-semibold text-sm px-2"[31m
+            [33mstyle[31m=[32m"color: var(--color-text-primary);"[31m
+          [36m>[31m
+            [0mIunie[0m
+            [0m [0m
+            [0m2026[0m
+          [36m</span>[31m
+          [36m<button[31m
+            [33maria-label[31m=[32m"Luna urm─Гtoare"[31m
+            [33mclass[31m=[32m"px-3 py-1.5 border rounded-lg transition-all duration-150 text-sm font-medium hover:bg-[var(--color-bg-elevated)] cursor-pointer"[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary); border-color: var(--color-border);"[31m
+          [36m>[31m
+            [0mLuna urm─Гtoare тА║[0m
+          [36m</button>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"flex gap-3 mb-4 text-xs flex-wrap font-medium"[31m
+        [36m>[31m
+          [36m<span[31m
+            [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+            [33mstyle[31m=[32m"background-color: var(--color-success-bg); color: var(--color-success); border: 1px solid rgba(52, 211, 153, 0.2);"[31m
+          [36m>[31m
+            [0mPROGRAMAT[0m
+          [36m</span>[31m
+          [36m<span[31m
+            [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+            [33mstyle[31m=[32m"background-color: var(--color-warning-bg); color: var(--color-warning); border: 1px solid rgba(251, 191, 36, 0.2);"[31m
+          [36m>[31m
+            [0mSCADENT[0m
+          [36m</span>[31m
+          [36m<span[31m
+            [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+            [33mstyle[31m=[32m"background-color: var(--color-error-bg); color: var(--color-error); border: 1px solid rgba(248, 113, 113, 0.2);"[31m
+          [36m>[31m
+            [0mDEPASIT[0m
+          [36m</span>[31m
+          [36m<span[31m
+            [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+            [33mstyle[31m=[32m"background-color: var(--color-info-bg); color: var(--color-info); border: 1px solid rgba(96, 16...[39m
+[31m   [31m├Ч[31m MaintenanceCalendarPage тАФ function coverage[2m > [22mreschedule error shows error message[39m[33m 1349[2mms[22m[39m
+[31m     тЖТ Found a label with the text of: Data nou─Г, however no form control was found associated to that label. Make sure you're using the "for" attribute or "aria-labelledby" attribute correctly.
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"p-4 md:p-8 space-y-6"[31m
+    [36m>[31m
+      [36m<span[31m
+        [33mclass[31m=[32m"sr-only"[31m
+      [36m>[31m
+        [0mMaintenanceCalendarPage[0m
+      [36m</span>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4"[31m
+      [36m>[31m
+        [36m<div>[31m
+          [36m<h1[31m
+            [33mclass[31m=[32m"text-3xl font-bold mb-2"[31m
+            [33mstyle[31m=[32m"color: var(--healthcare-primary);"[31m
+          [36m>[31m
+            [0mCalendar Mentenan╚Ы─Г[0m
+          [36m</h1>[31m
+          [36m<p[31m
+            [33mclass[31m=[32m"text-sm"[31m
+            [33mstyle[31m=[32m"color: var(--color-text-secondary);"[31m
+          [36m>[31m
+            [0mVizualiza╚Ыi program─Гrile de mentenan╚Ы─Г preventiv─Г ╚Щi reprograma╚Ыi ocuren╚Ыele scadente[0m
+          [36m</p>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"flex gap-2 flex-wrap"[31m
+        [36m>[31m
+          [36m<button[31m
+            [33mclass[31m=[32m"px-4 py-2 border rounded-lg hover:bg-[var(--color-bg-elevated)] transition-all duration-150 text-sm font-semibold flex items-center gap-2 cursor-pointer"[31m
+            [33mstyle[31m=[32m"border-color: var(--color-border); color: var(--color-text-primary); background-color: var(--color-bg-secondary);"[31m
+          [36m>[31m
+            [0mDescarc─Г Formular Nr. 5 (PDF)[0m
+          [36m</button>[31m
+          [36m<button[31m
+            [33mclass[31m=[32m"px-4 py-2 rounded-lg transition-all duration-150 text-sm font-semibold flex items-center gap-2 cursor-pointer"[31m
+            [33mstyle[31m=[32m"background-color: var(--healthcare-primary); color: rgb(255, 255, 255);"[31m
+          [36m>[31m
+            [0mCreare Plan[0m
+          [36m</button>[31m
+        [36m</div>[31m
+      [36m</div>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"flex items-center gap-3 mb-4 flex-wrap"[31m
+      [36m>[31m
+        [36m<label[31m
+          [33mclass[31m=[32m"font-medium text-sm"[31m
+          [33mfor[31m=[32m"year-select"[31m
+          [33mstyle[31m=[32m"color: var(--color-text-secondary);"[31m
+        [36m>[31m
+          [0mAn:[0m
+        [36m</label>[31m
+        [36m<select[31m
+          [33mclass[31m=[32m"border rounded-lg px-3 py-1.5 text-sm cursor-pointer outline-none transition-all duration-150"[31m
+          [33mid[31m=[32m"year-select"[31m
+          [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary); border-color: var(--color-border);"[31m
+        [36m>[31m
+          [36m<option[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+            [33mvalue[31m=[32m"2025"[31m
+          [36m>[31m
+            [0m2025[0m
+          [36m</option>[31m
+          [36m<option[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+            [33mvalue[31m=[32m"2026"[31m
+          [36m>[31m
+            [0m2026[0m
+          [36m</option>[31m
+          [36m<option[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+            [33mvalue[31m=[32m"2027"[31m
+          [36m>[31m
+            [0m2027[0m
+          [36m</option>[31m
+          [36m<option[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+            [33mvalue[31m=[32m"2028"[31m
+          [36m>[31m
+            [0m2028[0m
+          [36m</option>[31m
+          [36m<option[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+            [33mvalue[31m=[32m"2029"[31m
+          [36m>[31m
+            [0m2029[0m
+          [36m</option>[31m
+        [36m</select>[31m
+        [36m<button[31m
+          [33maria-label[31m=[32m"Luna anterioar─Г"[31m
+          [33mclass[31m=[32m"px-3 py-1.5 border rounded-lg transition-all duration-150 text-sm font-medium hover:bg-[var(--color-bg-elevated)] cursor-pointer"[31m
+          [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary); border-color: var(--color-border);"[31m
+        [36m>[31m
+          [0mтА╣ Luna anterioar─Г[0m
+        [36m</button>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"font-semibold text-sm px-2"[31m
+          [33mstyle[31m=[32m"color: var(--color-text-primary);"[31m
+        [36m>[31m
+          [0mIunie[0m
+          [0m [0m
+          [0m2026[0m
+        [36m</span>[31m
+        [36m<button[31m
+          [33maria-label[31m=[32m"Luna urm─Гtoare"[31m
+          [33mclass[31m=[32m"px-3 py-1.5 border rounded-lg transition-all duration-150 text-sm font-medium hover:bg-[var(--color-bg-elevated)] cursor-pointer"[31m
+          [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary); border-color: var(--color-border);"[31m
+        [36m>[31m
+          [0mLuna urm─Гtoare тА║[0m
+        [36m</button>[31m
+      [36m</div>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"flex gap-3 mb-4 text-xs flex-wrap font-medium"[31m
+      [36m>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+          [33mstyle[31m=[32m"background-color: var(--color-success-bg); color: var(--color-success); border: 1px solid rgba(52, 211, 153, 0.2);"[31m
+        [36m>[31m
+          [0mPROGRAMAT[0m
+        [36m</span>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+          [33mstyle[31m=[32m"background-color: var(--color-warning-bg); color: var(--color-warning); border: 1px solid rgba(251, 191, 36, 0.2);"[31m
+        [36m>[31m
+          [0mSCADENT[0m
+        [36m</span>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+          [33mstyle[31m=[32m"background-color: var(--color-error-bg); color: var(--color-error); border: 1px solid rgba(248, 113, 113, 0.2);"[31m
+        [36m>[31m
+          [0mDEPASIT[0m
+        [36m</span>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+          [33mstyle[31m=[32m"background-color: var(--color-info-bg); color: var(--color-info); border: 1px solid rgba(96, 165, 250, 0.2);"[31m
+        [36m>[31m
+          [0mEFECTUAT[0m
+        [36m</span>[31m
+      [36m</div>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"grid grid-cols-7 gap-1 mb-6"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"text-center text-xs font-semibold text...
+
+Ignored nodes: comments, script, style
+[36m<html>[31m
+  [36m<head />[31m
+  [36m<body>[31m
+    [36m<div>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"p-4 md:p-8 space-y-6"[31m
+      [36m>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"sr-only"[31m
+        [36m>[31m
+          [0mMaintenanceCalendarPage[0m
+        [36m</span>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4"[31m
+        [36m>[31m
+          [36m<div>[31m
+            [36m<h1[31m
+              [33mclass[31m=[32m"text-3xl font-bold mb-2"[31m
+              [33mstyle[31m=[32m"color: var(--healthcare-primary);"[31m
+            [36m>[31m
+              [0mCalendar Mentenan╚Ы─Г[0m
+            [36m</h1>[31m
+            [36m<p[31m
+              [33mclass[31m=[32m"text-sm"[31m
+              [33mstyle[31m=[32m"color: var(--color-text-secondary);"[31m
+            [36m>[31m
+              [0mVizualiza╚Ыi program─Гrile de mentenan╚Ы─Г preventiv─Г ╚Щi reprograma╚Ыi ocuren╚Ыele scadente[0m
+            [36m</p>[31m
+          [36m</div>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"flex gap-2 flex-wrap"[31m
+          [36m>[31m
+            [36m<button[31m
+              [33mclass[31m=[32m"px-4 py-2 border rounded-lg hover:bg-[var(--color-bg-elevated)] transition-all duration-150 text-sm font-semibold flex items-center gap-2 cursor-pointer"[31m
+              [33mstyle[31m=[32m"border-color: var(--color-border); color: var(--color-text-primary); background-color: var(--color-bg-secondary);"[31m
+            [36m>[31m
+              [0mDescarc─Г Formular Nr. 5 (PDF)[0m
+            [36m</button>[31m
+            [36m<button[31m
+              [33mclass[31m=[32m"px-4 py-2 rounded-lg transition-all duration-150 text-sm font-semibold flex items-center gap-2 cursor-pointer"[31m
+              [33mstyle[31m=[32m"background-color: var(--healthcare-primary); color: rgb(255, 255, 255);"[31m
+            [36m>[31m
+              [0mCreare Plan[0m
+            [36m</button>[31m
+          [36m</div>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"flex items-center gap-3 mb-4 flex-wrap"[31m
+        [36m>[31m
+          [36m<label[31m
+            [33mclass[31m=[32m"font-medium text-sm"[31m
+            [33mfor[31m=[32m"year-select"[31m
+            [33mstyle[31m=[32m"color: var(--color-text-secondary);"[31m
+          [36m>[31m
+            [0mAn:[0m
+          [36m</label>[31m
+          [36m<select[31m
+            [33mclass[31m=[32m"border rounded-lg px-3 py-1.5 text-sm cursor-pointer outline-none transition-all duration-150"[31m
+            [33mid[31m=[32m"year-select"[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary); border-color: var(--color-border);"[31m
+          [36m>[31m
+            [36m<option[31m
+              [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+              [33mvalue[31m=[32m"2025"[31m
+            [36m>[31m
+              [0m2025[0m
+            [36m</option>[31m
+            [36m<option[31m
+              [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+              [33mvalue[31m=[32m"2026"[31m
+            [36m>[31m
+              [0m2026[0m
+            [36m</option>[31m
+            [36m<option[31m
+              [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+              [33mvalue[31m=[32m"2027"[31m
+            [36m>[31m
+              [0m2027[0m
+            [36m</option>[31m
+            [36m<option[31m
+              [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+              [33mvalue[31m=[32m"2028"[31m
+            [36m>[31m
+              [0m2028[0m
+            [36m</option>[31m
+            [36m<option[31m
+              [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+              [33mvalue[31m=[32m"2029"[31m
+            [36m>[31m
+              [0m2029[0m
+            [36m</option>[31m
+          [36m</select>[31m
+          [36m<button[31m
+            [33maria-label[31m=[32m"Luna anterioar─Г"[31m
+            [33mclass[31m=[32m"px-3 py-1.5 border rounded-lg transition-all duration-150 text-sm font-medium hover:bg-[var(--color-bg-elevated)] cursor-pointer"[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary); border-color: var(--color-border);"[31m
+          [36m>[31m
+            [0mтА╣ Luna anterioar─Г[0m
+          [36m</button>[31m
+          [36m<span[31m
+            [33mclass[31m=[32m"font-semibold text-sm px-2"[31m
+            [33mstyle[31m=[32m"color: var(--color-text-primary);"[31m
+          [36m>[31m
+            [0mIunie[0m
+            [0m [0m
+            [0m2026[0m
+          [36m</span>[31m
+          [36m<button[31m
+            [33maria-label[31m=[32m"Luna urm─Гtoare"[31m
+            [33mclass[31m=[32m"px-3 py-1.5 border rounded-lg transition-all duration-150 text-sm font-medium hover:bg-[var(--color-bg-elevated)] cursor-pointer"[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary); border-color: var(--color-border);"[31m
+          [36m>[31m
+            [0mLuna urm─Гtoare тА║[0m
+          [36m</button>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"flex gap-3 mb-4 text-xs flex-wrap font-medium"[31m
+        [36m>[31m
+          [36m<span[31m
+            [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+            [33mstyle[31m=[32m"background-color: var(--color-success-bg); color: var(--color-success); border: 1px solid rgba(52, 211, 153, 0.2);"[31m
+          [36m>[31m
+            [0mPROGRAMAT[0m
+          [36m</span>[31m
+          [36m<span[31m
+            [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+            [33mstyle[31m=[32m"background-color: var(--color-warning-bg); color: var(--color-warning); border: 1px solid rgba(251, 191, 36, 0.2);"[31m
+          [36m>[31m
+            [0mSCADENT[0m
+          [36m</span>[31m
+          [36m<span[31m
+            [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+            [33mstyle[31m=[32m"background-color: var(--color-error-bg); color: var(--color-error); border: 1px solid rgba(248, 113, 113, 0.2);"[31m
+          [36m>[31m
+            [0mDEPASIT[0m
+          [36m</span>[31m
+          [36m<span[31m
+            [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+            [33mstyle[31m=[32m"background-color: var(--color-info-bg); color: var(--color-info); border: 1px solid rgba(96, 16...[39m
+   [32mтЬУ[39m MaintenanceCalendarPage тАФ function coverage[2m > [22mexecute MPP button navigates to execution page[32m 186[2mms[22m[39m
+   [32mтЬУ[39m MaintenanceCalendarPage тАФ function coverage[2m > [22myear select renders all year options[32m 38[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenanceCalendarPage тАФ function coverage[2m > [22mcreate modal with affiliation field [33m 302[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/InventoryPage.functions.test.jsx [2m([22m[2m25 tests[22m[2m)[22m[33m 11130[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ function coverage[2m > [22mswitches to cards view [33m 427[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ function coverage[2m > [22msearch filters devices by name [33m 625[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ function coverage[2m > [22msearch filters by inventory number [33m 624[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ function coverage[2m > [22msearch filters by model [33m 435[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ function coverage[2m > [22mcombining search and filters [33m 1623[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ function coverage[2m > [22mpagination: shows next page [33m 1007[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ function coverage[2m > [22mpagination: prev button disabled on first page [33m 865[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ function coverage[2m > [22mkanban shows hidden count when > 10 devices in a status [33m 520[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ function coverage[2m > [22mkanban hidden count shows singular for 1 [33m 383[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ function coverage[2m > [22msearch resets page to 1 [33m 2650[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/IncidentsPage.functions.test.jsx [2m([22m[2m26 tests[22m[2m)[22m[33m 12566[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m IncidentsPage тАФ function coverage[2m > [22mopens new incident modal via "Raporteaz─Г Incident" button [33m 592[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m IncidentsPage тАФ function coverage[2m > [22mcloses modal via close X button [33m 384[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m IncidentsPage тАФ function coverage[2m > [22msubmits new incident with POST [33m 613[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m IncidentsPage тАФ function coverage[2m > [22medits existing incident with PUT [33m 578[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m IncidentsPage тАФ function coverage[2m > [22mtoggles patientAffected checkbox [33m 989[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m IncidentsPage тАФ function coverage[2m > [22mtoggles reportedToAmdm checkbox and shows extra fields [33m 640[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m IncidentsPage тАФ function coverage[2m > [22mdelete flow: click trash, confirm, then delete [33m 1080[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m IncidentsPage тАФ function coverage[2m > [22mdelete flow: click trash, then cancel [33m 991[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m IncidentsPage тАФ function coverage[2m > [22mhandles delete error [33m 803[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m IncidentsPage тАФ function coverage[2m > [22mStatusChanger opens dropdown and changes status [33m 717[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m IncidentsPage тАФ function coverage[2m > [22mStatusChanger handles error [33m 412[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m IncidentsPage тАФ function coverage[2m > [22mpagination: next and prev buttons [33m 1036[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m IncidentsPage тАФ function coverage[2m > [22mincident edit modal handles POST error [33m 866[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m IncidentsPage тАФ function coverage[2m > [22mfills all form fields in new incident modal [33m 836[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/DeviceForm.functions.test.jsx [2m([22m[2m20 tests[22m[2m)[22m[33m 14679[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm тАФ function coverage[2m > [22madvances to step 1 with valid data [33m 760[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm тАФ function coverage[2m > [22mgoes back to step 0 from step 1 [33m 795[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm тАФ function coverage[2m > [22mstep 1 has riskClass, status, section selects [33m 930[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm тАФ function coverage[2m > [22mstep 1 shows date pickers [33m 756[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm тАФ function coverage[2m > [22madvances to step 2 with all valid data [33m 1310[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm тАФ function coverage[2m > [22mstep 2 shows summary and advanced toggle [33m 2168[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm тАФ function coverage[2m > [22madvanced toggle hides fields on second click [33m 2125[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm тАФ function coverage[2m > [22mform submit calls createDevice in new mode [33m 2195[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm тАФ function coverage[2m > [22mEnter key advances steps [33m 665[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm тАФ function coverage[2m > [22mstep 2 advanced fields include all optional fields [33m 1919[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/InventoryPage.coverage.test.jsx [2m([22m[2m25 tests[22m[2m)[22m[33m 17793[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage Coverage[2m > [22mall filter combinations[2m > [22mfilters by FUNCTIONAL status [33m 727[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage Coverage[2m > [22mall filter combinations[2m > [22mfilters by ATI section [33m 488[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage Coverage[2m > [22mall filter combinations[2m > [22mcombines status and section filters [33m 636[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage Coverage[2m > [22mall filter combinations[2m > [22msearches by name [33m 1472[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage Coverage[2m > [22mall filter combinations[2m > [22msearches by inventory number [33m 1567[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage Coverage[2m > [22mall filter combinations[2m > [22msearches by model [33m 1045[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage Coverage[2m > [22mdelete with confirmation[2m > [22mshows confirmation dialog before delete [33m 1083[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage Coverage[2m > [22mdelete with confirmation[2m > [22mcancels delete when Cancel clicked [33m 969[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage Coverage[2m > [22mdelete with confirmation[2m > [22mcalls DELETE API on confirm [33m 1257[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage Coverage[2m > [22mpagination[2m > [22mshows pagination when more than 20 devices [33m 548[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage Coverage[2m > [22mpagination[2m > [22mnavigates to next page [33m 533[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage Coverage[2m > [22mpagination[2m > [22mdisables prev button on page 1 [33m 409[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage Coverage[2m > [22mpagination[2m > [22mdisables next button on last page [33m 665[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage Coverage[2m > [22mempty states[2m > [22mshows empty state when search has no results [33m 1278[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage Coverage[2m > [22mempty states[2m > [22mresets page when filter changes [33m 1884[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage Coverage[2m > [22mview modes[2m > [22mswitches to cards view [33m 536[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage Coverage[2m > [22mview modes[2m > [22mswitches to kanban view [33m 444[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage Coverage[2m > [22mkanban view[2m > [22mgroups devices by status [33m 651[2mms[22m[39m
+ [31mтЭп[39m src/__tests__/pages/ConsumablesPage.functions.test.jsx [2m([22m[2m31 tests[22m[2m | [22m[31m3 failed[39m[2m)[22m[33m 21889[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ConsumablesPage тАФ function coverage[2m > [22mrenders header and table [33m 564[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ConsumablesPage тАФ function coverage[2m > [22msearch input triggers search [33m 647[2mms[22m[39m
+   [32mтЬУ[39m ConsumablesPage тАФ function coverage[2m > [22mminQuantity filter changes[32m 284[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ConsumablesPage тАФ function coverage[2m > [22mreset button clears filters [33m 534[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ConsumablesPage тАФ function coverage[2m > [22madd consumable button opens modal [33m 395[2mms[22m[39m
+   [32mтЬУ[39m ConsumablesPage тАФ function coverage[2m > [22medit button opens edit modal[32m 266[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ConsumablesPage тАФ function coverage[2m > [22medit modal cancel closes it [33m 653[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ConsumablesPage тАФ function coverage[2m > [22medit modal save calls PUT for existing [33m 1021[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ConsumablesPage тАФ function coverage[2m > [22madd modal save calls POST for new [33m 432[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ConsumablesPage тАФ function coverage[2m > [22madd stock modal opens and saves [33m 605[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ConsumablesPage тАФ function coverage[2m > [22madd stock modal validates quantity [33m 405[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ConsumablesPage тАФ function coverage[2m > [22madd stock modal cancel closes [33m 1261[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ConsumablesPage тАФ function coverage[2m > [22mdelete consumable via delete dialog [33m 655[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ConsumablesPage тАФ function coverage[2m > [22mexport CSV with data [33m 770[2mms[22m[39m
+[31m   [31m├Ч[31m ConsumablesPage тАФ function coverage[2m > [22mexport CSV shows warning when no data[39m[33m 1096[2mms[22m[39m
+[31m     тЖТ Unable to find an element with the text: Nu sunt consumabile. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<main[31m
+      [33mclass[31m=[32m"p-6 min-h-screen"[31m
+      [33mid[31m=[32m"main"[31m
+      [33mstyle[31m=[32m"background-color: var(--color-bg-primary);"[31m
+    [36m>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"max-w-7xl mx-auto"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"flex justify-between items-center mb-6"[31m
+        [36m>[31m
+          [36m<h1[31m
+            [33mclass[31m=[32m"text-3xl font-bold"[31m
+          [36m>[31m
+            [0mЁЯУж Consumabile & Piese Schimb[0m
+          [36m</h1>[31m
+          [36m<button[31m
+            [33mclass[31m=[32m"btn-primary"[31m
+          [36m>[31m
+            [0m+ Adaug─Г Consumabil[0m
+          [36m</button>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"card-base mb-6 p-4 space-y-4"[31m
+        [36m>[31m
+          [36m<h2[31m
+            [33mclass[31m=[32m"text-lg font-semibold"[31m
+          [36m>[31m
+            [0mFiltrare ╚Щi C─Гutare[0m
+          [36m</h2>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"[31m
+          [36m>[31m
+            [36m<div[31m
+              [33mclass[31m=[32m"relative"[31m
+            [36m>[31m
+              [36m<label[31m
+                [33mclass[31m=[32m"label-base"[31m
+                [33mfor[31m=[32m"search"[31m
+              [36m>[31m
+                [0mC─Гutare[0m
+              [36m</label>[31m
+              [36m<input[31m
+                [33maria-expanded[31m=[32m"false"[31m
+                [33mclass[31m=[32m"input-base w-full"[31m
+                [33mid[31m=[32m"search"[31m
+                [33mplaceholder[31m=[32m"Denumire, model..."[31m
+                [33mrole[31m=[32m"combobox"[31m
+                [33mtype[31m=[32m"text"[31m
+                [33mvalue[31m=[32m""[31m
+              [36m/>[31m
+            [36m</div>[31m
+            [36m<div>[31m
+              [36m<label[31m
+                [33mclass[31m=[32m"label-base"[31m
+                [33mfor[31m=[32m"minQty-filter"[31m
+              [36m>[31m
+                [0mCantitate Minim─Г[0m
+              [36m</label>[31m
+              [36m<input[31m
+                [33mclass[31m=[32m"input-base w-full"[31m
+                [33mid[31m=[32m"minQty-filter"[31m
+                [33mmin[31m=[32m"0"[31m
+                [33mplaceholder[31m=[32m"Doar sub..."[31m
+                [33mtype[31m=[32m"number"[31m
+                [33mvalue[31m=[32m""[31m
+              [36m/>[31m
+            [36m</div>[31m
+            [36m<div[31m
+              [33mclass[31m=[32m"flex items-end"[31m
+            [36m>[31m
+              [36m<button[31m
+                [33mclass[31m=[32m"btn-secondary w-full"[31m
+              [36m>[31m
+                [0mResetare[0m
+              [36m</button>[31m
+            [36m</div>[31m
+            [36m<div[31m
+              [33mclass[31m=[32m"flex items-end"[31m
+            [36m>[31m
+              [36m<button[31m
+                [33mclass[31m=[32m"btn-primary w-full"[31m
+              [36m>[31m
+                [0mЁЯУЛ Export CSV[0m
+              [36m</button>[31m
+            [36m</div>[31m
+          [36m</div>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"card-base overflow-x-auto mb-6"[31m
+        [36m>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"p-6 text-center"[31m
+          [36m>[31m
+            [0mNu sunt consumabile ├оn baza de date.[0m
+          [36m</div>[31m
+        [36m</div>[31m
+      [36m</div>[31m
+    [36m</main>[31m
+  [36m</div>[31m
+[36m</body>[31m
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<main[31m
+      [33mclass[31m=[32m"p-6 min-h-screen"[31m
+      [33mid[31m=[32m"main"[31m
+      [33mstyle[31m=[32m"background-color: var(--color-bg-primary);"[31m
+    [36m>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"max-w-7xl mx-auto"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"flex justify-between items-center mb-6"[31m
+        [36m>[31m
+          [36m<h1[31m
+            [33mclass[31m=[32m"text-3xl font-bold"[31m
+          [36m>[31m
+            [0mЁЯУж Consumabile & Piese Schimb[0m
+          [36m</h1>[31m
+          [36m<button[31m
+            [33mclass[31m=[32m"btn-primary"[31m
+          [36m>[31m
+            [0m+ Adaug─Г Consumabil[0m
+          [36m</button>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"card-base mb-6 p-4 space-y-4"[31m
+        [36m>[31m
+          [36m<h2[31m
+            [33mclass[31m=[32m"text-lg font-semibold"[31m
+          [36m>[31m
+            [0mFiltrare ╚Щi C─Гutare[0m
+          [36m</h2>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"[31m
+          [36m>[31m
+            [36m<div[31m
+              [33mclass[31m=[32m"relative"[31m
+            [36m>[31m
+              [36m<label[31m
+                [33mclass[31m=[32m"label-base"[31m
+                [33mfor[31m=[32m"search"[31m
+              [36m>[31m
+                [0mC─Гutare[0m
+              [36m</label>[31m
+              [36m<input[31m
+                [33maria-expanded[31m=[32m"false"[31m
+                [33mclass[31m=[32m"input-base w-full"[31m
+                [33mid[31m=[32m"search"[31m
+                [33mplaceholder[31m=[32m"Denumire, model..."[31m
+                [33mrole[31m=[32m"combobox"[31m
+                [33mtype[31m=[32m"text"[31m
+                [33mvalue[31m=[32m""[31m
+              [36m/>[31m
+            [36m</div>[31m
+            [36m<div>[31m
+              [36m<label[31m
+                [33mclass[31m=[32m"label-base"[31m
+                [33mfor[31m=[32m"minQty-filter"[31m
+              [36m>[31m
+                [0mCantitate Minim─Г[0m
+              [36m</label>[31m
+              [36m<input[31m
+                [33mclass[31m=[32m"input-base w-full"[31m
+                [33mid[31m=[32m"minQty-filter"[31m
+                [33mmin[31m=[32m"0"[31m
+                [33mplaceholder[31m=[32m"Doar sub..."[31m
+                [33mtype[31m=[32m"number"[31m
+                [33mvalue[31m=[32m""[31m
+              [36m/>[31m
+            [36m</div>[31m
+            [36m<div[31m
+              [33mclass[31m=[32m"flex items-end"[31m
+            [36m>[31m
+              [36m<button[31m
+                [33mclass[31m=[32m"btn-secondary w-full"[31m
+              [36m>[31m
+                [0mResetare[0m
+              [36m</button>[31m
+            [36m</div>[31m
+            [36m<div[31m
+              [33mclass[31m=[32m"flex items-end"[31m
+            [36m>[31m
+              [36m<button[31m
+                [33mclass[31m=[32m"btn-primary w-full"[31m
+              [36m>[31m
+                [0mЁЯУЛ Export CSV[0m
+              [36m</button>[31m
+            [36m</div>[31m
+          [36m</div>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"card-base overflow-x-auto mb-6"[31m
+        [36m>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"p-6 text-center"[31m
+          [36m>[31m
+            [0mNu sunt consumabile ├оn baza de date.[0m
+          [36m</div>[31m
+        [36m</div>[31m
+      [36m</div>[31m
+    [36m</main>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[31m   [31m├Ч[31m ConsumablesPage тАФ function coverage[2m > [22mminQuantity input in edit modal changes value[39m[33m 627[2mms[22m[39m
+[31m     тЖТ Found multiple elements with the text of: Cantitate Minim─Г
+
+Here are the matching elements:
+
+Ignored nodes: comments, script, style
+[36m<input[31m
+  [33mclass[31m=[32m"input-base w-full"[31m
+  [33mid[31m=[32m"minQty-filter"[31m
+  [33mmin[31m=[32m"0"[31m
+  [33mplaceholder[31m=[32m"Doar sub..."[31m
+  [33mtype[31m=[32m"number"[31m
+  [33mvalue[31m=[32m""[31m
+[36m/>[31m
+
+Ignored nodes: comments, script, style
+[36m<input[31m
+  [33mclass[31m=[32m"input-base w-full"[31m
+  [33mid[31m=[32m"minQuantity"[31m
+  [33mmin[31m=[32m"0"[31m
+  [33mtype[31m=[32m"number"[31m
+  [33mvalue[31m=[32m"100"[31m
+[36m/>[31m
+
+(If this is intentional, then use the `*AllBy*` variant of the query (like `queryAllByText`, `getAllByText`, or `findAllByText`)).
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<main[31m
+      [33mclass[31m=[32m"p-6 min-h-screen"[31m
+      [33mid[31m=[32m"main"[31m
+      [33mstyle[31m=[32m"background-color: var(--color-bg-primary);"[31m
+    [36m>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"max-w-7xl mx-auto"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"flex justify-between items-center mb-6"[31m
+        [36m>[31m
+          [36m<h1[31m
+            [33mclass[31m=[32m"text-3xl font-bold"[31m
+          [36m>[31m
+            [0mЁЯУж Consumabile & Piese Schimb[0m
+          [36m</h1>[31m
+          [36m<button[31m
+            [33mclass[31m=[32m"btn-primary"[31m
+          [36m>[31m
+            [0m+ Adaug─Г Consumabil[0m
+          [36m</button>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"card-base mb-6 p-4 space-y-4"[31m
+        [36m>[31m
+          [36m<h2[31m
+            [33mclass[31m=[32m"text-lg font-semibold"[31m
+          [36m>[31m
+            [0mFiltrare ╚Щi C─Гutare[0m
+          [36m</h2>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"[31m
+          [36m>[31m
+            [36m<div[31m
+              [33mclass[31m=[32m"relative"[31m
+            [36m>[31m
+              [36m<label[31m
+                [33mclass[31m=[32m"label-base"[31m
+                [33mfor[31m=[32m"search"[31m
+              [36m>[31m
+                [0mC─Гutare[0m
+              [36m</label>[31m
+              [36m<input[31m
+                [33maria-expanded[31m=[32m"false"[31m
+                [33mclass[31m=[32m"input-base w-full"[31m
+                [33mid[31m=[32m"search"[31m
+                [33mplaceholder[31m=[32m"Denumire, model..."[31m
+                [33mrole[31m=[32m"combobox"[31m
+                [33mtype[31m=[32m"text"[31m
+                [33mvalue[31m=[32m""[31m
+              [36m/>[31m
+            [36m</div>[31m
+            [36m<div>[31m
+              [36m<label[31m
+                [33mclass[31m=[32m"label-base"[31m
+                [33mfor[31m=[32m"minQty-filter"[31m
+              [36m>[31m
+                [0mCantitate Minim─Г[0m
+              [36m</label>[31m
+              [36m<input[31m
+                [33mclass[31m=[32m"input-base w-full"[31m
+                [33mid[31m=[32m"minQty-filter"[31m
+                [33mmin[31m=[32m"0"[31m
+                [33mplaceholder[31m=[32m"Doar sub..."[31m
+                [33mtype[31m=[32m"number"[31m
+                [33mvalue[31m=[32m""[31m
+              [36m/>[31m
+            [36m</div>[31m
+            [36m<div[31m
+              [33mclass[31m=[32m"flex items-end"[31m
+            [36m>[31m
+              [36m<button[31m
+                [33mclass[31m=[32m"btn-secondary w-full"[31m
+              [36m>[31m
+                [0mResetare[0m
+              [36m</button>[31m
+            [36m</div>[31m
+            [36m<div[31m
+              [33mclass[31m=[32m"flex items-end"[31m
+            [36m>[31m
+              [36m<button[31m
+                [33mclass[31m=[32m"btn-primary w-full"[31m
+              [36m>[31m
+                [0mЁЯУЛ Export CSV[0m
+              [36m</button>[31m
+            [36m</div>[31m
+          [36m</div>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"card-base overflow-x-auto mb-6"[31m
+        [36m>[31m
+          [36m<table[31m
+            [33mclass[31m=[32m"w-full text-sm"[31m
+          [36m>[31m
+            [36m<thead>[31m
+              [36m<tr[31m
+                [33mclass[31m=[32m"border-b"[31m
+                [33mstyle[31m=[32m"border-color: var(--color-border);"[31m
+              [36m>[31m
+                [36m<th[31m
+                  [33mclass[31m=[32m"px-4 py-3 text-left font-semibold"[31m
+                  [33mscope[31m=[32m"col"[31m
+                  [33mstyle[31m=[32m"color: var(--color-accent);"[31m
+                [36m>[31m
+                  [0mDenumire[0m
+                [36m</th>[31m
+                [36m<th[31m
+                  [33mclass[31m=[32m"px-4 py-3 text-left font-semibold"[31m
+                  [33mscope[31m=[32m"col"[31m
+                  [33mstyle[31m=[32m"color: var(--color-accent);"[31m
+                [36m>[31m
+                  [0mModel[0m
+                [36m</th>[31m
+                [36m<th[31m
+                  [33mclass[31m=[32m"px-4 py-3 text-center font-semibold"[31m
+                  [33mscope[31m=[32m"col"[31m
+                  [33mstyle[31m=[32m"color: var(--color-accent);"[31m
+                [36m>[31m
+                  [0mCantitate[0m
+                [36m</th>[31m
+                [36m<th[31m
+                  [33mclass[31m=[32m"px-4 py-3 text-center font-semibold"[31m
+                  [33mscope[31m=[32m"col"[31m
+                  [33mstyle[31m=[32m"color: var(--color-accent);"[31m
+                [36m>[31m
+                  [0mMin[0m
+                [36m</th>[31m
+                [36m<th[31m
+                  [33mclass[31m=[32m"px-4 py-3 text-center font-semibold"[31m
+                  [33mscope[31m=[32m"col"[31m
+                  [33mstyle[31m=[32m"color: var(--color-accent);"[31m
+                [36m>[31m
+                  [0m% Stoc[0m
+                [36m</th>[31m
+                [36m<th[31m
+                  [33mclass[31m=[32m"px-4 py-3 text-center font-semibold"[31m
+                  [33mscope[31m=[32m"col"[31m
+                  [33mstyle[31m=[32m"color: var(--color-accent);"[31m
+                [36m>[31m
+                  [0mUrgen╚Ы─Г[0m
+                [36m</th>[31m
+                [36m<th[31m
+                  [33mclass[31m=[32m"px-4 py-3 text-center font-semibold"[31m
+                  [33mscope[31m=[32m"col"[31m
+                  [33mstyle[31m=[32m"color: var(--color-accent);"[31m
+                [36m>[31m
+                  [0mExpirare[0m
+                [36m</th>[31m
+                [36m<th[31m
+                  [33mclass[31m=[32m"px-4 py-3 text-center font-semibold"[31m
+                  [33mscope[31m=[32m"col"[31m
+                  [33mstyle[31m=[32m"color: var(--color-accent);"[31m
+                [36m>[31m
+                  [0mAc╚Ыiuni[0m
+                [36m</th>[31m
+              [36m</tr>[31m
+            [36m</thead>[31m
+            [36m<tbody>[31m
+              [36m<tr[31m
+                [33mclass[31m=[32m"border-b transition hover:shadow-md"[31m
+                [33mstyle[31m=[32m"border-color: var(--color-border); background-color: rgba(248, 113, 113, 0.08);"[31m
+              [36m>[31m
+                [36m<td[31m
+                  [33mclass[31m=[32m"px-4 py-3"[31m
+                [36m>[31m
+                  [36m<div[31m
+        ...[39m
+   [32mтЬУ[39m ConsumablesPage тАФ function coverage[2m > [22mshows urgency badges for low stock[32m 249[2mms[22m[39m
+   [32mтЬУ[39m ConsumablesPage тАФ function coverage[2m > [22mshows normal badge for OK stock[32m 119[2mms[22m[39m
+   [32mтЬУ[39m ConsumablesPage тАФ function coverage[2m > [22mshows expiry badge for expiring soon[32m 169[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ConsumablesPage тАФ function coverage[2m > [22msearch suggestions appear on typing [33m 492[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ConsumablesPage тАФ function coverage[2m > [22mclicking suggestion fills search [33m 906[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ConsumablesPage тАФ function coverage[2m > [22medit modal fields are editable [33m 1135[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ConsumablesPage тАФ function coverage[2m > [22medit modal shows error on API failure for new [33m 704[2mms[22m[39m
+   [32mтЬУ[39m ConsumablesPage тАФ function coverage[2m > [22medit modal shows error on API failure for existing[32m 293[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ConsumablesPage тАФ function coverage[2m > [22madd stock modal shows error on API failure [33m 1082[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ConsumablesPage тАФ function coverage[2m > [22madd stock modal overlay click closes [33m 817[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ConsumablesPage тАФ function coverage[2m > [22madd modal overlay click closes [33m 686[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ConsumablesPage тАФ function coverage[2m > [22msearch input onFocus shows suggestions [33m 1158[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ConsumablesPage тАФ function coverage[2m > [22mpagination buttons work [33m 1072[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ConsumablesPage тАФ function coverage[2m > [22mquantity input in edit modal changes value [33m 1745[2mms[22m[39m
+[31m   [31m├Ч[31m ConsumablesPage тАФ function coverage[2m > [22mminQuantity input in edit modal changes value[39m[33m 1045[2mms[22m[39m
+[31m     тЖТ Found multiple elements with the text of: Cantitate Minim─Г
+
+Here are the matching elements:
+
+Ignored nodes: comments, script, style
+[36m<input[31m
+  [33mclass[31m=[32m"input-base w-full"[31m
+  [33mid[31m=[32m"minQty-filter"[31m
+  [33mmin[31m=[32m"0"[31m
+  [33mplaceholder[31m=[32m"Doar sub..."[31m
+  [33mtype[31m=[32m"number"[31m
+  [33mvalue[31m=[32m""[31m
+[36m/>[31m
+
+Ignored nodes: comments, script, style
+[36m<input[31m
+  [33mclass[31m=[32m"input-base w-full"[31m
+  [33mid[31m=[32m"minQuantity"[31m
+  [33mmin[31m=[32m"0"[31m
+  [33mtype[31m=[32m"number"[31m
+  [33mvalue[31m=[32m"100"[31m
+[36m/>[31m
+
+(If this is intentional, then use the `*AllBy*` variant of the query (like `queryAllByText`, `getAllByText`, or `findAllByText`)).
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<main[31m
+      [33mclass[31m=[32m"p-6 min-h-screen"[31m
+      [33mid[31m=[32m"main"[31m
+      [33mstyle[31m=[32m"background-color: var(--color-bg-primary);"[31m
+    [36m>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"max-w-7xl mx-auto"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"flex justify-between items-center mb-6"[31m
+        [36m>[31m
+          [36m<h1[31m
+            [33mclass[31m=[32m"text-3xl font-bold"[31m
+          [36m>[31m
+            [0mЁЯУж Consumabile & Piese Schimb[0m
+          [36m</h1>[31m
+          [36m<button[31m
+            [33mclass[31m=[32m"btn-primary"[31m
+          [36m>[31m
+            [0m+ Adaug─Г Consumabil[0m
+          [36m</button>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"card-base mb-6 p-4 space-y-4"[31m
+        [36m>[31m
+          [36m<h2[31m
+            [33mclass[31m=[32m"text-lg font-semibold"[31m
+          [36m>[31m
+            [0mFiltrare ╚Щi C─Гutare[0m
+          [36m</h2>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"[31m
+          [36m>[31m
+            [36m<div[31m
+              [33mclass[31m=[32m"relative"[31m
+            [36m>[31m
+              [36m<label[31m
+                [33mclass[31m=[32m"label-base"[31m
+                [33mfor[31m=[32m"search"[31m
+              [36m>[31m
+                [0mC─Гutare[0m
+              [36m</label>[31m
+              [36m<input[31m
+                [33maria-expanded[31m=[32m"false"[31m
+                [33mclass[31m=[32m"input-base w-full"[31m
+                [33mid[31m=[32m"search"[31m
+                [33mplaceholder[31m=[32m"Denumire, model..."[31m
+                [33mrole[31m=[32m"combobox"[31m
+                [33mtype[31m=[32m"text"[31m
+                [33mvalue[31m=[32m""[31m
+              [36m/>[31m
+            [36m</div>[31m
+            [36m<div>[31m
+              [36m<label[31m
+                [33mclass[31m=[32m"label-base"[31m
+                [33mfor[31m=[32m"minQty-filter"[31m
+              [36m>[31m
+                [0mCantitate Minim─Г[0m
+              [36m</label>[31m
+              [36m<input[31m
+                [33mclass[31m=[32m"input-base w-full"[31m
+                [33mid[31m=[32m"minQty-filter"[31m
+                [33mmin[31m=[32m"0"[31m
+                [33mplaceholder[31m=[32m"Doar sub..."[31m
+                [33mtype[31m=[32m"number"[31m
+                [33mvalue[31m=[32m""[31m
+              [36m/>[31m
+            [36m</div>[31m
+            [36m<div[31m
+              [33mclass[31m=[32m"flex items-end"[31m
+            [36m>[31m
+              [36m<button[31m
+                [33mclass[31m=[32m"btn-secondary w-full"[31m
+              [36m>[31m
+                [0mResetare[0m
+              [36m</button>[31m
+            [36m</div>[31m
+            [36m<div[31m
+              [33mclass[31m=[32m"flex items-end"[31m
+            [36m>[31m
+              [36m<button[31m
+                [33mclass[31m=[32m"btn-primary w-full"[31m
+              [36m>[31m
+                [0mЁЯУЛ Export CSV[0m
+              [36m</button>[31m
+            [36m</div>[31m
+          [36m</div>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"card-base overflow-x-auto mb-6"[31m
+        [36m>[31m
+          [36m<table[31m
+            [33mclass[31m=[32m"w-full text-sm"[31m
+          [36m>[31m
+            [36m<thead>[31m
+              [36m<tr[31m
+                [33mclass[31m=[32m"border-b"[31m
+                [33mstyle[31m=[32m"border-color: var(--color-border);"[31m
+              [36m>[31m
+                [36m<th[31m
+                  [33mclass[31m=[32m"px-4 py-3 text-left font-semibold"[31m
+                  [33mscope[31m=[32m"col"[31m
+                  [33mstyle[31m=[32m"color: var(--color-accent);"[31m
+                [36m>[31m
+                  [0mDenumire[0m
+                [36m</th>[31m
+                [36m<th[31m
+                  [33mclass[31m=[32m"px-4 py-3 text-left font-semibold"[31m
+                  [33mscope[31m=[32m"col"[31m
+                  [33mstyle[31m=[32m"color: var(--color-accent);"[31m
+                [36m>[31m
+                  [0mModel[0m
+                [36m</th>[31m
+                [36m<th[31m
+                  [33mclass[31m=[32m"px-4 py-3 text-center font-semibold"[31m
+                  [33mscope[31m=[32m"col"[31m
+                  [33mstyle[31m=[32m"color: var(--color-accent);"[31m
+                [36m>[31m
+                  [0mCantitate[0m
+                [36m</th>[31m
+                [36m<th[31m
+                  [33mclass[31m=[32m"px-4 py-3 text-center font-semibold"[31m
+                  [33mscope[31m=[32m"col"[31m
+                  [33mstyle[31m=[32m"color: var(--color-accent);"[31m
+                [36m>[31m
+                  [0mMin[0m
+                [36m</th>[31m
+                [36m<th[31m
+                  [33mclass[31m=[32m"px-4 py-3 text-center font-semibold"[31m
+                  [33mscope[31m=[32m"col"[31m
+                  [33mstyle[31m=[32m"color: var(--color-accent);"[31m
+                [36m>[31m
+                  [0m% Stoc[0m
+                [36m</th>[31m
+                [36m<th[31m
+                  [33mclass[31m=[32m"px-4 py-3 text-center font-semibold"[31m
+                  [33mscope[31m=[32m"col"[31m
+                  [33mstyle[31m=[32m"color: var(--color-accent);"[31m
+                [36m>[31m
+                  [0mUrgen╚Ы─Г[0m
+                [36m</th>[31m
+                [36m<th[31m
+                  [33mclass[31m=[32m"px-4 py-3 text-center font-semibold"[31m
+                  [33mscope[31m=[32m"col"[31m
+                  [33mstyle[31m=[32m"color: var(--color-accent);"[31m
+                [36m>[31m
+                  [0mExpirare[0m
+                [36m</th>[31m
+                [36m<th[31m
+                  [33mclass[31m=[32m"px-4 py-3 text-center font-semibold"[31m
+                  [33mscope[31m=[32m"col"[31m
+                  [33mstyle[31m=[32m"color: var(--color-accent);"[31m
+                [36m>[31m
+                  [0mAc╚Ыiuni[0m
+                [36m</th>[31m
+              [36m</tr>[31m
+            [36m</thead>[31m
+            [36m<tbody>[31m
+              [36m<tr[31m
+                [33mclass[31m=[32m"border-b transition hover:shadow-md"[31m
+                [33mstyle[31m=[32m"border-color: var(--color-border); background-color: rgba(248, 113, 113, 0.08);"[31m
+              [36m>[31m
+                [36m<td[31m
+                  [33mclass[31m=[32m"px-4 py-3"[31m
+                [36m>[31m
+                  [36m<div[31m
+        ...[39m
+ [32mтЬУ[39m src/__tests__/pages/DeviceForm.coverage.test.jsx [2m([22m[2m24 tests[22m[2m)[22m[33m 25529[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm Coverage[2m > [22mwizard step navigation[2m > [22madvances to step 1 with valid fields [33m 849[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm Coverage[2m > [22mwizard step navigation[2m > [22mgoes back to step 0 from step 1 [33m 694[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm Coverage[2m > [22mwizard step navigation[2m > [22mdoes not advance past last step [33m 1414[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm Coverage[2m > [22mform validation[2m > [22mvalidates step 1 fields on advance [33m 1143[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm Coverage[2m > [22mform submission[2m > [22mcreates device with all fields [33m 3287[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm Coverage[2m > [22mform submission[2m > [22mshows loading state during save [33m 1984[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm Coverage[2m > [22mform submission[2m > [22mshows error toast on create failure [33m 2421[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm Coverage[2m > [22medit mode[2m > [22mupdates device with PUT [33m 564[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm Coverage[2m > [22medit mode[2m > [22mshows PDF download button in edit mode step 2 [33m 669[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm Coverage[2m > [22medit mode[2m > [22mshows document upload in edit mode step 2 [33m 416[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm Coverage[2m > [22madvanced fields[2m > [22mtoggles advanced fields section [33m 2978[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm Coverage[2m > [22madvanced fields[2m > [22mfills advanced fields [33m 4960[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm Coverage[2m > [22mkeyboard navigation[2m > [22mEnter key advances wizard [33m 847[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm Coverage[2m > [22merror states[2m > [22mshows generic error on create failure without response error [33m 1646[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm Coverage[2m > [22merror states[2m > [22mshows update error on edit mode failure [33m 661[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/InventoryPage.extended.test.jsx [2m([22m[2m16 tests[22m[2m)[22m[33m 8904[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ Extended Tests[2m > [22mcomut─Г la vizualizarea carduri [33m 1166[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ Extended Tests[2m > [22mcomut─Г la vizualizarea kanban [33m 471[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ Extended Tests[2m > [22mkanban afi╚Щeaz─Г dispozitive grupate pe status [33m 714[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ Extended Tests[2m > [22mc─Гutarea func╚Ыioneaz─Г pe model [33m 331[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ Extended Tests[2m > [22mc─Гutarea func╚Ыioneaz─Г pe inventar number [33m 450[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ Extended Tests[2m > [22mlink-urile de editare au href corect [33m 391[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ Extended Tests[2m > [22mbutonul Adaug─Г navigheaz─Г la /devices/new [33m 448[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ Extended Tests[2m > [22mfiltrarea dup─Г sec╚Ыie returneaz─Г doar dispozitivele din sec╚Ыia respectiv─Г [33m 352[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ Extended Tests[2m > [22mresetarea filtrelor afi╚Щeaz─Г toate dispozitivele [33m 616[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ Extended Tests[2m > [22mcardurile au link de editare [33m 932[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ Extended Tests[2m > [22mafi╚Щeaz─Г mesajul corect pentru 0 dispozitive [33m 361[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ Extended Tests[2m > [22mfiltrul de status func╚Ыioneaz─Г pe toate statusurile [33m 1847[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/InventoryPage.integration.test.jsx [2m([22m[2m11 tests[22m[2m)[22m[33m 10232[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ paginare client-side[2m > [22mpaginatorul se afi╚Щeaz─Г c├вnd exist─Г mai mult de 20 de dispozitive [33m 1524[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ paginare client-side[2m > [22mbutonul de pagin─Г ├Оnapoi este dezactivat pe prima pagin─Г [33m 1225[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ paginare client-side[2m > [22mbutonul ├Оnainte avanseaz─Г pagina [33m 1395[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ paginare client-side[2m > [22mbutonul ├Оnainte este dezactivat pe ultima pagin─Г [33m 1282[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ paginare client-side[2m > [22mindicatorul de pagini arat─Г total corect [33m 503[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ paginare client-side[2m > [22mpaginatorul nu se afi╚Щeaz─Г c├вnd sunt maxim 20 de dispozitive [33m 783[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ combina╚Ыii de filtre (client-side)[2m > [22mfiltrarea dup─Г status ╚Щi sec╚Ыie returneaz─Г intersec╚Ыia corect─Г [33m 644[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ combina╚Ыii de filtre (client-side)[2m > [22mc─Гutarea + filtrul de status func╚Ыioneaz─Г ├оmpreun─Г [33m 1649[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ combina╚Ыii de filtre (client-side)[2m > [22mselectarea "Toate statusurile" readuce toate dispozitivele [33m 920[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/ConsumablesPage.integration.test.jsx [2m([22m[2m6 tests[22m[2m)[22m[33m 7396[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ConsumablesPage тАФ c─Гutare, expirare ╚Щi creare[2m > [22mc─Гutarea declan╚Щeaz─Г un nou fetch cu ?search= [33m 1774[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ConsumablesPage тАФ c─Гutare, expirare ╚Щi creare[2m > [22mselectarea unei sugestii de autocomplete completeaz─Г c├вmpul de c─Гutare [33m 1125[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ConsumablesPage тАФ c─Гutare, expirare ╚Щi creare[2m > [22mbutonul Resetare cur─Г╚Ы─Г c├вmpul de c─Гutare [33m 1516[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ConsumablesPage тАФ c─Гutare, expirare ╚Щi creare[2m > [22mcreeaz─Г un consumabil nou prin POST din formularul de ad─Гugare [33m 2689[2mms[22m[39m
+node.exe : [90mstderr[2m | src/__tests__/pages/Login.functions.test.jsx[2m > [22m[2mLogin тАФ function 
+coverage[2m > [22m[2msubmit button shows loading state
+строка:1 знак:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Users\janea\AppData\Roaming\ ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([90mstderr[2m...s loading state:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+[22m[39mAn update to MemoryRouter inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at 
+https://react.dev/link/wrap-tests-with-act
+
+[90mstderr[2m | src/__tests__/pages/Login.functions.test.jsx[2m > [22m[2mLogin тАФ function coverage[2m > 
+[22m[2msubmit button shows loading state
+[22m[39mAn update to Login inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at 
+https://react.dev/link/wrap-tests-with-act
+
+[90mstderr[2m | src/__tests__/pages/Login.functions.test.jsx[2m > [22m[2mLogin тАФ function coverage[2m > 
+[22m[2mdisabled state during submission
+[22m[39mAn update to MemoryRouter inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at 
+https://react.dev/link/wrap-tests-with-act
+
+[90mstderr[2m | src/__tests__/pages/Login.functions.test.jsx[2m > [22m[2mLogin тАФ function coverage[2m > 
+[22m[2mdisabled state during submission
+[22m[39mAn update to Login inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at 
+https://react.dev/link/wrap-tests-with-act
+
+ [32mтЬУ[39m src/__tests__/pages/Login.functions.test.jsx [2m([22m[2m21 tests[22m[2m)[22m[33m 14823[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Login тАФ function coverage[2m > [22mrenders all form elements [33m 1037[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Login тАФ function coverage[2m > [22mpassword toggle shows/hides password [33m 704[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Login тАФ function coverage[2m > [22mpassword toggle aria-pressed updates [33m 426[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Login тАФ function coverage[2m > [22mform submits with valid credentials [33m 1333[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Login тАФ function coverage[2m > [22mform submits with rememberMe checked [33m 1816[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Login тАФ function coverage[2m > [22mvalidation clears on typing [33m 346[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Login тАФ function coverage[2m > [22mshows server error on failed login [33m 845[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Login тАФ function coverage[2m > [22mshows generic error on network failure [33m 915[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Login тАФ function coverage[2m > [22mEnter key on password field submits [33m 1150[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Login тАФ function coverage[2m > [22msubmit button shows loading state [33m 1519[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Login тАФ function coverage[2m > [22mrate limiting blocks rapid submissions [33m 1234[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Login тАФ function coverage[2m > [22msubmit button shows A╚Щteapt─Г when rate limited [33m 1098[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Login тАФ function coverage[2m > [22mdisabled state during submission [33m 1371[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/InventoryPage.test.jsx [2m([22m[2m13 tests[22m[2m)[22m[33m 9903[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage[2m > [22mrandeaz─Г tabelul cu lista de dispozitive ╚Щi sec╚Ыiunea de filtre [33m 709[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage[2m > [22mafi╚Щeaz─Г coloanele Dispozitiv, Inv. Nr., Status ╚Щi Sec╚Ыie [33m 372[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage[2m > [22mfiltrarea dup─Г status afi╚Щeaz─Г doar dispozitivele cu acel status [33m 614[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage[2m > [22mc─Гutarea filtreaz─Г dispozitivele ├оn timp real [33m 1431[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage[2m > [22mbutoanele de vizualizare (tabel/carduri/kanban) sunt vizibile ╚Щi schimb─Г view-ul [33m 883[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage[2m > [22mfiltrarea dup─Г sec╚Ыie afi╚Щeaz─Г doar dispozitivele din acea sec╚Ыie [33m 1032[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage[2m > [22mcombinarea filtrelor de status ╚Щi sec╚Ыie afi╚Щeaz─Г rezultatele corecte [33m 1286[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage[2m > [22m╚Щtergerea textului de c─Гutare restaureaz─Г toate dispozitivele [33m 1820[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage[2m > [22m╚Щtergerea unui dispozitiv dup─Г confirmare apeleaz─Г DELETE [33m 824[2mms[22m[39m
+ [31mтЭп[39m src/__tests__/pages/App.extra.test.jsx [2m([22m[2m13 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 6820[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m App тАФ Extra Coverage[2m > [22mloading state[2m > [22mshows loading spinner when auth is loading [33m 645[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m App тАФ Extra Coverage[2m > [22munauthenticated routes[2m > [22mshows login form on /login [33m 347[2mms[22m[39m
+   [32mтЬУ[39m App тАФ Extra Coverage[2m > [22munauthenticated routes[2m > [22mredirects to login on protected route[32m 34[2mms[22m[39m
+[31m   [31m├Ч[31m App тАФ Extra Coverage[2m > [22mauthenticated routes[2m > [22mrenders dashboard on /[39m[33m 1185[2mms[22m[39m
+[31m     тЖТ Unable to find an element with the text: bioinginer. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"min-h-screen"[31m
+      [33mstyle[31m=[32m"background-color: var(--color-bg-primary);"[31m
+    [36m>[31m
+      [36m<a[31m
+        [33maria-label[31m=[32m"Sari la con╚Ыinut principal"[31m
+        [33mclass[31m=[32m"
+        fixed top-0 left-0 z-[9999]
+        px-4 py-3 rounded-br-lg
+        font-medium text-sm
+        transition-all duration-200
+        invisible opacity-0 -translate-x-2
+      "[31m
+        [33mhref[31m=[32m"#main"[31m
+        [33mstyle[31m=[32m"background-color: var(--color-accent); color: var(--color-on-primary, #ffffff);"[31m
+      [36m>[31m
+        [0mSari la con╚Ыinut[0m
+      [36m</a>[31m
+      [36m<header[31m
+        [33mclass[31m=[32m"border-b px-4 md:px-8 py-4 flex justify-between items-center sticky top-0 z-40"[31m
+        [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); border-color: var(--color-border);"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"flex items-center gap-4"[31m
+        [36m>[31m
+          [36m<button[31m
+            [33maria-controls[31m=[32m"mobile-menu"[31m
+            [33maria-expanded[31m=[32m"false"[31m
+            [33maria-label[31m=[32m"Meniu"[31m
+            [33mclass[31m=[32m"md:hidden p-2 hover:opacity-70 transition-opacity"[31m
+            [33mstyle[31m=[32m"color: var(--color-accent);"[31m
+          [36m>[31m
+            [36m<svg[31m
+              [33maria-hidden[31m=[32m"true"[31m
+              [33mclass[31m=[32m"lucide lucide-menu"[31m
+              [33mfill[31m=[32m"none"[31m
+              [33mheight[31m=[32m"24"[31m
+              [33mstroke[31m=[32m"currentColor"[31m
+              [33mstroke-linecap[31m=[32m"round"[31m
+              [33mstroke-linejoin[31m=[32m"round"[31m
+              [33mstroke-width[31m=[32m"2"[31m
+              [33mviewBox[31m=[32m"0 0 24 24"[31m
+              [33mwidth[31m=[32m"24"[31m
+              [33mxmlns[31m=[32m"http://www.w3.org/2000/svg"[31m
+            [36m>[31m
+              [36m<path[31m
+                [33md[31m=[32m"M4 5h16"[31m
+              [36m/>[31m
+              [36m<path[31m
+                [33md[31m=[32m"M4 12h16"[31m
+              [36m/>[31m
+              [36m<path[31m
+                [33md[31m=[32m"M4 19h16"[31m
+              [36m/>[31m
+            [36m</svg>[31m
+          [36m</button>[31m
+          [36m<a[31m
+            [33mclass[31m=[32m"flex items-center gap-1.5"[31m
+            [33mdata-discover[31m=[32m"true"[31m
+            [33mhref[31m=[32m"/"[31m
+            [33mstyle[31m=[32m"text-decoration: none; color: var(--color-accent);"[31m
+          [36m>[31m
+            [36m<span[31m
+              [33mclass[31m=[32m"material-symbols-outlined"[31m
+              [33mstyle[31m=[32m"font-variation-settings: 'FILL' 1; font-size: 20px;"[31m
+            [36m>[31m
+              [0mflare[0m
+            [36m</span>[31m
+            [36m<span[31m
+              [33mclass[31m=[32m"text-2xl font-bold tracking-tight"[31m
+              [33mstyle[31m=[32m"font-family: var(--font-family-headline); color: var(--color-accent);"[31m
+            [36m>[31m
+              [0mSIMDM[0m
+            [36m</span>[31m
+          [36m</a>[31m
+          [36m<nav[31m
+            [33mclass[31m=[32m"hidden md:flex gap-6 ml-8"[31m
+          [36m>[31m
+            [36m<a[31m
+              [33mclass[31m=[32m"text-sm font-medium hover:opacity-70 transition-opacity flex items-center gap-1.5 pb-2 "[31m
+              [33mdata-discover[31m=[32m"true"[31m
+              [33mhref[31m=[32m"/inventory"[31m
+              [33mstyle[31m=[32m"color: var(--color-text-primary); text-decoration: none; border-color: transparent;"[31m
+            [36m>[31m
+              [36m<svg[31m
+                [33maria-hidden[31m=[32m"true"[31m
+                [33mclass[31m=[32m"lucide lucide-warehouse"[31m
+                [33mfill[31m=[32m"none"[31m
+                [33mheight[31m=[32m"15"[31m
+                [33mstroke[31m=[32m"currentColor"[31m
+                [33mstroke-linecap[31m=[32m"round"[31m
+                [33mstroke-linejoin[31m=[32m"round"[31m
+                [33mstroke-width[31m=[32m"2"[31m
+                [33mviewBox[31m=[32m"0 0 24 24"[31m
+                [33mwidth[31m=[32m"15"[31m
+                [33mxmlns[31m=[32m"http://www.w3.org/2000/svg"[31m
+              [36m>[31m
+                [36m<path[31m
+                  [33md[31m=[32m"M18 21V10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1v11"[31m
+                [36m/>[31m
+                [36m<path[31m
+                  [33md[31m=[32m"M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 1.132-1.803l7.95-3.974a2 2 0 0 1 1.837 0l7.948 3.974A2 2 0 0 1 22 8z"[31m
+                [36m/>[31m
+                [36m<path[31m
+                  [33md[31m=[32m"M6 13h12"[31m
+                [36m/>[31m
+                [36m<path[31m
+                  [33md[31m=[32m"M6 17h12"[31m
+                [36m/>[31m
+              [36m</svg>[31m
+              [0m [0m
+              [0mInventar[0m
+            [36m</a>[31m
+            [36m<a[31m
+              [33mclass[31m=[32m"text-sm font-medium hover:opacity-70 transition-opacity flex items-center gap-1.5 pb-2 "[31m
+              [33mdata-discover[31m=[32m"true"[31m
+              [33mhref[31m=[32m"/inventory/annual"[31m
+              [33mstyle[31m=[32m"color: var(--color-text-primary); text-decoration: none; border-color: transparent;"[31m
+            [36m>[31m
+              [36m<svg[31m
+                [33maria-hidden[31m=[32m"true"[31m
+                [33mclass[31m=[32m"lucide lucide-calendar"[31m
+                [33mfill[31m=[32m"none"[31m
+                [33mheight[31m=[32m"15"[31m
+                [33mstroke[31m=[32m"currentColor"[31m
+                [33mstroke-linecap[31m=[32m"round"[31m
+                [33mstroke-linejoin[31m=[32m"round"[31m
+                [33mstroke-width[31m=[32m"2"[31m
+                [33mviewBox[31m=[32m"0 0 24 24"[31m
+                [33mwidth[31m=[32m"15"[31m
+                [33mxmlns[31m=[32m"http://www.w3.org/2000/svg"[31m
+              [36m>[31m
+                [36m<path[31m
+                  [33md[31m=[32m"M8 2v4"[31m
+                [36m/>[31m
+                [36m<path[31m
+                  [33md[31m=[32m"M16 2v4"[31m
+                [36m/>[31m
+                [36m<rect[31m
+                  [33mheight[31m=[32m"18"[31m
+                  [33mrx[31m=[32m"2"[31m
+                  [33mwidth[31m=[32m"18"[31m
+                  [33mx[31m=[32m"3"[31m
+                  [33my[31m=[32m"4"[31m
+                [36m/>[31m
+                [36m<path[31m
+                  [33md[31m=[32m"M3 10h18"[31m
+      ...
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"min-h-screen"[31m
+      [33mstyle[31m=[32m"background-color: var(--color-bg-primary);"[31m
+    [36m>[31m
+      [36m<a[31m
+        [33maria-label[31m=[32m"Sari la con╚Ыinut principal"[31m
+        [33mclass[31m=[32m"
+        fixed top-0 left-0 z-[9999]
+        px-4 py-3 rounded-br-lg
+        font-medium text-sm
+        transition-all duration-200
+        invisible opacity-0 -translate-x-2
+      "[31m
+        [33mhref[31m=[32m"#main"[31m
+        [33mstyle[31m=[32m"background-color: var(--color-accent); color: var(--color-on-primary, #ffffff);"[31m
+      [36m>[31m
+        [0mSari la con╚Ыinut[0m
+      [36m</a>[31m
+      [36m<header[31m
+        [33mclass[31m=[32m"border-b px-4 md:px-8 py-4 flex justify-between items-center sticky top-0 z-40"[31m
+        [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); border-color: var(--color-border);"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"flex items-center gap-4"[31m
+        [36m>[31m
+          [36m<button[31m
+            [33maria-controls[31m=[32m"mobile-menu"[31m
+            [33maria-expanded[31m=[32m"false"[31m
+            [33maria-label[31m=[32m"Meniu"[31m
+            [33mclass[31m=[32m"md:hidden p-2 hover:opacity-70 transition-opacity"[31m
+            [33mstyle[31m=[32m"color: var(--color-accent);"[31m
+          [36m>[31m
+            [36m<svg[31m
+              [33maria-hidden[31m=[32m"true"[31m
+              [33mclass[31m=[32m"lucide lucide-menu"[31m
+              [33mfill[31m=[32m"none"[31m
+              [33mheight[31m=[32m"24"[31m
+              [33mstroke[31m=[32m"currentColor"[31m
+              [33mstroke-linecap[31m=[32m"round"[31m
+              [33mstroke-linejoin[31m=[32m"round"[31m
+              [33mstroke-width[31m=[32m"2"[31m
+              [33mviewBox[31m=[32m"0 0 24 24"[31m
+              [33mwidth[31m=[32m"24"[31m
+              [33mxmlns[31m=[32m"http://www.w3.org/2000/svg"[31m
+            [36m>[31m
+              [36m<path[31m
+                [33md[31m=[32m"M4 5h16"[31m
+              [36m/>[31m
+              [36m<path[31m
+                [33md[31m=[32m"M4 12h16"[31m
+              [36m/>[31m
+              [36m<path[31m
+                [33md[31m=[32m"M4 19h16"[31m
+              [36m/>[31m
+            [36m</svg>[31m
+          [36m</button>[31m
+          [36m<a[31m
+            [33mclass[31m=[32m"flex items-center gap-1.5"[31m
+            [33mdata-discover[31m=[32m"true"[31m
+            [33mhref[31m=[32m"/"[31m
+            [33mstyle[31m=[32m"text-decoration: none; color: var(--color-accent);"[31m
+          [36m>[31m
+            [36m<span[31m
+              [33mclass[31m=[32m"material-symbols-outlined"[31m
+              [33mstyle[31m=[32m"font-variation-settings: 'FILL' 1; font-size: 20px;"[31m
+            [36m>[31m
+              [0mflare[0m
+            [36m</span>[31m
+            [36m<span[31m
+              [33mclass[31m=[32m"text-2xl font-bold tracking-tight"[31m
+              [33mstyle[31m=[32m"font-family: var(--font-family-headline); color: var(--color-accent);"[31m
+            [36m>[31m
+              [0mSIMDM[0m
+            [36m</span>[31m
+          [36m</a>[31m
+          [36m<nav[31m
+            [33mclass[31m=[32m"hidden md:flex gap-6 ml-8"[31m
+          [36m>[31m
+            [36m<a[31m
+              [33mclass[31m=[32m"text-sm font-medium hover:opacity-70 transition-opacity flex items-center gap-1.5 pb-2 "[31m
+              [33mdata-discover[31m=[32m"true"[31m
+              [33mhref[31m=[32m"/inventory"[31m
+              [33mstyle[31m=[32m"color: var(--color-text-primary); text-decoration: none; border-color: transparent;"[31m
+            [36m>[31m
+              [36m<svg[31m
+                [33maria-hidden[31m=[32m"true"[31m
+                [33mclass[31m=[32m"lucide lucide-warehouse"[31m
+                [33mfill[31m=[32m"none"[31m
+                [33mheight[31m=[32m"15"[31m
+                [33mstroke[31m=[32m"currentColor"[31m
+                [33mstroke-linecap[31m=[32m"round"[31m
+                [33mstroke-linejoin[31m=[32m"round"[31m
+                [33mstroke-width[31m=[32m"2"[31m
+                [33mviewBox[31m=[32m"0 0 24 24"[31m
+                [33mwidth[31m=[32m"15"[31m
+                [33mxmlns[31m=[32m"http://www.w3.org/2000/svg"[31m
+              [36m>[31m
+                [36m<path[31m
+                  [33md[31m=[32m"M18 21V10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1v11"[31m
+                [36m/>[31m
+                [36m<path[31m
+                  [33md[31m=[32m"M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 1.132-1.803l7.95-3.974a2 2 0 0 1 1.837 0l7.948 3.974A2 2 0 0 1 22 8z"[31m
+                [36m/>[31m
+                [36m<path[31m
+                  [33md[31m=[32m"M6 13h12"[31m
+                [36m/>[31m
+                [36m<path[31m
+                  [33md[31m=[32m"M6 17h12"[31m
+                [36m/>[31m
+              [36m</svg>[31m
+              [0m [0m
+              [0mInventar[0m
+            [36m</a>[31m
+            [36m<a[31m
+              [33mclass[31m=[32m"text-sm font-medium hover:opacity-70 transition-opacity flex items-center gap-1.5 pb-2 "[31m
+              [33mdata-discover[31m=[32m"true"[31m
+              [33mhref[31m=[32m"/inventory/annual"[31m
+              [33mstyle[31m=[32m"color: var(--color-text-primary); text-decoration: none; border-color: transparent;"[31m
+            [36m>[31m
+              [36m<svg[31m
+                [33maria-hidden[31m=[32m"true"[31m
+                [33mclass[31m=[32m"lucide lucide-calendar"[31m
+                [33mfill[31m=[32m"none"[31m
+                [33mheight[31m=[32m"15"[31m
+                [33mstroke[31m=[32m"currentColor"[31m
+                [33mstroke-linecap[31m=[32m"round"[31m
+                [33mstroke-linejoin[31m=[32m"round"[31m
+                [33mstroke-width[31m=[32m"2"[31m
+                [33mviewBox[31m=[32m"0 0 24 24"[31m
+                [33mwidth[31m=[32m"15"[31m
+                [33mxmlns[31m=[32m"http://www.w3.org/2000/svg"[31m
+              [36m>[31m
+                [36m<path[31m
+                  [33md[31m=[32m"M8 2v4"[31m
+                [36m/>[31m
+                [36m<path[31m
+                  [33md[31m=[32m"M16 2v4"[31m
+                [36m/>[31m
+                [36m<rect[31m
+                  [33mheight[31m=[32m"18"[31m
+                  [33mrx[31m=[32m"2"[31m
+                  [33mwidth[31m=[32m"18"[31m
+                  [33mx[31m=[32m"3"[31m
+                  [33my[31m=[32m"4"[31m
+                [36m/>[31m
+                [36m<path[31m
+                  [33md[31m=[32m"M3 10h18"[31m
+      ...[39m
+   [33m[2mтЬУ[22m[39m App тАФ Extra Coverage[2m > [22mauthenticated routes[2m > [22mrenders inventory page on /inventory [33m 711[2mms[22m[39m
+   [32mтЬУ[39m App тАФ Extra Coverage[2m > [22mauthenticated routes[2m > [22mrenders incidents page on /incidents[32m 194[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m App тАФ Extra Coverage[2m > [22mauthenticated routes[2m > [22mrenders audit logs page on /audit-logs [33m 670[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m App тАФ Extra Coverage[2m > [22mmobile menu[2m > [22mopens and closes mobile menu [33m 1032[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m App тАФ Extra Coverage[2m > [22mtheme toggle[2m > [22mtoggles between light and dark [33m 685[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m App тАФ Extra Coverage[2m > [22mnavigation links[2m > [22mrenders desktop nav links [33m 671[2mms[22m[39m
+   [32mтЬУ[39m App тАФ Extra Coverage[2m > [22mnavigation links[2m > [22mrenders settings link[32m 124[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m App тАФ Extra Coverage[2m > [22mlogout[2m > [22mcalls logout function [33m 459[2mms[22m[39m
+   [32mтЬУ[39m App тАФ Extra Coverage[2m > [22merror boundary[2m > [22mrenders ErrorBoundary wrapper[32m 58[2mms[22m[39m
+[90mstderr[2m | src/__tests__/pages/RepairTicketsPage.coverage.test.jsx[2m > [22m[2mRepairTicketsPage 
+Coverage[2m > [22m[2mPDF downloads[2m > [22m[2mdownloads Formular 7 from jurnal view
+[22m[39mNot implemented: navigation to another Document
+
+[90mstderr[2m | src/__tests__/pages/RepairTicketsPage.coverage.test.jsx[2m > [22m[2mRepairTicketsPage 
+Coverage[2m > [22m[2mPDF downloads[2m > [22m[2mdownloads Formular 8 from details modal
+[22m[39mNot implemented: navigation to another Document
+
+ [32mтЬУ[39m src/__tests__/pages/RepairTicketsPage.coverage.test.jsx [2m([22m[2m29 tests[22m[2m)[22m[33m 5838[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m RepairTicketsPage Coverage[2m > [22mtriage and repair modals[2m > [22msubmits repair with valid data [33m 312[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m RepairTicketsPage Coverage[2m > [22mcreate ticket modal[2m > [22mcloses modal on cancel [33m 325[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m RepairTicketsPage Coverage[2m > [22mPDF downloads[2m > [22mdownloads Formular 8 from details modal [33m 470[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m RepairTicketsPage Coverage[2m > [22mdetails modal info tab[2m > [22mdisplays ticket info fields [33m 383[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/MaintenanceCalendarPage.test.jsx [2m([22m[2m11 tests[22m[2m)[22m[33m 6819[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenanceCalendarPage тАФ Calendar & Apari╚Ыii MPP[2m > [22mrandeaz─Г calendar cu luna curenta [33m 447[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenanceCalendarPage тАФ Calendar & Apari╚Ыii MPP[2m > [22mpermite navigare lun─Г anterioar─Г [33m 611[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenanceCalendarPage тАФ Calendar & Apari╚Ыii MPP[2m > [22mpermite navigare lun─Г urm─Гtoare [33m 354[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenanceCalendarPage тАФ Calendar & Apari╚Ыii MPP[2m > [22mdeschide modal creare plan la click "Creare Plan" [33m 309[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenanceCalendarPage тАФ Calendar & Apari╚Ыii MPP[2m > [22mvalideaz─Г form creare plan (device + frequency) [33m 1068[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenanceCalendarPage тАФ Calendar & Apari╚Ыii MPP[2m > [22mafi╚Щeaz─Г mesaj dup─Г creare plan reu╚Щit─Г [33m 2618[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenanceCalendarPage тАФ Calendar & Apari╚Ыii MPP[2m > [22mafi╚Щeaz─Г apari╚Ыii zilei la click pe data calendarului [33m 531[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenanceCalendarPage тАФ Calendar & Apari╚Ыii MPP[2m > [22mnavigare ├оntre luni nu pierde state-ul [33m 489[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/MaintenancePage.functions.test.jsx [2m([22m[2m30 tests[22m[2m)[22m[33m 10600[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenancePage тАФ function coverage[2m > [22mshows records in table view [33m 365[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenancePage тАФ function coverage[2m > [22madd modal has all form fields [33m 538[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenancePage тАФ function coverage[2m > [22mvalidates description required [33m 374[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenancePage тАФ function coverage[2m > [22msubmits new record via POST [33m 898[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenancePage тАФ function coverage[2m > [22medit modal close button closes [33m 461[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenancePage тАФ function coverage[2m > [22mfilter by type: Preventiv─Г [33m 307[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenancePage тАФ function coverage[2m > [22mfilter "Toate" shows all records [33m 307[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenancePage тАФ function coverage[2m > [22mdelete flow: trash тЖТ confirm тЖТ delete [33m 374[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenancePage тАФ function coverage[2m > [22mhandles delete error [33m 486[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenancePage тАФ function coverage[2m > [22mform fields are fillable [33m 2013[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenancePage тАФ function coverage[2m > [22mexternal service checkbox toggles provider field [33m 627[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenancePage тАФ function coverage[2m > [22mpost error shows toast [33m 553[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/Login.test.jsx [2m([22m[2m11 tests[22m[2m)[22m[33m 6498[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Login[2m > [22mrandeaz─Г inputurile de utilizator ╚Щi parol─Г plus butonul de conectare [33m 853[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Login[2m > [22mactualizeaz─Г valorile inputurilor pe m─Гsur─Г ce utilizatorul tasteaz─Г [33m 1002[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Login[2m > [22mla submit valid apeleaz─Г login(username, password) [33m 1435[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Login[2m > [22mafi╚Щeaz─Г mesajul de eroare din r─Гspunsul serverului (role="alert") [33m 897[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Login[2m > [22mafi╚Щeaz─Г mesaj generic c├вnd eroarea nu are r─Гspuns de la server [33m 592[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Login[2m > [22mtrimite formularul la ap─Гsarea tastei Enter ├оn c├вmpul parol─Г [33m 1061[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Login[2m > [22meroarea de validare se curat─Г la tasta╚Ыie (mode: all) [33m 340[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/ServiceContractsPage.test.jsx [2m([22m[2m15 tests[22m[2m)[22m[33m 6744[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ServiceContractsPage тАФ Contracte Externe & Cost Analysis[2m > [22mpermite creare contract nou [33m 4101[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ServiceContractsPage тАФ Contracte Externe & Cost Analysis[2m > [22mvalideaz─Г form creare contract [33m 457[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ServiceContractsPage тАФ Contracte Externe & Cost Analysis[2m > [22mpermite rating furnizor (1-5 stele + comment) [33m 337[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ServiceContractsPage тАФ Contracte Externe & Cost Analysis[2m > [22mpermite ╚Щtergere contract (cu confirmare) [33m 413[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/IncidentsPage.extra.test.jsx [2m([22m[2m19 tests[22m[2m)[22m[33m 3450[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m IncidentsPage тАФ Extra Coverage[2m > [22mmodal open/close[2m > [22mopens modal when report button clicked [33m 359[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m IncidentsPage тАФ Extra Coverage[2m > [22mpatient affected and AMDM toggles[2m > [22mhides AMDM fields when unchecked [33m 403[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m IncidentsPage тАФ Extra Coverage[2m > [22mpagination[2m > [22mshows page count and navigation [33m 437[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/DeviceForm.test.jsx [2m([22m[2m7 tests[22m[2m)[22m[33m 4713[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm[2m > [22mrandeaz─Г inputurile obligatorii din primul pas (Nr. inventar, Denumire) [33m 432[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm[2m > [22mrandeaz─Г dropdown-ul de sec╚Ыii populat din API la pasul de clasificare [33m 1745[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm[2m > [22mexpune c├вmpurile de clasificare obligatorii: clasa de risc, status ╚Щi sec╚Ыie [33m 807[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm[2m > [22mtrimite un POST la /devices cu date valide la salvare [33m 1237[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/InventoryPageV2.extra.test.jsx [2m([22m[2m8 tests[22m[2m)[22m[33m 2573[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ Extra Branch Coverage[2m > [22mkanban view details[2m > [22mshows kanban view with grouped columns [33m 794[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ Extra Branch Coverage[2m > [22mcards view details[2m > [22mshows card details for devices [33m 443[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ Extra Branch Coverage[2m > [22mview toggle state[2m > [22mswitches between views [33m 369[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m InventoryPage тАФ Extra Branch Coverage[2m > [22mdelete[2m > [22mcalls DELETE API on confirm [33m 452[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/AuditLogsPage.extra.test.jsx [2m([22m[2m15 tests[22m[2m)[22m[33m 2002[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m AuditLogsPage тАФ Extra Coverage[2m > [22mdate filters[2m > [22msends dateFrom param when filter set [33m 394[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m AuditLogsPage тАФ Extra Coverage[2m > [22mchanges expand/collapse[2m > [22mexpands changes cell [33m 410[2mms[22m[39m
+[90mstderr[2m | src/__tests__/pages/MaintenanceCalendarPage.coverage.test.jsx[2m > [22m[2mMaintenanceCalendarPage 
+Coverage[2m > [22m[2mPDF download[2m > [22m[2mdownloads Formular 5
+[22m[39mNot implemented: navigation to another Document
+
+ [32mтЬУ[39m src/__tests__/MppExecutionForm.test.jsx [2m([22m[2m17 tests[22m[2m)[22m[33m 4025[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MppExecutionForm тАФ Execu╚Ыie Mentenan╚Ы─Г cu Semn─Гtur─Г[2m > [22mpermite marcare taskuri checklist (checkbox) [33m 446[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MppExecutionForm тАФ Execu╚Ыie Mentenan╚Ы─Г cu Semn─Гtur─Г[2m > [22mpermite selectare consumabile (piese, ulei) [33m 334[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MppExecutionForm тАФ Execu╚Ыie Mentenan╚Ы─Г cu Semn─Гtur─Г[2m > [22mvalideaz─Г cantitate consumabil (nu mai mult dec├вt stoc) [33m 512[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MppExecutionForm тАФ Execu╚Ыie Mentenan╚Ы─Г cu Semn─Гtur─Г[2m > [22mpermite upload ╚Щi salvare executare mentenan╚Ы─Г [33m 593[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MppExecutionForm тАФ Execu╚Ыie Mentenan╚Ы─Г cu Semn─Гtur─Г[2m > [22mgenereaza ╚Щi afi╚Щeaz─Г link PDF Formular Nr. 6 [33m 332[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MppExecutionForm тАФ Execu╚Ыie Mentenan╚Ы─Г cu Semn─Гtur─Г[2m > [22mpermite desc─Гrcare PDF Formular Nr. 6 [33m 324[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/MaintenanceCalendarPage.coverage.test.jsx [2m([22m[2m23 tests[22m[2m)[22m[33m 2512[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenanceCalendarPage Coverage[2m > [22mcalendar navigation[2m > [22mnavigates to previous month [33m 315[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/ConsumablesPage.test.jsx [2m([22m[2m9 tests[22m[2m)[22m[33m 2376[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ConsumablesPage[2m > [22mrandeaz─Г tabelul de consumabile ╚Щi c├вmpul de c─Гutare [33m 396[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ConsumablesPage[2m > [22mbutonul "+ Adaug─Г Consumabil" deschide formularul de ad─Гugare [33m 423[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ConsumablesPage[2m > [22m╚Щterge un consumabil dup─Г confirmare (DELETE) [33m 339[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ConsumablesPage[2m > [22mediteaz─Г un consumabil existent ╚Щi salveaz─Г prin PUT [33m 448[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/RepairTicketsPage.test.jsx [2m([22m[2m11 tests[22m[2m)[22m[33m 2649[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m RepairTicketsPage тАФ Kanban Board cu State Machine[2m > [22mdeschide modal detalii la click pe tichet [33m 416[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m RepairTicketsPage тАФ Kanban Board cu State Machine[2m > [22mpermite creare tichet nou [33m 933[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m RepairTicketsPage тАФ Kanban Board cu State Machine[2m > [22mpermite schimbare status tichet din modal [33m 391[2mms[22m[39m
+[90mstderr[2m | src/__tests__/pages/RepairTicketsPage.extended.test.jsx[2m > [22m[2mRepairTicketsPage тАФ 
+Extended Tests[2m > [22m[2mdescarc─Г Formular 7
+[22m[39mNot implemented: navigation to another Document
+
+[90mstderr[2m | src/__tests__/pages/RepairTicketsPage.extended.test.jsx[2m > [22m[2mRepairTicketsPage тАФ 
+Extended Tests[2m > [22m[2mdescarc─Г Formular 8 din detalii
+[22m[39mNot implemented: navigation to another Document
+
+ [32mтЬУ[39m src/__tests__/pages/DeviceForm.integration.test.jsx [2m([22m[2m4 tests[22m[2m)[22m[33m 3151[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm тАФ wizard: navigare ├оnapoi ╚Щi persisten╚Ыa st─Гrii[2m > [22mbutonul ├Оnapoi este dezactivat la primul pas [33m 478[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm тАФ wizard: navigare ├оnapoi ╚Щi persisten╚Ыa st─Гrii[2m > [22mp─Гstreaz─Г valorile introduse c├вnd utilizatorul navigheaz─Г ├Оnainte apoi ├Оnapoi [33m 1021[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm тАФ wizard: navigare ├оnapoi ╚Щi persisten╚Ыa st─Гrii[2m > [22mindicatorul de pas reflect─Г mi╚Щcarea ├оnainte ╚Щi ├оnapoi prin wizard [33m 652[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m DeviceForm тАФ wizard: navigare ├оnapoi ╚Щi persisten╚Ыa st─Гrii[2m > [22mselec╚Ыia sec╚Ыiei persist─Г dup─Г navigare ├Оnainte/├Оnapoi ├оntre pa╚Щi [33m 997[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/VerificationsPage.test.jsx [2m([22m[2m13 tests[22m[2m)[22m[33m 2865[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m VerificationsPage тАФ Verific─Гri Periodice & Conformitate[2m > [22mpermite upload certificat pentru dispozitiv [33m 1104[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m VerificationsPage тАФ Verific─Гri Periodice & Conformitate[2m > [22mvalideaz─Г date upload (dispozitiv, tip, fi╚Щier) [33m 350[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m VerificationsPage тАФ Verific─Гri Periodice & Conformitate[2m > [22mpermite ╚Щtergere verificare (cu confirmare) [33m 322[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/RepairTicketsPage.extended.test.jsx [2m([22m[2m21 tests[22m[2m)[22m[33m 1882[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/SettingsPage.test.jsx [2m([22m[2m18 tests[22m[2m)[22m[33m 1693[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/MaintenancePage.coverage.test.jsx [2m([22m[2m19 tests[22m[2m)[22m[33m 2668[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenancePage Coverage[2m > [22mfilter by type[2m > [22mfilters records by Preventiv─Г type [33m 325[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenancePage Coverage[2m > [22mCRUD operations[2m > [22mcreates new record with valid data [33m 434[2mms[22m[39m
+[90mstderr[2m | src/__tests__/pages/AuditLogsPage.test.jsx[2m > [22m[2mAuditLogsPage[2m > [22m[2mhandles CSV 
+export success
+[22m[39mNot implemented: navigation to another Document
+
+ [32mтЬУ[39m src/__tests__/pages/AuditLogsPage.test.jsx [2m([22m[2m15 tests[22m[2m)[22m[33m 1717[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m AuditLogsPage[2m > [22mrenders export CSV button [33m 318[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m AuditLogsPage[2m > [22mshows pagination for multiple pages [33m 340[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/App.integration.test.jsx [2m([22m[2m7 tests[22m[2m)[22m[33m 1595[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m App (entry point + router)[2m > [22mrandeaz─Г Dashboard-ul cu numele utilizatorului c├вnd este autentificat [33m 428[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m App (entry point + router)[2m > [22mguard de rut─Г: ruta protejat─Г "/inventory" randeaz─Г con╚Ыinutul c├вnd e autentificat [33m 356[2mms[22m[39m
+[90mstderr[2m | src/__tests__/components/modals/TicketDetailsModal.extra.test.jsx[2m > [22m[2mTicketDetailsModal 
+тАФ Extra Coverage[2m > [22m[2mformular8 download[2m > [22m[2mdownloads formular8 PDF when actionsTaken present
+[22m[39mNot implemented: navigation to another Document
+
+ [32mтЬУ[39m src/__tests__/components/modals/TicketDetailsModal.extra.test.jsx [2m([22m[2m20 tests[22m[2m)[22m[33m 908[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m TicketDetailsModal тАФ Extra Coverage[2m > [22mstatus transitions[2m > [22mupdates status via mutation [33m 319[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/AnnualInventoryPage.test.jsx [2m([22m[2m8 tests[22m[2m)[22m[33m 1784[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m AnnualInventoryPage[2m > [22mrandeaz─Г selectorul de an cu anii disponibili [33m 505[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m AnnualInventoryPage[2m > [22mpermite marcarea dispozitivelor ca g─Гsite ├оn modalul de inventariere [33m 357[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m AnnualInventoryPage[2m > [22mdeschide modalul de discrepan╚Ыe ╚Щi marcheaz─Г o discrepan╚Ы─Г ca verificat─Г [33m 366[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/MppExecutionForm.test.jsx [2m([22m[2m25 tests[22m[2m)[22m[33m 1500[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MppExecutionForm[2m > [22mselectarea DEFECT arat─Г avertizare [33m 312[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/components/ui/Select.test.jsx [2m([22m[2m9 tests[22m[2m)[22m[33m 1150[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Select UI Components[2m > [22mrenders Select with trigger [33m 356[2mms[22m[39m
+[90mstderr[2m | src/__tests__/components/modals/RepairModal.extra.test.jsx[2m > [22m[2mRepairModal тАФ Extra 
+Coverage[2m > [22m[2msubmit validation complete flow[2m > [22m[2mvalidates all fields step by step
+[22m[39mNot implemented: HTMLCanvasElement's toDataURL() method: without installing the canvas npm package
+
+ [32mтЬУ[39m src/__tests__/components/modals/RepairModal.extra.test.jsx [2m([22m[2m16 tests[22m[2m)[22m[33m 1112[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/components/modals/RepairModal.test.jsx [2m([22m[2m21 tests[22m[2m)[22m[33m 1196[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/MaintenanceExecutionPage.functions.test.jsx [2m([22m[2m14 tests[22m[2m)[22m[33m 3607[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenanceExecutionPage тАФ function coverage[2m > [22mdelete execution button calls deleteMutation [33m 483[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenanceExecutionPage тАФ function coverage[2m > [22mopens execution dialog when "Execut─Г mentenan╚Ы─Г" is clicked [33m 666[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenanceExecutionPage тАФ function coverage[2m > [22mshows form fields in execution dialog [33m 429[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenanceExecutionPage тАФ function coverage[2m > [22msubmit button disabled when no signature [33m 327[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenanceExecutionPage тАФ function coverage[2m > [22mshows signature clear button [33m 311[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenanceExecutionPage тАФ function coverage[2m > [22mcancel button closes the dialog [33m 531[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenanceExecutionPage тАФ function coverage[2m > [22msignature canvas is rendered in dialog [33m 313[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/IncidentsPage.test.jsx [2m([22m[2m12 tests[22m[2m)[22m[33m 1098[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/accessibility.test.jsx [2m([22m[2m11 tests[22m[2m)[22m[33m 920[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Accessibility Compliance (WCAG 2.1 AA)[2m > [22mStatusBadge - trebuie s─Г aib─Г role ╚Щi aria-label [33m 344[2mms[22m[39m
+[90mstderr[2m | src/__tests__/pages/MaintenanceExecutionPage.coverage.test.jsx[2m > 
+[22m[2mMaintenanceExecutionPage Coverage[2m > [22m[2mpending plans[2m > [22m[2mshows pending plans when 
+available
+[22m[39mIn HTML, <div> cannot be a child of <select>.
+This will cause a hydration error.
+
+  ...
+    <div>
+      <div className="grid grid-...">
+        <div className="cursor-poi...">
+          <div className="pt-6">
+            <div className="space-y-2">
+              <p>
+              <p>
+              <p>
+              <Dialog open={false} onOpenChange={function onOpenChange}>
+                <div data-testid="dialog" data-open={false}>
+                  <DialogTrigger>
+                  <DialogContent className="max-w-2xl ...">
+                    <div data-testid="dialog-con..." className="max-w-2xl ...">
+                      <DialogHeader>
+                      <form onSubmit={function} className="space-y-4">
+                        <div className="space-y-2">
+                          <label>
+                          <Select value="" onValueChange={function onValueChange}>
+>                           <select value="" onChange={function onChange}>
+                              <SelectTrigger>
+>                               <div>
+                              ...
+                        ...
+
+<select> cannot contain a nested <div>.
+See this log for the ancestor stack trace.
+
+ [32mтЬУ[39m src/__tests__/pages/MaintenanceExecutionPage.coverage.test.jsx [2m([22m[2m10 tests[22m[2m)[22m[33m 893[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenanceExecutionPage Coverage[2m > [22mexecution list[2m > [22mdeletes execution on button click [33m 420[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/MaintenanceExecutionPage.test.jsx [2m([22m[2m12 tests[22m[2m)[22m[33m 1083[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenanceExecutionPage[2m > [22mbutonul de ╚Щtergere apeleaz─Г DELETE [33m 481[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/components/AlertsWidget.test.jsx [2m([22m[2m13 tests[22m[2m)[22m[33m 1079[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m AlertsWidget[2m > [22mnavigheaz─Г c─Гtre pagina de consumabile la click pe alerta de stoc [33m 351[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/MaintenancePage.test.jsx [2m([22m[2m10 tests[22m[2m)[22m[33m 849[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/components/ui/Dialog.test.jsx [2m([22m[2m10 tests[22m[2m)[22m[33m 805[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/DeviceForm.extra.test.jsx [2m([22m[2m9 tests[22m[2m)[22m[33m 837[2mms[22m[39m
+[90mstderr[2m | src/__tests__/pages/AuthProvider.integration.test.jsx[2m > [22m[2mAuthProvider + useAuth 
+(lifecycle)[2m > [22m[2mlogout cur─Г╚Ы─Г starea local─Г chiar dac─Г apelul c─Гtre server e╚Щueaz─Г
+[22m[39m[AuthContext] Logout error: server down
+
+ [32mтЬУ[39m src/__tests__/pages/AuthProvider.integration.test.jsx [2m([22m[2m8 tests[22m[2m)[22m[33m 942[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m AuthProvider + useAuth (lifecycle)[2m > [22mlogin stocheaz─Г accessToken ├оn tokenStore ╚Щi seteaz─Г user-ul [33m 388[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/components/ShadcnComponents.test.jsx [2m([22m[2m27 tests[22m[2m)[22m[33m 673[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Shadcn Components - Unit Tests[2m > [22mButton Component[2m > [22mrenders button with text [33m 354[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/MaintenanceExecutionPage.extra.test.jsx [2m([22m[2m7 tests[22m[2m)[22m[33m 821[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m MaintenanceExecutionPage тАФ Extra Coverage[2m > [22mdelete execution[2m > [22mcalls delete on trash button click [33m 333[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/components/modals/DetailsModal.test.jsx [2m([22m[2m19 tests[22m[2m)[22m[33m 993[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m TicketDetailsModal[2m > [22mupdates status transition [33m 487[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/utils/AccessibilityUtils.test.jsx [2m([22m[2m22 tests[22m[2m)[22m[33m 677[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m AccessibilityUtils[2m > [22mSkipLink[2m > [22mrenders skip link with href #main [33m 490[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/components/modals/TriageModal.test.jsx [2m([22m[2m15 tests[22m[2m)[22m[33m 700[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/components/SkipLink.test.jsx [2m([22m[2m8 tests[22m[2m)[22m[33m 443[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m SkipLink[2m > [22mrenders skip link with correct text [33m 332[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/components/KeyboardShortcuts.test.jsx [2m([22m[2m8 tests[22m[2m)[22m[33m 525[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/components/ErrorState.test.jsx [2m([22m[2m10 tests[22m[2m)[22m[33m 557[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ErrorState[2m > [22mhas alert role [33m 334[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/components/Alert.test.jsx [2m([22m[2m10 tests[22m[2m)[22m[33m 600[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Alert[2m > [22mapplies correct role for info type [33m 408[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/components/ErrorBoundary.test.jsx [2m([22m[2m7 tests[22m[2m)[22m[33m 973[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ErrorBoundary[2m > [22mlinks to home page [33m 497[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/components/DeviceTimeline.test.jsx [2m([22m[2m10 tests[22m[2m)[22m[33m 833[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/components/ui/UIComponents.test.jsx [2m([22m[2m24 tests[22m[2m)[22m[33m 667[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m UI Components[2m > [22mTabs[2m > [22mrenders tab triggers [33m 354[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/components/Toast.test.jsx [2m([22m[2m11 tests[22m[2m)[22m[33m 532[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/hooks/useDevices.test.js [2m([22m[2m11 tests[22m[2m)[22m[33m 863[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/components/ui/Tooltip.test.jsx [2m([22m[2m6 tests[22m[2m)[22m[33m 686[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Tooltip UI Components[2m > [22mrenders Tooltip root without errors [33m 450[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/components/Skeleton.test.jsx [2m([22m[2m11 tests[22m[2m)[22m[33m 442[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Skeleton[2m > [22mrenders with role status [33m 359[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/components/Spinner.test.jsx [2m([22m[2m9 tests[22m[2m)[22m[33m 440[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m Spinner[2m > [22mrenders with role status [33m 326[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/components/EmptyState.test.jsx [2m([22m[2m8 tests[22m[2m)[22m[33m 459[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/components/ProtectedRoute.test.jsx [2m([22m[2m6 tests[22m[2m)[22m[33m 737[2mms[22m[39m
+   [33m[2mтЬУ[22m[39m ProtectedRoute[2m > [22mafi╚Щeaz─Г skeleton-ul de ├оnc─Гrcare ├оn timpul verific─Гrii [33m 589[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/hooks/hooks.test.js [2m([22m[2m10 tests[22m[2m)[22m[32m 142[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/api/apiFiles.test.js [2m([22m[2m36 tests[22m[2m)[22m[32m 65[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/api/consumables.test.js [2m([22m[2m17 tests[22m[2m)[22m[32m 22[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/schemas/deviceSchema.test.js [2m([22m[2m6 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/api/tokenStore.test.js [2m([22m[2m10 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/pages/axios.integration.test.jsx [2m([22m[2m8 tests[22m[2m)[22m[32m 33[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/api/axios.interceptors.test.js [2m([22m[2m9 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32mтЬУ[39m src/__tests__/api/axios.functions.test.js [2m([22m[2m2 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+
+[31mтОптОптОптОптОптОп[39m[1m[41m Unhandled Error [49m[22m[31mтОптОптОптОптОптОптОп[39m
+[31m[1mError[22m: ENOENT: no such file or directory, open 
+'C:\Users\janea\simdm\frontend\coverage\.tmp\coverage-3.json'[39m
+[90m [2mтЭп[22m open node:internal/fs/promises:[2m641:25[22m[39m
+[90m [2mтЭп[22m Object.readFile node:internal/fs/promises:[2m1245:14[22m[39m
+[90m [2mтЭп[22m node_modules/vitest/dist/chunks/coverage.DfSpMS-b.js:[2m4060:23[22m[39m
+[90m [2mтЭп[22m V8CoverageProvider.readCoverageFiles 
+node_modules/vitest/dist/chunks/coverage.DfSpMS-b.js:[2m4059:5[22m[39m
+[90m [2mтЭп[22m V8CoverageProvider.generateCoverage 
+node_modules/@vitest/coverage-v8/dist/provider.js:[2m2573:3[22m[39m
+[90m [2mтЭп[22m node_modules/vitest/dist/chunks/cli-api.DWGBtMmz.js:[2m9663:22[22m[39m
+[90m [2mтЭп[22m Vitest.runFiles node_modules/vitest/dist/chunks/cli-api.DWGBtMmz.js:[2m9676:10[22m[39m
+[90m [2mтЭп[22m Vitest.start node_modules/vitest/dist/chunks/cli-api.DWGBtMmz.js:[2m9564:18[22m[39m
+[90m [2mтЭп[22m startVitest node_modules/vitest/dist/chunks/cli-api.DWGBtMmz.js:[2m10520:8[22m[39m
+
+[31m[2mтОптОптОптОптОптОптОптОптОптОптОптОптОптОптОптОптОптОптОптОптОптОптОптОптОптОптОптОптОптОп[22m[39m
+[31m[1mSerialized Error:[22m[39m [90m{ errno: -4058, code: 'ENOENT', syscall: 'open', path: 
+'C:\Users\janea\simdm\frontend\coverage\.tmp\coverage-3.json' }[39m
+
+
+

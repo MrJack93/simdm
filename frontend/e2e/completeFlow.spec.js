@@ -90,7 +90,7 @@ test.describe('SIMDM Maintenance and Repair End-to-End Flow', () => {
         return selects[1].options[1].value;
       });
       await execOccSelect.selectOption(occValue);
-    } catch (e) {
+    } catch {
       console.log('No occurrence found in dropdown, continuing without it...');
     }
 
@@ -215,7 +215,7 @@ test.describe('SIMDM Maintenance and Repair End-to-End Flow', () => {
     try {
       const download = await downloadPromise;
       console.log(`✓ Formular 5 downloaded: ${download.suggestedFilename}`);
-    } catch (e) {
+    } catch {
       console.log('Formular 5 download initiated (no wait needed)');
     }
 
@@ -236,7 +236,7 @@ test.describe('SIMDM Maintenance and Repair End-to-End Flow', () => {
       try {
         const download8 = await downloadFormular8;
         console.log(`✓ Formular 8 downloaded: ${download8.suggestedFilename}`);
-      } catch (e) {
+      } catch {
         console.log('Formular 8 initiated');
       }
     }

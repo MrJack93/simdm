@@ -3,6 +3,7 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import axios from '../api/axios';
 import SignatureCanvas from 'react-signature-canvas';
 import { useNavigate } from 'react-router-dom';
+import { Field, FieldLabel, FieldDescription } from '../components/ui/field';
 
 export default function MppExecutionForm() {
   const navigate = useNavigate();
@@ -31,7 +32,7 @@ export default function MppExecutionForm() {
   const { data: devicesData } = useQuery({
     queryKey: ['devices'],
     queryFn: async () => {
-      const res = await axios.get('/api/devices');
+      const res = await axios.get('/devices');
       return res.data;
     },
   });
@@ -40,7 +41,7 @@ export default function MppExecutionForm() {
     queryKey: ['maintenance-calendar', new Date().getFullYear()],
     queryFn: async () => {
       const res = await axios.get(
-        `/api/maintenance-plans/calendar?year=${new Date().getFullYear()}`
+        `/maintenance-plans/calendar?year=${new Date().getFullYear()}`
       );
       return res.data;
     },
@@ -51,7 +52,7 @@ export default function MppExecutionForm() {
     queryFn: async () => {
       if (!selectedDeviceId) return null;
       const res = await axios.get(
-        `/api/mpp-executions/checklist-template/${selectedDeviceId}`
+        `/mpp-executions/checklist-template/${selectedDeviceId}`
       );
       return res.data;
     },
@@ -61,7 +62,7 @@ export default function MppExecutionForm() {
   const { data: consumablesData } = useQuery({
     queryKey: ['consumables-dropdown'],
     queryFn: async () => {
-      const res = await axios.get('/api/consumables/dropdown');
+      const res = await axios.get('/consumables/dropdown');
       return res.data;
     },
   });
@@ -189,7 +190,7 @@ export default function MppExecutionForm() {
         // photoAfterBase64: photoAfter,
       };
 
-      const res = await axios.post('/api/mpp-executions', payload);
+      const res = await axios.post('/mpp-executions', payload);
       return res.data;
     },
     onSuccess: (data) => {
@@ -235,12 +236,12 @@ export default function MppExecutionForm() {
       </div>
 
       {error && (
-        <div className="p-4 mb-4 rounded-xl text-sm font-medium border" style={{ backgroundColor: 'var(--color-error-bg)', color: 'var(--color-error)', borderColor: 'rgba(248, 113, 113, 0.2)' }}>
+        <div role="alert" className="p-4 mb-4 rounded-xl text-sm font-medium border" style={{ backgroundColor: 'var(--color-error-bg)', color: 'var(--color-error)', borderColor: 'var(--color-error)' }}>
           {error}
         </div>
       )}
       {success && (
-        <div className="p-4 mb-4 rounded-xl text-sm font-medium border" style={{ backgroundColor: 'var(--color-success-bg)', color: 'var(--color-success)', borderColor: 'rgba(52, 211, 153, 0.2)' }}>
+        <div role="status" className="p-4 mb-4 rounded-xl text-sm font-medium border" style={{ backgroundColor: 'var(--color-success-bg)', color: 'var(--color-success)', borderColor: 'var(--color-success)' }}>
           {success}
         </div>
       )}
@@ -248,9 +249,10 @@ export default function MppExecutionForm() {
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Device & Occurrence Selection */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-5 rounded-xl border transition-all duration-150" style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)' }}>
-          <div>
-            <label className="block text-sm font-semibold mb-2" style={{ color: 'var(--color-text-secondary)' }}>Dispozitiv *</label>
+          <Field>
+            <FieldLabel htmlFor="mpp-device" required>Dispozitiv</FieldLabel>
             <select
+              id="mpp-device"
               value={selectedDeviceId}
               onChange={(e) => {
                 setSelectedDeviceId(e.target.value);
@@ -268,11 +270,12 @@ export default function MppExecutionForm() {
                 </option>
               ))}
             </select>
-          </div>
+          </Field>
 
-          <div>
-            <label className="block text-sm font-semibold mb-2" style={{ color: 'var(--color-text-secondary)' }}>Ocurență (opțional)</label>
+          <Field>
+            <FieldLabel htmlFor="mpp-occurrence">Ocurență (opțional)</FieldLabel>
             <select
+              id="mpp-occurrence"
               value={selectedOccurrenceId}
               onChange={(e) => setSelectedOccurrenceId(e.target.value)}
               className="w-full border rounded-lg px-3 py-2 text-sm outline-none transition-all duration-150"
@@ -286,14 +289,16 @@ export default function MppExecutionForm() {
                 </option>
               ))}
             </select>
-          </div>
+            <FieldDescription>Selectează o ocurență programată</FieldDescription>
+          </Field>
         </div>
 
         {/* Execution Details */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-5 rounded-xl border transition-all duration-150" style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)' }}>
           <div>
-            <label className="block text-sm font-semibold mb-2" style={{ color: 'var(--color-text-secondary)' }}>Data execuției *</label>
+            <label htmlFor="mpp-date" className="block text-sm font-semibold mb-2" style={{ color: 'var(--color-text-secondary)' }}>Data execuției *</label>
             <input
+              id="mpp-date"
               type="date"
               value={executedDate}
               onChange={(e) => setExecutedDate(e.target.value)}
@@ -304,8 +309,9 @@ export default function MppExecutionForm() {
           </div>
 
           <div>
-            <label className="block text-sm font-semibold mb-2" style={{ color: 'var(--color-text-secondary)' }}>Durată (minute)</label>
+            <label htmlFor="mpp-duration" className="block text-sm font-semibold mb-2" style={{ color: 'var(--color-text-secondary)' }}>Durată (minute)</label>
             <input
+              id="mpp-duration"
               type="number"
               value={durationMinutes}
               onChange={(e) => setDurationMinutes(e.target.value)}
@@ -317,8 +323,9 @@ export default function MppExecutionForm() {
           </div>
 
           <div>
-            <label className="block text-sm font-semibold mb-2" style={{ color: 'var(--color-text-secondary)' }}>Rezultat *</label>
+            <label htmlFor="mpp-result" className="block text-sm font-semibold mb-2" style={{ color: 'var(--color-text-secondary)' }}>Rezultat *</label>
             <select
+              id="mpp-result"
               value={result}
               onChange={(e) => setResult(e.target.value)}
               className="w-full border rounded-lg px-3 py-2 text-sm outline-none transition-all duration-150"
@@ -332,8 +339,9 @@ export default function MppExecutionForm() {
 
         {/* Engineer Name */}
         <div className="p-5 rounded-xl border transition-all duration-150" style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)' }}>
-          <label className="block text-sm font-semibold mb-2" style={{ color: 'var(--color-text-secondary)' }}>Inginer responsabil *</label>
+          <label htmlFor="mpp-engineer" className="block text-sm font-semibold mb-2" style={{ color: 'var(--color-text-secondary)' }}>Inginer responsabil *</label>
           <input
+            id="mpp-engineer"
             type="text"
             value={engineerName}
             onChange={(e) => setEngineerName(e.target.value)}
@@ -352,6 +360,7 @@ export default function MppExecutionForm() {
               {checklist.map((item, idx) => (
                 <div key={idx} className="flex items-start gap-3 pb-3 border-b" style={{ borderColor: 'var(--color-border)' }}>
                   <input
+                    id={`mpp-check-${idx}`}
                     type="checkbox"
                     checked={item.bifat}
                     onChange={(e) =>
@@ -360,7 +369,7 @@ export default function MppExecutionForm() {
                     className="mt-1.5 cursor-pointer accent-[var(--color-accent)]"
                   />
                   <div className="flex-1">
-                    <label className="block text-sm font-semibold mb-1" style={{ color: 'var(--color-text-primary)' }}>
+                    <label htmlFor={`mpp-check-${idx}`} className="block text-sm font-semibold mb-1" style={{ color: 'var(--color-text-primary)' }}>
                       {item.operatiune}
                     </label>
                     <textarea
@@ -408,6 +417,7 @@ export default function MppExecutionForm() {
                       handleUpdateConsumable(idx, 'qty', e.target.value)
                     }
                     placeholder="Cantitate"
+                    aria-label="Cantitate consumabil"
                     className="w-24 border rounded-lg px-3 py-2 text-sm outline-none transition-all duration-150"
                     style={{ backgroundColor: 'var(--color-bg-elevated)', color: 'var(--color-text-primary)', borderColor: 'var(--color-border)' }}
                     min="1"
@@ -437,8 +447,9 @@ export default function MppExecutionForm() {
         {/* Photos */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-5 rounded-xl border transition-all duration-150" style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)' }}>
           <div>
-            <label className="block text-sm font-semibold mb-2" style={{ color: 'var(--color-text-secondary)' }}>Foto înainte</label>
+            <label htmlFor="mpp-photo-before" className="block text-sm font-semibold mb-2" style={{ color: 'var(--color-text-secondary)' }}>Foto înainte</label>
             <input
+              id="mpp-photo-before"
               type="file"
               accept="image/*"
               onChange={(e) => handlePhotoUpload(e, setPhotoBefore)}
@@ -448,7 +459,7 @@ export default function MppExecutionForm() {
             {photoBefore && (
               <img
                 src={photoBefore}
-                alt="Before"
+                alt="Foto înainte de reparație"
                 className="mt-3 w-full h-40 object-cover rounded-lg border"
                 style={{ borderColor: 'var(--color-border)' }}
               />
@@ -456,8 +467,9 @@ export default function MppExecutionForm() {
           </div>
 
           <div>
-            <label className="block text-sm font-semibold mb-2" style={{ color: 'var(--color-text-secondary)' }}>Foto după</label>
+            <label htmlFor="mpp-photo-after" className="block text-sm font-semibold mb-2" style={{ color: 'var(--color-text-secondary)' }}>Foto după</label>
             <input
+              id="mpp-photo-after"
               type="file"
               accept="image/*"
               onChange={(e) => handlePhotoUpload(e, setPhotoAfter)}
@@ -467,7 +479,7 @@ export default function MppExecutionForm() {
             {photoAfter && (
               <img
                 src={photoAfter}
-                alt="After"
+                alt="Foto după reparație"
                 className="mt-3 w-full h-40 object-cover rounded-lg border"
                 style={{ borderColor: 'var(--color-border)' }}
               />
@@ -479,7 +491,7 @@ export default function MppExecutionForm() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-5 rounded-xl border transition-all duration-150" style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)' }}>
           <div>
             <label className="block text-sm font-semibold mb-2" style={{ color: 'var(--color-text-secondary)' }}>Semnătură Inginer *</label>
-            <div className="border rounded-lg bg-white overflow-hidden transition-all duration-150" style={{ borderColor: 'var(--color-border)' }}>
+            <div className="border rounded-lg bg-[var(--color-bg-primary)] overflow-hidden transition-all duration-150" style={{ borderColor: 'var(--color-border)' }} aria-label="Zonă semnătură inginer">
               <SignatureCanvas
                 ref={signaturePadEngineerRef}
                 canvasProps={{
@@ -503,7 +515,7 @@ export default function MppExecutionForm() {
             <label className="block text-sm font-semibold mb-2" style={{ color: 'var(--color-text-secondary)' }}>
               Semnătură Responsabil Secție
             </label>
-            <div className="border rounded-lg bg-white overflow-hidden transition-all duration-150" style={{ borderColor: 'var(--color-border)' }}>
+            <div className="border rounded-lg bg-[var(--color-bg-primary)] overflow-hidden transition-all duration-150" style={{ borderColor: 'var(--color-border)' }} aria-label="Zonă semnătură responsabil secție">
               <SignatureCanvas
                 ref={signaturePadManagerRef}
                 canvasProps={{
@@ -526,8 +538,9 @@ export default function MppExecutionForm() {
 
         {/* Notes */}
         <div className="p-5 rounded-xl border transition-all duration-150" style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)' }}>
-          <label className="block text-sm font-semibold mb-2" style={{ color: 'var(--color-text-secondary)' }}>Observații generale</label>
+          <label htmlFor="mpp-notes" className="block text-sm font-semibold mb-2" style={{ color: 'var(--color-text-secondary)' }}>Observații generale</label>
           <textarea
+            id="mpp-notes"
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             placeholder="Observații sau comentarii (opțional)"

@@ -9,9 +9,9 @@ const ITEMS_PER_PAGE = 25;
 const SEVERITY_CONFIG = {
   NEAR_MISS:   { label: 'Aproape-incident', color: 'var(--color-text-secondary)' },
   MINOR:       { label: 'Minor',            color: 'var(--color-warning)' },
-  MODERAT:     { label: 'Moderat',          color: '#f97316' },
+  MODERAT:     { label: 'Moderat',          color: 'var(--color-warning)' },
   GRAV:        { label: 'Grav',             color: 'var(--color-error)' },
-  CRITIC:      { label: 'Critic',           color: '#7f1d1d' },
+  CRITIC:      { label: 'Critic',           color: 'var(--color-error)' },
 };
 
 const STATUS_CONFIG = {
@@ -114,7 +114,7 @@ function IncidentModal({ incident, devices, onClose, onSaved }) {
           <h2 className="text-xl font-bold" style={{ color: 'var(--color-text-primary)' }}>
             {isNew ? 'Raportează Incident' : 'Editează Incident'}
           </h2>
-          <button onClick={onClose} style={{ color: 'var(--color-text-secondary)' }}><X size={20} /></button>
+          <button onClick={onClose} style={{ color: 'var(--color-text-secondary)' }} aria-label="Închide"><X size={20} /></button>
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
@@ -403,7 +403,7 @@ export default function IncidentsPage() {
                         <button onClick={() => setModal({ incident: inc })} className="p-1.5 rounded hover:opacity-70" style={{ color: 'var(--color-accent)' }} aria-label="Editează"><Edit2 size={14} /></button>
                         {deleteId === inc.id ? (
                           <div className="flex gap-1">
-                            <button onClick={() => deleteMutation.mutate(inc.id)} className="text-xs px-2 py-1 rounded" style={{ backgroundColor: 'var(--color-error)', color: '#fff' }}>Confirm</button>
+                            <button onClick={() => deleteMutation.mutate(inc.id)} className="text-xs px-2 py-1 rounded" style={{ backgroundColor: 'var(--color-error)', color: 'var(--color-on-primary)' }}>Confirm</button>
                             <button onClick={() => setDeleteId(null)} className="text-xs px-2 py-1 rounded btn-secondary">Nu</button>
                           </div>
                         ) : (

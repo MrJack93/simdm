@@ -60,7 +60,7 @@ describe('Login', () => {
     await user.type(screen.getByLabelText('Parolă'), 'parola123');
     await user.click(screen.getByRole('button', { name: 'Conectare' }));
     await waitFor(() => {
-      expect(login).toHaveBeenCalledWith('bioinginer', 'parola123');
+      expect(login).toHaveBeenCalledWith('bioinginer', 'parola123', { rememberMe: false });
     });
   });
 
@@ -94,7 +94,28 @@ describe('Login', () => {
     await user.type(screen.getByLabelText('Utilizator'), 'bioinginer');
     await user.type(screen.getByLabelText('Parolă'), 'parola123{Enter}');
     await waitFor(() => {
-      expect(login).toHaveBeenCalledWith('bioinginer', 'parola123');
+      expect(login).toHaveBeenCalledWith('bioinginer', 'parola123', { rememberMe: false });
     });
+  });
+
+  it('are checkbox "Ține-mă minte"', () => {
+    renderLogin();
+    expect(screen.getByLabelText('Ține-mă minte')).toBeInTheDocument();
+  });
+
+  it('eroarea de validare se curată la tastație (mode: all)', async () => {
+    const user = userEvent.setup();
+    renderLogin();
+    const username = screen.getByLabelText('Utilizator');
+    await user.click(username);
+    await user.tab(); // blur empty field → error appears
+    expect(screen.getByText('Utilizatorul este obligatoriu')).toBeInTheDocument();
+    await user.type(username, 'b'); // type → error should clear
+    expect(screen.queryByText('Utilizatorul este obligatoriu')).not.toBeInTheDocument();
+  });
+
+  it('are skip link pentru accesibilitate', () => {
+    renderLogin();
+    expect(screen.getByText('Sari la conținut')).toBeInTheDocument();
   });
 });

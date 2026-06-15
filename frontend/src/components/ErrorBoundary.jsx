@@ -4,12 +4,7 @@ import { AlertTriangle, RefreshCw } from 'lucide-react';
 export class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      hasError: false,
-      error: null,
-      errorInfo: null,
-      errorCount: 0,
-    };
+    this.state = { hasError: false, error: null, errorInfo: null, errorCount: 0 };
   }
 
   static getDerivedStateFromError(error) {
@@ -17,45 +12,21 @@ export class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, errorInfo) {
-    // Log error details for debugging
     console.error('ErrorBoundary caught:', error, errorInfo);
-
     this.setState(prevState => ({
       error,
       errorInfo,
       errorCount: prevState.errorCount + 1,
     }));
-
-    // Optional: Send to error tracking service (Sentry, etc.)
-    if (window.errorTracker) {
-      window.errorTracker.captureException(error, {
-        context: {
-          component: 'ErrorBoundary',
-          errorInfo,
-          timestamp: new Date().toISOString(),
-        },
-      });
-    }
   }
 
   handleReset = () => {
-    this.setState({
-      hasError: false,
-      error: null,
-      errorInfo: null,
-    });
-
-    // Optional: Redirect to home
-    if (this.props.onReset) {
-      this.props.onReset();
-    }
+    this.setState({ hasError: false, error: null, errorInfo: null });
+    if (this.props.onReset) this.props.onReset();
   };
 
   render() {
     if (this.state.hasError) {
-      // import.meta.env.DEV este API-ul standard Vite (boolean).
-      // process.env.NODE_ENV este sintaxa Node.js/webpack — funcționează accidental
-      // în Vite dar nu este garantat și poate fi undefined în anumite configurații.
       const isDevelopment = import.meta.env.DEV;
 
       return (
@@ -64,40 +35,38 @@ export class ErrorBoundary extends React.Component {
           style={{ backgroundColor: 'var(--color-bg-primary)' }}
         >
           <div
-            className="max-w-md w-full rounded-lg p-8 shadow-lg"
-            style={{ backgroundColor: 'var(--color-bg-secondary)' }}
+            className="max-w-md w-full rounded-xl p-8"
+            style={{
+              backgroundColor: 'var(--color-bg-secondary)',
+              border: '1px solid var(--color-border)',
+            }}
           >
-            {/* Error Icon */}
             <div className="flex justify-center mb-6">
               <div
-                className="p-4 rounded-full"
+                className="w-16 h-16 rounded-full flex items-center justify-center"
                 style={{ backgroundColor: 'var(--color-error-bg)' }}
               >
-                <AlertTriangle
-                  size={32}
-                  style={{ color: 'var(--color-error)' }}
-                />
+                <AlertTriangle size={32} style={{ color: 'var(--color-error)' }} />
               </div>
             </div>
 
-            {/* Error Title */}
             <h1
-              className="text-2xl font-bold text-center mb-4"
-              style={{ color: 'var(--color-error)' }}
+              className="text-2xl font-medium text-center mb-4"
+              style={{
+                fontFamily: 'var(--font-family-heading)',
+                color: 'var(--color-error)',
+              }}
             >
               A apărut o eroare
             </h1>
 
-            {/* Error Message */}
             <p
               className="text-center mb-6 leading-relaxed"
               style={{ color: 'var(--color-text-secondary)' }}
             >
-              Sincer îmi pare rău. O eroare neașteptată s-a produs în aplicație.
-              Echipa noastră a fost notificată și o să o rezolve în curând.
+              O eroare neașteptată s-a produs în aplicație. Încearcă din nou.
             </p>
 
-            {/* Development Error Details */}
             {isDevelopment && this.state.error && (
               <div
                 className="mb-6 p-4 rounded-lg text-xs font-mono overflow-auto max-h-48"
@@ -107,11 +76,11 @@ export class ErrorBoundary extends React.Component {
                   borderLeft: '3px solid var(--color-error)',
                 }}
               >
-                <p className="font-bold mb-2">Detalii eroare (dev):</p>
+                <p className="font-medium mb-2">Detalii eroare (dev):</p>
                 <p className="mb-2">{this.state.error.toString()}</p>
                 {this.state.errorInfo && (
                   <details className="text-xs">
-                    <summary className="cursor-pointer font-bold">Component Stack</summary>
+                    <summary className="cursor-pointer font-medium">Component Stack</summary>
                     <pre className="mt-2 overflow-x-auto">
                       {this.state.errorInfo.componentStack}
                     </pre>
@@ -120,43 +89,28 @@ export class ErrorBoundary extends React.Component {
               </div>
             )}
 
-            {/* Actions */}
             <div className="space-y-3">
               <button
                 onClick={this.handleReset}
-                className="w-full py-3 px-4 rounded-lg font-semibold flex items-center justify-center gap-2 transition-all"
-                style={{
-                  backgroundColor: 'var(--healthcare-primary)',
-                  color: '#fff',
-                }}
-                onMouseEnter={(e) => e.currentTarget.style.opacity = '0.9'}
-                onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
+                className="w-full btn-primary flex items-center justify-center gap-2"
               >
-                <RefreshCw size={18} />
+                <RefreshCw size={16} />
                 Încearcă din nou
               </button>
 
               <a
                 href="/"
-                className="w-full py-3 px-4 rounded-lg font-semibold text-center transition-all"
-                style={{
-                  backgroundColor: 'var(--color-bg-tertiary)',
-                  color: 'var(--color-text-primary)',
-                }}
-                onMouseEnter={(e) => e.currentTarget.style.opacity = '0.8'}
-                onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
+                className="w-full btn-secondary text-center block"
               >
                 Mergi la start
               </a>
             </div>
 
-            {/* Error ID for support */}
             <p
               className="text-center mt-6 text-xs"
               style={{ color: 'var(--color-text-tertiary)' }}
             >
               ID eroare: {Date.now()}
-              {isDevelopment && ` | Erori: ${this.state.errorCount}`}
             </p>
           </div>
         </div>
@@ -169,7 +123,5 @@ export class ErrorBoundary extends React.Component {
 
 // eslint-disable-next-line react-refresh/only-export-components
 export function useErrorHandler() {
-  return (error) => {
-    throw error;
-  };
+  return (error) => { throw error; };
 }

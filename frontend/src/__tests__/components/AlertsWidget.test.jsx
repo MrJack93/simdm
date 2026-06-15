@@ -152,13 +152,13 @@ describe('AlertsWidget', () => {
   it('afișează numărul de produse care expiră în mai puțin de 7 zile', async () => {
     resolveConsumables([withExpiry(3), withExpiry(5)]);
     renderWithProviders(<AlertsWidget />);
-    expect(await screen.findByText(/2 consumabile expiră în <7 zile/)).toBeInTheDocument();
+    expect(await screen.findByText(/2 expiră în <7 zile/)).toBeInTheDocument();
   });
 
   it('afișează numărul de produse care expiră între 7 și 30 de zile', async () => {
     resolveConsumables([withExpiry(15), withExpiry(20), withExpiry(25)]);
     renderWithProviders(<AlertsWidget />);
-    expect(await screen.findByText(/3 consumabile expiră în <30 zile/)).toBeInTheDocument();
+    expect(await screen.findByText(/3 expiră în <30 zile/)).toBeInTheDocument();
   });
 
   it('navighează către pagina de consumabile la click pe alerta de stoc', async () => {

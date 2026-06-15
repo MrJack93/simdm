@@ -130,20 +130,20 @@ export default function VerificationsPage() {
     : 0;
 
   const getStatusColor = (status) => {
-    if (status === 'CONFORM') return 'bg-green-100 text-green-800';
-    if (status === 'EXPIRAT') return 'bg-red-100 text-red-800';
-    if (status === 'EXPIRA_CURAND') return 'bg-orange-100 text-orange-800';
-    if (status === 'NECONFORM') return 'bg-red-200 text-red-950 border border-red-400';
-    return 'bg-yellow-100 text-yellow-800';
+    if (status === 'CONFORM') return 'bg-[var(--color-success-bg)] text-[var(--color-success)]';
+    if (status === 'EXPIRAT') return 'bg-[var(--color-error-bg)] text-[var(--color-error)]';
+    if (status === 'NEVERIFICAT') return 'bg-[var(--color-warning-bg)] text-[var(--color-warning)]';
+    if (status === 'NECONFORM') return 'bg-[var(--color-error-bg)] text-[var(--color-error)] border border-[var(--color-error)]';
+    return 'bg-[var(--color-warning-bg)] text-[var(--color-warning)]';
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen p-6" style={{ backgroundColor: 'var(--color-bg-primary)' }}>
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-gray-900">Verificări Periodice</h1>
+        <h1 className="text-3xl">Verificări Periodice</h1>
         <button
           onClick={() => setShowUploadModal(true)}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          className="btn-primary"
         >
           Upload Certificat
         </button>
@@ -156,34 +156,34 @@ export default function VerificationsPage() {
             <h2 className="text-xl font-bold">Raport Conformitate</h2>
             <button
               onClick={handleDownloadComplianceReport}
-              className="px-3 py-2 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700"
+              className="btn-primary text-sm"
             >
               Descarca Raport (CSV)
             </button>
           </div>
           <div className="grid grid-cols-3 md:grid-cols-6 gap-4">
-            <div className="bg-white p-4 rounded-lg shadow text-center">
-              <p className="text-sm text-gray-600">Total</p>
+            <div className="bg-[var(--color-bg-secondary)] p-4 rounded-lg shadow text-center">
+              <p className="text-sm text-[var(--color-text-secondary)]">Total</p>
               <p className="text-2xl font-bold text-blue-700">{report.total}</p>
             </div>
-            <div className="bg-white p-4 rounded-lg shadow text-center">
-              <p className="text-sm text-gray-600">Valide</p>
+            <div className="bg-[var(--color-bg-secondary)] p-4 rounded-lg shadow text-center">
+              <p className="text-sm text-[var(--color-text-secondary)]">Valide</p>
               <p className="text-2xl font-bold text-green-700">{report.conform}</p>
             </div>
-            <div className="bg-white p-4 rounded-lg shadow text-center">
-              <p className="text-sm text-gray-600">Expira curand</p>
+            <div className="bg-[var(--color-bg-secondary)] p-4 rounded-lg shadow text-center">
+              <p className="text-sm text-[var(--color-text-secondary)]">Expira curand</p>
               <p className="text-2xl font-bold text-orange-700">{report.expiraCurand ?? 0}</p>
             </div>
-            <div className="bg-white p-4 rounded-lg shadow text-center">
-              <p className="text-sm text-gray-600">Expirat</p>
+            <div className="bg-[var(--color-bg-secondary)] p-4 rounded-lg shadow text-center">
+              <p className="text-sm text-[var(--color-text-secondary)]">Expirat</p>
               <p className="text-2xl font-bold text-red-700">{report.expirat}</p>
             </div>
-            <div className="bg-white p-4 rounded-lg shadow text-center">
-              <p className="text-sm text-gray-600">Neconforme</p>
+            <div className="bg-[var(--color-bg-secondary)] p-4 rounded-lg shadow text-center">
+              <p className="text-sm text-[var(--color-text-secondary)]">Neconforme</p>
               <p className="text-2xl font-bold text-red-900">{report.neconform ?? 0}</p>
             </div>
-            <div className="bg-white p-4 rounded-lg shadow text-center">
-              <p className="text-sm text-gray-600">Conformitate</p>
+            <div className="bg-[var(--color-bg-secondary)] p-4 rounded-lg shadow text-center">
+              <p className="text-sm text-[var(--color-text-secondary)]">Conformitate</p>
               <p className="text-2xl font-bold text-blue-700">{conformPct}%</p>
             </div>
           </div>
@@ -194,14 +194,14 @@ export default function VerificationsPage() {
       <div className="flex gap-3 mb-4">
         <button
           onClick={() => setShowFilters((v) => !v)}
-          className="px-4 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50"
+          className="px-4 py-2 border border-[var(--color-border)] rounded-lg text-sm hover:bg-[var(--color-bg-tertiary)]"
         >
           Filtrare
         </button>
       </div>
 
       {showFilters && (
-        <div className="bg-white p-4 rounded border mb-4">
+        <div className="bg-[var(--color-bg-secondary)] p-4 rounded border mb-4">
           <div className="flex gap-6 flex-wrap">
             <div>
               <p className="text-sm font-medium mb-1">Tip Verificare</p>
@@ -212,7 +212,7 @@ export default function VerificationsPage() {
                     checked={filterType === t}
                     onChange={() => applyFilter('type', t)}
                   />
-                  <span className="text-xs text-gray-700">{t}</span>
+                  <span className="text-xs text-[var(--color-text-primary)]">{t}</span>
                 </label>
               ))}
             </div>
@@ -225,7 +225,7 @@ export default function VerificationsPage() {
                     checked={filterStatus === s}
                     onChange={() => applyFilter('status', s)}
                   />
-                  <span className="text-xs text-gray-700">{s}</span>
+                  <span className="text-xs text-[var(--color-text-primary)]">{s}</span>
                 </label>
               ))}
             </div>
@@ -234,9 +234,9 @@ export default function VerificationsPage() {
       )}
 
       {/* Table */}
-      <div className="bg-white rounded-lg shadow overflow-hidden mb-4">
+      <div className="bg-[var(--color-bg-secondary)] rounded-lg shadow overflow-x-auto mb-4">
         <table className="w-full">
-          <thead className="bg-gray-100 border-b">
+          <thead className="bg-[var(--color-bg-tertiary)] border-b">
             <tr>
               <th role="columnheader" scope="col" className="px-6 py-3 text-left text-sm font-semibold">Dispozitiv</th>
               <th role="columnheader" scope="col" className="px-6 py-3 text-left text-sm font-semibold">Tip</th>
@@ -244,7 +244,7 @@ export default function VerificationsPage() {
               <th
                 role="columnheader"
                 scope="col"
-                className="px-6 py-3 text-left text-sm font-semibold cursor-pointer hover:bg-gray-200"
+                className="px-6 py-3 text-left text-sm font-semibold cursor-pointer hover:bg-[var(--color-bg-elevated)]"
                 onClick={() => setSortByExpiry((v) => !v)}
               >
                 Valid Until
@@ -257,7 +257,7 @@ export default function VerificationsPage() {
           <tbody className="divide-y">
             {verifications.length === 0 ? (
               <tr>
-                <td colSpan="7" className="px-6 py-8 text-center text-gray-500">
+                <td colSpan="7" className="px-6 py-8 text-center text-[var(--color-text-tertiary)]">
                   Nu există verificări
                 </td>
               </tr>
@@ -269,7 +269,7 @@ export default function VerificationsPage() {
                     )
                   : null;
                 return (
-                  <tr key={v.id} className="hover:bg-gray-50">
+                  <tr key={v.id} className="hover:bg-[var(--color-bg-tertiary)]">
                     <td className="px-6 py-4 text-sm font-medium">
                       {v.device?.name || v.deviceName}
                     </td>
@@ -299,7 +299,7 @@ export default function VerificationsPage() {
                     <td className="px-6 py-4 text-center">
                       <button
                         onClick={() => handleDownloadCertificate(v.id)}
-                        className="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded hover:bg-blue-200"
+                        className="px-2 py-1 text-xs bg-[var(--color-info-bg)] text-[var(--color-info)] rounded hover:bg-[var(--color-info-bg)]"
                       >
                         PDF
                       </button>
@@ -307,7 +307,7 @@ export default function VerificationsPage() {
                     <td className="px-6 py-4 text-center">
                       <button
                         onClick={() => setDeleteTarget(v)}
-                        className="px-2 py-1 text-xs bg-red-100 text-red-700 rounded hover:bg-red-200"
+                        className="px-2 py-1 text-xs bg-[var(--color-error-bg)] text-[var(--color-error)] rounded hover:bg-[var(--color-error-bg)]"
                       >
                         Șterge
                       </button>
@@ -325,7 +325,7 @@ export default function VerificationsPage() {
         <button
           onClick={() => setPage((p) => Math.max(1, p - 1))}
           disabled={page <= 1}
-          className="px-3 py-1 border rounded disabled:opacity-40 hover:bg-gray-100"
+          className="px-3 py-1 border rounded disabled:opacity-40 hover:bg-[var(--color-bg-tertiary)]"
         >
           Pagina anterioară
         </button>
@@ -335,7 +335,7 @@ export default function VerificationsPage() {
         <button
           onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
           disabled={page >= totalPages}
-          className="px-3 py-1 border rounded disabled:opacity-40 hover:bg-gray-100"
+          className="px-3 py-1 border rounded disabled:opacity-40 hover:bg-[var(--color-bg-tertiary)]"
         >
           Pagina următoare
         </button>
@@ -388,7 +388,7 @@ function UploadModal({ devices, onClose, onUpload }) {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 w-full max-w-md shadow-xl">
+      <div className="bg-[var(--color-bg-secondary)] rounded-lg p-6 w-full max-w-md shadow-xl">
         <h2 className="text-xl font-bold mb-4">Încarcă Certificat</h2>
 
         <div className="mb-3">
@@ -429,8 +429,8 @@ function UploadModal({ devices, onClose, onUpload }) {
         {formError && <p className="text-red-600 text-sm mb-3">{formError}</p>}
 
         <div className="flex gap-2 justify-end">
-          <button type="button" onClick={onClose} className="px-4 py-2 border rounded hover:bg-gray-100">Anulare</button>
-          <button type="button" onClick={handleSubmit} className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Salvare</button>
+          <button type="button" onClick={onClose} className="px-4 py-2 border rounded hover:bg-[var(--color-bg-tertiary)]">Anulare</button>
+          <button type="button" onClick={handleSubmit} className="btn-primary">Salvare</button>
         </div>
       </div>
     </div>
@@ -440,11 +440,11 @@ function UploadModal({ devices, onClose, onUpload }) {
 function ConfirmModal({ message, onConfirm, onCancel }) {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 w-full max-w-sm shadow-xl">
+      <div className="bg-[var(--color-bg-secondary)] rounded-lg p-6 w-full max-w-sm shadow-xl">
         <p className="mb-4">{message}</p>
         <div className="flex gap-2 justify-end">
-          <button type="button" onClick={onCancel} className="px-4 py-2 border rounded hover:bg-gray-100">Anulare</button>
-          <button type="button" onClick={onConfirm} className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Confirmare</button>
+          <button type="button" onClick={onCancel} className="px-4 py-2 border rounded hover:bg-[var(--color-bg-tertiary)]">Anulare</button>
+          <button type="button" onClick={onConfirm} className="btn-danger">Confirmare</button>
         </div>
       </div>
     </div>

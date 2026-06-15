@@ -1,7 +1,7 @@
 @import "tailwindcss";
 @import "./design-system.css";
 
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (&:is([data-theme="dark"] *));
 
 @layer base {
   html {
@@ -9,7 +9,7 @@
   }
 
   body {
-    @apply transition-colors bg-background text-foreground;
+    @apply transition-colors;
     background-color: var(--color-bg-primary);
     color: var(--color-text-primary);
     font-family: var(--font-family-base);
@@ -18,30 +18,30 @@
   }
 
   /*
-   * Titlurile moștenesc --color-text-primary implicit.
-   * Culoarea accent se aplică SELECTIV cu clasa utilitară .heading-accent,
-   * evitând portocaliul strident în contexte neutre (dialoguri, carduri info,
-   * secțiuni de eroare). Paginile care aveau style={{ color: '...' }} explicit
-   * rămân neschimbate — inline style are specificitate mai mare oricum.
+   * Titlurile folosesc font-family serif (Cormorant Garamond) pentru display.
+   * Weight 400 (regular) — serif nu se bolduie.
+   * Negative letter-spacing esențial pentru character-ul editorial.
    */
   h1 {
-    @apply text-4xl font-bold mb-6 leading-tight;
+    @apply text-4xl mb-6 leading-tight;
     font-family: var(--font-family-heading);
-    font-weight: 700;
+    font-weight: 400 !important;
+    letter-spacing: -0.02em;
     color: var(--color-text-primary);
   }
 
   h2 {
-    @apply text-2xl font-bold mb-4 leading-tight;
+    @apply text-2xl mb-4 leading-tight;
     font-family: var(--font-family-heading);
-    font-weight: 600;
+    font-weight: 400 !important;
+    letter-spacing: -0.01em;
     color: var(--color-text-primary);
   }
 
   h3 {
-    @apply text-xl font-bold mb-3;
+    @apply text-xl mb-3;
     font-family: var(--font-family-heading);
-    font-weight: 600;
+    font-weight: 500 !important;
     color: var(--color-text-primary);
   }
 
@@ -67,20 +67,13 @@
   }
 
   /*
-   * Efect hover valid pentru carduri.
-   * CORECTARE: hover:shadow-[var(--color-accent)] este sintaxă greșită în Tailwind —
-   * `box-shadow` cere o declarație completă, nu doar o culoare.
-   * --shadow-glow-accent din design-system.css conține declarația completă.
+   * Efect hover pentru carduri — color-block first, shadow rare.
+   * Subtle shadow lift doar la hover, nu constant.
    */
   .card-hover {
-    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    transition: box-shadow var(--transition-normal);
   }
   .card-hover:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-glow-accent);
-  }
-  .card-hover:active {
-    transform: translateY(-1px);
     box-shadow: var(--shadow-sm);
   }
 
@@ -92,19 +85,20 @@
   }
 
   .focusable-danger {
-    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2;
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2;
+    --tw-ring-color: var(--color-error);
     --tw-ring-offset-color: var(--color-bg-primary);
     transition: all var(--transition-fast);
   }
 
+  /* Button Primary — Coral #cc785c on cream */
   .btn-primary {
-    @apply inline-flex items-center justify-center px-4 py-3 min-h-[44px]
-           text-white font-bold rounded-lg
+    @apply inline-flex items-center justify-center px-5 py-2.5 min-h-[40px]
+           text-sm font-medium rounded-lg
            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
-           disabled:opacity-50 disabled:cursor-not-allowed
-           hover:shadow-lg hover:translate-y-[-2px];
+           disabled:opacity-50 disabled:cursor-not-allowed;
     background-color: var(--color-accent);
-    color: var(--color-bg-primary);
+    color: var(--color-on-primary, #ffffff);
     --tw-ring-color: var(--color-accent);
     --tw-ring-offset-color: var(--color-bg-primary);
     transition: all var(--transition-fast);
@@ -114,16 +108,22 @@
     background-color: var(--color-accent-hover);
   }
 
+  .btn-primary:active {
+    transform: scale(0.97);
+  }
+
   .btn-primary:disabled {
+    background-color: var(--color-disabled-bg);
     color: var(--color-disabled-text);
   }
 
+  /* Button Secondary — Cream + hairline border */
   .btn-secondary {
-    @apply inline-flex items-center justify-center px-4 py-3 min-h-[44px]
-           font-semibold rounded-lg
+    @apply inline-flex items-center justify-center px-5 py-2.5 min-h-[40px]
+           text-sm font-medium rounded-lg
            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
-           hover:shadow-md;
-    background-color: var(--color-bg-tertiary);
+           disabled:opacity-50 disabled:cursor-not-allowed;
+    background-color: var(--color-bg-primary);
     color: var(--color-text-primary);
     border: 1px solid var(--color-border);
     --tw-ring-color: var(--color-accent);
@@ -139,12 +139,15 @@
     color: var(--color-disabled-text);
   }
 
+  /* Button Danger */
   .btn-danger {
-    @apply inline-flex items-center justify-center px-4 py-3 min-h-[44px]
-           text-white font-bold rounded-lg
-           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2
-           hover:shadow-lg hover:translate-y-[-2px];
+    @apply inline-flex items-center justify-center px-5 py-2.5 min-h-[40px]
+           text-sm font-medium rounded-lg
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
+           disabled:opacity-50 disabled:cursor-not-allowed;
     background-color: var(--color-error);
+    color: #ffffff;
+    --tw-ring-color: var(--color-error);
     --tw-ring-offset-color: var(--color-bg-primary);
     transition: all var(--transition-fast);
   }
@@ -153,15 +156,20 @@
     background-color: var(--color-error-hover);
   }
 
+  .btn-danger:active {
+    transform: scale(0.97);
+  }
+
   .btn-danger:disabled {
     color: var(--color-disabled-text);
   }
 
+  /* Input Base — Cream + hairline border */
   .input-base {
-    @apply w-full px-4 py-3 min-h-[44px] border rounded-lg text-base
+    @apply w-full px-4 py-2.5 min-h-[40px] border rounded-lg text-sm
            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
            disabled:opacity-50 disabled:cursor-not-allowed;
-    background-color: var(--color-bg-tertiary);
+    background-color: var(--color-bg-primary);
     color: var(--color-text-primary);
     border-color: var(--color-border);
     --tw-ring-color: var(--color-accent);
@@ -176,31 +184,28 @@
 
   .input-base:focus {
     border-color: var(--color-accent);
-    box-shadow: 0 0 0 3px rgba(255, 181, 151, 0.1);
+    box-shadow: 0 0 0 3px rgba(204, 120, 92, 0.15);
   }
 
+  /* Label Base */
   .label-base {
     @apply text-sm mb-2 block font-medium;
     color: var(--color-text-secondary);
   }
 
+  /* Card Base — Cream card + hairline border */
   .card-base {
-    @apply border rounded-lg px-6 py-6;
+    @apply border rounded-xl px-6 py-6;
     background-color: var(--color-bg-secondary);
     border-color: var(--color-border);
-    transition: all var(--transition-normal);
+    transition: box-shadow var(--transition-normal);
   }
 
   .card-base:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: var(--shadow-sm);
   }
 
-  /*
-   * CORECTARE: opacity: 0.15 era aplicat pe ÎNTREGUL element, făcând textul
-   * practic invizibil. Fundalurile --color-*-bg au deja alpha 10% incorporat.
-   * role: alert nu există ca proprietate CSS — se pune ca atribut HTML pe element.
-   * Utilizare corectă: <div role="alert" className="alert-error">...</div>
-   */
+  /* Alert styles — cream bg + colored left border */
   .alert-error {
     @apply px-4 py-3 rounded-lg text-sm flex items-start gap-2;
     background-color: var(--color-error-bg);
@@ -229,44 +234,20 @@
   .icon-lg { font-size: var(--icon-size-lg); }
   .icon-xl { font-size: var(--icon-size-xl); }
 
-  /* Glassmorphism Utility */
-  .glass-effect {
-    background-color: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    backdrop-filter: blur(var(--glass-blur));
-    -webkit-backdrop-filter: blur(var(--glass-blur));
-  }
-
   /* Animations */
   @keyframes slideDown {
-    from {
-      opacity: 0;
-      transform: translateY(-10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
   @keyframes slideUp {
-    from {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
   @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
 
   .animate-slide-down {
@@ -313,7 +294,6 @@
 }
 
 @theme inline {
-  /* Aliniat cu design-system.css — ambele folosesc Plus Jakarta Sans */
   --font-heading: var(--font-family-heading);
   --font-sans: var(--font-family-base);
   --color-sidebar-ring: var(--sidebar-ring);
@@ -347,13 +327,13 @@
   --color-card: var(--card);
   --color-foreground: var(--foreground);
   --color-background: var(--background);
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 16px;
+  --radius-3xl: 16px;
+  --radius-4xl: 16px;
 }
 
 /*
@@ -364,19 +344,19 @@
  * theme toggle-ul (dark/light) al aplicației.
  */
 :root {
-  /* ── Fundal & text ── */
+  /* ── Fundal & text (cream canvas) ── */
   --background:        var(--color-bg-primary);
   --foreground:        var(--color-text-primary);
 
-  /* ── Card & Popover ── */
+  /* ── Card & Popover (cream cards) ── */
   --card:              var(--color-bg-secondary);
   --card-foreground:   var(--color-text-primary);
   --popover:           var(--color-bg-secondary);
   --popover-foreground:var(--color-text-primary);
 
-  /* ── Acțiuni primare ── */
+  /* ── Acțiuni primare (coral) ── */
   --primary:           var(--color-accent);
-  --primary-foreground:#1a1a1a;
+  --primary-foreground:#ffffff;
 
   /* ── Acțiuni secundare / muted ── */
   --secondary:         var(--color-bg-tertiary);
@@ -391,19 +371,19 @@
   /* ── Pericol / eroare ── */
   --destructive:       var(--color-error);
 
-  /* ── Borduri & inputs ── */
+  /* ── Borduri & inputs (hairline) ── */
   --border:            var(--color-border);
-  --input:             var(--color-bg-tertiary);
+  --input:             var(--color-bg-primary);
   --ring:              var(--color-accent);
 
-  /* ── Raze (aliniate cu SIMDM) ── */
-  --radius: 0.625rem;
+  /* ── Raze (aliniate cu DESIGN.md) ── */
+  --radius: 0.75rem;
 
   /* ── Sidebar ── */
   --sidebar:                   var(--color-bg-secondary);
   --sidebar-foreground:        var(--color-text-primary);
   --sidebar-primary:           var(--color-accent);
-  --sidebar-primary-foreground:#1a1a1a;
+  --sidebar-primary-foreground:#ffffff;
   --sidebar-accent:            var(--color-accent-subtle);
   --sidebar-accent-foreground: var(--color-accent);
   --sidebar-border:            var(--color-border);
@@ -416,9 +396,3 @@
   --chart-4: var(--color-status-loaned);
   --chart-5: var(--color-status-decommissioned);
 }
-
-/*
- * În light mode, html.light-mode actualizează --color-* din design-system.css,
- * iar bridge-ul de mai sus propagă automat valorile corecte. Nu e nevoie de
- * un bloc .dark separat.
- */

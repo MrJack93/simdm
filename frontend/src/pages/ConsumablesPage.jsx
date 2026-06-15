@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import api from '../api/axios';
 import { Plus } from 'lucide-react';
+import Skeleton from '../components/Skeleton';
 import { DeleteConfirmDialog } from '../components/DeleteConfirmDialog';
 import { useConsumablesWithFilters } from '../hooks/useConsumables';
 import { deleteConsumable, consumableKeys } from '../api/consumables';
@@ -179,11 +180,11 @@ function getExpiryBadge(expiryDate) {
   const daysUntilExpiry = Math.floor((expiry - now) / (1000 * 60 * 60 * 24));
 
   if (daysUntilExpiry < 0) {
-    return { label: '⚠️ Expirat', color: '#dc2626', textColor: 'white' };
+    return { label: '⚠️ Expirat', color: 'var(--color-error)', textColor: 'var(--color-on-primary)' };
   } else if (daysUntilExpiry < 7) {
-    return { label: `🔴 ${daysUntilExpiry} zile`, color: '#dc2626', textColor: 'white' };
+    return { label: `🔴 ${daysUntilExpiry} zile`, color: 'var(--color-error)', textColor: 'var(--color-on-primary)' };
   } else if (daysUntilExpiry < 30) {
-    return { label: `🟡 ${daysUntilExpiry} zile`, color: '#fbbf24', textColor: '#1a1a1a' };
+    return { label: `🟡 ${daysUntilExpiry} zile`, color: 'var(--color-warning)', textColor: 'var(--color-text-primary)' };
   }
 
   return null;
@@ -191,9 +192,9 @@ function getExpiryBadge(expiryDate) {
 
 function getStockStatus(quantity, minQuantity) {
   if (quantity >= minQuantity) {
-    return { icon: '✅', label: 'OK', color: '#4ade80', textColor: '#1a1a1a' };
+    return { icon: '✅', label: 'OK', color: 'var(--color-success)', textColor: 'var(--color-text-primary)' };
   } else {
-    return { icon: '❌', label: 'Sub minim', color: '#f87171', textColor: 'white' };
+    return { icon: '❌', label: 'Sub minim', color: 'var(--color-error)', textColor: 'var(--color-on-primary)' };
   }
 }
 
@@ -206,13 +207,13 @@ function getUrgencyBadge(quantity, minQuantity) {
   const percentage = getStockPercentage(quantity, minQuantity);
 
   if (percentage === 0) {
-    return { label: '🔴 DEPLIN EPUIZAT', color: '#dc2626', textColor: 'white', isUrgent: true };
+    return { label: '🔴 DEPLIN EPUIZAT', color: 'var(--color-error)', textColor: 'var(--color-on-primary)', isUrgent: true };
   } else if (percentage < 10) {
-    return { label: '⚠️ URGENT', color: '#dc2626', textColor: 'white', isUrgent: true };
+    return { label: '⚠️ URGENT', color: 'var(--color-error)', textColor: 'var(--color-on-primary)', isUrgent: true };
   } else if (percentage < 25) {
-    return { label: '🟠 CRITIC', color: '#ea580c', textColor: 'white', isUrgent: true };
+    return { label: '🟠 CRITIC', color: 'var(--color-warning)', textColor: 'var(--color-on-primary)', isUrgent: true };
   } else if (percentage < 50) {
-    return { label: '🟡 REDUS', color: '#fbbf24', textColor: '#1a1a1a', isUrgent: false };
+    return { label: '🟡 REDUS', color: 'var(--color-warning)', textColor: 'var(--color-text-primary)', isUrgent: false };
   }
 
   return null;
@@ -420,7 +421,7 @@ export default function ConsumablesPage() {
         {/* Table */}
         <div className="card-base overflow-x-auto mb-6">
           {consumablesLoading ? (
-            <div className="p-6 text-center">Se încarcă...</div>
+            <div className="p-6"><Skeleton variant="table" lines={5} /></div>
           ) : consumables.length === 0 ? (
             <div className="p-6 text-center">Nu sunt consumabile în baza de date.</div>
           ) : (
@@ -465,7 +466,7 @@ export default function ConsumablesPage() {
                       className="border-b transition hover:shadow-md"
                       style={{
                         borderColor: 'var(--color-border)',
-                        backgroundColor: isCritical ? 'rgba(248, 113, 113, 0.08)' : 'transparent',
+                        backgroundColor: isCritical ? 'var(--color-error-bg)' : 'transparent',
                       }}
                     >
                       <td className="px-4 py-3">
@@ -480,10 +481,10 @@ export default function ConsumablesPage() {
                       <td className="px-4 py-3">
                         {(() => {
                           const pct = getStockPercentage(consumable.quantity, consumable.minQuantity);
-                          let barColor = '#34d399'; // verde
-                          if (pct < 10) barColor = '#f87171'; // roșu
-                          else if (pct < 25) barColor = '#ea580c'; // portocaliu
-                          else if (pct < 50) barColor = '#fbbf24'; // galben
+                          let barColor = 'var(--color-success)'; // verde
+                          if (pct < 10) barColor = 'var(--color-error)'; // roșu
+                          else if (pct < 25) barColor = 'var(--color-warning)'; // portocaliu
+                          else if (pct < 50) barColor = 'var(--color-warning)'; // galben
 
                           return (
                             <div className="flex items-center gap-2 justify-center">
@@ -511,8 +512,8 @@ export default function ConsumablesPage() {
                           <span
                             className="px-3 py-1 rounded text-xs font-semibold inline-flex items-center gap-1"
                             style={{
-                              backgroundColor: '#4ade80',
-                              color: '#1a1a1a',
+                              backgroundColor: 'var(--color-success)',
+                              color: 'var(--color-text-primary)',
                               border: '1px solid currentColor',
                             }}
                           >
@@ -546,8 +547,8 @@ export default function ConsumablesPage() {
                           }}
                           className="p-2 rounded text-xs font-semibold focusable hover:opacity-70 transition flex items-center justify-center"
                           style={{
-                            backgroundColor: '#10b981',
-                            color: 'white',
+                            backgroundColor: 'var(--color-success)',
+                            color: 'var(--color-on-primary)',
                           }}
                           aria-label={`Adaugă stoc la ${consumable.name}`}
                         >
@@ -558,7 +559,7 @@ export default function ConsumablesPage() {
                           className="px-3 py-1 rounded text-xs font-semibold focusable hover:opacity-70 transition"
                           style={{
                             backgroundColor: 'var(--color-accent)',
-                            color: '#1a1a1a',
+                            color: 'var(--color-on-primary)',
                           }}
                         >
                           ✎ Edit
@@ -570,7 +571,7 @@ export default function ConsumablesPage() {
                             <button
                               disabled={deleteMutation.isPending}
                               className="px-3 py-1 rounded text-xs font-semibold focusable-danger hover:opacity-70 transition disabled:opacity-50"
-                              style={{ backgroundColor: '#dc2626', color: 'white' }}
+                              style={{ backgroundColor: 'var(--color-error)', color: 'var(--color-on-primary)' }}
                             >
                               {deleteMutation.isPending ? '...' : '✕'}
                             </button>

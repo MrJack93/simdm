@@ -1,7 +1,9 @@
 # Ghid Workflow Mobile — SIMDM
 
-**Audiență:** Bioinginer medical care lucrează pe teren (salon, bloc operator, depozit)  
-**Versiune:** 1.0 | **Data:** 2026-06-05
+**Audiență:** Bioinginer medical care lucrează pe teren (salon, bloc operator, depozit)
+**Versiune:** 2.0 | **Data:** 2026-06-13 | **Design:** Claude.ai editorial (cream/coral)
+
+> Design system: [`DESIGN.md`](../DESIGN.md) · Accesibilitate: [`ACCESSIBILITY-CHECKLIST.md`](ACCESSIBILITY-CHECKLIST.md)
 
 ---
 
@@ -69,20 +71,19 @@ Scenariul: Tocmai ai terminat mentenanța preventivă.
 
 ## Breakpoints Responsive
 
-| Ecran | Comportament |
-|-------|-------------|
-| < 768px (mobile) | Meniu hamburger, coloane tabel reduse, butoane full-width |
-| 768–1024px (tabletă) | Nav desktop vizibil, layout hybrid |
-| > 1024px (desktop) | Layout complet, toate coloanele vizibile |
-
----
+| Ecran | Lățime | Comportament |
+|-------|--------|-------------|
+| Mobil | < 768px | Hamburger nav, coloane tabel reduse, butoane full-width, font ≥14px |
+| Tabletă | 768–1024px | Nav desktop vizibil, layout hybrid, 2 coloane |
+| Desktop | > 1024px | Layout complet, toate coloanele vizibile, 3 coloane |
 
 ## Touch Target Guidelines
 
-Toate butoanele interactive respectă minimum **44×44px** (WCAG 2.5.5):
-- Butoanele de acțiune (Edit, Delete, +Stock): `p-1.5` = ~36px → înlocuiți cu `p-2` pe mobile dacă e nevoie
-- Butoanele principale (`btn-primary`, `btn-secondary`): `py-2 px-4` = ≥44px ✓
-- Select-uri și input-uri: `input-base` include `py-2` = ≥44px ✓
+Toate butoanele interactive respectă minimum **40×40px** (WCAG 2.2):
+- `btn-primary`: `py-2.5 px-5` = ≥40px ✓
+- `btn-secondary`: `py-2.5 px-5` = ≥40px ✓
+- `input-base`: `min-h-[40px]` = 40px ✓
+- Carduri: întreaga suprafață e tappable (>44px)
 
 ---
 

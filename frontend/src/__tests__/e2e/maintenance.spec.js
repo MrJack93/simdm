@@ -114,7 +114,7 @@ test.describe('E2E — Mentenanță Preventivă (Faza 3.1)', () => {
     await expect(nextBtn).toBeVisible();
 
     // Click next month
-    const initialText = await page.locator('body').textContent();
+    const _initialText = await page.locator('body').textContent();
     await nextBtn.click();
 
     // Wait a bit for calendar to update

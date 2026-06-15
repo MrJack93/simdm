@@ -90,12 +90,12 @@ export default function MppExecutionForm({ occurrenceId }) {
 
   return (
     <div className="p-4 max-w-3xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Execuție Mentenanță</h1>
+      <h1 className="text-2xl font-medium mb-4" style={{ fontFamily: 'var(--font-family-heading)' }}>Execuție Mentenanță</h1>
 
-      {error && <div className="bg-red-100 text-red-700 p-3 mb-4 rounded">{error}</div>}
+      {error && <div className="alert-error mb-4">{error}</div>}
 
       {success && (
-        <div className="bg-green-100 text-green-700 p-3 mb-4 rounded">
+        <div className="alert-success mb-4">
           <p>Mentenanță executată cu succes</p>
           <p>Formular Nr. 6</p>
           <a href={pdfUrl || '/files/formular6.pdf'} role="link">
@@ -155,14 +155,14 @@ export default function MppExecutionForm({ occurrenceId }) {
           <button
             type="button"
             onClick={handleAddConsumable}
-            className="px-3 py-1 bg-blue-500 text-white rounded"
+            className="btn-primary text-sm py-1 px-3"
           >
             Adaugă
           </button>
         </div>
         {stockError && <p className="text-red-600 text-sm">{stockError}</p>}
         {addedConsumables.map((c, i) => (
-          <div key={i} className="text-sm text-gray-700">
+          <div key={i} className="text-sm" style={{ color: 'var(--color-text-primary)' }}>
             {c.name} × {c.qty}
           </div>
         ))}
@@ -197,41 +197,45 @@ export default function MppExecutionForm({ occurrenceId }) {
       {/* Signatures */}
       <section className="grid grid-cols-2 gap-4 mb-6">
         <div>
-          <h3 className="font-semibold mb-1">Semnătură Inginer</h3>
+          <h3 className="font-medium mb-1" style={{ color: 'var(--color-text-primary)' }}>Semnătură Inginer</h3>
           <div
-            className="border-2 border-dashed rounded p-4 text-center cursor-pointer bg-white"
+            className="border-2 border-dashed rounded-lg p-4 text-center cursor-pointer transition-colors"
+            style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-bg-primary)' }}
             onClick={() => setEngineerSigned(true)}
           >
             {engineerSigned ? (
-              <span className="text-green-600">✓ Semnat</span>
+              <span style={{ color: 'var(--color-success)' }}>✓ Semnat</span>
             ) : (
-              <span className="text-gray-500">Click pentru semnătură</span>
+              <span style={{ color: 'var(--color-text-tertiary)' }}>Click pentru semnătură</span>
             )}
           </div>
           <button
             type="button"
             onClick={() => setEngineerSigned(false)}
-            className="mt-1 text-sm text-blue-500"
+            className="mt-1 text-sm hover:opacity-70"
+            style={{ color: 'var(--color-accent)' }}
           >
             Curăță
           </button>
         </div>
         <div>
-          <h3 className="font-semibold mb-1">Semnătură Manager</h3>
+          <h3 className="font-medium mb-1" style={{ color: 'var(--color-text-primary)' }}>Semnătură Manager</h3>
           <div
-            className="border-2 border-dashed rounded p-4 text-center cursor-pointer bg-white"
+            className="border-2 border-dashed rounded-lg p-4 text-center cursor-pointer transition-colors"
+            style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-bg-primary)' }}
             onClick={() => setManagerSigned(true)}
           >
             {managerSigned ? (
-              <span className="text-green-600">✓ Semnat</span>
+              <span style={{ color: 'var(--color-success)' }}>✓ Semnat</span>
             ) : (
-              <span className="text-gray-500">Click pentru semnătură</span>
+              <span style={{ color: 'var(--color-text-tertiary)' }}>Click pentru semnătură</span>
             )}
           </div>
           <button
             type="button"
             onClick={() => setManagerSigned(false)}
-            className="mt-1 text-sm text-blue-500"
+            className="mt-1 text-sm hover:opacity-70"
+            style={{ color: 'var(--color-accent)' }}
           >
             Curăță
           </button>
@@ -242,7 +246,7 @@ export default function MppExecutionForm({ occurrenceId }) {
         type="button"
         onClick={handleSubmit}
         disabled={loading}
-        className="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:bg-gray-400"
+        className="btn-primary"
       >
         {loading ? 'Se salvează...' : 'Salvare'}
       </button>

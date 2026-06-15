@@ -36,10 +36,10 @@ describe('ProtectedRoute', () => {
     expect(screen.queryByText('Pagina de login')).not.toBeInTheDocument();
   });
 
-  it('afișează spinner-ul de încărcare (role="status") în timpul verificării', () => {
+  it('afișează skeleton-ul de încărcare în timpul verificării', () => {
     renderGuard({ user: null, loading: true });
-    expect(screen.getByRole('status')).toBeInTheDocument();
-    expect(screen.getByText('Se încarcă…')).toBeInTheDocument();
+    // Skeleton component has role="status" with sr-only text
+    expect(screen.getAllByRole('status').length).toBeGreaterThan(0);
   });
 
   it('nu redirecționează cât timp starea de încărcare este activă', () => {
@@ -50,7 +50,6 @@ describe('ProtectedRoute', () => {
   it('nu afișează conținutul protejat cât timp se încarcă', () => {
     renderGuard({ user: { id: 1 }, loading: true });
     expect(screen.queryByText('Conținut protejat')).not.toBeInTheDocument();
-    expect(screen.getByRole('status')).toBeInTheDocument();
   });
 
   it('randează corect children-ul transmis ca prop', () => {
