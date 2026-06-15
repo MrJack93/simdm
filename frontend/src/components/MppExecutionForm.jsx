@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getConsumables } from '../api/consumables';
 import { executeMpp } from '../api/mppExecutions';
 import { InputGroup, InputGroupTextarea, InputGroupText } from '../components/ui/input-group';
-import { Field, FieldLabel, FieldDescription } from '../components/ui/field';
+import { Field, FieldLabel, FieldDescription, FieldError } from '../components/ui/field';
 
 const DEFAULT_CHECKLIST = [
   { id: 'check1', label: 'Verificare componentă', checked: false },
@@ -128,15 +128,15 @@ export default function MppExecutionForm({ occurrenceId }) {
 
       {/* Consumables */}
       <section className="mb-6">
-        <h2 className="font-semibold mb-2">Consumabile</h2>
-        <div className="flex gap-2 items-end mb-2">
-          <div>
-            <label htmlFor="consumable-select">Consumabil</label>
+        <h2 className="font-semibold mb-4">Consumabile</h2>
+        <div className="grid grid-cols-3 gap-3 mb-4">
+          <Field>
+            <FieldLabel htmlFor="consumable-select">Consumabil</FieldLabel>
             <select
               id="consumable-select"
               value={selectedConsumable}
               onChange={(e) => setSelectedConsumable(e.target.value)}
-              className="block border px-2 py-1 rounded"
+              className="input-base text-sm"
             >
               <option value="">-- Selectează --</option>
               {consumables.map((c) => (
@@ -145,58 +145,99 @@ export default function MppExecutionForm({ occurrenceId }) {
                 </option>
               ))}
             </select>
-          </div>
-          <div>
-            <label htmlFor="qty-input">Cantitate</label>
+          </Field>
+          <Field>
+            <FieldLabel htmlFor="qty-input">Cantitate</FieldLabel>
             <input
               id="qty-input"
               type="number"
               value={consumableQty}
               onChange={(e) => setConsumableQty(e.target.value)}
-              className="block border px-2 py-1 rounded w-20"
+              className="input-base text-sm"
               min="1"
+              placeholder="Min 1"
             />
+          </Field>
+          <div className="flex flex-col justify-end">
+            <button
+              type="button"
+              onClick={handleAddConsumable}
+              className="btn-primary text-sm py-2"
+            >
+              + Adaugă
+            </button>
           </div>
-          <button
-            type="button"
-            onClick={handleAddConsumable}
-            className="btn-primary text-sm py-1 px-3"
-          >
-            Adaugă
-          </button>
         </div>
-        {stockError && <p className="text-red-600 text-sm">{stockError}</p>}
-        {addedConsumables.map((c, i) => (
-          <div key={i} className="text-sm" style={{ color: 'var(--color-text-primary)' }}>
-            {c.name} × {c.qty}
+        {stockError && (
+          <FieldError className="mb-2">{stockError}</FieldError>
+        )}
+        {addedConsumables.length > 0 && (
+          <div className="bg-[var(--color-bg-secondary)] rounded-lg p-3 space-y-1">
+            {addedConsumables.map((c, i) => (
+              <div
+                key={i}
+                className="flex justify-between items-center text-sm p-2 rounded border"
+                style={{ borderColor: 'var(--color-border)' }}
+              >
+                <span style={{ color: 'var(--color-text-primary)' }}>
+                  {c.name}
+                </span>
+                <span className="font-medium" style={{ color: 'var(--color-text-secondary)' }}>
+                  ×{c.qty}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setAddedConsumables((prev) => prev.filter((_, idx) => idx !== i))}
+                  className="text-xs hover:opacity-70"
+                  style={{ color: 'var(--color-error)' }}
+                  aria-label={`Șterge ${c.name}`}
+                >
+                  ✕
+                </button>
+              </div>
+            ))}
           </div>
-        ))}
+        )}
       </section>
 
       {/* Photos */}
-      <section className="grid grid-cols-2 gap-4 mb-6">
-        <div>
-          <label htmlFor="before-photo">Fotografie Înainte</label>
+      <section className="grid grid-cols-2 gap-6 mb-6">
+        <Field>
+          <FieldLabel htmlFor="before-photo">Fotografie Înainte (Opțional)</FieldLabel>
           <input
             id="before-photo"
             type="file"
             accept="image/*"
             onChange={handleBeforePhoto}
-            className="block mt-1"
+            className="input-base cursor-pointer"
           />
-          {beforePhoto && <img src={beforePhoto} alt="Preview Înainte" className="mt-2 h-24 object-cover" />}
-        </div>
-        <div>
-          <label htmlFor="after-photo">Fotografie După</label>
+          {beforePhoto && (
+            <img
+              src={beforePhoto}
+              alt="Preview Înainte de reparație"
+              className="mt-2 h-32 w-full object-cover rounded-lg border"
+              style={{ borderColor: 'var(--color-border)' }}
+            />
+          )}
+        </Field>
+        <Field>
+          <FieldLabel htmlFor="after-photo">Fotografie După (Opțional)</FieldLabel>
           <input
             id="after-photo"
             type="file"
             accept="image/*"
             onChange={handleAfterPhoto}
-            className="block mt-1"
+            className="input-base cursor-pointer"
           />
-          {afterPhoto && <img src={afterPhoto} alt="Preview După" className="mt-2 h-24 object-cover" />}
-        </div>
+          {afterPhoto && (
+            <img
+              src={afterPhoto}
+              alt="Preview După reparație"
+              className="mt-2 h-32 w-full object-cover rounded-lg border"
+              style={{ borderColor: 'var(--color-border)' }}
+            />
+          )}
+        </Field>
       </section>
 
       {/* Observations */}

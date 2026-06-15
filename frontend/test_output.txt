@@ -1,0 +1,658 @@
+﻿
+[1m[46m RUN [49m[22m [36mv3.2.6 [39m[90mC:/Users/janea/simdm/frontend[39m
+
+ [31mтЭп[39m src/__tests__/MaintenanceCalendarPage.test.jsx [2m([22m[2m11 tests[22m[2m | [22m[31m1 failed[39m[2m | [22m[33m10 skipped[39m[2m)[22m[33m 1429[2mms[22m[39m
+   [2m[90mтЖУ[39m[22m MaintenanceCalendarPage тАФ Calendar & Apari╚Ыii MPP[2m > [22mrandeaz─Г calendar cu luna curenta
+   [2m[90mтЖУ[39m[22m MaintenanceCalendarPage тАФ Calendar & Apari╚Ыii MPP[2m > [22mafi╚Щeaz─Г apari╚Ыii mentenan╚Ы─Г pe calendar
+   [2m[90mтЖУ[39m[22m MaintenanceCalendarPage тАФ Calendar & Apari╚Ыii MPP[2m > [22mpermite navigare lun─Г anterioar─Г
+   [2m[90mтЖУ[39m[22m MaintenanceCalendarPage тАФ Calendar & Apari╚Ыii MPP[2m > [22mpermite navigare lun─Г urm─Гtoare
+   [2m[90mтЖУ[39m[22m MaintenanceCalendarPage тАФ Calendar & Apari╚Ыii MPP[2m > [22mafi╚Щeaz─Г status apari╚Ыie (SCADENT, PLANIFICAT)
+   [2m[90mтЖУ[39m[22m MaintenanceCalendarPage тАФ Calendar & Apari╚Ыii MPP[2m > [22mdeschide modal creare plan la click "Creare Plan"
+   [2m[90mтЖУ[39m[22m MaintenanceCalendarPage тАФ Calendar & Apari╚Ыii MPP[2m > [22mvalideaz─Г form creare plan (device + frequency)
+   [2m[90mтЖУ[39m[22m MaintenanceCalendarPage тАФ Calendar & Apari╚Ыii MPP[2m > [22mtrimite criere plan cu date valide
+   [2m[90mтЖУ[39m[22m MaintenanceCalendarPage тАФ Calendar & Apari╚Ыii MPP[2m > [22mafi╚Щeaz─Г mesaj dup─Г creare plan reu╚Щit─Г
+[31m   [31m├Ч[31m MaintenanceCalendarPage тАФ Calendar & Apari╚Ыii MPP[2m > [22mafi╚Щeaz─Г apari╚Ыii zilei la click pe data calendarului[39m[33m 1427[2mms[22m[39m
+[31m     тЖТ Unable to find an element with the text: /Apari╚Ыii mentenan╚Ы─Г/i. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"p-4 md:p-8 space-y-6"[31m
+    [36m>[31m
+      [36m<span[31m
+        [33mclass[31m=[32m"sr-only"[31m
+      [36m>[31m
+        [0mMaintenanceCalendarPage[0m
+      [36m</span>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4"[31m
+      [36m>[31m
+        [36m<div>[31m
+          [36m<h1[31m
+            [33mclass[31m=[32m"text-3xl font-bold mb-2"[31m
+            [33mstyle[31m=[32m"color: var(--healthcare-primary);"[31m
+          [36m>[31m
+            [0mCalendar Mentenan╚Ы─Г[0m
+          [36m</h1>[31m
+          [36m<p[31m
+            [33mclass[31m=[32m"text-sm"[31m
+            [33mstyle[31m=[32m"color: var(--color-text-secondary);"[31m
+          [36m>[31m
+            [0mVizualiza╚Ыi program─Гrile de mentenan╚Ы─Г preventiv─Г ╚Щi reprograma╚Ыi ocuren╚Ыele scadente[0m
+          [36m</p>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"flex gap-2 flex-wrap"[31m
+        [36m>[31m
+          [36m<button[31m
+            [33mclass[31m=[32m"px-4 py-2 border rounded-lg hover:bg-[var(--color-bg-elevated)] transition-all duration-150 text-sm font-semibold flex items-center gap-2 cursor-pointer"[31m
+            [33mstyle[31m=[32m"border-color: var(--color-border); color: var(--color-text-primary); background-color: var(--color-bg-secondary);"[31m
+          [36m>[31m
+            [0mDescarc─Г Formular Nr. 5 (PDF)[0m
+          [36m</button>[31m
+          [36m<button[31m
+            [33mclass[31m=[32m"px-4 py-2 rounded-lg transition-all duration-150 text-sm font-semibold flex items-center gap-2 cursor-pointer"[31m
+            [33mstyle[31m=[32m"background-color: var(--healthcare-primary); color: rgb(255, 255, 255);"[31m
+          [36m>[31m
+            [0mCreare Plan[0m
+          [36m</button>[31m
+        [36m</div>[31m
+      [36m</div>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"flex items-center gap-3 mb-4 flex-wrap"[31m
+      [36m>[31m
+        [36m<label[31m
+          [33mclass[31m=[32m"font-medium text-sm"[31m
+          [33mfor[31m=[32m"year-select"[31m
+          [33mstyle[31m=[32m"color: var(--color-text-secondary);"[31m
+        [36m>[31m
+          [0mAn:[0m
+        [36m</label>[31m
+        [36m<select[31m
+          [33mclass[31m=[32m"border rounded-lg px-3 py-1.5 text-sm cursor-pointer outline-none transition-all duration-150"[31m
+          [33mid[31m=[32m"year-select"[31m
+          [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary); border-color: var(--color-border);"[31m
+        [36m>[31m
+          [36m<option[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+            [33mvalue[31m=[32m"2025"[31m
+          [36m>[31m
+            [0m2025[0m
+          [36m</option>[31m
+          [36m<option[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+            [33mvalue[31m=[32m"2026"[31m
+          [36m>[31m
+            [0m2026[0m
+          [36m</option>[31m
+          [36m<option[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+            [33mvalue[31m=[32m"2027"[31m
+          [36m>[31m
+            [0m2027[0m
+          [36m</option>[31m
+          [36m<option[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+            [33mvalue[31m=[32m"2028"[31m
+          [36m>[31m
+            [0m2028[0m
+          [36m</option>[31m
+          [36m<option[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+            [33mvalue[31m=[32m"2029"[31m
+          [36m>[31m
+            [0m2029[0m
+          [36m</option>[31m
+        [36m</select>[31m
+        [36m<button[31m
+          [33maria-label[31m=[32m"Luna anterioar─Г"[31m
+          [33mclass[31m=[32m"px-3 py-1.5 border rounded-lg transition-all duration-150 text-sm font-medium hover:bg-[var(--color-bg-elevated)] cursor-pointer"[31m
+          [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary); border-color: var(--color-border);"[31m
+        [36m>[31m
+          [0mтА╣ Luna anterioar─Г[0m
+        [36m</button>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"font-semibold text-sm px-2"[31m
+          [33mstyle[31m=[32m"color: var(--color-text-primary);"[31m
+        [36m>[31m
+          [0mIunie[0m
+          [0m [0m
+          [0m2026[0m
+        [36m</span>[31m
+        [36m<button[31m
+          [33maria-label[31m=[32m"Luna urm─Гtoare"[31m
+          [33mclass[31m=[32m"px-3 py-1.5 border rounded-lg transition-all duration-150 text-sm font-medium hover:bg-[var(--color-bg-elevated)] cursor-pointer"[31m
+          [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary); border-color: var(--color-border);"[31m
+        [36m>[31m
+          [0mLuna urm─Гtoare тА║[0m
+        [36m</button>[31m
+      [36m</div>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"flex gap-3 mb-4 text-xs flex-wrap font-medium"[31m
+      [36m>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+          [33mstyle[31m=[32m"background-color: var(--color-success-bg); color: var(--color-success); border: 1px solid rgba(52, 211, 153, 0.2);"[31m
+        [36m>[31m
+          [0mPROGRAMAT[0m
+        [36m</span>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+          [33mstyle[31m=[32m"background-color: var(--color-warning-bg); color: var(--color-warning); border: 1px solid rgba(251, 191, 36, 0.2);"[31m
+        [36m>[31m
+          [0mSCADENT[0m
+        [36m</span>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+          [33mstyle[31m=[32m"background-color: var(--color-error-bg); color: var(--color-error); border: 1px solid rgba(248, 113, 113, 0.2);"[31m
+        [36m>[31m
+          [0mDEPASIT[0m
+        [36m</span>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+          [33mstyle[31m=[32m"background-color: var(--color-info-bg); color: var(--color-info); border: 1px solid rgba(96, 165, 250, 0.2);"[31m
+        [36m>[31m
+          [0mEFECTUAT[0m
+        [36m</span>[31m
+      [36m</div>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"rdp-root p-3 mb-6"[31m
+        [33mdata-mode[31m=[32m"single"[31m
+        [33mlang[31m=[32m"en-US"[31m
+      [36m>[31m
+        [36m<d...
+
+Ignored nodes: comments, script, style
+[36m<html>[31m
+  [36m<head />[31m
+  [36m<body>[31m
+    [36m<div>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"p-4 md:p-8 space-y-6"[31m
+      [36m>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"sr-only"[31m
+        [36m>[31m
+          [0mMaintenanceCalendarPage[0m
+        [36m</span>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4"[31m
+        [36m>[31m
+          [36m<div>[31m
+            [36m<h1[31m
+              [33mclass[31m=[32m"text-3xl font-bold mb-2"[31m
+              [33mstyle[31m=[32m"color: var(--healthcare-primary);"[31m
+            [36m>[31m
+              [0mCalendar Mentenan╚Ы─Г[0m
+            [36m</h1>[31m
+            [36m<p[31m
+              [33mclass[31m=[32m"text-sm"[31m
+              [33mstyle[31m=[32m"color: var(--color-text-secondary);"[31m
+            [36m>[31m
+              [0mVizualiza╚Ыi program─Гrile de mentenan╚Ы─Г preventiv─Г ╚Щi reprograma╚Ыi ocuren╚Ыele scadente[0m
+            [36m</p>[31m
+          [36m</div>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"flex gap-2 flex-wrap"[31m
+          [36m>[31m
+            [36m<button[31m
+              [33mclass[31m=[32m"px-4 py-2 border rounded-lg hover:bg-[var(--color-bg-elevated)] transition-all duration-150 text-sm font-semibold flex items-center gap-2 cursor-pointer"[31m
+              [33mstyle[31m=[32m"border-color: var(--color-border); color: var(--color-text-primary); background-color: var(--color-bg-secondary);"[31m
+            [36m>[31m
+              [0mDescarc─Г Formular Nr. 5 (PDF)[0m
+            [36m</button>[31m
+            [36m<button[31m
+              [33mclass[31m=[32m"px-4 py-2 rounded-lg transition-all duration-150 text-sm font-semibold flex items-center gap-2 cursor-pointer"[31m
+              [33mstyle[31m=[32m"background-color: var(--healthcare-primary); color: rgb(255, 255, 255);"[31m
+            [36m>[31m
+              [0mCreare Plan[0m
+            [36m</button>[31m
+          [36m</div>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"flex items-center gap-3 mb-4 flex-wrap"[31m
+        [36m>[31m
+          [36m<label[31m
+            [33mclass[31m=[32m"font-medium text-sm"[31m
+            [33mfor[31m=[32m"year-select"[31m
+            [33mstyle[31m=[32m"color: var(--color-text-secondary);"[31m
+          [36m>[31m
+            [0mAn:[0m
+          [36m</label>[31m
+          [36m<select[31m
+            [33mclass[31m=[32m"border rounded-lg px-3 py-1.5 text-sm cursor-pointer outline-none transition-all duration-150"[31m
+            [33mid[31m=[32m"year-select"[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary); border-color: var(--color-border);"[31m
+          [36m>[31m
+            [36m<option[31m
+              [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+              [33mvalue[31m=[32m"2025"[31m
+            [36m>[31m
+              [0m2025[0m
+            [36m</option>[31m
+            [36m<option[31m
+              [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+              [33mvalue[31m=[32m"2026"[31m
+            [36m>[31m
+              [0m2026[0m
+            [36m</option>[31m
+            [36m<option[31m
+              [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+              [33mvalue[31m=[32m"2027"[31m
+            [36m>[31m
+              [0m2027[0m
+            [36m</option>[31m
+            [36m<option[31m
+              [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+              [33mvalue[31m=[32m"2028"[31m
+            [36m>[31m
+              [0m2028[0m
+            [36m</option>[31m
+            [36m<option[31m
+              [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[31m
+              [33mvalue[31m=[32m"2029"[31m
+            [36m>[31m
+              [0m2029[0m
+            [36m</option>[31m
+          [36m</select>[31m
+          [36m<button[31m
+            [33maria-label[31m=[32m"Luna anterioar─Г"[31m
+            [33mclass[31m=[32m"px-3 py-1.5 border rounded-lg transition-all duration-150 text-sm font-medium hover:bg-[var(--color-bg-elevated)] cursor-pointer"[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary); border-color: var(--color-border);"[31m
+          [36m>[31m
+            [0mтА╣ Luna anterioar─Г[0m
+          [36m</button>[31m
+          [36m<span[31m
+            [33mclass[31m=[32m"font-semibold text-sm px-2"[31m
+            [33mstyle[31m=[32m"color: var(--color-text-primary);"[31m
+          [36m>[31m
+            [0mIunie[0m
+            [0m [0m
+            [0m2026[0m
+          [36m</span>[31m
+          [36m<button[31m
+            [33maria-label[31m=[32m"Luna urm─Гtoare"[31m
+            [33mclass[31m=[32m"px-3 py-1.5 border rounded-lg transition-all duration-150 text-sm font-medium hover:bg-[var(--color-bg-elevated)] cursor-pointer"[31m
+            [33mstyle[31m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary); border-color: var(--color-border);"[31m
+          [36m>[31m
+            [0mLuna urm─Гtoare тА║[0m
+          [36m</button>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"flex gap-3 mb-4 text-xs flex-wrap font-medium"[31m
+        [36m>[31m
+          [36m<span[31m
+            [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+            [33mstyle[31m=[32m"background-color: var(--color-success-bg); color: var(--color-success); border: 1px solid rgba(52, 211, 153, 0.2);"[31m
+          [36m>[31m
+            [0mPROGRAMAT[0m
+          [36m</span>[31m
+          [36m<span[31m
+            [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+            [33mstyle[31m=[32m"background-color: var(--color-warning-bg); color: var(--color-warning); border: 1px solid rgba(251, 191, 36, 0.2);"[31m
+          [36m>[31m
+            [0mSCADENT[0m
+          [36m</span>[31m
+          [36m<span[31m
+            [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+            [33mstyle[31m=[32m"background-color: var(--color-error-bg); color: var(--color-error); border: 1px solid rgba(248, 113, 113, 0.2);"[31m
+          [36m>[31m
+            [0mDEPASIT[0m
+          [36m</span>[31m
+          [36m<span[31m
+            [33mclass[31m=[32m"px-2.5 py-1 rounded"[31m
+            [33mstyle[31m=[32m"background-color: var(--color-info-bg); color: var(--color-info); border: 1px solid rgba(96, 16...[39m
+   [2m[90mтЖУ[39m[22m MaintenanceCalendarPage тАФ Calendar & Apari╚Ыii MPP[2m > [22mnavigare ├оntre luni nu pierde state-ul
+node.exe : 
+строка:1 знак:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Users\janea\AppData\Roaming\ ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+[31mтОптОптОптОптОптОптОп[39m[1m[41m Failed Tests 1 [49m[22m[31mтОптОптОптОптОптОптОп[39m
+
+[41m[1m FAIL [22m[49m src/__tests__/MaintenanceCalendarPage.test.jsx[2m > [22mMaintenanceCalendarPage тАФ 
+Calendar & Apari╚Ыii MPP[2m > [22mafi╚Щeaz─Г apari╚Ыii zilei la click pe data calendarului
+[31m[1mTestingLibraryElementError[22m[39m: Unable to find an element with the text: /Apari╚Ыii mentenan╚Ы─Г/i. 
+This could be because the text is broken up by multiple elements. In this case, you can provide a function for your 
+text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"p-4 md:p-8 space-y-6"[39m
+    [36m>[39m
+      [36m<span[39m
+        [33mclass[39m=[32m"sr-only"[39m
+      [36m>[39m
+        [0mMaintenanceCalendarPage[0m
+      [36m</span>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4"[39m
+      [36m>[39m
+        [36m<div>[39m
+          [36m<h1[39m
+            [33mclass[39m=[32m"text-3xl font-bold mb-2"[39m
+            [33mstyle[39m=[32m"color: var(--healthcare-primary);"[39m
+          [36m>[39m
+            [0mCalendar Mentenan╚Ы─Г[0m
+          [36m</h1>[39m
+          [36m<p[39m
+            [33mclass[39m=[32m"text-sm"[39m
+            [33mstyle[39m=[32m"color: var(--color-text-secondary);"[39m
+          [36m>[39m
+            [0mVizualiza╚Ыi program─Гrile de mentenan╚Ы─Г preventiv─Г ╚Щi reprograma╚Ыi ocuren╚Ыele scadente[0m
+          [36m</p>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"flex gap-2 flex-wrap"[39m
+        [36m>[39m
+          [36m<button[39m
+            [33mclass[39m=[32m"px-4 py-2 border rounded-lg hover:bg-[var(--color-bg-elevated)] transition-all 
+duration-150 text-sm font-semibold flex items-center gap-2 cursor-pointer"[39m
+            [33mstyle[39m=[32m"border-color: var(--color-border); color: var(--color-text-primary); 
+background-color: var(--color-bg-secondary);"[39m
+          [36m>[39m
+            [0mDescarc─Г Formular Nr. 5 (PDF)[0m
+          [36m</button>[39m
+          [36m<button[39m
+            [33mclass[39m=[32m"px-4 py-2 rounded-lg transition-all duration-150 text-sm font-semibold flex 
+items-center gap-2 cursor-pointer"[39m
+            [33mstyle[39m=[32m"background-color: var(--healthcare-primary); color: rgb(255, 255, 255);"[39m
+          [36m>[39m
+            [0mCreare Plan[0m
+          [36m</button>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"flex items-center gap-3 mb-4 flex-wrap"[39m
+      [36m>[39m
+        [36m<label[39m
+          [33mclass[39m=[32m"font-medium text-sm"[39m
+          [33mfor[39m=[32m"year-select"[39m
+          [33mstyle[39m=[32m"color: var(--color-text-secondary);"[39m
+        [36m>[39m
+          [0mAn:[0m
+        [36m</label>[39m
+        [36m<select[39m
+          [33mclass[39m=[32m"border rounded-lg px-3 py-1.5 text-sm cursor-pointer outline-none transition-all 
+duration-150"[39m
+          [33mid[39m=[32m"year-select"[39m
+          [33mstyle[39m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary); 
+border-color: var(--color-border);"[39m
+        [36m>[39m
+          [36m<option[39m
+            [33mstyle[39m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[39m
+            [33mvalue[39m=[32m"2025"[39m
+          [36m>[39m
+            [0m2025[0m
+          [36m</option>[39m
+          [36m<option[39m
+            [33mstyle[39m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[39m
+            [33mvalue[39m=[32m"2026"[39m
+          [36m>[39m
+            [0m2026[0m
+          [36m</option>[39m
+          [36m<option[39m
+            [33mstyle[39m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[39m
+            [33mvalue[39m=[32m"2027"[39m
+          [36m>[39m
+            [0m2027[0m
+          [36m</option>[39m
+          [36m<option[39m
+            [33mstyle[39m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[39m
+            [33mvalue[39m=[32m"2028"[39m
+          [36m>[39m
+            [0m2028[0m
+          [36m</option>[39m
+          [36m<option[39m
+            [33mstyle[39m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary);"[39m
+            [33mvalue[39m=[32m"2029"[39m
+          [36m>[39m
+            [0m2029[0m
+          [36m</option>[39m
+        [36m</select>[39m
+        [36m<button[39m
+          [33maria-label[39m=[32m"Luna anterioar─Г"[39m
+          [33mclass[39m=[32m"px-3 py-1.5 border rounded-lg transition-all duration-150 text-sm font-medium 
+hover:bg-[var(--color-bg-elevated)] cursor-pointer"[39m
+          [33mstyle[39m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary); 
+border-color: var(--color-border);"[39m
+        [36m>[39m
+          [0mтА╣ Luna anterioar─Г[0m
+        [36m</button>[39m
+        [36m<span[39m
+          [33mclass[39m=[32m"font-semibold text-sm px-2"[39m
+          [33mstyle[39m=[32m"color: var(--color-text-primary);"[39m
+        [36m>[39m
+          [0mIunie[0m
+          [0m [0m
+          [0m2026[0m
+        [36m</span>[39m
+        [36m<button[39m
+          [33maria-label[39m=[32m"Luna urm─Гtoare"[39m
+          [33mclass[39m=[32m"px-3 py-1.5 border rounded-lg transition-all duration-150 text-sm font-medium 
+hover:bg-[var(--color-bg-elevated)] cursor-pointer"[39m
+          [33mstyle[39m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary); 
+border-color: var(--color-border);"[39m
+        [36m>[39m
+          [0mLuna urm─Гtoare тА║[0m
+        [36m</button>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"flex gap-3 mb-4 text-xs flex-wrap font-medium"[39m
+      [36m>[39m
+        [36m<span[39m
+          [33mclass[39m=[32m"px-2.5 py-1 rounded"[39m
+          [33mstyle[39m=[32m"background-color: var(--color-success-bg); color: var(--color-success); border: 1px 
+solid rgba(52, 211, 153, 0.2);"[39m
+        [36m>[39m
+          [0mPROGRAMAT[0m
+        [36m</span>[39m
+        [36m<span[39m
+          [33mclass[39m=[32m"px-2.5 py-1 rounded"[39m
+          [33mstyle[39m=[32m"background-color: var(--color-warning-bg); color: var(--color-warning); border: 1px 
+solid rgba(251, 191, 36, 0.2);"[39m
+        [36m>[39m
+          [0mSCADENT[0m
+        [36m</span>[39m
+        [36m<span[39m
+          [33mclass[39m=[32m"px-2.5 py-1 rounded"[39m
+          [33mstyle[39m=[32m"background-color: var(--color-error-bg); color: var(--color-error); border: 1px solid 
+rgba(248, 113, 113, 0.2);"[39m
+        [36m>[39m
+          [0mDEPASIT[0m
+        [36m</span>[39m
+        [36m<span[39m
+          [33mclass[39m=[32m"px-2.5 py-1 rounded"[39m
+          [33mstyle[39m=[32m"background-color: var(--color-info-bg); color: var(--color-info); border: 1px solid 
+rgba(96, 165, 250, 0.2);"[39m
+        [36m>[39m
+          [0mEFECTUAT[0m
+        [36m</span>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"rdp-root p-3 mb-6"[39m
+        [33mdata-mode[39m=[32m"single"[39m
+        [33mlang[39m=[32m"en-US"[39m
+      [36m>[39m
+        [36m<d...
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body>[39m
+    [36m<div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"p-4 md:p-8 space-y-6"[39m
+      [36m>[39m
+        [36m<span[39m
+          [33mclass[39m=[32m"sr-only"[39m
+        [36m>[39m
+          [0mMaintenanceCalendarPage[0m
+        [36m</span>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4"[39m
+        [36m>[39m
+          [36m<div>[39m
+            [36m<h1[39m
+              [33mclass[39m=[32m"text-3xl font-bold mb-2"[39m
+              [33mstyle[39m=[32m"color: var(--healthcare-primary);"[39m
+            [36m>[39m
+              [0mCalendar Mentenan╚Ы─Г[0m
+            [36m</h1>[39m
+            [36m<p[39m
+              [33mclass[39m=[32m"text-sm"[39m
+              [33mstyle[39m=[32m"color: var(--color-text-secondary);"[39m
+            [36m>[39m
+              [0mVizualiza╚Ыi program─Гrile de mentenan╚Ы─Г preventiv─Г ╚Щi reprograma╚Ыi ocuren╚Ыele scadente[0m
+            [36m</p>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"flex gap-2 flex-wrap"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"px-4 py-2 border rounded-lg hover:bg-[var(--color-bg-elevated)] transition-all 
+duration-150 text-sm font-semibold flex items-center gap-2 cursor-pointer"[39m
+              [33mstyle[39m=[32m"border-color: var(--color-border); color: var(--color-text-primary); 
+background-color: var(--color-bg-secondary);"[39m
+            [36m>[39m
+              [0mDescarc─Г Formular Nr. 5 (PDF)[0m
+            [36m</button>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"px-4 py-2 rounded-lg transition-all duration-150 text-sm font-semibold flex 
+items-center gap-2 cursor-pointer"[39m
+              [33mstyle[39m=[32m"background-color: var(--healthcare-primary); color: rgb(255, 255, 255);"[39m
+            [36m>[39m
+              [0mCreare Plan[0m
+            [36m</button>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"flex items-center gap-3 mb-4 flex-wrap"[39m
+        [36m>[39m
+          [36m<label[39m
+            [33mclass[39m=[32m"font-medium text-sm"[39m
+            [33mfor[39m=[32m"year-select"[39m
+            [33mstyle[39m=[32m"color: var(--color-text-secondary);"[39m
+          [36m>[39m
+            [0mAn:[0m
+          [36m</label>[39m
+          [36m<select[39m
+            [33mclass[39m=[32m"border rounded-lg px-3 py-1.5 text-sm cursor-pointer outline-none transition-all 
+duration-150"[39m
+            [33mid[39m=[32m"year-select"[39m
+            [33mstyle[39m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary); 
+border-color: var(--color-border);"[39m
+          [36m>[39m
+            [36m<option[39m
+              [33mstyle[39m=[32m"background-color: var(--color-bg-secondary); color: 
+var(--color-text-primary);"[39m
+              [33mvalue[39m=[32m"2025"[39m
+            [36m>[39m
+              [0m2025[0m
+            [36m</option>[39m
+            [36m<option[39m
+              [33mstyle[39m=[32m"background-color: var(--color-bg-secondary); color: 
+var(--color-text-primary);"[39m
+              [33mvalue[39m=[32m"2026"[39m
+            [36m>[39m
+              [0m2026[0m
+            [36m</option>[39m
+            [36m<option[39m
+              [33mstyle[39m=[32m"background-color: var(--color-bg-secondary); color: 
+var(--color-text-primary);"[39m
+              [33mvalue[39m=[32m"2027"[39m
+            [36m>[39m
+              [0m2027[0m
+            [36m</option>[39m
+            [36m<option[39m
+              [33mstyle[39m=[32m"background-color: var(--color-bg-secondary); color: 
+var(--color-text-primary);"[39m
+              [33mvalue[39m=[32m"2028"[39m
+            [36m>[39m
+              [0m2028[0m
+            [36m</option>[39m
+            [36m<option[39m
+              [33mstyle[39m=[32m"background-color: var(--color-bg-secondary); color: 
+var(--color-text-primary);"[39m
+              [33mvalue[39m=[32m"2029"[39m
+            [36m>[39m
+              [0m2029[0m
+            [36m</option>[39m
+          [36m</select>[39m
+          [36m<button[39m
+            [33maria-label[39m=[32m"Luna anterioar─Г"[39m
+            [33mclass[39m=[32m"px-3 py-1.5 border rounded-lg transition-all duration-150 text-sm font-medium 
+hover:bg-[var(--color-bg-elevated)] cursor-pointer"[39m
+            [33mstyle[39m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary); 
+border-color: var(--color-border);"[39m
+          [36m>[39m
+            [0mтА╣ Luna anterioar─Г[0m
+          [36m</button>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"font-semibold text-sm px-2"[39m
+            [33mstyle[39m=[32m"color: var(--color-text-primary);"[39m
+          [36m>[39m
+            [0mIunie[0m
+            [0m [0m
+            [0m2026[0m
+          [36m</span>[39m
+          [36m<button[39m
+            [33maria-label[39m=[32m"Luna urm─Гtoare"[39m
+            [33mclass[39m=[32m"px-3 py-1.5 border rounded-lg transition-all duration-150 text-sm font-medium 
+hover:bg-[var(--color-bg-elevated)] cursor-pointer"[39m
+            [33mstyle[39m=[32m"background-color: var(--color-bg-secondary); color: var(--color-text-primary); 
+border-color: var(--color-border);"[39m
+          [36m>[39m
+            [0mLuna urm─Гtoare тА║[0m
+          [36m</button>[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[33m10 skipped[39m[90m (11)[39m
+[2m   Start at [22m 13:52:47
+[2m   Duration [22m 16.27s[2m (transform 893ms, setup 1.23s, collect 7.64s, tests 1.43s, environment 4.53s, prepare 432ms)[22m
+
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"flex gap-3 mb-4 text-xs flex-wrap font-medium"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"px-2.5 py-1 rounded"[39m
+            [33mstyle[39m=[32m"background-color: var(--color-success-bg); color: var(--color-success); border: 1px 
+solid rgba(52, 211, 153, 0.2);"[39m
+          [36m>[39m
+            [0mPROGRAMAT[0m
+          [36m</span>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"px-2.5 py-1 rounded"[39m
+            [33mstyle[39m=[32m"background-color: var(--color-warning-bg); color: var(--color-warning); border: 1px 
+solid rgba(251, 191, 36, 0.2);"[39m
+          [36m>[39m
+            [0mSCADENT[0m
+          [36m</span>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"px-2.5 py-1 rounded"[39m
+            [33mstyle[39m=[32m"background-color: var(--color-error-bg); color: var(--color-error); border: 1px 
+solid rgba(248, 113, 113, 0.2);"[39m
+          [36m>[39m
+            [0mDEPASIT[0m
+          [36m</span>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"px-2.5 py-1 rounded"[39m
+            [33mstyle[39m=[32m"background-color: var(--color-info-bg); color: var(--color-info); border: 1px solid 
+rgba(96, 16...
+[90m [2mтЭп[22m Proxy.waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:[2m163:27[22m[39m
+[36m [2mтЭп[22m src/__tests__/MaintenanceCalendarPage.test.jsx:[2m255:11[22m[39m
+    [90m253| [39m
+    [90m254| [39m    [90m// Details panel should appear[39m
+    [90m255| [39m    [35mawait[39m [34mwaitFor[39m(() [33m=>[39m {
+    [90m   | [39m          [31m^[39m
+    [90m256| [39m      expect(screen.getByText(/Apari╚Ыii mentenan╚Ы─Г/i)).toBeInTheDocumeтАж
+    [90m257| [39m    })[33m;[39m
+
+[31m[2mтОптОптОптОптОптОптОптОптОптОптОптОптОптОптОптОптОптОптОптОптОптОптОптОп[1/1]тОп[22m[39m
+

@@ -99,7 +99,7 @@ describe('ConsumablesPage — căutare, expirare și creare', () => {
     await user.click(screen.getByRole('button', { name: /Adaugă Consumabil/ }));
     await screen.findByText('Adaugă Consumabil Nou');
 
-    await user.type(screen.getByLabelText('Denumire'), 'Comprese sterile');
+    await user.type(screen.getByLabelText(/Denumire/), 'Comprese sterile');
     await user.type(screen.getByLabelText('Cantitate'), '200');
 
     await user.click(screen.getByRole('button', { name: 'Adaugă' }));

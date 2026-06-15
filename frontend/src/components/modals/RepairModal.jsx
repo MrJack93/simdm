@@ -107,10 +107,19 @@ export default function RepairModal({ ticket, onClose, onRefresh }) {
             <h3 className="font-medium mb-3" style={{ color: 'var(--color-text-primary)' }}>Piese Folosite</h3>
             <div className="p-4 rounded-lg mb-4 space-y-3" style={{ backgroundColor: 'var(--color-bg-tertiary)' }}>
               <div className="grid grid-cols-3 gap-3">
-                <input type="text" value={newPart.description} onChange={(e) => setNewPart({ ...newPart, description: e.target.value })} placeholder="Descriere" className="input-base text-sm" list="consumables-list" />
-                <datalist id="consumables-list">{consumables.map((c) => <option key={c.id} value={c.name} />)}</datalist>
-                <input type="number" min="1" value={newPart.qty} onChange={(e) => setNewPart({ ...newPart, qty: e.target.value })} placeholder="Cantitate" className="input-base text-sm" />
-                <input type="number" step="0.01" value={newPart.costUnit} onChange={(e) => setNewPart({ ...newPart, costUnit: e.target.value })} placeholder="Cost/buc" className="input-base text-sm" />
+                <div>
+                  <label htmlFor="part-description" className="label-base">Descriere piesă</label>
+                  <input id="part-description" type="text" value={newPart.description} onChange={(e) => setNewPart({ ...newPart, description: e.target.value })} placeholder="Descriere" className="input-base text-sm" list="consumables-list" />
+                  <datalist id="consumables-list">{consumables.map((c) => <option key={c.id} value={c.name} />)}</datalist>
+                </div>
+                <div>
+                  <label htmlFor="part-qty" className="label-base">Cantitate</label>
+                  <input id="part-qty" type="number" min="1" value={newPart.qty} onChange={(e) => setNewPart({ ...newPart, qty: e.target.value })} placeholder="Cantitate" className="input-base text-sm" />
+                </div>
+                <div>
+                  <label htmlFor="part-cost" className="label-base">Cost/buc</label>
+                  <input id="part-cost" type="number" step="0.01" value={newPart.costUnit} onChange={(e) => setNewPart({ ...newPart, costUnit: e.target.value })} placeholder="Cost/buc" className="input-base text-sm" />
+                </div>
               </div>
               <button onClick={handleAddPart} className="w-full btn-primary text-sm py-2">+ Adaugă Piesa</button>
             </div>
@@ -180,7 +189,7 @@ export default function RepairModal({ ticket, onClose, onRefresh }) {
             <label htmlFor="repair-engineer" className="label-base">Inginer Responsabil {engineerName && `(${engineerName})`} *</label>
             <input id="repair-engineer" type="text" value={engineerName} onChange={(e) => setEngineerName(e.target.value)} placeholder="Nume inginer" className="input-base mb-3" />
             <div className="rounded-lg overflow-hidden" style={{ border: '2px solid var(--color-border)', backgroundColor: 'var(--color-bg-primary)' }}>
-              <SignatureCanvas ref={engineerSigRef} canvasProps={{ width: 500, height: 150, style: { display: 'block', margin: '0 auto' } }} />
+              <SignatureCanvas ref={engineerSigRef} canvasProps={{ width: 500, height: 150, style: { display: 'block', margin: '0 auto', backgroundColor: 'var(--color-bg-primary)' } }} />
             </div>
             <button onClick={() => engineerSigRef.current?.clear()} className="mt-2 text-sm hover:opacity-70" style={{ color: 'var(--color-text-secondary)' }}>Șterge Semnătura</button>
           </div>
@@ -189,7 +198,7 @@ export default function RepairModal({ ticket, onClose, onRefresh }) {
             <label htmlFor="repair-manager" className="label-base">Manager/Supraveghetor {managerName && `(${managerName})`} (opțional)</label>
             <input id="repair-manager" type="text" value={managerName} onChange={(e) => setManagerName(e.target.value)} placeholder="Nume manager" className="input-base mb-3" />
             <div className="rounded-lg overflow-hidden" style={{ border: '2px solid var(--color-border)', backgroundColor: 'var(--color-bg-primary)' }}>
-              <SignatureCanvas ref={managerSigRef} canvasProps={{ width: 500, height: 150, style: { display: 'block', margin: '0 auto' } }} />
+              <SignatureCanvas ref={managerSigRef} canvasProps={{ width: 500, height: 150, style: { display: 'block', margin: '0 auto', backgroundColor: 'var(--color-bg-primary)' } }} />
             </div>
             <button onClick={() => managerSigRef.current?.clear()} className="mt-2 text-sm hover:opacity-70" style={{ color: 'var(--color-text-secondary)' }}>Șterge Semnătura</button>
           </div>

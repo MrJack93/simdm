@@ -418,3 +418,42 @@
   --chart-4: var(--color-status-loaned);
   --chart-5: var(--color-status-decommissioned);
 }
+
+/* ===== PHASE 5: DARK MODE REFINEMENTS ===== */
+
+/* Glass morphism modal overlay — better visibility */
+[data-theme="dark"] .modal-overlay,
+[data-theme="dark"] [role="dialog"] {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+}
+
+/* Focus ring with brighter accent in dark mode for visibility */
+[data-theme="dark"] button:focus-visible,
+[data-theme="dark"] a[href]:focus-visible,
+[data-theme="dark"] input:focus-visible,
+[data-theme="dark"] select:focus-visible,
+[data-theme="dark"] textarea:focus-visible {
+  --tw-ring-color: var(--color-accent-bright);
+}
+
+/* Better hover states in dark mode */
+[data-theme="dark"] .btn-primary:hover {
+  background-color: var(--color-accent-hover);
+}
+
+[data-theme="dark"] .card-hover:hover {
+  box-shadow: var(--shadow-md);
+}
+
+/* Ensure inputs are properly styled in dark mode */
+[data-theme="dark"] .input-base {
+  background-color: var(--color-bg-elevated);
+  color: var(--color-text-primary);
+  border-color: var(--color-border);
+}
+
+[data-theme="dark"] .input-base:focus {
+  border-color: var(--color-accent-bright);
+  background-color: var(--color-bg-elevated);
+}

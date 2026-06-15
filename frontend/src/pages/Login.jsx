@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { Eye, EyeOff } from 'lucide-react';
 import SkipLink from '../components/SkipLink';
+import Skeleton from '../components/Skeleton';
 
 // Schema validare — mesaje în română, consistente cu restul aplicației
 const loginSchema = z.object({
@@ -233,7 +234,7 @@ export default function Login() {
               aria-busy={isSubmitting}
               className="btn-primary w-full mt-6 flex items-center justify-center gap-2"
             >
-              {isSubmitting && <div className="loading-spinner loading-spinner-sm" aria-label="Se procesează" />}
+              {isSubmitting && <Skeleton lines={1} className="w-12 h-4 shrink-0" />}
               {isSubmitting ? 'Se conectează…' : rateLimited ? 'Așteaptă…' : 'Conectare'}
             </button>
           </form>

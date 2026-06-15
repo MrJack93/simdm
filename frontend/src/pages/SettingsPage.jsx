@@ -10,14 +10,7 @@ import api from '../api/axios';
 import { Switch } from '../components/ui/switch';
 import { Button } from '../components/ui/button';
 import { Field, FieldLabel, FieldDescription } from '../components/ui/field';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '../components/ui/dialog';
+import { ConfirmDialog } from '../components/modals/ConfirmDialog';
 
 const changePasswordSchema = z.object({
   currentPassword: z.string().min(1, 'Parolă curentă obligatorie'),
@@ -32,7 +25,6 @@ export default function SettingsPage() {
   const { theme, toggleTheme } = useTheme();
   const { user, logout } = useAuth();
   const [isChanging, setIsChanging] = useState(false);
-  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const { register, handleSubmit, formState: { errors }, reset } = useForm({
     resolver: zodResolver(changePasswordSchema),
   });
@@ -220,51 +212,19 @@ export default function SettingsPage() {
 
         {/* Logout */}
         <div className="space-y-4">
-          <Button
-            onClick={() => setShowLogoutConfirm(true)}
-            className="w-full"
-            size="lg"
-            variant="destructive"
+          <ConfirmDialog
+            title="Confirmare deconectare"
+            description="Ești sigur că vrei să te deconectezi? Datele nesalvate vor fi pierdute."
+            onConfirm={logout}
+            isDestructive
+            confirmText="Deconectare"
           >
-            <LogOut size={18} className="mr-2" /> Deconectare
-          </Button>
+            <Button className="w-full" size="lg" variant="destructive">
+              <LogOut size={18} className="mr-2" /> Deconectare
+            </Button>
+          </ConfirmDialog>
           <p className="text-xs text-center" style={{ color: 'var(--color-text-secondary)' }}>© 2026 SIMDM. Toate drepturile rezervate.</p>
         </div>
-
-        {/* Logout Confirmation Dialog */}
-        <Dialog open={showLogoutConfirm} onOpenChange={setShowLogoutConfirm}>
-          <DialogContent showCloseButton={false}>
-            <DialogHeader className="text-center">
-              <DialogTitle>Confirmare deconectare</DialogTitle>
-              <DialogDescription>
-                Ești sigur că vrei să te deconectezi?
-              </DialogDescription>
-            </DialogHeader>
-
-            <div className="text-sm text-center" style={{ color: 'var(--color-text-secondary)' }}>
-              <p>⚠️ Datele nesalvate vor fi pierdute.</p>
-            </div>
-
-            <DialogFooter>
-              <Button
-                variant="outline"
-                onClick={() => setShowLogoutConfirm(false)}
-                autoFocus
-              >
-                Anulare
-              </Button>
-              <Button
-                variant="destructive"
-                onClick={() => {
-                  setShowLogoutConfirm(false);
-                  logout();
-                }}
-              >
-                Deconectare
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
       </div>
     </div>
   );

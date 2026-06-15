@@ -33,6 +33,7 @@ export class ErrorBoundary extends React.Component {
         <div
           className="min-h-screen flex items-center justify-center p-4"
           style={{ backgroundColor: 'var(--color-bg-primary)' }}
+          role="alert"
         >
           <div
             className="max-w-md w-full rounded-xl p-8"

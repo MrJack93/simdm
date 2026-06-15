@@ -164,27 +164,27 @@ export default function VerificationsPage() {
           <div className="grid grid-cols-3 md:grid-cols-6 gap-4">
             <div className="bg-[var(--color-bg-secondary)] p-4 rounded-lg shadow text-center">
               <p className="text-sm text-[var(--color-text-secondary)]">Total</p>
-              <p className="text-2xl font-bold text-blue-700">{report.total}</p>
+              <p className="text-2xl font-bold text-[var(--color-info)]">{report.total}</p>
             </div>
             <div className="bg-[var(--color-bg-secondary)] p-4 rounded-lg shadow text-center">
               <p className="text-sm text-[var(--color-text-secondary)]">Valide</p>
-              <p className="text-2xl font-bold text-green-700">{report.conform}</p>
+              <p className="text-2xl font-bold text-[var(--color-success)]">{report.conform}</p>
             </div>
             <div className="bg-[var(--color-bg-secondary)] p-4 rounded-lg shadow text-center">
               <p className="text-sm text-[var(--color-text-secondary)]">Expira curand</p>
-              <p className="text-2xl font-bold text-orange-700">{report.expiraCurand ?? 0}</p>
+              <p className="text-2xl font-bold text-[var(--color-warning)]">{report.expiraCurand ?? 0}</p>
             </div>
             <div className="bg-[var(--color-bg-secondary)] p-4 rounded-lg shadow text-center">
               <p className="text-sm text-[var(--color-text-secondary)]">Expirat</p>
-              <p className="text-2xl font-bold text-red-700">{report.expirat}</p>
+              <p className="text-2xl font-bold text-[var(--color-error)]">{report.expirat}</p>
             </div>
             <div className="bg-[var(--color-bg-secondary)] p-4 rounded-lg shadow text-center">
               <p className="text-sm text-[var(--color-text-secondary)]">Neconforme</p>
-              <p className="text-2xl font-bold text-red-900">{report.neconform ?? 0}</p>
+              <p className="text-2xl font-bold text-[var(--color-error)]">{report.neconform ?? 0}</p>
             </div>
             <div className="bg-[var(--color-bg-secondary)] p-4 rounded-lg shadow text-center">
               <p className="text-sm text-[var(--color-text-secondary)]">Conformitate</p>
-              <p className="text-2xl font-bold text-blue-700">{conformPct}%</p>
+              <p className="text-2xl font-bold text-[var(--color-info)]">{conformPct}%</p>
             </div>
           </div>
         </section>
@@ -325,7 +325,7 @@ export default function VerificationsPage() {
         <button
           onClick={() => setPage((p) => Math.max(1, p - 1))}
           disabled={page <= 1}
-          className="px-3 py-1 border rounded disabled:opacity-40 hover:bg-[var(--color-bg-tertiary)]"
+          className="px-3 py-1 border rounded disabled:opacity-40 hover:bg-[var(--color-bg-tertiary)] min-h-[40px]"
         >
           Pagina anterioară
         </button>
@@ -335,7 +335,7 @@ export default function VerificationsPage() {
         <button
           onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
           disabled={page >= totalPages}
-          className="px-3 py-1 border rounded disabled:opacity-40 hover:bg-[var(--color-bg-tertiary)]"
+          className="px-3 py-1 border rounded disabled:opacity-40 hover:bg-[var(--color-bg-tertiary)] min-h-[40px]"
         >
           Pagina următoare
         </button>

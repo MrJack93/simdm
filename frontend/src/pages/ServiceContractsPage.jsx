@@ -101,7 +101,7 @@ export default function ServiceContractsPage() {
                     {contract.isExpired ? <span style={{ color: 'var(--color-error)' }}>Expirat</span> : <span style={{ color: 'var(--color-success)' }}>{contract.daysUntilExpiry}z</span>}
                   </td>
                   <td className="px-6 py-4 text-center">
-                    <button onClick={() => setDeleteTarget(contract)} className="text-xs px-2 py-1 rounded" style={{ backgroundColor: 'var(--color-error-bg)', color: 'var(--color-error)' }}>Șterge</button>
+                    <button onClick={() => setDeleteTarget(contract)} className="text-xs px-2 py-1 rounded min-h-[40px]" style={{ backgroundColor: 'var(--color-error-bg)', color: 'var(--color-error)' }}>Șterge</button>
                   </td>
                 </tr>
               ))}

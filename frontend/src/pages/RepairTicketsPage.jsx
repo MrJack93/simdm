@@ -19,6 +19,7 @@ import {
   DialogDescription,
   DialogFooter,
 } from '../components/ui/dialog';
+import { Field, FieldLabel, FieldError } from '../components/ui/field';
 
 const STATUSES = ['DESCHIS', 'IN_LUCRU', 'REZOLVAT', 'TESTAT', 'INCHIS'];
 
@@ -432,18 +433,18 @@ function CreateTicketModal({ devices, onClose, onCreate }) {
   const [priority, setPriority] = useState('NORMAL');
   const [description, setDescription] = useState('');
   const [reportedBy, setReportedBy] = useState('');
-  const [formError, setFormError] = useState('');
+  const [fieldErrors, setFieldErrors] = useState({});
 
   const handleSubmit = () => {
-    setFormError('');
+    const errors = {};
     if (!deviceId) {
-      setFormError('Campul Dispozitiv este obligatoriu');
-      return;
+      errors.deviceId = 'Campul Dispozitiv este obligatoriu';
     }
     if (!description.trim()) {
-      setFormError('Campul Descriere este obligatoriu');
-      return;
+      errors.description = 'Campul Descriere este obligatoriu';
     }
+    setFieldErrors(errors);
+    if (Object.keys(errors).length > 0) return;
     onCreate({
       deviceId: parseInt(deviceId),
       priority,
@@ -462,8 +463,8 @@ function CreateTicketModal({ devices, onClose, onCreate }) {
         </DialogHeader>
 
         <div className="space-y-4 py-4">
-          <div>
-            <label htmlFor="ticket-device" className="block font-medium mb-1">Dispozitiv</label>
+          <Field>
+            <FieldLabel htmlFor="ticket-device" required>Dispozitiv</FieldLabel>
             <select
               id="ticket-device"
               value={deviceId}
@@ -475,10 +476,11 @@ function CreateTicketModal({ devices, onClose, onCreate }) {
                 <option key={d.id} value={d.id}>{d.name}</option>
               ))}
             </select>
-          </div>
+            {fieldErrors.deviceId && <FieldError>{fieldErrors.deviceId}</FieldError>}
+          </Field>
 
-          <div>
-            <label htmlFor="ticket-priority" className="block font-medium mb-1">Prioritate</label>
+          <Field>
+            <FieldLabel htmlFor="ticket-priority">Prioritate</FieldLabel>
             <select
               id="ticket-priority"
               value={priority}
@@ -490,10 +492,10 @@ function CreateTicketModal({ devices, onClose, onCreate }) {
               <option value="RIDICAT">Ridicat</option>
               <option value="URGENT">Urgent</option>
             </select>
-          </div>
+          </Field>
 
-          <div>
-            <label htmlFor="ticket-desc" className="block font-medium mb-1">Descriere</label>
+          <Field>
+            <FieldLabel htmlFor="ticket-desc" required>Descriere</FieldLabel>
             <textarea
               id="ticket-desc"
               value={description}
@@ -501,10 +503,11 @@ function CreateTicketModal({ devices, onClose, onCreate }) {
               className="input-base h-20"
               placeholder="Descrieti defectiunea..."
             />
-          </div>
+            {fieldErrors.description && <FieldError>{fieldErrors.description}</FieldError>}
+          </Field>
 
-          <div>
-            <label htmlFor="ticket-reported" className="block font-medium mb-1">Raportat de</label>
+          <Field>
+            <FieldLabel htmlFor="ticket-reported">Raportat de</FieldLabel>
             <input
               id="ticket-reported"
               type="text"
@@ -512,9 +515,7 @@ function CreateTicketModal({ devices, onClose, onCreate }) {
               onChange={(e) => setReportedBy(e.target.value)}
               className="input-base"
             />
-          </div>
-
-          {formError && <p role="alert" className="text-sm" style={{ color: 'var(--color-error)' }}>{formError}</p>}
+          </Field>
         </div>
 
         <DialogFooter>

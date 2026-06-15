@@ -204,7 +204,7 @@ describe('RepairTicketsPage — Kanban Board cu State Machine', () => {
     await user.click(submitBtn);
 
     await waitFor(() => {
-      expect(screen.getByText(/obligatoriu/i)).toBeInTheDocument();
+      expect(screen.getAllByText(/obligatoriu/i).length).toBeGreaterThan(0);
     });
   });
 

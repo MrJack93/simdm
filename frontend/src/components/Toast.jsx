@@ -77,7 +77,7 @@ export default function Toast({ type = 'info', message, duration, onDismiss, cla
       </div>
       <button
         onClick={handleDismiss}
-        className="flex-shrink-0 p-1 hover:opacity-70 transition-opacity"
+        className="flex-shrink-0 p-1 hover:opacity-70 transition-opacity focusable"
         aria-label="Închide"
       >
         <X size={14} />

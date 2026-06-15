@@ -6,6 +6,7 @@ import { ErrorBoundary } from './components/ErrorBoundary';
 import Login from './pages/Login';
 import ProtectedRoute from './components/ProtectedRoute';
 import SkipLink from './components/SkipLink';
+import Skeleton from './components/Skeleton';
 import { Menu, X, Home, Warehouse, Package, Calendar, Cog, LogOut, Wrench, AlertTriangle, FileText, TicketCheck, CheckSquare, Briefcase } from 'lucide-react';
 
 // Lazy-loaded pages - code splitting pentru perf boost
@@ -30,10 +31,8 @@ function LoadingFallback() {
   return (
     <div className="flex items-center justify-center min-h-screen" style={{ backgroundColor: 'var(--color-bg-primary)' }}>
       <div className="text-center">
-        <div className="inline-block" style={{ color: 'var(--healthcare-primary)' }}>
-          <div className="animate-spin h-8 w-8 border-4 border-current border-t-transparent rounded-full mb-4"></div>
-          <p style={{ color: 'var(--color-text-secondary)' }}>Se încarcă...</p>
-        </div>
+        <Skeleton lines={1} variant="text" className="w-32 mb-4" />
+        <p style={{ color: 'var(--color-text-secondary)' }}>Se încarcă...</p>
       </div>
     </div>
   );

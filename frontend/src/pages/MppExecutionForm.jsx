@@ -3,7 +3,9 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import axios from '../api/axios';
 import SignatureCanvas from 'react-signature-canvas';
 import { useNavigate } from 'react-router-dom';
-import { Field, FieldLabel, FieldDescription } from '../components/ui/field';
+import { Field, FieldLabel, FieldDescription, FieldError } from '../components/ui/field';
+import { InputGroup, InputGroupAddon, InputGroupInput, InputGroupTextarea, InputGroupText } from '../components/ui/input-group';
+import { User, Clock, Hash } from 'lucide-react';
 
 export default function MppExecutionForm() {
   const navigate = useNavigate();
@@ -23,6 +25,7 @@ export default function MppExecutionForm() {
   const [consumablesUsed, setConsumablesUsed] = useState([]);
   const [photoBefore, setPhotoBefore] = useState(null);
   const [photoAfter, setPhotoAfter] = useState(null);
+  const [fieldErrors, setFieldErrors] = useState({});
 
   // Signature canvases
   const signaturePadEngineerRef = useRef(null);
@@ -140,26 +143,27 @@ export default function MppExecutionForm() {
 
   // Form validation
   const validateForm = () => {
+    const errors = {};
     if (!selectedDeviceId) {
-      setError('Selectează dispozitivul');
-      return false;
+      errors.device = 'Selectează dispozitivul';
     }
     if (!executedDate) {
-      setError('Selectează data execuției');
-      return false;
+      errors.date = 'Selectează data execuției';
     }
     if (!engineerName.trim()) {
-      setError('Introdu numele inginerului');
-      return false;
+      errors.engineer = 'Introdu numele inginerului';
     }
     if (checklist.length === 0) {
-      setError('Checklist-ul este gol');
+      errors.checklist = 'Checklist-ul este gol';
+    } else if (!checklist.some((item) => item.bifat)) {
+      errors.checklist = 'Cel puțin o operațiune trebuie bifată';
+    }
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      setError('');
       return false;
     }
-    if (!checklist.some((item) => item.bifat)) {
-      setError('Cel puțin o operațiune trebuie bifată');
-      return false;
-    }
+    setFieldErrors({});
     return true;
   };
 
@@ -216,6 +220,7 @@ export default function MppExecutionForm() {
     e.preventDefault();
     setError('');
     setSuccess('');
+    setFieldErrors({});
 
     if (!validateForm()) {
       return;
@@ -295,8 +300,8 @@ export default function MppExecutionForm() {
 
         {/* Execution Details */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-5 rounded-xl border transition-all duration-150" style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)' }}>
-          <div>
-            <label htmlFor="mpp-date" className="block text-sm font-semibold mb-2" style={{ color: 'var(--color-text-secondary)' }}>Data execuției *</label>
+          <Field>
+            <FieldLabel htmlFor="mpp-date" required>Data execuției</FieldLabel>
             <input
               id="mpp-date"
               type="date"
@@ -306,24 +311,28 @@ export default function MppExecutionForm() {
               style={{ backgroundColor: 'var(--color-bg-elevated)', color: 'var(--color-text-primary)', borderColor: 'var(--color-border)' }}
               required
             />
-          </div>
+            <FieldError>{fieldErrors.date}</FieldError>
+          </Field>
 
-          <div>
-            <label htmlFor="mpp-duration" className="block text-sm font-semibold mb-2" style={{ color: 'var(--color-text-secondary)' }}>Durată (minute)</label>
-            <input
-              id="mpp-duration"
-              type="number"
-              value={durationMinutes}
-              onChange={(e) => setDurationMinutes(e.target.value)}
-              placeholder="45"
-              className="w-full border rounded-lg px-3 py-2 text-sm outline-none transition-all duration-150"
-              style={{ backgroundColor: 'var(--color-bg-elevated)', color: 'var(--color-text-primary)', borderColor: 'var(--color-border)' }}
-              min="1"
-            />
-          </div>
+          <Field>
+            <FieldLabel htmlFor="mpp-duration">Durată (minute)</FieldLabel>
+            <InputGroup>
+              <InputGroupAddon align="start">
+                <Clock size={16} />
+              </InputGroupAddon>
+              <InputGroupInput
+                id="mpp-duration"
+                type="number"
+                value={durationMinutes}
+                onChange={(e) => setDurationMinutes(e.target.value)}
+                placeholder="45"
+                min="1"
+              />
+            </InputGroup>
+          </Field>
 
-          <div>
-            <label htmlFor="mpp-result" className="block text-sm font-semibold mb-2" style={{ color: 'var(--color-text-secondary)' }}>Rezultat *</label>
+          <Field>
+            <FieldLabel htmlFor="mpp-result" required>Rezultat</FieldLabel>
             <select
               id="mpp-result"
               value={result}
@@ -334,22 +343,25 @@ export default function MppExecutionForm() {
               <option value="FUNCTIONAL" style={{ backgroundColor: 'var(--color-bg-elevated)', color: 'var(--color-text-primary)' }}>✅ Funcțional</option>
               <option value="DEFECT" style={{ backgroundColor: 'var(--color-bg-elevated)', color: 'var(--color-text-primary)' }}>❌ Defect</option>
             </select>
-          </div>
+          </Field>
         </div>
 
         {/* Engineer Name */}
         <div className="p-5 rounded-xl border transition-all duration-150" style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)' }}>
           <label htmlFor="mpp-engineer" className="block text-sm font-semibold mb-2" style={{ color: 'var(--color-text-secondary)' }}>Inginer responsabil *</label>
-          <input
-            id="mpp-engineer"
-            type="text"
-            value={engineerName}
-            onChange={(e) => setEngineerName(e.target.value)}
-            placeholder="Ing. Ion Popescu"
-            className="w-full border rounded-lg px-3 py-2 text-sm outline-none transition-all duration-150"
-            style={{ backgroundColor: 'var(--color-bg-elevated)', color: 'var(--color-text-primary)', borderColor: 'var(--color-border)' }}
-            required
-          />
+          <InputGroup>
+            <InputGroupAddon align="start">
+              <User size={16} />
+            </InputGroupAddon>
+            <InputGroupInput
+              id="mpp-engineer"
+              type="text"
+              value={engineerName}
+              onChange={(e) => setEngineerName(e.target.value)}
+              placeholder="Ing. Ion Popescu"
+              required
+            />
+          </InputGroup>
         </div>
 
         {/* Checklist */}
@@ -410,18 +422,21 @@ export default function MppExecutionForm() {
                       </option>
                     ))}
                   </select>
-                  <input
-                    type="number"
-                    value={item.qty}
-                    onChange={(e) =>
-                      handleUpdateConsumable(idx, 'qty', e.target.value)
-                    }
-                    placeholder="Cantitate"
-                    aria-label="Cantitate consumabil"
-                    className="w-24 border rounded-lg px-3 py-2 text-sm outline-none transition-all duration-150"
-                    style={{ backgroundColor: 'var(--color-bg-elevated)', color: 'var(--color-text-primary)', borderColor: 'var(--color-border)' }}
-                    min="1"
-                  />
+                  <InputGroup className="w-24">
+                    <InputGroupInput
+                      type="number"
+                      value={item.qty}
+                      onChange={(e) =>
+                        handleUpdateConsumable(idx, 'qty', e.target.value)
+                      }
+                      placeholder="Cantitate"
+                      aria-label="Cantitate consumabil"
+                      min="1"
+                    />
+                    <InputGroupAddon align="end">
+                      <Hash size={14} />
+                    </InputGroupAddon>
+                  </InputGroup>
                   <button
                     type="button"
                     onClick={() => handleRemoveConsumable(idx)}

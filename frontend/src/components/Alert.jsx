@@ -44,7 +44,7 @@ export default function Alert({ type = 'info', children, dismissible = false, on
       {dismissible && (
         <button
           onClick={onDismiss}
-          className="flex-shrink-0 p-1 hover:opacity-70 transition-opacity"
+          className="flex-shrink-0 p-1 hover:opacity-70 transition-opacity focusable"
           aria-label="Închide alerta"
         >
           <X size={14} />

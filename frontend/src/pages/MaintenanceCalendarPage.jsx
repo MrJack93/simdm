@@ -9,6 +9,8 @@ import {
 } from '../api/maintenancePlans';
 import { getDevices } from '../api/devices';
 import { Calendar } from '../components/ui/calendar';
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '../components/ui/drawer';
+import { useMediaQuery } from '../hooks/useMediaQuery';
 
 const MONTHS_RO = [
   'Ianuarie', 'Februarie', 'Martie', 'Aprilie', 'Mai', 'Iunie',
@@ -37,6 +39,7 @@ function getStatusStyle(status) {
 export default function MaintenanceCalendarPage() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const isDesktop = useMediaQuery('(min-width: 768px)');
 
   const [selectedYear, setSelectedYear] = useState(CURRENT_YEAR);
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
@@ -370,8 +373,67 @@ export default function MaintenanceCalendarPage() {
                   </div>
                 </div>
 
-                {/* Reschedule inline form */}
-                {rescheduleOccId === occ.id && (
+                {/* Reschedule form: Drawer on mobile, inline on desktop */}
+                {!isDesktop && (
+                  <Drawer
+                    open={rescheduleOccId === occ.id}
+                    onOpenChange={(open) => {
+                      if (!open) setRescheduleOccId(null);
+                    }}
+                  >
+                    <DrawerContent>
+                      <DrawerHeader>
+                        <DrawerTitle>Reprogramare ocurență</DrawerTitle>
+                      </DrawerHeader>
+                      <div className="px-4 pb-6 space-y-4">
+                        <div>
+                          <label htmlFor={`drawer-reschedule-date-${occ.id}`} className="block text-xs font-medium mb-1" style={{ color: 'var(--color-text-secondary)' }}>Data nouă</label>
+                          <input
+                            id={`drawer-reschedule-date-${occ.id}`}
+                            type="date"
+                            value={rescheduleData.newDate}
+                            onChange={(e) => setRescheduleData((d) => ({ ...d, newDate: e.target.value }))}
+                            className="input-base w-full"
+                          />
+                        </div>
+                        <div>
+                          <label htmlFor={`drawer-reschedule-reason-${occ.id}`} className="block text-xs font-medium mb-1" style={{ color: 'var(--color-text-secondary)' }}>
+                            Motiv <span style={{ color: 'var(--color-text-tertiary)' }}>(min 5 caractere)</span>
+                          </label>
+                          <textarea
+                            id={`drawer-reschedule-reason-${occ.id}`}
+                            value={rescheduleData.reason}
+                            onChange={(e) => setRescheduleData((d) => ({ ...d, reason: e.target.value }))}
+                            rows={3}
+                            placeholder="Ex: Bioinginerul nu era disponibil"
+                            className="input-base w-full"
+                          />
+                        </div>
+                        {rescheduleError && (
+                          <p role="alert" aria-live="assertive" className="text-xs" style={{ color: 'var(--color-error)' }}>{rescheduleError}</p>
+                        )}
+                        <div className="flex gap-2 pt-4">
+                          <button
+                            onClick={() => { setRescheduleOccId(null); setRescheduleError(''); }}
+                            className="btn-secondary flex-1"
+                          >
+                            Anulare
+                          </button>
+                          <button
+                            onClick={() => handleRescheduleSubmit(occ.id)}
+                            disabled={rescheduleMutation.isPending}
+                            className="btn-primary flex-1 disabled:opacity-50"
+                          >
+                            {rescheduleMutation.isPending ? 'Se salvează...' : 'Salvează'}
+                          </button>
+                        </div>
+                      </div>
+                    </DrawerContent>
+                  </Drawer>
+                )}
+
+                {/* Desktop: inline form */}
+                {isDesktop && rescheduleOccId === occ.id && (
                   <div className="mt-4 p-4 rounded-lg border transition-all duration-150" style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-warning)' }}>
                     <h3 className="text-sm font-semibold mb-3" style={{ color: 'var(--color-text-primary)' }}>Reprogramare ocurență</h3>
                     <div className="mb-3">
@@ -381,8 +443,7 @@ export default function MaintenanceCalendarPage() {
                         type="date"
                         value={rescheduleData.newDate}
                         onChange={(e) => setRescheduleData((d) => ({ ...d, newDate: e.target.value }))}
-                        className="border rounded-lg px-3 py-2 text-sm w-full outline-none transition-all duration-150"
-                        style={{ backgroundColor: 'var(--color-bg-elevated)', color: 'var(--color-text-primary)', borderColor: 'var(--color-border)' }}
+                        className="input-base w-full"
                       />
                     </div>
                     <div className="mb-3">
@@ -395,8 +456,7 @@ export default function MaintenanceCalendarPage() {
                         onChange={(e) => setRescheduleData((d) => ({ ...d, reason: e.target.value }))}
                         rows={2}
                         placeholder="Ex: Bioinginerul nu era disponibil"
-                        className="border rounded-lg px-3 py-2 text-sm w-full outline-none transition-all duration-150"
-                        style={{ backgroundColor: 'var(--color-bg-elevated)', color: 'var(--color-text-primary)', borderColor: 'var(--color-border)' }}
+                        className="input-base w-full"
                       />
                     </div>
                     {rescheduleError && (
@@ -406,15 +466,13 @@ export default function MaintenanceCalendarPage() {
                       <button
                         onClick={() => handleRescheduleSubmit(occ.id)}
                         disabled={rescheduleMutation.isPending}
-                        className="px-4 py-1.5 text-xs text-white rounded-lg hover:opacity-90 disabled:opacity-50 transition-all duration-150 cursor-pointer"
-                        style={{ backgroundColor: 'var(--color-warning)', color: 'var(--color-bg-primary)', fontWeight: 'bold' }}
+                        className="btn-primary text-xs disabled:opacity-50"
                       >
                         {rescheduleMutation.isPending ? 'Se salvează...' : 'Salvează'}
                       </button>
                       <button
                         onClick={() => { setRescheduleOccId(null); setRescheduleError(''); }}
-                        className="px-4 py-1.5 text-xs border rounded-lg hover:bg-[var(--color-bg-elevated)] transition-all duration-150 cursor-pointer"
-                        style={{ borderColor: 'var(--color-border)', color: 'var(--color-text-primary)', backgroundColor: 'transparent' }}
+                        className="btn-secondary text-xs"
                       >
                         Anulare
                       </button>

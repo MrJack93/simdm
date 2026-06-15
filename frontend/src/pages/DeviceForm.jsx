@@ -6,14 +6,14 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import Select from 'react-select';
-import DatePicker from 'react-datepicker';
+import { DatePicker } from '../components/ui/date-picker';
 import { toast } from 'react-toastify';
 import { deviceSchema } from '../schemas/deviceSchema';
 import { useDevice } from '../hooks/useDevices';
 import { useSections } from '../hooks/useSections';
 import { createDevice, updateDevice, deviceKeys } from '../api/devices';
 import api from '../api/axios';
-import 'react-datepicker/dist/react-datepicker.css';
+import { Field, FieldLabel, FieldError } from '../components/ui/field';
 
 // Stilurile pentru react-select sunt extrase la nivel de modul.
 // Anterior erau definite inline de 3 ori — câte un obiect nou la fiecare render
@@ -366,10 +366,8 @@ export default function DeviceForm() {
             <div className="card-base p-6 animate-slide-up space-y-4">
               <h2 className="text-xl font-semibold">Identificare Dispozitiv</h2>
 
-              <div>
-                <label htmlFor="inventoryNumber" className="label-base">
-                  Numărul inventarului *
-                </label>
+              <Field>
+                <FieldLabel htmlFor="inventoryNumber" required>Numărul inventarului</FieldLabel>
                 <input
                   {...register('inventoryNumber')}
                   id="inventoryNumber"
@@ -378,17 +376,13 @@ export default function DeviceForm() {
                   aria-invalid={!!errors.inventoryNumber}
                   aria-describedby={errors.inventoryNumber ? 'inventoryNumber-error' : undefined}
                 />
-                {errors.inventoryNumber && (
-                  <p id="inventoryNumber-error" style={{ color: 'var(--color-error)' }} className="text-sm mt-1" role="alert">
-                    {errors.inventoryNumber.message}
-                  </p>
-                )}
-              </div>
+                <FieldError id="inventoryNumber-error">
+                  {errors.inventoryNumber?.message}
+                </FieldError>
+              </Field>
 
-              <div>
-                <label htmlFor="name" className="label-base">
-                  Denumire *
-                </label>
+              <Field>
+                <FieldLabel htmlFor="name" required>Denumire</FieldLabel>
                 <input
                   {...register('name')}
                   id="name"
@@ -397,27 +391,21 @@ export default function DeviceForm() {
                   aria-invalid={!!errors.name}
                   aria-describedby={errors.name ? 'name-error' : undefined}
                 />
-                {errors.name && (
-                  <p id="name-error" style={{ color: 'var(--color-error)' }} className="text-sm mt-1" role="alert">
-                    {errors.name.message}
-                  </p>
-                )}
-              </div>
+                <FieldError id="name-error">
+                  {errors.name?.message}
+                </FieldError>
+              </Field>
 
               <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label htmlFor="model" className="label-base">
-                    Model
-                  </label>
+                <Field>
+                  <FieldLabel htmlFor="model">Model</FieldLabel>
                   <input {...register('model')} id="model" className="input-base w-full" />
-                </div>
+                </Field>
 
-                <div>
-                  <label htmlFor="serialNumber" className="label-base">
-                    Seria
-                  </label>
+                <Field>
+                  <FieldLabel htmlFor="serialNumber">Seria</FieldLabel>
                   <input {...register('serialNumber')} id="serialNumber" className="input-base w-full" />
-                </div>
+                </Field>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
@@ -539,19 +527,16 @@ export default function DeviceForm() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="acquisitionDate" className="label-base">
-                    Data achiziției
-                  </label>
                   <Controller
                     control={control}
                     name="acquisitionDate"
                     render={({ field }) => (
                       <DatePicker
-                        selected={field.value ? new Date(field.value) : null}
-                        onChange={(date) => field.onChange(date?.toISOString())}
-                        dateFormat="dd/MM/yyyy"
-                        className="input-base w-full"
-                        placeholderText="DD/MM/YYYY"
+                        label="Data achiziției"
+                        id="acquisitionDate"
+                        value={field.value ? new Date(field.value) : undefined}
+                        onSelect={(date) => field.onChange(date?.toISOString())}
+                        placeholder="DD/MM/YYYY"
                       />
                     )}
                   />
@@ -563,19 +548,16 @@ export default function DeviceForm() {
                 </div>
 
                 <div>
-                  <label htmlFor="warrantyExpiry" className="label-base">
-                    Data expirării garanției
-                  </label>
                   <Controller
                     control={control}
                     name="warrantyExpiry"
                     render={({ field }) => (
                       <DatePicker
-                        selected={field.value ? new Date(field.value) : null}
-                        onChange={(date) => field.onChange(date?.toISOString())}
-                        dateFormat="dd/MM/yyyy"
-                        className="input-base w-full"
-                        placeholderText="DD/MM/YYYY"
+                        label="Data expirării garanției"
+                        id="warrantyExpiry"
+                        value={field.value ? new Date(field.value) : undefined}
+                        onSelect={(date) => field.onChange(date?.toISOString())}
+                        placeholder="DD/MM/YYYY"
                       />
                     )}
                   />
@@ -739,19 +721,16 @@ export default function DeviceForm() {
                     </div>
 
                     <div>
-                      <label htmlFor="installationDate" className="label-base">
-                        Data instalării
-                      </label>
                       <Controller
                         control={control}
                         name="installationDate"
                         render={({ field }) => (
                           <DatePicker
-                            selected={field.value ? new Date(field.value) : null}
-                            onChange={(date) => field.onChange(date?.toISOString())}
-                            dateFormat="dd/MM/yyyy"
-                            className="input-base w-full"
-                            placeholderText="DD/MM/YYYY"
+                            label="Data instalării"
+                            id="installationDate"
+                            value={field.value ? new Date(field.value) : undefined}
+                            onSelect={(date) => field.onChange(date?.toISOString())}
+                            placeholder="DD/MM/YYYY"
                           />
                         )}
                       />

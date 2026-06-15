@@ -5,6 +5,7 @@ import api from '../api/axios';
 import { Plus } from 'lucide-react';
 import Skeleton from '../components/Skeleton';
 import { DeleteConfirmDialog } from '../components/DeleteConfirmDialog';
+import { Field, FieldLabel, FieldDescription } from '../components/ui/field';
 import { useConsumablesWithFilters } from '../hooks/useConsumables';
 import { deleteConsumable, consumableKeys } from '../api/consumables';
 
@@ -43,20 +44,22 @@ function AddStockModal({ consumable, onClose, onSave }) {
       >
         <h2 className="text-xl font-bold mb-4">Adaugă Stoc — {consumable.name}</h2>
         <div className="mb-6">
-          <label htmlFor="add-qty" className="label-base">Cantitate de adăugat</label>
-          <input
-            id="add-qty"
-            type="number"
-            min="1"
-            value={quantity}
-            onChange={(e) => setQuantity(e.target.value)}
-            className="input-base w-full"
-            placeholder="ex. 10"
-            autoFocus
-          />
-          <p className="text-xs mt-2" style={{ color: 'var(--color-text-secondary)' }}>
-            Stoc curent: <strong>{consumable.quantity}</strong> → După: <strong>{parseInt(quantity || 0) + consumable.quantity}</strong>
-          </p>
+          <Field>
+            <FieldLabel htmlFor="add-qty" required>Cantitate de adăugat</FieldLabel>
+            <input
+              id="add-qty"
+              type="number"
+              min="1"
+              value={quantity}
+              onChange={(e) => setQuantity(e.target.value)}
+              className="input-base w-full"
+              placeholder="ex. 10"
+              autoFocus
+            />
+            <FieldDescription>
+              Stoc curent: <strong>{consumable.quantity}</strong> → După: <strong>{parseInt(quantity || 0) + consumable.quantity}</strong>
+            </FieldDescription>
+          </Field>
         </div>
         <div className="flex gap-2">
           <button onClick={onClose} className="btn-secondary flex-1" disabled={loading}>
@@ -106,8 +109,8 @@ function EditModal({ consumable, onClose, onSave }) {
       >
         <h2 className="text-xl font-bold mb-4">{isNew ? 'Adaugă Consumabil Nou' : 'Editare Consumabil'}</h2>
         <div className="space-y-4 mb-6">
-          <div>
-            <label htmlFor="name" className="label-base">Denumire</label>
+          <Field>
+            <FieldLabel htmlFor="name" required>Denumire</FieldLabel>
             <input
               id="name"
               type="text"
@@ -115,9 +118,9 @@ function EditModal({ consumable, onClose, onSave }) {
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               className="input-base w-full"
             />
-          </div>
-          <div>
-            <label htmlFor="model" className="label-base">Model</label>
+          </Field>
+          <Field>
+            <FieldLabel htmlFor="model">Model</FieldLabel>
             <input
               id="model"
               type="text"
@@ -125,9 +128,9 @@ function EditModal({ consumable, onClose, onSave }) {
               onChange={(e) => setFormData({ ...formData, model: e.target.value })}
               className="input-base w-full"
             />
-          </div>
-          <div>
-            <label htmlFor="quantity" className="label-base">Cantitate</label>
+          </Field>
+          <Field>
+            <FieldLabel htmlFor="quantity">Cantitate</FieldLabel>
             <input
               id="quantity"
               type="number"
@@ -136,9 +139,9 @@ function EditModal({ consumable, onClose, onSave }) {
               onChange={(e) => setFormData({ ...formData, quantity: parseInt(e.target.value) || 0 })}
               className="input-base w-full"
             />
-          </div>
-          <div>
-            <label htmlFor="minQuantity" className="label-base">Cantitate Minimă</label>
+          </Field>
+          <Field>
+            <FieldLabel htmlFor="minQuantity">Cantitate Minimă</FieldLabel>
             <input
               id="minQuantity"
               type="number"
@@ -147,9 +150,9 @@ function EditModal({ consumable, onClose, onSave }) {
               onChange={(e) => setFormData({ ...formData, minQuantity: parseInt(e.target.value) || 0 })}
               className="input-base w-full"
             />
-          </div>
-          <div>
-            <label htmlFor="expiryDate" className="label-base">Data Expirare</label>
+          </Field>
+          <Field>
+            <FieldLabel htmlFor="expiryDate">Data Expirare</FieldLabel>
             <input
               id="expiryDate"
               type="date"
@@ -157,7 +160,7 @@ function EditModal({ consumable, onClose, onSave }) {
               onChange={(e) => setFormData({ ...formData, expiryDate: e.target.value || null })}
               className="input-base w-full"
             />
-          </div>
+          </Field>
         </div>
         <div className="flex gap-2">
           <button onClick={onClose} className="btn-secondary flex-1" disabled={loading}>

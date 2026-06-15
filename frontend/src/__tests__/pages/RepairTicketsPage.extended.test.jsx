@@ -148,7 +148,7 @@ describe('RepairTicketsPage — Extended Tests', () => {
     });
     fireEvent.click(screen.getByText('Creează'));
     await waitFor(() => {
-      expect(screen.getByText(/obligatoriu/i)).toBeInTheDocument();
+      expect(screen.getAllByText(/obligatoriu/i).length).toBeGreaterThan(0);
     });
   });
 

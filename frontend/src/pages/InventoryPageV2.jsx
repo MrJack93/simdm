@@ -77,7 +77,7 @@ function ViewToggle({ view, setView }) {
         <button
           key={key}
           onClick={() => setView(key)}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-medium transition-all ${hideOnMobile ? 'hidden md:flex' : ''}`}
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-medium transition-all min-h-[40px] min-w-[40px] ${hideOnMobile ? 'hidden md:flex' : ''}`}
           style={{
             backgroundColor: view === key ? 'var(--color-accent)' : 'transparent',
             color: view === key ? 'var(--color-bg-primary)' : 'var(--color-text-secondary)',
