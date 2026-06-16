@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useMemo, createContext, useContext } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
+import { DayButton } from 'react-day-picker';
 import {
   getMaintenancePlans,
   createMaintenancePlan,
@@ -12,6 +13,63 @@ import { Calendar } from '../components/ui/calendar';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '../components/ui/drawer';
 import { Button } from '../components/ui/button';
 import { useMediaQuery } from '../hooks/useMediaQuery';
+
+const MAX_BARS_PER_DAY = 2;
+
+// Context (nu props) ca să păstrăm referința componentei DayButton stabilă între render-uri —
+// react-day-picker remontează toate celulele dacă `components.DayButton` se schimbă ca referință.
+const OccurrencesContext = createContext({});
+
+// Celulă custom: număr zi + bare colorate (Figma slot component style)
+function DayButtonWithOccurrences({ day, modifiers, ...buttonProps }) {
+  const occurrencesByDay = useContext(OccurrencesContext);
+  const dayOccs = occurrencesByDay[day.date.getDate()] || [];
+  const visible = dayOccs.slice(0, MAX_BARS_PER_DAY);
+  const extra = dayOccs.length - visible.length;
+  const isWeekend = modifiers?.disabled || day.date.getDay() === 0 || day.date.getDay() === 6;
+  const ariaSuffix = dayOccs.length > 0
+    ? ` — ${dayOccs.length} ${dayOccs.length === 1 ? 'ocurență' : 'ocurențe'} mentenanță`
+    : '';
+
+  return (
+    <DayButton
+      day={day}
+      modifiers={modifiers}
+      {...buttonProps}
+      className={`min-h-[88px] p-1 calendar-day-cell ${isWeekend ? 'weekend' : ''} ${modifiers?.today ? 'today' : ''}`}
+      aria-label={`${buttonProps['aria-label'] || ''}${ariaSuffix}`}
+    >
+      <span className="text-sm font-medium">{day.date.getDate()}</span>
+      {dayOccs.length > 0 && (
+        <span className="flex flex-col gap-0.5 w-full px-0.5 mt-0.5">
+          {visible.map((occ) => (
+            <span
+              key={occ.id}
+              className="calendar-event-indicator block w-full truncate text-left text-[9px] font-medium leading-tight"
+              style={{
+                ...getStatusStyle(occ.status),
+                borderRadius: 'var(--radius-xs)',
+              }}
+              title={`${occ.deviceName} (${getStatusLabel(occ.status)})`}
+            >
+              {occ.deviceName}
+            </span>
+          ))}
+          {extra > 0 && (
+            <span className="text-[9px] leading-tight font-medium" style={{ color: 'var(--color-text-tertiary)' }}>
+              +{extra} {extra === 1 ? 'altă' : 'altele'}
+            </span>
+          )}
+        </span>
+      )}
+    </DayButton>
+  );
+}
+
+// Referințe stabile (definite o singură dată) — orice obiect/funcție nouă pasată la `components`
+// pe fiecare render forțează react-day-picker să remonteze toate celulele lunii.
+const HiddenMonthCaption = () => null;
+const CALENDAR_COMPONENTS = { MonthCaption: HiddenMonthCaption, DayButton: DayButtonWithOccurrences };
 
 const MONTHS_RO = [
   'Ianuarie', 'Februarie', 'Martie', 'Aprilie', 'Mai', 'Iunie',
@@ -35,6 +93,21 @@ function getStatusStyle(status) {
     return { backgroundColor: 'var(--color-info-bg)', color: 'var(--color-info)', borderColor: 'var(--color-info-bg)', borderWidth: '1px', borderStyle: 'solid' };
   }
   return { backgroundColor: 'var(--color-success-bg)', color: 'var(--color-success)', borderColor: 'var(--color-success-bg)', borderWidth: '1px', borderStyle: 'solid' }; // PROGRAMAT
+}
+
+// Simbol + etichetă pe lângă culoare, pentru accesibilitate (daltonism / fără culoare)
+function getStatusSymbol(status) {
+  if (status === 'DEPASIT') return '⚠';
+  if (status === 'SCADENT') return '⏰';
+  if (status === 'EFECTUAT') return '✓';
+  return '○'; // PROGRAMAT
+}
+
+function getStatusLabel(status) {
+  if (status === 'DEPASIT') return 'Depășit';
+  if (status === 'SCADENT') return 'Scadent';
+  if (status === 'EFECTUAT') return 'Efectuat';
+  return 'Programat';
 }
 
 export default function MaintenanceCalendarPage() {
@@ -74,7 +147,7 @@ export default function MaintenanceCalendarPage() {
     setSelectedDay(null);
   };
 
-  const { data: calendarData } = useQuery({
+  const { data: calendarData, isLoading: isPlansLoading } = useQuery({
     queryKey: ['maintenancePlans', selectedYear],
     queryFn: () => getMaintenancePlans({ year: selectedYear }),
   });
@@ -164,7 +237,7 @@ export default function MaintenanceCalendarPage() {
 
   // Flatten all occurrences for the current month.
   // Support both array of plans (unit tests) and array of occurrences (real backend calendar endpoint).
-  const occurrencesForMonth = plans.flatMap((item) => {
+  const occurrencesForMonth = useMemo(() => plans.flatMap((item) => {
     if (item.occurrences && Array.isArray(item.occurrences)) {
       return item.occurrences
         .filter((occ) => {
@@ -187,7 +260,13 @@ export default function MaintenanceCalendarPage() {
       }];
     }
     return [];
-  });
+  }), [plans, selectedYear, currentMonth]);
+
+  const occurrencesByDay = useMemo(() => occurrencesForMonth.reduce((acc, occ) => {
+    const d = new Date(occ.rescheduledTo || occ.scheduledDate || occ.dueDate).getDate();
+    (acc[d] = acc[d] || []).push(occ);
+    return acc;
+  }, {}), [occurrencesForMonth]);
 
   const occurrencesForDay = (day) =>
     occurrencesForMonth.filter(
@@ -235,18 +314,19 @@ export default function MaintenanceCalendarPage() {
         <div className="alert-error mb-4" role="alert" aria-live="polite">{pdfError}</div>
       )}
 
-      {/* Year dropdown + month navigation */}
-      <div className="flex items-center gap-3 mb-4 flex-wrap">
-        <label htmlFor="year-select" className="font-medium text-sm" style={{ color: 'var(--color-text-secondary)' }}>An:</label>
+      {/* Year dropdown + month navigation — Responsive (mobile/desktop) */}
+      <div className="flex items-center gap-2 md:gap-3 mb-4 flex-wrap">
+        <label htmlFor="year-select" className="font-medium text-xs md:text-sm" style={{ color: 'var(--color-text-secondary)' }}>An:</label>
         <select
           id="year-select"
           value={selectedYear}
           onChange={(e) => { setSelectedYear(Number(e.target.value)); setSelectedDay(null); }}
-          className="border rounded-lg px-3 py-1.5 text-sm cursor-pointer outline-none transition-all duration-150"
+          className="border rounded px-2 py-1 md:px-3 md:py-1.5 text-xs md:text-sm cursor-pointer outline-none transition-all duration-150 focus:ring-2 focus:ring-offset-1"
           style={{
             backgroundColor: 'var(--color-bg-secondary)',
             color: 'var(--color-text-primary)',
             borderColor: 'var(--color-border)',
+            focusRingColor: 'var(--color-accent)',
           }}
         >
           {YEAR_OPTIONS.map((y) => (
@@ -257,59 +337,101 @@ export default function MaintenanceCalendarPage() {
         <button
           aria-label="Luna anterioară"
           onClick={prevMonth}
-          className="px-3 py-1.5 border rounded-lg transition-all duration-150 text-sm font-medium hover:bg-[var(--color-bg-elevated)] cursor-pointer"
+          className="px-2 py-1 md:px-3 md:py-1.5 border rounded transition-all duration-150 text-xs md:text-sm font-medium hover:bg-[var(--color-bg-elevated)] cursor-pointer focus:ring-2 focus:ring-offset-1"
           style={{
             backgroundColor: 'var(--color-bg-secondary)',
             color: 'var(--color-text-primary)',
             borderColor: 'var(--color-border)',
           }}
         >
-          ‹ Luna anterioară
+          <span className="hidden md:inline">‹ Luna anterioară</span>
+          <span className="md:hidden">‹</span>
         </button>
-        <span className="font-semibold text-sm px-2" style={{ color: 'var(--color-text-primary)' }}>
+        <span className="font-semibold text-xs md:text-sm px-2 whitespace-nowrap" style={{ color: 'var(--color-text-primary)' }}>
           {MONTHS_RO[currentMonth]} {selectedYear}
         </span>
         <button
           aria-label="Luna următoare"
           onClick={nextMonth}
-          className="px-3 py-1.5 border rounded-lg transition-all duration-150 text-sm font-medium hover:bg-[var(--color-bg-elevated)] cursor-pointer"
+          className="px-2 py-1 md:px-3 md:py-1.5 border rounded transition-all duration-150 text-xs md:text-sm font-medium hover:bg-[var(--color-bg-elevated)] cursor-pointer focus:ring-2 focus:ring-offset-1"
           style={{
             backgroundColor: 'var(--color-bg-secondary)',
             color: 'var(--color-text-primary)',
             borderColor: 'var(--color-border)',
           }}
         >
-          Luna următoare ›
+          <span className="hidden md:inline">Luna următoare ›</span>
+          <span className="md:hidden">›</span>
         </button>
       </div>
 
-      {/* Color legend */}
+      {isPlansLoading && (
+        <div className="space-y-3 mb-6" aria-busy="true" aria-label="Se încarcă planurile de mentenanță">
+          <div className="skeleton skeleton-row" style={{ height: '24px', width: '320px', borderRadius: '6px' }} />
+          <div className="skeleton skeleton-row" style={{ height: '320px', borderRadius: '12px' }} />
+        </div>
+      )}
+
+      {/* Color legend — simbol + culoare, nu doar culoare (accesibilitate daltonism) */}
       <div className="flex gap-3 mb-4 text-xs flex-wrap font-medium">
-        <span className="px-2.5 py-1 rounded" style={getStatusStyle('PROGRAMAT')}>PROGRAMAT</span>
-        <span className="px-2.5 py-1 rounded" style={getStatusStyle('SCADENT')}>SCADENT</span>
-        <span className="px-2.5 py-1 rounded" style={getStatusStyle('DEPASIT')}>DEPASIT</span>
-        <span className="px-2.5 py-1 rounded" style={getStatusStyle('EFECTUAT')}>EFECTUAT</span>
+        {['PROGRAMAT', 'SCADENT', 'DEPASIT', 'EFECTUAT'].map((status) => (
+          <span
+            key={status}
+            role="status"
+            aria-label={`Status: ${getStatusLabel(status)}`}
+            className="px-2.5 py-1 rounded flex items-center gap-1"
+            style={getStatusStyle(status)}
+          >
+            <span aria-hidden="true">{getStatusSymbol(status)}</span>
+            {status}
+          </span>
+        ))}
       </div>
 
-      {/* Calendar */}
-      <div data-testid="maintenance-calendar">
-        <Calendar
-          mode="single"
-          selected={selectedDate}
-          onSelect={handleCalendarSelect}
-          month={new Date(selectedYear, currentMonth, 1)}
-          onMonthChange={handleMonthChange}
-          captionLayout="dropdown"
-          showOutsideDays={false}
-          startMonth={new Date(CURRENT_YEAR - 1, 0, 1)}
-          endMonth={new Date(CURRENT_YEAR + 3, 11, 31)}
-          className="mb-6"
-          classNames={{
-            day: "min-h-[64px] p-1",
-            day_button: "h-auto min-h-[64px] w-full p-1 font-normal",
-          }}
-        />
+      {/* Calendar — Responsive (mobile 375px / desktop 1465px) */}
+      <div data-testid="maintenance-calendar" className="w-full overflow-x-auto rounded-lg border" style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-bg-primary)' }}>
+        <OccurrencesContext.Provider value={occurrencesByDay}>
+          <Calendar
+            mode="single"
+            selected={selectedDate}
+            onSelect={handleCalendarSelect}
+            month={new Date(selectedYear, currentMonth, 1)}
+            onMonthChange={handleMonthChange}
+            showOutsideDays={false}
+            startMonth={new Date(CURRENT_YEAR - 1, 0, 1)}
+            endMonth={new Date(CURRENT_YEAR + 3, 11, 31)}
+            className="mb-6 w-full"
+            classNames={{
+              months: "w-full",
+              month: "w-full",
+              table: "w-full border-collapse",
+              head_row: "flex border-b" + ` [border-color:var(--color-border)]`,
+              head_cell: "flex-1 text-center p-2 text-xs font-medium" + ` [color:var(--color-text-secondary)] [background-color:var(--color-bg-secondary)]`,
+              row: "flex w-full border-b" + ` [border-color:var(--color-border-subtle)]`,
+              cell: "flex-1 p-0 text-center aspect-square min-h-[88px] md:min-h-[102px]",
+              day: "h-full w-full p-1",
+              day_button: "h-full w-full p-1 font-normal flex flex-col items-start justify-start text-sm",
+              nav: "hidden",
+            }}
+            components={CALENDAR_COMPONENTS}
+          />
+        </OccurrencesContext.Provider>
       </div>
+
+      {!isPlansLoading && plans.length === 0 && (
+        <div className="text-center py-12 rounded-xl border mb-4" style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)' }}>
+          <p className="text-sm mb-4" style={{ color: 'var(--color-text-secondary)' }}>
+            Niciun plan de mentenanță pentru anul {selectedYear}.
+          </p>
+          <button
+            onClick={() => setShowCreateModal(true)}
+            className="px-4 py-2 rounded-lg text-sm font-semibold cursor-pointer"
+            style={{ backgroundColor: 'var(--healthcare-primary)', color: 'var(--color-bg-primary)' }}
+          >
+            Creare Plan
+          </button>
+        </div>
+      )}
 
       {/* Occurrence indicators below calendar */}
       {occurrencesForMonth.length > 0 && (
@@ -320,10 +442,11 @@ export default function MaintenanceCalendarPage() {
               <button
                 key={occ.id}
                 onClick={() => handleDayClick(occDay)}
+                aria-label={`Status: ${getStatusLabel(occ.status)} — ${occDay} ${MONTHS_RO[currentMonth]}, ${occ.deviceName}`}
                 className="flex items-center gap-1.5 px-2 py-1 rounded text-xs font-medium cursor-pointer transition-all duration-150 hover:opacity-80"
                 style={getStatusStyle(occ.status)}
               >
-                <span className="w-2 h-2 rounded-full" style={{ backgroundColor: getStatusStyle(occ.status).color }} />
+                <span aria-hidden="true">{getStatusSymbol(occ.status)}</span>
                 {occDay} {MONTHS_RO[currentMonth]} — {occ.deviceName} ({occ.status})
               </button>
             );
@@ -348,7 +471,13 @@ export default function MaintenanceCalendarPage() {
                     <span className="text-xs" style={{ color: 'var(--color-text-tertiary)' }}>•</span>
                     <span className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>{occ.planFrequency}</span>
                     <span className="text-xs" style={{ color: 'var(--color-text-tertiary)' }}>•</span>
-                    <span className="text-xs px-2.5 py-0.5 rounded font-semibold" style={getStatusStyle(occ.status)}>
+                    <span
+                      role="status"
+                      aria-label={`Status: ${getStatusLabel(occ.status)}`}
+                      className="text-xs px-2.5 py-0.5 rounded font-semibold flex items-center gap-1"
+                      style={getStatusStyle(occ.status)}
+                    >
+                      <span aria-hidden="true">{getStatusSymbol(occ.status)}</span>
                       {occ.status}
                     </span>
                   </div>
