@@ -10,6 +10,8 @@ import {
 } from '../api/maintenancePlans';
 import { getDevices } from '../api/devices';
 import { Calendar } from '../components/ui/calendar';
+import { CalendarSlot, CalendarEventIndicator } from '../components/ui/calendar-slot';
+import { CalendarToolBar } from '../components/ui/calendar-toolbar';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '../components/ui/drawer';
 import { Button } from '../components/ui/button';
 import { useMediaQuery } from '../hooks/useMediaQuery';
@@ -43,17 +45,12 @@ function DayButtonWithOccurrences({ day, modifiers, ...buttonProps }) {
       {dayOccs.length > 0 && (
         <span className="flex flex-col gap-0.5 w-full px-0.5 mt-0.5">
           {visible.map((occ) => (
-            <span
+            <CalendarEventIndicator
               key={occ.id}
-              className="calendar-event-indicator block w-full truncate text-left text-[9px] font-medium leading-tight"
-              style={{
-                ...getStatusStyle(occ.status),
-                borderRadius: 'var(--radius-xs)',
-              }}
-              title={`${occ.deviceName} (${getStatusLabel(occ.status)})`}
-            >
-              {occ.deviceName}
-            </span>
+              status={occ.status.toLowerCase()}
+              deviceName={occ.deviceName}
+              quantity={1}
+            />
           ))}
           {extra > 0 && (
             <span className="text-[9px] leading-tight font-medium" style={{ color: 'var(--color-text-tertiary)' }}>
@@ -124,6 +121,7 @@ export default function MaintenanceCalendarPage() {
   const [rescheduleError, setRescheduleError] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
   const [pdfError, setPdfError] = useState('');
+  const [currentView, setCurrentView] = useState('month');
 
   const selectedDate = selectedDay != null ? new Date(selectedYear, currentMonth, selectedDay) : undefined;
 
@@ -314,55 +312,74 @@ export default function MaintenanceCalendarPage() {
         <div className="alert-error mb-4" role="alert" aria-live="polite">{pdfError}</div>
       )}
 
-      {/* Year dropdown + month navigation — Responsive (mobile/desktop) */}
-      <div className="flex items-center gap-2 md:gap-3 mb-4 flex-wrap">
-        <label htmlFor="year-select" className="font-medium text-xs md:text-sm" style={{ color: 'var(--color-text-secondary)' }}>An:</label>
-        <select
-          id="year-select"
-          value={selectedYear}
-          onChange={(e) => { setSelectedYear(Number(e.target.value)); setSelectedDay(null); }}
-          className="border rounded px-2 py-1 md:px-3 md:py-1.5 text-xs md:text-sm cursor-pointer outline-none transition-all duration-150 focus:ring-2 focus:ring-offset-1"
-          style={{
-            backgroundColor: 'var(--color-bg-secondary)',
-            color: 'var(--color-text-primary)',
-            borderColor: 'var(--color-border)',
-            focusRingColor: 'var(--color-accent)',
-          }}
-        >
-          {YEAR_OPTIONS.map((y) => (
-            <option key={y} value={y} style={{ backgroundColor: 'var(--color-bg-secondary)', color: 'var(--color-text-primary)' }}>{y}</option>
-          ))}
-        </select>
+      {/* Toolbar — Integrated CalendarToolBar (responsive) */}
+      <div className="mb-4 rounded-lg border" style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-bg-primary)' }}>
+        <div className="flex items-center gap-2 md:gap-3 p-3 md:p-4 flex-wrap">
+          <label htmlFor="year-select" className="font-medium text-xs md:text-sm" style={{ color: 'var(--color-text-secondary)' }}>An:</label>
+          <select
+            id="year-select"
+            value={selectedYear}
+            onChange={(e) => { setSelectedYear(Number(e.target.value)); setSelectedDay(null); }}
+            className="border rounded px-2 py-1 md:px-3 md:py-1.5 text-xs md:text-sm cursor-pointer outline-none transition-all duration-150 focus:ring-2 focus:ring-offset-1"
+            style={{
+              backgroundColor: 'var(--color-bg-secondary)',
+              color: 'var(--color-text-primary)',
+              borderColor: 'var(--color-border)',
+            }}
+          >
+            {YEAR_OPTIONS.map((y) => (
+              <option key={y} value={y} style={{ backgroundColor: 'var(--color-bg-secondary)', color: 'var(--color-text-primary)' }}>{y}</option>
+            ))}
+          </select>
 
-        <button
-          aria-label="Luna anterioară"
-          onClick={prevMonth}
-          className="px-2 py-1 md:px-3 md:py-1.5 border rounded transition-all duration-150 text-xs md:text-sm font-medium hover:bg-[var(--color-bg-elevated)] cursor-pointer focus:ring-2 focus:ring-offset-1"
-          style={{
-            backgroundColor: 'var(--color-bg-secondary)',
-            color: 'var(--color-text-primary)',
-            borderColor: 'var(--color-border)',
-          }}
-        >
-          <span className="hidden md:inline">‹ Luna anterioară</span>
-          <span className="md:hidden">‹</span>
-        </button>
-        <span className="font-semibold text-xs md:text-sm px-2 whitespace-nowrap" style={{ color: 'var(--color-text-primary)' }}>
-          {MONTHS_RO[currentMonth]} {selectedYear}
-        </span>
-        <button
-          aria-label="Luna următoare"
-          onClick={nextMonth}
-          className="px-2 py-1 md:px-3 md:py-1.5 border rounded transition-all duration-150 text-xs md:text-sm font-medium hover:bg-[var(--color-bg-elevated)] cursor-pointer focus:ring-2 focus:ring-offset-1"
-          style={{
-            backgroundColor: 'var(--color-bg-secondary)',
-            color: 'var(--color-text-primary)',
-            borderColor: 'var(--color-border)',
-          }}
-        >
-          <span className="hidden md:inline">Luna următoare ›</span>
-          <span className="md:hidden">›</span>
-        </button>
+          <button
+            aria-label="Luna anterioară"
+            onClick={prevMonth}
+            className="px-2 py-1 md:px-3 md:py-1.5 border rounded transition-all duration-150 text-xs md:text-sm font-medium hover:bg-[var(--color-bg-elevated)] cursor-pointer focus:ring-2 focus:ring-offset-1"
+            style={{
+              backgroundColor: 'var(--color-bg-secondary)',
+              color: 'var(--color-text-primary)',
+              borderColor: 'var(--color-border)',
+            }}
+          >
+            <span className="hidden md:inline">‹ Luna anterioară</span>
+            <span className="md:hidden">‹</span>
+          </button>
+          <span className="font-semibold text-xs md:text-sm px-2 whitespace-nowrap" style={{ color: 'var(--color-text-primary)' }}>
+            {MONTHS_RO[currentMonth]} {selectedYear}
+          </span>
+          <button
+            aria-label="Luna următoare"
+            onClick={nextMonth}
+            className="px-2 py-1 md:px-3 md:py-1.5 border rounded transition-all duration-150 text-xs md:text-sm font-medium hover:bg-[var(--color-bg-elevated)] cursor-pointer focus:ring-2 focus:ring-offset-1"
+            style={{
+              backgroundColor: 'var(--color-bg-secondary)',
+              color: 'var(--color-text-primary)',
+              borderColor: 'var(--color-border)',
+            }}
+          >
+            <span className="hidden md:inline">Luna următoare ›</span>
+            <span className="md:hidden">›</span>
+          </button>
+
+          {/* View selector (optional feature for future Week/Day/Year views) */}
+          <div className="ml-auto flex gap-1 border rounded p-1" style={{ borderColor: 'var(--color-accent)', backgroundColor: 'var(--color-bg-secondary)' }}>
+            {['month'].map((view) => (
+              <button
+                key={view}
+                className="text-xs font-medium px-2 py-1 rounded transition-colors"
+                style={{
+                  backgroundColor: currentView === view ? 'var(--color-accent)' : 'transparent',
+                  color: currentView === view ? 'var(--color-on-primary)' : 'var(--color-text-primary)',
+                }}
+                onClick={() => setCurrentView(view)}
+                aria-label={`Schimbă la ${view}`}
+              >
+                {view.charAt(0).toUpperCase() + view.slice(1)}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
 
       {isPlansLoading && (
