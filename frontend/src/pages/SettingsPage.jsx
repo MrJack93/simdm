@@ -2,9 +2,10 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTheme } from '../hooks/useTheme';
 import { useAuth } from '../hooks/useAuth';
-import { Moon, Sun, LogOut, User, Lock } from 'lucide-react';
+import { Moon, Sun, LogOut, User, Lock, AlertTriangle } from 'lucide-react';
 import { toast } from 'react-toastify';
 import api from '../api/axios';
 import { Switch } from '../components/ui/switch';
@@ -23,7 +24,10 @@ const changePasswordSchema = z.object({
 
 export default function SettingsPage() {
   const { theme, toggleTheme } = useTheme();
-  const { user, logout } = useAuth();
+  const { user, logout, refreshUser } = useAuth();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const forceChange = searchParams.get('forceChange') === '1' || user?.mustChangePassword;
   const [isChanging, setIsChanging] = useState(false);
   const { register, handleSubmit, formState: { errors }, reset } = useForm({
     resolver: zodResolver(changePasswordSchema),
@@ -39,6 +43,10 @@ export default function SettingsPage() {
       });
       toast.success('Parolă schimbată cu succes');
       reset();
+      await refreshUser();
+      if (forceChange) {
+        navigate('/', { replace: true });
+      }
     } catch (error) {
       const msg = error.response?.data?.error || 'Eroare la schimbarea parolei';
       toast.error(msg);
@@ -57,6 +65,15 @@ export default function SettingsPage() {
       </div>
 
       <div className="container mx-auto p-8 max-w-2xl space-y-6">
+        {forceChange && (
+          <div className="p-4 rounded-xl border flex items-center gap-3" style={{ backgroundColor: 'var(--color-warning-bg)', borderColor: 'var(--color-warning)', borderLeft: '4px solid var(--color-warning)' }}>
+            <AlertTriangle size={20} style={{ color: 'var(--color-warning)' }} />
+            <p className="text-sm font-medium" style={{ color: 'var(--color-warning)' }}>
+              Trebuie să schimbi parola implicită înainte de a continua utilizarea sistemului.
+            </p>
+          </div>
+        )}
+
         {/* User Profile */}
         <section className="p-6 rounded-xl border" style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)' }}>
           <div className="flex items-center gap-4 mb-6">

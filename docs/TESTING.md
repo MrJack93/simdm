@@ -1,13 +1,13 @@
-# 🧪 FAZA 3 — GHID TESTARE COMPLETĂ
+# 🧪 GHID TESTARE COMPLETĂ — SIMDM
 
 ## Overview
 
-Faza 3 conține **158 teste** organizate în 3 niveluri:
-- **Backend Tests** (66) — Vitest + Supertest
-- **Frontend Tests** (62) — Vitest + React Testing Library
-- **E2E Tests** (30) — Playwright
+SIMDM conține **1033+ teste backend** și **127+ teste frontend** organizate în 3 niveluri:
+- **Backend Tests** (1033+) — Vitest + Supertest
+- **Frontend Tests** (127+) — Vitest + React Testing Library
+- **E2E Tests** (7 scenarii) — Playwright (lifecycle complet)
 
-**Target:** ≥95% code coverage
+**Target:** ≥90% code coverage (backend + frontend)
 
 ---
 
@@ -41,6 +41,27 @@ npm test
 ### 2.2 Rulează test specific
 
 ```bash
+# Documents (DMS + hash + expirare + acces log)
+npm test -- documents.test.js
+
+# Dashboard (KPI)
+npm test -- dashboard.test.js
+
+# Decommission (casare)
+npm test -- decommission.test.js
+
+# Duty Log (jurnal gardă)
+npm test -- dutyLog.test.js
+
+# Activity Report
+npm test -- activityReport.test.js
+
+# Procurement (planificare)
+npm test -- procurement.test.js
+
+# Commissioning (dare în exploatare)
+npm test -- commissioning.test.js
+
 # Notifications (cron jobs)
 npm test -- notifications.test.js
 
@@ -115,20 +136,26 @@ npx playwright test
 ### 4.2 Rulează test specific
 
 ```bash
+# Ciclul complet de viață DM (lifecycle)
+npx playwright test lifecycle.spec.js
+
 # Authentication
-npx playwright test auth.spec.js
+npx playwright test login-and-navigate.spec.js
 
-# Maintenance
-npx playwright test maintenance.spec.js
+# Device CRUD
+npx playwright test device-crud.spec.js
 
-# Repair tickets
-npx playwright test repairTickets.spec.js
+# Maintenance + Repair
+npx playwright test completeFlow.spec.js
 
-# Verifications
-npx playwright test verifications.spec.js
+# PDF export
+npx playwright test pdf-export.spec.js
 
-# Service contracts
-npx playwright test serviceContracts.spec.js
+# Annual inventory
+npx playwright test annual-inventory.spec.js
+
+# Session refresh
+npx playwright test session-refresh.spec.js
 ```
 
 ### 4.3 Headed mode (vizualizare browser)
@@ -391,10 +418,10 @@ open coverage/index.html
 
 | Test Suite | Count | Time |
 |------------|-------|------|
-| Backend | 66 | ~30s |
-| Frontend | 62 | ~20s |
-| E2E | 30 | ~60s |
-| **Total** | **158** | **~110s** |
+| Backend | 1033+ | ~40s |
+| Frontend | 127+ | ~10s |
+| E2E | 7 scenarii | ~120s |
+| **Total** | **1160+** | **~170s** |
 
 ---
 

@@ -1,8 +1,8 @@
 # Ghid Dezvoltator — SIMDM Frontend & Backend
 
-**Versiune:** 2.1 (Faza 1-2 Complete + Faza 3 Ready + Testing & Docker Best Practices 2026)  
-**Actualizat:** 2026-06-02  
-**Audiență:** Dezvoltatori frontend și backend  
+**Versiune:** 5.0 (Faza 1-8 Complete — Production Ready)
+**Actualizat:** 2026-06-29
+**Audiență:** Dezvoltatori frontend și backend
 **Limbă:** Engleză (cod), Română (comentarii și UI)
 
 ---

@@ -38,7 +38,6 @@ describe('ProtectedRoute', () => {
 
   it('afișează skeleton-ul de încărcare în timpul verificării', () => {
     renderGuard({ user: null, loading: true });
-    // Skeleton component has role="status" with sr-only text
     expect(screen.getAllByRole('status').length).toBeGreaterThan(0);
   });
 
@@ -58,5 +57,38 @@ describe('ProtectedRoute', () => {
       { children: <span>Dashboard bioinginer</span> }
     );
     expect(screen.getByText('Dashboard bioinginer')).toBeInTheDocument();
+  });
+
+  it('redirecționează spre /settings când mustChangePassword=true', () => {
+    render(
+      <AuthContext.Provider value={{ user: { id: 1, mustChangePassword: true }, loading: false }}>
+        <MemoryRouter initialEntries={['/dashboard']}>
+          <Routes>
+            <Route path="/dashboard" element={<ProtectedRoute><div>Dashboard</div></ProtectedRoute>} />
+            <Route path="/settings" element={<div>Setări</div>} />
+          </Routes>
+        </MemoryRouter>
+      </AuthContext.Provider>
+    );
+    expect(screen.getByText('Setări')).toBeInTheDocument();
+    expect(screen.queryByText('Dashboard')).not.toBeInTheDocument();
+  });
+
+  it('nu redirecționează când mustChangePassword=true dar suntem pe /settings', () => {
+    render(
+      <AuthContext.Provider value={{ user: { id: 1, mustChangePassword: true }, loading: false }}>
+        <MemoryRouter initialEntries={['/settings']}>
+          <Routes>
+            <Route path="/settings" element={<ProtectedRoute><div>Setări</div></ProtectedRoute>} />
+          </Routes>
+        </MemoryRouter>
+      </AuthContext.Provider>
+    );
+    expect(screen.getByText('Setări')).toBeInTheDocument();
+  });
+
+  it('randează children când mustChangePassword=false', () => {
+    renderGuard({ user: { id: 1, mustChangePassword: false }, loading: false });
+    expect(screen.getByText('Conținut protejat')).toBeInTheDocument();
   });
 });

@@ -72,7 +72,8 @@ describe('SettingsPage', () => {
     const toggleTheme = vi.fn();
     useTheme.mockReturnValue({ theme: 'light', toggleTheme });
     renderPage({ toggleTheme });
-    fireEvent.click(screen.getByText('Comută'));
+    const toggle = screen.getByRole('switch', { name: /Comută/ });
+    fireEvent.click(toggle);
     expect(toggleTheme).toHaveBeenCalled();
   });
 
@@ -87,12 +88,19 @@ describe('SettingsPage', () => {
     expect(screen.getByText('Mod întunecat')).toBeInTheDocument();
   });
 
-  it('calls logout when Deconectare is clicked', () => {
+  it('calls logout when Deconectare is clicked', async () => {
     const logout = vi.fn();
     useAuth.mockReturnValue({ user: { username: 'test' }, logout });
     renderPage({ logout });
     fireEvent.click(screen.getByText('Deconectare'));
-    expect(logout).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(screen.getByText('Confirmare deconectare')).toBeInTheDocument();
+    });
+    const confirmBtns = screen.getAllByText('Deconectare');
+    fireEvent.click(confirmBtns[confirmBtns.length - 1]);
+    await waitFor(() => {
+      expect(logout).toHaveBeenCalled();
+    });
   });
 
   it('renders the password change form', () => {

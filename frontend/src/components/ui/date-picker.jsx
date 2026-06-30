@@ -57,6 +57,7 @@ function DatePicker({
               onSelect(date)
               setOpen(false)
             }}
+            locale={ro}
             initialFocus
           />
         </PopoverContent>

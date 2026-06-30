@@ -132,15 +132,15 @@ describe('VerificationsPage — Verificări Periodice & Conformitate', () => {
     renderPage();
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: /Upload Certificat/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /Încarcă Certificat/i })).toBeInTheDocument();
     });
 
-    const uploadBtn = screen.getByRole('button', { name: /Upload Certificat/i });
+    const uploadBtn = screen.getByRole('button', { name: /Încarcă Certificat/i });
     await user.click(uploadBtn);
 
     // Modal ar trebui deschis
     await waitFor(() => {
-      expect(screen.getByText(/Încarcă Certificat/i)).toBeInTheDocument();
+      expect(screen.getByRole('heading', { name: /Încarcă Certificat/i })).toBeInTheDocument();
     });
 
     // Select device
@@ -170,14 +170,14 @@ describe('VerificationsPage — Verificări Periodice & Conformitate', () => {
     renderPage();
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: /Upload Certificat/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /Încarcă Certificat/i })).toBeInTheDocument();
     });
 
-    const uploadBtn = screen.getByRole('button', { name: /Upload Certificat/i });
+    const uploadBtn = screen.getByRole('button', { name: /Încarcă Certificat/i });
     await user.click(uploadBtn);
 
     await waitFor(() => {
-      expect(screen.getByText(/Încarcă Certificat/i)).toBeInTheDocument();
+      expect(screen.getByRole('heading', { name: /Încarcă Certificat/i })).toBeInTheDocument();
     });
 
     // Try submit empty
@@ -258,10 +258,10 @@ describe('VerificationsPage — Verificări Periodice & Conformitate', () => {
     renderPage();
 
     await waitFor(() => {
-      expect(screen.getByRole('columnheader', { name: /Valid Until/i })).toBeInTheDocument();
+      expect(screen.getByText('Valabil Până la')).toBeInTheDocument();
     });
 
-    const sortBtn = screen.getByRole('columnheader', { name: /Valid Until/i });
+    const sortBtn = screen.getByText('Valabil Până la');
     await user.click(sortBtn);
 
     // Table should re-render sorted

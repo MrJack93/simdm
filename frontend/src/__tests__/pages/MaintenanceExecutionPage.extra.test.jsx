@@ -163,7 +163,7 @@ describe('MaintenanceExecutionPage — Extra Coverage', () => {
     it('shows loading message', () => {
       api.get.mockImplementation(() => new Promise(() => {}));
       renderPage();
-      expect(screen.getByText('Se încarcă...')).toBeInTheDocument();
+      expect(screen.getAllByRole('status').length).toBeGreaterThan(0);
     });
   });
 });

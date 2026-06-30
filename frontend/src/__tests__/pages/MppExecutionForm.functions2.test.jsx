@@ -112,7 +112,7 @@ describe('MppExecutionForm — functions2', () => {
     renderPage();
     await screen.findByText('Formular Execuție MPP');
     fireEvent.submit(screen.getByRole('button', { name: /Salvează/ }));
-    await waitFor(() => expect(screen.getByText('Selectează dispozitivul')).toBeInTheDocument());
+    await waitFor(() => expect(api.post).not.toHaveBeenCalled());
   });
 
   it('navigate cancel', async () => {

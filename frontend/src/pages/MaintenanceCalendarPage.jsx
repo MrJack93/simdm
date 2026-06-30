@@ -1,4 +1,4 @@
-import { useState, useMemo, createContext, useContext } from 'react';
+import { useState, useMemo, useEffect, useRef, createContext, useContext } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { DayButton } from 'react-day-picker';
@@ -10,11 +10,15 @@ import {
 } from '../api/maintenancePlans';
 import { getDevices } from '../api/devices';
 import { Calendar } from '../components/ui/calendar';
-import { CalendarSlot, CalendarEventIndicator } from '../components/ui/calendar-slot';
-import { CalendarToolBar } from '../components/ui/calendar-toolbar';
+import { CalendarEventIndicator } from '../components/ui/calendar-slot';
+import { CalendarSidebar } from '../components/ui/calendar-sidebar';
+import { CalendarDayView } from '../components/ui/calendar-day-view';
+import { CalendarWeekView } from '../components/ui/calendar-week-view';
+import { CalendarYearView } from '../components/ui/calendar-year-view';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '../components/ui/drawer';
 import { Button } from '../components/ui/button';
 import { useMediaQuery } from '../hooks/useMediaQuery';
+import { CreatePlanModal } from '../components/CreatePlanModal';
 
 const MAX_BARS_PER_DAY = 2;
 
@@ -73,10 +77,7 @@ const MONTHS_RO = [
   'Iulie', 'August', 'Septembrie', 'Octombrie', 'Noiembrie', 'Decembrie',
 ];
 
-const FREQUENCIES = ['LUNAR', 'BIMESTRIAL', 'TRIMESTRIAL', 'SEMESTRIAL', 'ANUAL'];
-
-const CURRENT_YEAR = new Date().getFullYear();
-const YEAR_OPTIONS = Array.from({ length: 5 }, (_, i) => CURRENT_YEAR - 1 + i);
+const YEAR_OPTIONS = Array.from({ length: 5 }, (_, i) => new Date().getFullYear() - 1 + i);
 
 // spec §2.3: PROGRAMAT=verde (success), SCADENT=portocaliu (warning), DEPASIT=roșu (error), EFECTUAT=albastru (info)
 function getStatusStyle(status) {
@@ -111,8 +112,10 @@ export default function MaintenanceCalendarPage() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const isDesktop = useMediaQuery('(min-width: 768px)');
+  const isMobile = !isDesktop;
 
-  const [selectedYear, setSelectedYear] = useState(CURRENT_YEAR);
+  const [initialYear] = useState(() => new Date().getFullYear());
+  const [selectedYear, setSelectedYear] = useState(() => new Date().getFullYear());
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
   const [selectedDay, setSelectedDay] = useState(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -122,6 +125,13 @@ export default function MaintenanceCalendarPage() {
   const [successMsg, setSuccessMsg] = useState('');
   const [pdfError, setPdfError] = useState('');
   const [currentView, setCurrentView] = useState('month');
+  const [showSidebar, setShowSidebar] = useState(!isMobile);
+
+  useEffect(() => {
+    if (!successMsg) return;
+    const timer = setTimeout(() => setSuccessMsg(''), 4000);
+    return () => clearTimeout(timer);
+  }, [successMsg]);
 
   const selectedDate = selectedDay != null ? new Date(selectedYear, currentMonth, selectedDay) : undefined;
 
@@ -164,7 +174,6 @@ export default function MaintenanceCalendarPage() {
       queryClient.invalidateQueries({ queryKey: ['maintenancePlans'] });
       setSuccessMsg('Plan creat cu succes');
       setShowCreateModal(false);
-      setTimeout(() => setSuccessMsg(''), 4000);
     },
   });
 
@@ -176,7 +185,6 @@ export default function MaintenanceCalendarPage() {
       setRescheduleData({ newDate: '', reason: '' });
       setRescheduleError('');
       setSuccessMsg('Ocurență reprogramată cu succes');
-      setTimeout(() => setSuccessMsg(''), 4000);
     },
     onError: (err) => {
       setRescheduleError(err?.response?.data?.error || 'Eroare la reprogramare');
@@ -209,7 +217,8 @@ export default function MaintenanceCalendarPage() {
       a.download = `Formular-5-${selectedYear}.pdf`;
       a.click();
       URL.revokeObjectURL(url);
-    } catch {
+    } catch (error) {
+      console.error('PDF download error:', error);
       setPdfError('Nu există planuri pentru acest an sau eroare la generare.');
     }
   };
@@ -271,12 +280,134 @@ export default function MaintenanceCalendarPage() {
       (occ) => new Date(occ.rescheduledTo || occ.scheduledDate || occ.dueDate).getDate() === day
     );
 
+  const todayRef = useRef(new Date());
+  const today = todayRef.current;
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
+  const todayEvents = useMemo(() =>
+    (plans || []).flatMap((item) => {
+      if (item.occurrences && Array.isArray(item.occurrences)) {
+        return item.occurrences
+          .filter((occ) => {
+            const d = new Date(occ.rescheduledTo || occ.scheduledDate || occ.dueDate);
+            return d.toDateString() === today.toDateString();
+          })
+          .map((occ) => ({
+            ...occ,
+            deviceName: item.device?.name,
+            scheduledTime: (occ.rescheduledTo || occ.scheduledDate)?.split('T')[1]?.substring(0, 5),
+          }));
+      }
+      // Flat occurrence (from /calendar endpoint)
+      const d = new Date(item.rescheduledTo || item.scheduledDate || item.dueDate);
+      if (d.toDateString() === today.toDateString()) {
+        return [{
+          ...item,
+          deviceName: item.plan?.device?.name,
+          scheduledTime: (item.rescheduledTo || item.scheduledDate)?.split('T')[1]?.substring(0, 5),
+        }];
+      }
+      return [];
+    }), [plans, today]);
+
+  const tomorrowEvents = useMemo(() =>
+    (plans || []).flatMap((item) => {
+      if (item.occurrences && Array.isArray(item.occurrences)) {
+        return item.occurrences
+          .filter((occ) => {
+            const d = new Date(occ.rescheduledTo || occ.scheduledDate || occ.dueDate);
+            return d.toDateString() === tomorrow.toDateString();
+          })
+          .map((occ) => ({
+            ...occ,
+            deviceName: item.device?.name,
+            scheduledTime: (occ.rescheduledTo || occ.scheduledDate)?.split('T')[1]?.substring(0, 5),
+          }));
+      }
+      // Flat occurrence (from /calendar endpoint)
+      const d = new Date(item.rescheduledTo || item.scheduledDate || item.dueDate);
+      if (d.toDateString() === tomorrow.toDateString()) {
+        return [{
+          ...item,
+          deviceName: item.plan?.device?.name,
+          scheduledTime: (item.rescheduledTo || item.scheduledDate)?.split('T')[1]?.substring(0, 5),
+        }];
+      }
+      return [];
+    }), [plans, tomorrow]);
+
+  const occurrencesByDate = useMemo(() => {
+    const grouped = {};
+    (plans || []).forEach((item) => {
+      if (item.occurrences) {
+        item.occurrences.forEach((occ) => {
+          const dateKey = (occ.rescheduledTo || occ.scheduledDate || occ.dueDate).split('T')[0];
+          if (!grouped[dateKey]) grouped[dateKey] = [];
+          grouped[dateKey].push({
+            ...occ,
+            deviceName: item.device?.name,
+            status: occ.status,
+          });
+        });
+      }
+    });
+    return grouped;
+  }, [plans]);
+
 
 
   return (
-    <div className="p-4 md:p-8 space-y-6">
-      {/* Hidden identifier for tests */}
-      <span className="sr-only">MaintenanceCalendarPage</span>
+    <div className="flex h-screen flex-col md:flex-row overflow-hidden">
+      {/* Sidebar — Desktop: fixed, Mobile: drawer */}
+      {isDesktop ? (
+        <CalendarSidebar
+          selectedDate={selectedDate}
+          onDateSelect={handleCalendarSelect}
+          currentMonth={new Date(selectedYear, currentMonth, 1)}
+          onMonthChange={(date) => {
+            setCurrentMonth(date.getMonth());
+            setSelectedYear(date.getFullYear());
+            setSelectedDay(null);
+          }}
+          todayEvents={todayEvents}
+          tomorrowEvents={tomorrowEvents}
+          showEmpty={false}
+          isMobile={false}
+        />
+      ) : (
+        <Drawer open={showSidebar} onOpenChange={setShowSidebar}>
+          <DrawerContent>
+            <DrawerHeader>
+              <DrawerTitle>Calendar</DrawerTitle>
+            </DrawerHeader>
+            <div className="px-4 pb-6">
+              <CalendarSidebar
+                selectedDate={selectedDate}
+                onDateSelect={(day) => {
+                  handleCalendarSelect(day);
+                  setShowSidebar(false);
+                }}
+                currentMonth={new Date(selectedYear, currentMonth, 1)}
+                onMonthChange={(date) => {
+                  setCurrentMonth(date.getMonth());
+                  setSelectedYear(date.getFullYear());
+                  setSelectedDay(null);
+                }}
+                todayEvents={todayEvents}
+                tomorrowEvents={tomorrowEvents}
+                showEmpty={false}
+                isMobile={false}
+              />
+            </div>
+          </DrawerContent>
+        </Drawer>
+      )}
+
+      {/* Main Content */}
+      <div className="flex-1 overflow-auto flex flex-col p-4 md:p-8 space-y-6">
+        {/* Hidden identifier for tests */}
+        <span className="sr-only">MaintenanceCalendarPage</span>
 
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
         <div>
@@ -362,9 +493,25 @@ export default function MaintenanceCalendarPage() {
             <span className="md:hidden">›</span>
           </button>
 
-          {/* View selector (optional feature for future Week/Day/Year views) */}
+          {/* Mobile sidebar trigger */}
+          {!isDesktop && (
+            <button
+              onClick={() => setShowSidebar(true)}
+              className="px-2 py-1 md:px-3 md:py-1.5 border rounded transition-all duration-150 text-xs md:text-sm font-medium hover:bg-[var(--color-bg-elevated)] cursor-pointer"
+              style={{
+                backgroundColor: 'var(--color-bg-secondary)',
+                color: 'var(--color-text-primary)',
+                borderColor: 'var(--color-border)',
+              }}
+              aria-label="Deschide sidebar calendar"
+            >
+              📅
+            </button>
+          )}
+
+          {/* View selector */}
           <div className="ml-auto flex gap-1 border rounded p-1" style={{ borderColor: 'var(--color-accent)', backgroundColor: 'var(--color-bg-secondary)' }}>
-            {['month'].map((view) => (
+            {['day', 'week', 'month', 'year'].map((view) => (
               <button
                 key={view}
                 className="text-xs font-medium px-2 py-1 rounded transition-colors"
@@ -373,7 +520,8 @@ export default function MaintenanceCalendarPage() {
                   color: currentView === view ? 'var(--color-on-primary)' : 'var(--color-text-primary)',
                 }}
                 onClick={() => setCurrentView(view)}
-                aria-label={`Schimbă la ${view}`}
+                aria-pressed={currentView === view}
+                aria-label={`Vizualizare ${view}`}
               >
                 {view.charAt(0).toUpperCase() + view.slice(1)}
               </button>
@@ -405,34 +553,61 @@ export default function MaintenanceCalendarPage() {
         ))}
       </div>
 
-      {/* Calendar — Responsive (mobile 375px / desktop 1465px) */}
-      <div data-testid="maintenance-calendar" className="w-full overflow-x-auto rounded-lg border" style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-bg-primary)' }}>
-        <OccurrencesContext.Provider value={occurrencesByDay}>
-          <Calendar
-            mode="single"
-            selected={selectedDate}
-            onSelect={handleCalendarSelect}
-            month={new Date(selectedYear, currentMonth, 1)}
-            onMonthChange={handleMonthChange}
-            showOutsideDays={false}
-            startMonth={new Date(CURRENT_YEAR - 1, 0, 1)}
-            endMonth={new Date(CURRENT_YEAR + 3, 11, 31)}
-            className="mb-6 w-full"
-            classNames={{
-              months: "w-full",
-              month: "w-full",
-              table: "w-full border-collapse",
-              head_row: "flex border-b" + ` [border-color:var(--color-border)]`,
-              head_cell: "flex-1 text-center p-2 text-xs font-medium" + ` [color:var(--color-text-secondary)] [background-color:var(--color-bg-secondary)]`,
-              row: "flex w-full border-b" + ` [border-color:var(--color-border-subtle)]`,
-              cell: "flex-1 p-0 text-center aspect-square min-h-[88px] md:min-h-[102px]",
-              day: "h-full w-full p-1",
-              day_button: "h-full w-full p-1 font-normal flex flex-col items-start justify-start text-sm",
-              nav: "hidden",
-            }}
-            components={CALENDAR_COMPONENTS}
+      {/* Calendar Views — Responsive (mobile 375px / desktop 1465px) */}
+      <div data-testid="maintenance-calendar" className="w-full rounded-lg border flex-1 overflow-hidden flex flex-col" style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-bg-primary)' }}>
+        {currentView === 'month' && (
+          <OccurrencesContext.Provider value={occurrencesByDay}>
+            <div className="overflow-x-auto">
+              <Calendar
+                mode="single"
+                selected={selectedDate}
+                onSelect={handleCalendarSelect}
+                month={new Date(selectedYear, currentMonth, 1)}
+                onMonthChange={handleMonthChange}
+                showOutsideDays={false}
+                startMonth={new Date(initialYear - 1, 0, 1)}
+                endMonth={new Date(initialYear + 3, 11, 31)}
+                className="mb-6 w-full"
+                classNames={{
+                  months: "w-full",
+                  month: "w-full",
+                  table: "w-full border-collapse",
+                  head_row: "flex border-b" + ` [border-color:var(--color-border)]`,
+                  head_cell: "flex-1 text-center p-2 text-xs font-medium" + ` [color:var(--color-text-secondary)] [background-color:var(--color-bg-secondary)]`,
+                  row: "flex w-full border-b" + ` [border-color:var(--color-border-subtle)]`,
+                  cell: "flex-1 p-0 text-center aspect-square min-h-[88px] md:min-h-[102px]",
+                  day: "h-full w-full p-1",
+                  day_button: "h-full w-full p-1 font-normal flex flex-col items-start justify-start text-sm",
+                  nav: "hidden",
+                }}
+                components={CALENDAR_COMPONENTS}
+              />
+            </div>
+          </OccurrencesContext.Provider>
+        )}
+
+        {currentView === 'day' && (
+          <CalendarDayView
+            selectedDate={selectedDate}
+            occurrences={occurrencesForDay(selectedDay || new Date().getDate())}
           />
-        </OccurrencesContext.Provider>
+        )}
+
+        {currentView === 'week' && (
+          <CalendarWeekView
+            selectedDate={selectedDate}
+            occurrencesByDate={occurrencesByDate}
+          />
+        )}
+
+        {currentView === 'year' && (
+          <CalendarYearView
+            selectedYear={selectedYear}
+            occurrencesByDate={occurrencesByDate}
+            selectedDate={selectedDate}
+            onDateSelect={handleCalendarSelect}
+          />
+        )}
       </div>
 
       {!isPlansLoading && plans.length === 0 && (
@@ -534,10 +709,10 @@ export default function MaintenanceCalendarPage() {
                       </DrawerHeader>
                       <div className="px-4 pb-6 space-y-4">
                         <div>
-                          <label htmlFor={`drawer-reschedule-date-${occ.id}`} className="block text-xs font-medium mb-1" style={{ color: 'var(--color-text-secondary)' }}>Data nouă</label>
+                          <label htmlFor={`drawer-reschedule-date-${occ.id}`} className="block text-xs font-medium mb-1" style={{ color: 'var(--color-text-secondary)' }}>Data și ora nouă</label>
                           <input
                             id={`drawer-reschedule-date-${occ.id}`}
-                            type="date"
+                            type="datetime-local"
                             value={rescheduleData.newDate}
                             onChange={(e) => setRescheduleData((d) => ({ ...d, newDate: e.target.value }))}
                             className="input-base w-full"
@@ -584,10 +759,10 @@ export default function MaintenanceCalendarPage() {
                   <div className="mt-4 p-4 rounded-lg border transition-all duration-150" style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-warning)' }}>
                     <h3 className="text-sm font-semibold mb-3" style={{ color: 'var(--color-text-primary)' }}>Reprogramare ocurență</h3>
                     <div className="mb-3">
-                      <label htmlFor="cal-reschedule-date" className="block text-xs font-medium mb-1" style={{ color: 'var(--color-text-secondary)' }}>Data nouă</label>
+                      <label htmlFor="cal-reschedule-date" className="block text-xs font-medium mb-1" style={{ color: 'var(--color-text-secondary)' }}>Data și ora nouă</label>
                       <input
                         id="cal-reschedule-date"
-                        type="date"
+                        type="datetime-local"
                         value={rescheduleData.newDate}
                         onChange={(e) => setRescheduleData((d) => ({ ...d, newDate: e.target.value }))}
                         className="input-base w-full"
@@ -652,141 +827,16 @@ export default function MaintenanceCalendarPage() {
         </div>
       )}
 
-      {/* Create Plan Modal */}
-      {showCreateModal && (
-        <CreatePlanModal
-          devices={devices}
-          onClose={() => setShowCreateModal(false)}
-          onCreate={(data) => createMutation.mutate(data)}
-          year={selectedYear}
-          isPending={createMutation.isPending}
-        />
-      )}
-    </div>
-  );
-}
-
-function CreatePlanModal({ devices, onClose, onCreate, year, isPending }) {
-  const [deviceId, setDeviceId] = useState('');
-  const [frequency, setFrequency] = useState('');
-  const [responsibleName, setResponsibleName] = useState('');
-  const [responsibleAffil, setResponsibleAffil] = useState('');
-  const [formError, setFormError] = useState('');
-
-  const handleSubmit = () => {
-    setFormError('');
-    if (!deviceId) {
-      setFormError('Câmpul Dispozitiv este obligatoriu');
-      return;
-    }
-    if (!frequency) {
-      setFormError('Câmpul Frecvență este obligatoriu');
-      return;
-    }
-    if (!responsibleName.trim()) {
-      setFormError('Câmpul Responsabil este obligatoriu');
-      return;
-    }
-    onCreate({ deviceId: parseInt(deviceId), frequency, year, responsibleName, responsibleAffil: responsibleAffil || undefined });
-    onClose();
-  };
-
-  return (
-    <div className="fixed inset-0 flex items-center justify-center z-50 transition-opacity" style={{ backgroundColor: 'var(--overlay-strong)' }}>
-      <div className="rounded-2xl p-6 w-full max-w-md shadow-2xl border transition-all duration-150" style={{ backgroundColor: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)' }}>
-        <h2 className="text-xl font-bold mb-5" style={{ color: 'var(--color-text-primary)' }}>Creare Plan Mentenanță — {year}</h2>
-
-        <div className="mb-4">
-          <label htmlFor="device-select" className="block text-sm font-semibold mb-1.5" style={{ color: 'var(--color-text-secondary)' }}>
-            Dispozitiv
-          </label>
-          <select
-            id="device-select"
-            value={deviceId}
-            onChange={(e) => setDeviceId(e.target.value)}
-            className="w-full border rounded-lg px-3 py-2 text-sm outline-none transition-all duration-150"
-            style={{ backgroundColor: 'var(--color-bg-elevated)', color: 'var(--color-text-primary)', borderColor: 'var(--color-border)' }}
-          >
-            <option value="" style={{ backgroundColor: 'var(--color-bg-elevated)', color: 'var(--color-text-primary)' }}>-- Selectează dispozitiv --</option>
-            {devices.map((d) => (
-              <option key={d.id} value={d.id} style={{ backgroundColor: 'var(--color-bg-elevated)', color: 'var(--color-text-primary)' }}>
-                {d.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="mb-4">
-          <label htmlFor="freq-select" className="block text-sm font-semibold mb-1.5" style={{ color: 'var(--color-text-secondary)' }}>
-            Frecvență
-          </label>
-          <select
-            id="freq-select"
-            value={frequency}
-            onChange={(e) => setFrequency(e.target.value)}
-            className="w-full border rounded-lg px-3 py-2 text-sm outline-none transition-all duration-150"
-            style={{ backgroundColor: 'var(--color-bg-elevated)', color: 'var(--color-text-primary)', borderColor: 'var(--color-border)' }}
-          >
-            <option value="" style={{ backgroundColor: 'var(--color-bg-elevated)', color: 'var(--color-text-primary)' }}>-- Selectează frecvență --</option>
-            {FREQUENCIES.map((f) => (
-              <option key={f} value={f} style={{ backgroundColor: 'var(--color-bg-elevated)', color: 'var(--color-text-primary)' }}>
-                {f.charAt(0) + f.slice(1).toLowerCase()}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="mb-4">
-          <label htmlFor="responsible-input" className="block text-sm font-semibold mb-1.5" style={{ color: 'var(--color-text-secondary)' }}>
-            Responsabil <span style={{ color: 'var(--color-error)' }}>*</span>
-          </label>
-          <input
-            id="responsible-input"
-            type="text"
-            value={responsibleName}
-            onChange={(e) => setResponsibleName(e.target.value)}
-            placeholder="Ing. Ion Popescu"
-            className="w-full border rounded-lg px-3 py-2 text-sm outline-none transition-all duration-150"
-            style={{ backgroundColor: 'var(--color-bg-elevated)', color: 'var(--color-text-primary)', borderColor: 'var(--color-border)' }}
+        {/* Create Plan Modal */}
+        {showCreateModal && (
+          <CreatePlanModal
+            devices={devices}
+            onClose={() => setShowCreateModal(false)}
+            onCreate={(data) => createMutation.mutate(data)}
+            year={selectedYear}
+            isPending={createMutation.isPending}
           />
-        </div>
-
-        <div className="mb-5">
-          <label htmlFor="affil-input" className="block text-sm font-semibold mb-1.5" style={{ color: 'var(--color-text-secondary)' }}>
-            Afiliat <span style={{ color: 'var(--color-text-tertiary)', fontWeight: 'normal' }} className="text-xs">(opțional)</span>
-          </label>
-          <input
-            id="affil-input"
-            type="text"
-            value={responsibleAffil}
-            onChange={(e) => setResponsibleAffil(e.target.value)}
-            placeholder="Ex: Dept. Bioinginerie"
-            className="w-full border rounded-lg px-3 py-2 text-sm outline-none transition-all duration-150"
-            style={{ backgroundColor: 'var(--color-bg-elevated)', color: 'var(--color-text-primary)', borderColor: 'var(--color-border)' }}
-          />
-        </div>
-
-        {formError && <p role="alert" aria-live="assertive" className="text-sm mb-4" style={{ color: 'var(--color-error)' }}>{formError}</p>}
-
-        <div className="flex gap-2 justify-end">
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-4 py-2 border rounded-lg hover:bg-[var(--color-bg-elevated)] transition-all duration-150 font-semibold cursor-pointer text-sm"
-            style={{ borderColor: 'var(--color-border)', color: 'var(--color-text-primary)', backgroundColor: 'transparent' }}
-          >
-            Anulare
-          </button>
-          <button
-            type="button"
-            onClick={handleSubmit}
-            disabled={isPending}
-            className="px-4 py-2 rounded-lg hover:opacity-90 disabled:opacity-50 transition-all duration-150 font-semibold cursor-pointer text-sm"
-            style={{ backgroundColor: 'var(--healthcare-primary)', color: 'var(--color-bg-primary)' }}
-          >
-            {isPending ? 'Se salvează...' : 'Salvare Plan'}
-          </button>
-        </div>
+        )}
       </div>
     </div>
   );

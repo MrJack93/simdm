@@ -10,6 +10,19 @@ import { render, screen, fireEvent, waitFor, within, act } from '@testing-librar
 import userEvent from '@testing-library/user-event';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter } from 'react-router-dom';
+
+// Mock window.matchMedia for react-day-picker
+if (!window.matchMedia) {
+  window.matchMedia = vi.fn(() => ({
+    matches: false,
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    dispatchEvent: vi.fn(),
+  }));
+}
+
 import MaintenanceCalendarPage from '../pages/MaintenanceCalendarPage';
 
 // Mock API calls

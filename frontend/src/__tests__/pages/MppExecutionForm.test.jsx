@@ -67,7 +67,7 @@ describe('MppExecutionForm', () => {
 
   it('afișează câmpul de dată execuție', async () => {
     renderPage();
-    expect(await screen.findByText('Data execuției *')).toBeInTheDocument();
+    expect(await screen.findByLabelText(/Data execuției/)).toBeInTheDocument();
   });
 
   it('afișează câmpul de durată (minute)', async () => {
@@ -77,7 +77,7 @@ describe('MppExecutionForm', () => {
 
   it('afișează selectorul de rezultat', async () => {
     renderPage();
-    expect(await screen.findByText('Rezultat *')).toBeInTheDocument();
+    expect(await screen.findByLabelText(/Rezultat/)).toBeInTheDocument();
   });
 
   it('afișează câmpul nume inginer', async () => {
@@ -156,7 +156,7 @@ describe('MppExecutionForm', () => {
 
   it('selectarea DEFECT arată avertizare', async () => {
     renderPage();
-    await screen.findByText('Rezultat *');
+    await screen.findByLabelText(/Rezultat/);
     const selects = screen.getAllByRole('combobox');
     const resultSelect = selects.find(s => s.textContent.includes('Funcțional'));
     expect(resultSelect).toBeTruthy();

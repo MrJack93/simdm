@@ -100,7 +100,7 @@ describe('DeviceForm Coverage', () => {
       renderWithProviders(<DeviceForm />);
       await screen.findByLabelText(/Numărul inventarului/);
       await user.type(screen.getByLabelText(/Numărul inventarului/), 'DM-001');
-      await user.type(screen.getByLabelText('Denumire *'), 'Test Device');
+      await user.type(screen.getByLabelText(/Denumire/), 'Test Device');
       await user.click(screen.getByRole('button', { name: /Înainte/ }));
       expect(await screen.findByText('Clasificare Risc și Status')).toBeInTheDocument();
     });
@@ -110,7 +110,7 @@ describe('DeviceForm Coverage', () => {
       renderWithProviders(<DeviceForm />);
       await screen.findByLabelText(/Numărul inventarului/);
       await user.type(screen.getByLabelText(/Numărul inventarului/), 'DM-001');
-      await user.type(screen.getByLabelText('Denumire *'), 'Test Device');
+      await user.type(screen.getByLabelText(/Denumire/), 'Test Device');
       await user.click(screen.getByRole('button', { name: /Înainte/ }));
       await screen.findByText('Clasificare Risc și Status');
       await user.click(screen.getByRole('button', { name: /Înapoi/ }));
@@ -128,7 +128,7 @@ describe('DeviceForm Coverage', () => {
       renderWithProviders(<DeviceForm />);
       await screen.findByLabelText(/Numărul inventarului/);
       await user.type(screen.getByLabelText(/Numărul inventarului/), 'DM-001');
-      await user.type(screen.getByLabelText('Denumire *'), 'Test Device');
+      await user.type(screen.getByLabelText(/Denumire/), 'Test Device');
       await goToStep(user, 1);
       await user.selectOptions(await screen.findByTestId('select-sectionId'), '1');
       await goToStep(user, 1);
@@ -153,7 +153,7 @@ describe('DeviceForm Coverage', () => {
       renderWithProviders(<DeviceForm />);
       await screen.findByLabelText(/Numărul inventarului/);
       await user.type(screen.getByLabelText(/Numărul inventarului/), 'DM-001');
-      await user.type(screen.getByLabelText('Denumire *'), 'Test Device');
+      await user.type(screen.getByLabelText(/Denumire/), 'Test Device');
       await goToStep(user, 1);
       await screen.findByText('Clasificare Risc și Status');
       await user.click(screen.getByRole('button', { name: /Înainte/ }));
@@ -170,7 +170,7 @@ describe('DeviceForm Coverage', () => {
       await screen.findByLabelText(/Numărul inventarului/);
 
       await user.type(screen.getByLabelText(/Numărul inventarului/), 'DM-2024-001');
-      await user.type(screen.getByLabelText('Denumire *'), 'Defibrilator');
+      await user.type(screen.getByLabelText(/Denumire/), 'Defibrilator');
       await user.type(screen.getByLabelText('Model'), 'X100');
 
       await goToStep(user, 1);
@@ -198,7 +198,7 @@ describe('DeviceForm Coverage', () => {
       await screen.findByLabelText(/Numărul inventarului/);
 
       await user.type(screen.getByLabelText(/Numărul inventarului/), 'DM-001');
-      await user.type(screen.getByLabelText('Denumire *'), 'Test');
+      await user.type(screen.getByLabelText(/Denumire/), 'Test');
       await goToStep(user, 1);
       await user.selectOptions(await screen.findByTestId('select-sectionId'), '1');
       await goToStep(user, 1);
@@ -216,7 +216,7 @@ describe('DeviceForm Coverage', () => {
       await screen.findByLabelText(/Numărul inventarului/);
 
       await user.type(screen.getByLabelText(/Numărul inventarului/), 'DM-001');
-      await user.type(screen.getByLabelText('Denumire *'), 'Test');
+      await user.type(screen.getByLabelText(/Denumire/), 'Test');
       await goToStep(user, 1);
       await user.selectOptions(await screen.findByTestId('select-sectionId'), '1');
       await goToStep(user, 1);
@@ -300,7 +300,7 @@ describe('DeviceForm Coverage', () => {
       renderWithProviders(<DeviceForm />);
       await screen.findByLabelText(/Numărul inventarului/);
       await user.type(screen.getByLabelText(/Numărul inventarului/), 'DM-001');
-      await user.type(screen.getByLabelText('Denumire *'), 'Test Device');
+      await user.type(screen.getByLabelText(/Denumire/), 'Test Device');
       await goToStep(user, 1);
       await user.selectOptions(await screen.findByTestId('select-sectionId'), '1');
       await goToStep(user, 1);
@@ -316,7 +316,7 @@ describe('DeviceForm Coverage', () => {
       renderWithProviders(<DeviceForm />);
       await screen.findByLabelText(/Numărul inventarului/);
       await user.type(screen.getByLabelText(/Numărul inventarului/), 'DM-001');
-      await user.type(screen.getByLabelText('Denumire *'), 'Test Device');
+      await user.type(screen.getByLabelText(/Denumire/), 'Test Device');
       await goToStep(user, 1);
       await user.selectOptions(await screen.findByTestId('select-sectionId'), '1');
       await goToStep(user, 1);
@@ -335,7 +335,7 @@ describe('DeviceForm Coverage', () => {
       renderWithProviders(<DeviceForm />);
       await screen.findByLabelText(/Numărul inventarului/);
       await user.type(screen.getByLabelText(/Numărul inventarului/), 'DM-001');
-      await user.type(screen.getByLabelText('Denumire *'), 'Test');
+      await user.type(screen.getByLabelText(/Denumire/), 'Test');
       await user.tab();
       await user.keyboard('{Enter}');
       expect(await screen.findByText('Clasificare Risc și Status')).toBeInTheDocument();
@@ -358,7 +358,7 @@ describe('DeviceForm Coverage', () => {
       renderWithProviders(<DeviceForm />);
       await screen.findByLabelText(/Numărul inventarului/);
       await user.type(screen.getByLabelText(/Numărul inventarului/), 'DM-001');
-      await user.type(screen.getByLabelText('Denumire *'), 'Test');
+      await user.type(screen.getByLabelText(/Denumire/), 'Test');
       await goToStep(user, 1);
       await user.selectOptions(await screen.findByTestId('select-sectionId'), '1');
       await goToStep(user, 1);

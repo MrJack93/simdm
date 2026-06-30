@@ -4,6 +4,18 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { MemoryRouter } from 'react-router-dom';
 
+// Mock window.matchMedia for react-day-picker
+if (!window.matchMedia) {
+  window.matchMedia = vi.fn(() => ({
+    matches: false,
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    dispatchEvent: vi.fn(),
+  }));
+}
+
 const mockNavigate = vi.fn();
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');
@@ -152,10 +164,10 @@ describe('MaintenanceCalendarPage — function coverage 2', () => {
   it('day click selects and deselects a day', async () => {
     renderPage();
     await screen.findByText('Calendar Mentenanță');
-    const dayEl = screen.getByText('15', { selector: 'span.text-sm' });
-    fireEvent.click(dayEl.closest('div'));
+    const dayEl = screen.getByText('15');
+    fireEvent.click(dayEl.closest('button') || dayEl.closest('div'));
     expect(screen.getByText(/Apariții mentenanță — 15/)).toBeInTheDocument();
-    fireEvent.click(dayEl.closest('div'));
+    fireEvent.click(dayEl.closest('button') || dayEl.closest('div'));
     await waitFor(() => {
       expect(screen.queryByText(/Apariții mentenanță/)).not.toBeInTheDocument();
     });
@@ -242,10 +254,10 @@ describe('MaintenanceCalendarPage — function coverage 2', () => {
     });
     renderPage();
     await screen.findByText('Calendar Mentenanță');
-    const dayEl = screen.getByText(String(day), { selector: 'span.text-sm' });
-    fireEvent.click(dayEl.closest('div'));
+    const dayEl = screen.getByText(String(day));
+    fireEvent.click(dayEl.closest('button') || dayEl);
     expect(screen.getByText(/Apariții mentenanță/)).toBeInTheDocument();
-    expect(screen.getByText('Echograf')).toBeInTheDocument();
+    expect(screen.getAllByText('Echograf').length).toBeGreaterThan(0);
   });
 
   it('reschedule button opens inline form', async () => {
@@ -261,12 +273,12 @@ describe('MaintenanceCalendarPage — function coverage 2', () => {
     });
     renderPage();
     await screen.findByText('Calendar Mentenanță');
-    const dayEl = screen.getByText(String(day), { selector: 'span.text-sm' });
-    fireEvent.click(dayEl.closest('div'));
-    await screen.findByText('Echograf');
+    const dayEl = screen.getByText(String(day));
+    fireEvent.click(dayEl.closest('button') || dayEl);
+    await screen.findAllByText('Echograf');
     const rescheduleBtn = screen.getByText('Reprogramează');
     fireEvent.click(rescheduleBtn);
-    expect(screen.getByText('Data nouă')).toBeInTheDocument();
+    expect(screen.getByText('Data și ora nouă')).toBeInTheDocument();
     expect(screen.getByText(/Motiv/)).toBeInTheDocument();
   });
 
@@ -283,14 +295,14 @@ describe('MaintenanceCalendarPage — function coverage 2', () => {
     });
     renderPage();
     await screen.findByText('Calendar Mentenanță');
-    const dayEl = screen.getByText(String(day), { selector: 'span.text-sm' });
-    fireEvent.click(dayEl.closest('div'));
-    await screen.findByText('Echograf');
+    const dayEl = screen.getByText(String(day));
+    fireEvent.click(dayEl.closest('button') || dayEl);
+    await screen.findAllByText('Echograf');
     fireEvent.click(screen.getByText('Reprogramează'));
     fireEvent.click(screen.getByText('Salvează'));
     expect(screen.getByText('Data nouă este obligatorie')).toBeInTheDocument();
     const dateInput = screen.getAllByDisplayValue('')[0];
-    fireEvent.change(dateInput, { target: { value: '2026-07-01' } });
+    fireEvent.change(dateInput, { target: { value: '2026-07-01T10:00' } });
     fireEvent.click(screen.getByText('Salvează'));
     expect(screen.getByText('Motivul trebuie să aibă cel puțin 5 caractere')).toBeInTheDocument();
   });
@@ -308,12 +320,12 @@ describe('MaintenanceCalendarPage — function coverage 2', () => {
     });
     renderPage();
     await screen.findByText('Calendar Mentenanță');
-    const dayEl = screen.getByText(String(day), { selector: 'span.text-sm' });
-    fireEvent.click(dayEl.closest('div'));
-    await screen.findByText('Echograf');
+    const dayEl = screen.getByText(String(day));
+    fireEvent.click(dayEl.closest('button') || dayEl);
+    await screen.findAllByText('Echograf');
     fireEvent.click(screen.getByText('Reprogramează'));
     const dateInput = screen.getAllByDisplayValue('')[0];
-    fireEvent.change(dateInput, { target: { value: '2026-07-01' } });
+    fireEvent.change(dateInput, { target: { value: '2026-07-01T10:00' } });
     fireEvent.change(screen.getByPlaceholderText(/Bioinginerul/), { target: { value: 'Reason for reschedule' } });
     fireEvent.click(screen.getByText('Salvează'));
     await waitFor(() => {
@@ -334,14 +346,14 @@ describe('MaintenanceCalendarPage — function coverage 2', () => {
     });
     renderPage();
     await screen.findByText('Calendar Mentenanță');
-    const dayEl = screen.getByText(String(day), { selector: 'span.text-sm' });
-    fireEvent.click(dayEl.closest('div'));
-    await screen.findByText('Echograf');
+    const dayEl = screen.getByText(String(day));
+    fireEvent.click(dayEl.closest('button') || dayEl);
+    await screen.findAllByText('Echograf');
     fireEvent.click(screen.getByText('Reprogramează'));
-    expect(screen.getByText('Data nouă')).toBeInTheDocument();
+    expect(screen.getByText('Data și ora nouă')).toBeInTheDocument();
     fireEvent.click(screen.getByText('Anulare'));
     await waitFor(() => {
-      expect(screen.queryByText('Data nouă')).not.toBeInTheDocument();
+      expect(screen.queryByText('Data și ora nouă')).not.toBeInTheDocument();
     });
   });
 
@@ -358,9 +370,9 @@ describe('MaintenanceCalendarPage — function coverage 2', () => {
     });
     renderPage();
     await screen.findByText('Calendar Mentenanță');
-    const dayEl = screen.getByText(String(day), { selector: 'span.text-sm' });
-    fireEvent.click(dayEl.closest('div'));
-    await screen.findByText('Echograf');
+    const dayEl = screen.getByText(String(day));
+    fireEvent.click(dayEl.closest('button') || dayEl);
+    await screen.findAllByText('Echograf');
     fireEvent.click(screen.getByText('Execută MPP'));
     expect(mockNavigate).toHaveBeenCalledWith('/maintenance/execution');
   });
@@ -368,8 +380,8 @@ describe('MaintenanceCalendarPage — function coverage 2', () => {
   it('empty day shows no occurrences message', async () => {
     renderPage();
     await screen.findByText('Calendar Mentenanță');
-    const dayEl = screen.getByText('15', { selector: 'span.text-sm' });
-    fireEvent.click(dayEl.closest('div'));
+    const dayEl = screen.getByText('15');
+    fireEvent.click(dayEl.closest('button') || dayEl);
     await waitFor(() => {
       expect(screen.getByText('Nu există apariții pentru această zi.')).toBeInTheDocument();
     });

@@ -448,7 +448,7 @@ describe('RepairTicketsPage Coverage', () => {
     it('shows loading indicator', async () => {
       repairApi.getRepairTickets.mockReturnValue(new Promise(() => {}));
       renderPage();
-      expect(screen.getByText('Incarcand...')).toBeInTheDocument();
+      expect(screen.getByLabelText(/Se încarcă tichetele/)).toBeInTheDocument();
     });
   });
 });

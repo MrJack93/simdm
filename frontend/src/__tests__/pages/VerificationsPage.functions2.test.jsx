@@ -63,7 +63,7 @@ describe('VerificationsPage -- function coverage 2', () => {
 
   it('renders heading and upload button', async () => {
     renderPage();
-    expect(await screen.findByText('Upload Certificat')).toBeInTheDocument();
+    expect(await screen.findByText('Încarcă Certificat')).toBeInTheDocument();
     expect(screen.getByText(/Verific/)).toBeInTheDocument();
   });
 
@@ -137,7 +137,7 @@ describe('VerificationsPage -- function coverage 2', () => {
     const user = userEvent.setup();
     renderPage();
     await screen.findByText('Echograf');
-    const validUntilHeader = screen.getByText('Valid Until');
+    const validUntilHeader = screen.getByText('Valabil Până la');
     await user.click(validUntilHeader);
     await user.click(validUntilHeader);
   });
@@ -173,23 +173,23 @@ describe('VerificationsPage -- function coverage 2', () => {
   it('UploadModal opens and closes', async () => {
     const user = userEvent.setup();
     renderPage();
-    await screen.findByText('Upload Certificat');
-    await user.click(screen.getByText('Upload Certificat'));
+    await screen.findByText('Încarcă Certificat');
+    await user.click(screen.getByText('Încarcă Certificat'));
     await waitFor(() => {
-      expect(screen.getByText(/ncarc/)).toBeInTheDocument();
+      expect(screen.getByRole('heading', { name: /Încarcă Certificat/i })).toBeInTheDocument();
     });
     await user.click(screen.getByText('Anulare'));
     await waitFor(() => {
-      expect(screen.queryByText(/ncarc/)).not.toBeInTheDocument();
+      expect(screen.queryByRole('heading', { name: /Încarcă Certificat/i })).not.toBeInTheDocument();
     });
   });
 
   it('UploadModal validates required fields', async () => {
     const user = userEvent.setup();
     renderPage();
-    await screen.findByText('Upload Certificat');
-    await user.click(screen.getByText('Upload Certificat'));
-    await waitFor(() => { expect(screen.getByText(/ncarc/)).toBeInTheDocument(); });
+    await screen.findByText('Încarcă Certificat');
+    await user.click(screen.getByText('Încarcă Certificat'));
+    await waitFor(() => { expect(screen.getByRole('heading', { name: /Încarcă Certificat/i })).toBeInTheDocument(); });
     await user.click(screen.getByText('Salvare'));
     expect(screen.getByText(/Dispozitiv.*obligatoriu/)).toBeInTheDocument();
   });
@@ -197,9 +197,9 @@ describe('VerificationsPage -- function coverage 2', () => {
   it('UploadModal submits with valid data', async () => {
     const user = userEvent.setup();
     renderPage();
-    await screen.findByText('Upload Certificat');
-    await user.click(screen.getByText('Upload Certificat'));
-    await waitFor(() => { expect(screen.getByText(/ncarc/)).toBeInTheDocument(); });
+    await screen.findByText('Încarcă Certificat');
+    await user.click(screen.getByText('Încarcă Certificat'));
+    await waitFor(() => { expect(screen.getByRole('heading', { name: /Încarcă Certificat/i })).toBeInTheDocument(); });
     fireEvent.change(screen.getByLabelText('Dispozitiv'), { target: { value: '1' } });
     fireEvent.change(screen.getByLabelText('Tip Verificare'), { target: { value: 'METROLOGIC' } });
     fireEvent.change(screen.getByLabelText('Nr. Certificat'), { target: { value: 'CERT-001' } });

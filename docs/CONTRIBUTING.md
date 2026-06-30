@@ -1,8 +1,8 @@
 # Ghid de Contribuție — SIMDM
 
-**Versiune:** 2.2 (Faza 1-2 Complete + Module Quick-Win + Faza 3 Ready)
-**Actualizat:** 2026-06-05  
-**Audiență:** Toți contributorii (backend, frontend, docs, DevOps)  
+**Versiune:** 5.0 (Faza 1-8 Complete — Production Ready)
+**Actualizat:** 2026-06-29
+**Audiență:** Toți contributorii (backend, frontend, docs, DevOps)
 **Limbă:** Română (interfață + docs), Engleză (cod)
 
 ---

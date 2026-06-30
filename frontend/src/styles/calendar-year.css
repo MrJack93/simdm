@@ -1,0 +1,375 @@
+/* Calendar Year View — SIMDM Figma 2026 Design */
+
+.calendar-year-view {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background-color: var(--color-bg-primary);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+/* ===== HEADER ===== */
+.calendar-year-header {
+  padding: var(--space-4) var(--space-6);
+  border-bottom: 1px solid var(--color-border);
+  background-color: var(--color-bg-primary);
+}
+
+.calendar-year-title {
+  margin: 0 0 var(--space-1) 0;
+  font-size: 1.875rem;
+  font-weight: 400;
+  color: var(--color-text-primary);
+  font-family: var(--font-family-heading);
+}
+
+.calendar-year-subtitle {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-regular);
+}
+
+/* ===== YEAR GRID ===== */
+.year-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4);
+  padding: var(--space-6);
+  overflow-y: auto;
+  flex: 1;
+  max-height: calc(100vh - 300px);
+}
+
+/* ===== MONTH CARD ===== */
+.year-month-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  transition: box-shadow var(--transition-fast), border-color var(--transition-fast);
+}
+
+.year-month-card:hover {
+  box-shadow: var(--shadow-sm);
+  border-color: var(--color-accent);
+}
+
+.year-month-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: var(--space-2);
+}
+
+.year-month-title {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+/* ===== MINI CALENDAR IN CARD ===== */
+.year-month-calendar {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-2) 0;
+}
+
+.year-day-picker {
+  width: 100%;
+}
+
+.year-months {
+  width: 100%;
+}
+
+.year-month {
+  width: 100%;
+}
+
+.year-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px;
+  margin-bottom: 4px;
+}
+
+.year-weekday {
+  text-align: center;
+  font-size: 8px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  padding: 2px 0;
+}
+
+.year-week {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px;
+  margin-bottom: 1px;
+}
+
+.year-day {
+  width: 100%;
+}
+
+.year-day-button {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  font-size: 10px;
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.year-day-button:hover {
+  background-color: var(--color-bg-tertiary);
+}
+
+.year-day-button:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: -2px;
+}
+
+.year-day-selected {
+  background-color: var(--color-accent);
+  color: var(--color-on-primary);
+  border-color: var(--color-accent);
+  font-weight: var(--font-weight-semibold);
+}
+
+.year-day-today {
+  background-color: var(--color-info-bg);
+  color: var(--color-info);
+  border-color: var(--color-info);
+  font-weight: var(--font-weight-semibold);
+}
+
+.year-day-outside {
+  color: var(--color-text-tertiary);
+  opacity: 0.4;
+}
+
+/* ===== MONTH EVENTS ===== */
+.year-month-events {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--color-border);
+}
+
+.year-events-header {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.year-events-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: 100px;
+  overflow-y: auto;
+}
+
+.year-event-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 2px 0;
+  font-size: 9px;
+  color: var(--color-text-primary);
+}
+
+.year-event-day {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-accent);
+}
+
+.year-event-count {
+  font-size: 8px;
+  color: var(--color-text-secondary);
+}
+
+.year-event-more {
+  text-align: center;
+  padding: 2px 0;
+  font-size: 8px;
+  color: var(--color-text-tertiary);
+  font-style: italic;
+}
+
+/* ===== LEGEND ===== */
+.calendar-year-legend {
+  display: flex;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-6);
+  border-top: 1px solid var(--color-border);
+  background-color: var(--color-bg-secondary);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-medium);
+}
+
+.legend-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.legend-dot.status-programat {
+  background-color: var(--color-success-bg);
+  border: 0.5px solid var(--color-success);
+}
+
+.legend-dot.status-scadent {
+  background-color: var(--color-warning-bg);
+  border: 0.5px solid var(--color-warning);
+}
+
+.legend-dot.status-depasit {
+  background-color: var(--color-error-bg);
+  border: 0.5px solid var(--color-error);
+}
+
+.legend-dot.status-efectuat {
+  background-color: var(--color-info-bg);
+  border: 0.5px solid var(--color-info);
+}
+
+/* ===== DARK MODE ===== */
+[data-theme="dark"] .calendar-year-view {
+  background-color: var(--color-bg-primary);
+}
+
+[data-theme="dark"] .calendar-year-header {
+  background-color: var(--color-bg-primary);
+  border-bottom-color: var(--color-border);
+}
+
+[data-theme="dark"] .year-month-card {
+  background-color: var(--color-bg-secondary);
+  border-color: var(--color-border);
+}
+
+[data-theme="dark"] .year-month-card:hover {
+  border-color: var(--color-accent);
+}
+
+[data-theme="dark"] .year-day-button:hover {
+  background-color: var(--color-bg-tertiary);
+}
+
+[data-theme="dark"] .calendar-year-legend {
+  background-color: var(--color-bg-secondary);
+  border-top-color: var(--color-border);
+}
+
+/* ===== MOBILE LAYOUT ===== */
+@media (max-width: 1200px) {
+  .year-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-3);
+    padding: var(--space-4);
+  }
+}
+
+@media (max-width: 768px) {
+  .year-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-2);
+    padding: var(--space-3);
+    max-height: calc(100vh - 250px);
+  }
+
+  .calendar-year-header {
+    padding: var(--space-3);
+  }
+
+  .calendar-year-title {
+    font-size: 1.5rem;
+  }
+
+  .year-month-card {
+    padding: var(--space-2);
+    gap: var(--space-1);
+  }
+
+  .year-month-title {
+    font-size: 11px;
+  }
+
+  .year-day-button {
+    width: 20px;
+    height: 20px;
+    font-size: 8px;
+  }
+
+  .year-events-header {
+    font-size: 10px;
+  }
+
+  .year-event-item {
+    font-size: 8px;
+  }
+
+  .calendar-year-legend {
+    gap: var(--space-2);
+    padding: var(--space-2);
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .year-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-2);
+    padding: var(--space-2);
+  }
+
+  .calendar-year-title {
+    font-size: 1.25rem;
+  }
+
+  .year-month-card {
+    padding: var(--space-2);
+  }
+
+  .calendar-year-legend {
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+}
+
+/* ===== REDUCED MOTION ===== */
+@media (prefers-reduced-motion: reduce) {
+  .year-month-card,
+  .year-day-button {
+    transition: none;
+  }
+}

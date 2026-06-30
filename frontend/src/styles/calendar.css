@@ -202,9 +202,23 @@
   border-radius: var(--radius-xs);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
+  overflow: hidden;
   white-space: nowrap;
+}
+
+.calendar-event-icon {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  line-height: 1;
+}
+
+.calendar-event-label {
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .calendar-event-indicator.status-programat {

@@ -28,7 +28,7 @@
     "axios": "^1.16.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "date-fns": "^3.6.0",
+    "date-fns": "^4.4.0",
     "lucide-react": "^1.17.0",
     "react": "^19.2.6",
     "react-big-calendar": "^1.8.5",

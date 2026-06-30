@@ -258,7 +258,7 @@ describe('MaintenanceExecutionPage — function coverage 2', () => {
   it('shows loading state initially', () => {
     api.get.mockImplementation(() => new Promise(() => {}));
     renderPage();
-    expect(screen.getByText('Se încarcă...')).toBeInTheDocument();
+    expect(screen.getAllByRole('status').length).toBeGreaterThan(0);
   });
 
   it('form fields can be filled', async () => {

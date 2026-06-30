@@ -67,8 +67,8 @@ describe('DeviceForm — Extra Coverage', () => {
 
   it('renders all step 0 fields', () => {
     renderForm();
-    expect(screen.getByLabelText('Numărul inventarului *')).toBeInTheDocument();
-    expect(screen.getByLabelText('Denumire *')).toBeInTheDocument();
+    expect(screen.getByLabelText(/Numărul inventarului/)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Denumire/)).toBeInTheDocument();
     expect(screen.getByLabelText('Model')).toBeInTheDocument();
     expect(screen.getByLabelText('Seria')).toBeInTheDocument();
     expect(screen.getByLabelText('Producător')).toBeInTheDocument();
@@ -85,8 +85,8 @@ describe('DeviceForm — Extra Coverage', () => {
 
   it('advances to step 2 with valid data', async () => {
     renderForm();
-    fireEvent.change(screen.getByLabelText('Numărul inventarului *'), { target: { value: 'DM-001' } });
-    fireEvent.change(screen.getByLabelText('Denumire *'), { target: { value: 'Ventilator' } });
+    fireEvent.change(screen.getByLabelText(/Numărul inventarului/), { target: { value: 'DM-001' } });
+    fireEvent.change(screen.getByLabelText(/Denumire/), { target: { value: 'Ventilator' } });
     fireEvent.click(screen.getByText('Înainte →'));
     await waitFor(() => {
       expect(screen.getByText('Clasificare Risc și Status')).toBeInTheDocument();
@@ -95,8 +95,8 @@ describe('DeviceForm — Extra Coverage', () => {
 
   it('goes back to step 1 from step 2', async () => {
     renderForm();
-    fireEvent.change(screen.getByLabelText('Numărul inventarului *'), { target: { value: 'DM-001' } });
-    fireEvent.change(screen.getByLabelText('Denumire *'), { target: { value: 'Ventilator' } });
+    fireEvent.change(screen.getByLabelText(/Numărul inventarului/), { target: { value: 'DM-001' } });
+    fireEvent.change(screen.getByLabelText(/Denumire/), { target: { value: 'Ventilator' } });
     fireEvent.click(screen.getByText('Înainte →'));
     await waitFor(() => screen.getByText('Clasificare Risc și Status'));
     fireEvent.click(screen.getByText('← Înapoi'));
@@ -118,9 +118,9 @@ describe('DeviceForm — Extra Coverage', () => {
 
   it('handles Enter key to advance steps', async () => {
     renderForm();
-    fireEvent.change(screen.getByLabelText('Numărul inventarului *'), { target: { value: 'DM-001' } });
-    fireEvent.change(screen.getByLabelText('Denumire *'), { target: { value: 'Ventilator' } });
-    const input = screen.getByLabelText('Numărul inventarului *');
+    fireEvent.change(screen.getByLabelText(/Numărul inventarului/), { target: { value: 'DM-001' } });
+    fireEvent.change(screen.getByLabelText(/Denumire/), { target: { value: 'Ventilator' } });
+    const input = screen.getByLabelText(/Numărul inventarului/);
     fireEvent.keyDown(input, { key: 'Enter' });
     await waitFor(() => {
       expect(screen.getByText('Clasificare Risc și Status')).toBeInTheDocument();
@@ -130,6 +130,6 @@ describe('DeviceForm — Extra Coverage', () => {
   it('shows loading state when device is loading', () => {
     useDevice.mockReturnValue({ isLoading: true, data: null });
     renderForm('/devices/1/edit');
-    expect(screen.getByText('Se încarcă dispozitivul…')).toBeInTheDocument();
+    expect(screen.getByRole('status')).toBeInTheDocument();
   });
 });

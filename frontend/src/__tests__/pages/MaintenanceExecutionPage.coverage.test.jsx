@@ -132,7 +132,7 @@ describe('MaintenanceExecutionPage Coverage', () => {
     it('shows loading state', async () => {
       api.get.mockReturnValue(new Promise(() => {}));
       renderPage();
-      expect(screen.getByText(/se încarcă/i)).toBeInTheDocument();
+      expect(screen.getAllByRole('status').length).toBeGreaterThan(0);
     });
 
     it('renders execution history section', async () => {

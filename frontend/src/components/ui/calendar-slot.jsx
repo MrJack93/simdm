@@ -1,28 +1,18 @@
 import { cn } from '@/lib/utils';
 
-export function CalendarSlot({
-  type = 'full',
-  monthView = false,
-  quantity = 'single',
-  weekend = false,
-  today = false,
-  children,
-  className,
-}) {
-  const slotClass = cn(
-    'calendar-day-cell',
-    {
-      'weekend': weekend,
-      'today': today,
-    },
-    className
-  );
-
-  return (
-    <div className={slotClass}>
-      {children}
-    </div>
-  );
+function getStatusIcon(status) {
+  switch (status.toLowerCase()) {
+    case 'programat':
+      return '○'; // Circle for scheduled
+    case 'scadent':
+      return '⏰'; // Hourglass for expiring
+    case 'depasit':
+      return '⚠'; // Warning for overdue
+    case 'efectuat':
+      return '✓'; // Checkmark for completed
+    default:
+      return '●'; // Dot fallback
+  }
 }
 
 export function CalendarEventIndicator({
@@ -32,10 +22,19 @@ export function CalendarEventIndicator({
   showExtra = false,
 }) {
   const statusClass = `status-${status.toLowerCase()}`;
+  const icon = getStatusIcon(status);
 
   return (
-    <div className={cn('calendar-event-indicator', statusClass)} title={deviceName}>
-      {deviceName}
+    <div
+      className={cn('calendar-event-indicator', statusClass)}
+      title={`${deviceName} (${status})`}
+      role="status"
+      aria-label={`${deviceName} — Status: ${status}`}
+    >
+      <span aria-hidden="true" className="calendar-event-icon">
+        {icon}
+      </span>
+      <span className="calendar-event-label">{deviceName}</span>
     </div>
   );
 }

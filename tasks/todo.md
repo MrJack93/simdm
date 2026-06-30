@@ -343,6 +343,98 @@ Audit trecut, remedieri aplicate (vezi CLAUDE.md §Reguli de securitate). Confir
 
 ---
 
+## 🟡 FAZA 3.6: Remediere Audit Calendar Mentenanță — PROPUS
+
+**Status:** 🟡 PLAN PROPUS (2026-06-16) — în așteptarea aprobării
+
+> Audit complet al paginii `/maintenance/calendar` (frontend+backend) a găsit
+> 1 bug critic (Year View gol), o neconcordanță de arhitectură (Day/Week
+> View foloseau timeline orar pe date fără oră), violări CLAUDE.md (texte EN
+> în UI) și DESIGN.md (font-weight heading), plus probleme UX/accesibilitate.
+> Planul detaliat (12 task-uri, 4 faze, checkpoint-uri) e în
+> [plan.md](plan.md).
+
+**Checklist (rezumat progres):**
+
+- [ ] Faza 1 — Fix critic Year View + oră reală de mentenanță (Task 1-4)
+- [ ] Faza 2 — Traducere RO completă + fix DESIGN.md heading-uri (Task 5-6)
+- [ ] Faza 3 — Sidebar mobil + sync mini-calendar + elimină feature fantomă (Task 7-9)
+- [ ] Faza 4 — Accesibilitate (aria-pressed/aria-label) + cleanup cod mort (Task 10-12)
+
+---
+
+## ✅ FAZA 5: Documente & Proceduri (DMS) — COMPLETATĂ
+
+**Status:** ✅ DONE (2026-06-19)
+
+Bibliotecă centralizată de documente pentru bioinginer — proceduri MDM, formulare, legislație,
+manuale tehnice, certificate, contracte, rapoarte — cu versionare, categorisire, căutare și servire autentificată.
+
+**Componente implementate:**
+
+- [x] Schema extinsă: `documents` + `uploadedById`, `deviceId`, `isDeleted` + migrare
+- [x] Backend: `documents.js` — CRUD complet + upload (multer 25MB) + versionare (self-relation) + servire autentificată (path-traversal guard)
+- [x] Frontend: `DocumentsPage.jsx` — tabel, filtre (search/categorie/dispozitiv), upload modal (drag&drop), istoric versiuni, editare metadate, soft-delete
+- [x] API: `documents.js` + hook `useDocuments.js`
+- [x] Navigare: ruta `/documents` + icon `BookOpen` în header + mobile menu
+- [x] Seed: `seedDocuments.js` — 22 documente normative (1 Ghid + 12 Formulare + 9 Proceduri MDM)
+- [x] DeviceForm: secțiune „Documente atașate" (filtrează după deviceId)
+- [x] Teste: 24 backend + 14 frontend — 966 total backend passing
+
+---
+
+## ✅ FAZA 5.1: DMS Hardening — COMPLETATĂ
+
+**Status:** ✅ DONE (2026-06-19)
+
+Ridicarea modulului Documente de la „MVP funcțional" la „DMS conform pentru date medicale".
+
+**Componente implementate:**
+
+- [x] Schema extinsă: `fileHash`, `issuer`, `validFrom`, `validUntil`, `reviewAt` + migrare
+- [x] Hash SHA-256 calculat la upload + `GET /:id/verify` + badge integritate în UI
+- [x] `validUntil` impus pe CERTIFICAT/CONTRACT (Zod superRefine)
+- [x] `GET /expiring?days=N` + `checkDocumentExpiry` în cron + badge/filtru expirare în UI
+- [x] `GET /:id/access-log` + tab „Istoric acces" în detaliul documentului
+- [x] `DocumentDetailModal` cu verificare integritate + istoric acces + hash copiat
+- [x] Câmpuri condiționate în modal: issuer/validUntil pentru CERTIFICAT/CONTRACT, reviewAt pentru PROCEDURA_MDM/FORMULAR
+- [x] Teste: 41 backend + 24 frontend — 985 total backend passing
+
+---
+
+## ✅ FAZA 6: Casare, Raportare & Jurnal de Gardă — COMPLETĂ
+
+**Status:** ✅ DONE (2026-06-19)
+
+Închiderea Capitolului 3 din Ghidul Bioinginerului.
+
+**Componente implementate:**
+
+- [x] Schema: `CONSERVAT` în DeviceStatus + `decommission_records` + `duty_log_entries` + `faultCategory` pe repair_tickets; migrare `20260619131811_add_phase6_casare_raport`
+- [x] Modul A: Casare/Conservare/Defectare — CRUD + actualizare status device + Formular Nr. 10 PDF
+- [x] Modul B: Raport activitate — agregare automată (reparații, mentenanță, verificări, DM instalate) + Formular Nr. 12 PDF (3 tabele)
+- [x] Modul C: Jurnal de gardă — raportare + soluționare + Formular Nr. 11 PDF
+- [x] Rute: `/decommission`, `/duty-log`, `/reports` (sub ProtectedRoute) + navigare în meniu
+- [x] Teste: 9 decommission + 8 dutyLog + 5 activityReport = 22 noi; 1007 total backend
+
+---
+
+## ✅ FAZA 7: Procurement (Planificare, Procurare & Instalare) — COMPLETĂ
+
+**Status:** ✅ DONE (2026-06-29)
+
+Acoperirea Capitolului 2 din Ghidul Bioinginerului — ciclul de viață complet al DM.
+
+**Componente implementate:**
+
+- [x] Schema: `procurement_plans` + `procurement_items` + `commissioning_records` + `faultCategory` pe repair_tickets; migrare `20260629094501_add_phase7_procurement`
+- [x] Modul A: Planuri procurare DM + consumabile, rânduri cu total auto, flux DRAFT→COORDONAT→APROBAT, Formulare Nr. 1 și Nr. 2 PDF
+- [x] Modul B: Dare în exploatare → device FUNCTIONAL + date achiziție; Formulare Nr. 3 și Nr. 4 PDF
+- [x] Rute: `/procurement` (ShoppingCart), `/commissioning` (PackageCheck) + navigare în meniu
+- [x] Teste: 10 procurement + 10 commissioning = 20 noi; 1027 total backend passing
+
+---
+
 ## 🔔 NOTIFICĂRI AUTOMATE (Backend)
 
 - [x] Instalează node-cron
@@ -386,10 +478,15 @@ Audit trecut, remedieri aplicate (vezi CLAUDE.md §Reguli de securitate). Confir
 | **1** | ✅ DONE + auditată | 100% | rulează `npm test` local |
 | **2** | ✅ DONE + auditată | 100% | rulează `npm test` local |
 | **3** | ✅ DONE + auditată | 100% | rulează `npm test` local |
-| **4-8** | ⬜ PLANNED | 0% | — |
+| **4** | ✅ DONE | 100% | Design System (Claude.ai theme) |
+| **5** | ✅ DONE | 100% | DMS — 24 backend + 14 frontend tests |
+| **5.1** | ✅ DONE | 100% | DMS Hardening — 41 backend + 24 frontend tests |
+| **6** | ✅ DONE | 100% | Casare + Raportare + Jurnal Gardă — 22 backend tests |
+| **7** | ✅ DONE | 100% | Procurement + Dare în exploatare (Formulare Nr. 1-4) — 10+10 backend tests |
+| **8** | ✅ DONE | 100% | Dashboard KPI + Hardening + QA — 6 dashboard tests, 1033 total backend |
 
 ---
 
-**Actualizat:** 2026-06-08  
-**Faza 3:** plan detaliat pas-cu-pas în [PLAN-FAZA3-DETALIAT.md](PLAN-FAZA3-DETALIAT.md)  
+**Actualizat:** 2026-06-29  
+**Faza 8:** Dashboard KPI + Hardening Go-Live + QA — SIMDM Production Ready (9/9 ProtectedRoute tests, E2E lifecycle, import date reale)  
 **Bază normativă:** Ordinul MS nr. 889/2024 (Ghidul Bioinginerului)

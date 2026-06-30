@@ -1,0 +1,331 @@
+/* Calendar Day View — SIMDM Figma 2026 Design */
+
+.calendar-day-view {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-bg-primary);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.calendar-day-view.empty {
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+}
+
+.calendar-day-view.empty .empty-state {
+  text-align: center;
+  padding: var(--space-8);
+}
+
+.calendar-day-view.empty .empty-state p {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+/* ===== HEADER ===== */
+.calendar-day-header {
+  padding: var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+  background-color: var(--color-bg-primary);
+}
+
+.calendar-day-title {
+  margin: 0 0 var(--space-1) 0;
+  font-size: 1.375rem;
+  font-weight: 400;
+  color: var(--color-text-primary);
+  font-family: var(--font-family-heading);
+  text-transform: capitalize;
+}
+
+.calendar-day-subtitle {
+  margin: 0;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-regular);
+}
+
+/* ===== TIMELINE ===== */
+.calendar-day-timeline {
+  display: flex;
+  flex: 1;
+  gap: 0;
+  overflow: hidden;
+}
+
+.timeline-hours {
+  display: flex;
+  flex-direction: column;
+  width: 70px;
+  border-right: 1px solid var(--color-border);
+  background-color: var(--color-bg-secondary);
+  flex-shrink: 0;
+}
+
+.timeline-hour-slot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 60px;
+  padding: var(--space-1);
+  border-bottom: 1px solid var(--color-border-subtle);
+  font-size: 11px;
+}
+
+.timeline-hour-slot:last-child {
+  border-bottom: none;
+}
+
+.timeline-hour-label {
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-medium);
+  text-align: center;
+  line-height: 1;
+}
+
+.timeline-grid {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow-y: auto;
+  position: relative;
+}
+
+.timeline-hour-cell {
+  position: relative;
+  height: 60px;
+  border-bottom: 1px solid var(--color-border-subtle);
+  background-color: var(--color-bg-primary);
+  transition: background-color var(--transition-fast);
+}
+
+.timeline-hour-cell:hover {
+  background-color: var(--color-bg-secondary);
+}
+
+.timeline-hour-cell:last-child {
+  border-bottom: none;
+}
+
+.timeline-hour-cell.has-events {
+  background-color: var(--color-bg-secondary);
+}
+
+/* ===== TIMELINE EVENTS ===== */
+.timeline-event {
+  position: absolute;
+  min-height: 40px;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  overflow: hidden;
+  transition: opacity var(--transition-fast), box-shadow var(--transition-fast);
+  border: 1px solid transparent;
+  display: flex;
+  align-items: center;
+  padding: var(--space-1);
+  right: var(--space-2);
+}
+
+.timeline-event:hover {
+  opacity: 0.85;
+  box-shadow: var(--shadow-md);
+}
+
+.timeline-event:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.timeline-event-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.timeline-event-name {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+}
+
+.timeline-event-time {
+  font-size: 10px;
+  font-weight: var(--font-weight-medium);
+  opacity: 0.8;
+  line-height: 1;
+}
+
+/* Status Colors */
+.timeline-event.status-programat {
+  background-color: var(--color-success-bg);
+  border-color: var(--color-success);
+  color: var(--color-success);
+}
+
+.timeline-event.status-scadent {
+  background-color: var(--color-warning-bg);
+  border-color: var(--color-warning);
+  color: var(--color-warning);
+}
+
+.timeline-event.status-depasit {
+  background-color: var(--color-error-bg);
+  border-color: var(--color-error);
+  color: var(--color-error);
+}
+
+.timeline-event.status-efectuat {
+  background-color: var(--color-info-bg);
+  border-color: var(--color-info);
+  color: var(--color-info);
+}
+
+/* ===== LEGEND ===== */
+.calendar-day-legend {
+  display: flex;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border-top: 1px solid var(--color-border);
+  background-color: var(--color-bg-secondary);
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-medium);
+}
+
+.legend-color {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: var(--radius-xs);
+  flex-shrink: 0;
+}
+
+.legend-color.status-programat {
+  background-color: var(--color-success-bg);
+  border: 1px solid var(--color-success);
+}
+
+.legend-color.status-scadent {
+  background-color: var(--color-warning-bg);
+  border: 1px solid var(--color-warning);
+}
+
+.legend-color.status-depasit {
+  background-color: var(--color-error-bg);
+  border: 1px solid var(--color-error);
+}
+
+.legend-color.status-efectuat {
+  background-color: var(--color-info-bg);
+  border: 1px solid var(--color-info);
+}
+
+/* ===== DARK MODE ===== */
+[data-theme="dark"] .calendar-day-view {
+  background-color: var(--color-bg-primary);
+}
+
+[data-theme="dark"] .calendar-day-header {
+  background-color: var(--color-bg-primary);
+  border-bottom-color: var(--color-border);
+}
+
+[data-theme="dark"] .timeline-hours {
+  background-color: var(--color-bg-secondary);
+  border-right-color: var(--color-border);
+}
+
+[data-theme="dark"] .timeline-hour-cell {
+  background-color: var(--color-bg-primary);
+}
+
+[data-theme="dark"] .timeline-hour-cell:hover {
+  background-color: var(--color-bg-secondary);
+}
+
+[data-theme="dark"] .timeline-hour-cell.has-events {
+  background-color: var(--color-bg-secondary);
+}
+
+[data-theme="dark"] .calendar-day-legend {
+  background-color: var(--color-bg-secondary);
+  border-top-color: var(--color-border);
+}
+
+/* ===== MOBILE LAYOUT ===== */
+@media (max-width: 767px) {
+  .calendar-day-view {
+    min-height: 500px;
+  }
+
+  .calendar-day-title {
+    font-size: 1.125rem;
+  }
+
+  .timeline-hours {
+    width: 50px;
+  }
+
+  .timeline-hour-slot {
+    height: 50px;
+    padding: 2px;
+  }
+
+  .timeline-hour-label {
+    font-size: 9px;
+  }
+
+  .timeline-hour-cell {
+    height: 50px;
+  }
+
+  .timeline-event {
+    min-height: 32px;
+    right: var(--space-1);
+  }
+
+  .timeline-event-name {
+    font-size: 9px;
+  }
+
+  .timeline-event-time {
+    font-size: 8px;
+  }
+
+  .calendar-day-legend {
+    gap: var(--space-2);
+    padding: var(--space-2);
+  }
+
+  .legend-item {
+    font-size: 10px;
+  }
+}
+
+/* ===== REDUCED MOTION ===== */
+@media (prefers-reduced-motion: reduce) {
+  .timeline-event {
+    transition: none;
+  }
+
+  .timeline-hour-cell {
+    transition: none;
+  }
+}

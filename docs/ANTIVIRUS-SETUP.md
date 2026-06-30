@@ -1,10 +1,10 @@
 # Securitate Fișiere și Antivirus — SIMDM
 
-**Dată:** 2026-06-05
+**Dată:** 2026-06-29
 **Caracteristică:** Detectare magic bytes + ClamAV opțional
-**Status:** ✅ Implementat (Faza 2) + Gata producție
+**Status:** ✅ Implementat (Faza 2) + DMS Hardening (Faza 5.1) + Gata producție
 
-**Descriere:** SIMDM implementează **securitate multi-strat pentru documente medicale**, inclusiv detectare magic bytes, validare dimensiune fișier și scanare antivirus (ClamAV-ready pentru producție). Documentele încărcate sunt validate și înregistrate complet în jurnalul de audit.
+**Descriere:** SIMDM implementează **securitate multi-strat pentru documente medicale**, inclusiv detectare magic bytes, validare dimensiune fișier (max 25MB), scanare ClamAV opțională, hash SHA-256 pentru integritate și jurnal de acces auditabil. Documentele încărcate sunt validate, scanate și înregistrate complet în jurnalul de audit.
 
 ---
 

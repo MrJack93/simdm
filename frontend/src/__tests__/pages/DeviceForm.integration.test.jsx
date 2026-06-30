@@ -59,7 +59,7 @@ describe('DeviceForm — wizard: navigare înapoi și persistența stării', () 
 
     // Pasul 0: completează câmpurile obligatorii.
     await user.type(screen.getByLabelText(/Numărul inventarului/), 'DM-PERSIST-1');
-    await user.type(screen.getByLabelText('Denumire *'), 'Pompă infuzie');
+    await user.type(screen.getByLabelText(/Denumire/), 'Pompă infuzie');
 
     // Înainte la pasul 1, apoi Înapoi la pasul 0.
     await next(user);
@@ -68,7 +68,7 @@ describe('DeviceForm — wizard: navigare înapoi și persistența stării', () 
 
     // Valorile din pasul 0 trebuie să fie încă acolo (stare persistentă).
     expect(await screen.findByLabelText(/Numărul inventarului/)).toHaveValue('DM-PERSIST-1');
-    expect(screen.getByLabelText('Denumire *')).toHaveValue('Pompă infuzie');
+    expect(screen.getByLabelText(/Denumire/)).toHaveValue('Pompă infuzie');
   });
 
   it('indicatorul de pas reflectă mișcarea înainte și înapoi prin wizard', async () => {
@@ -78,7 +78,7 @@ describe('DeviceForm — wizard: navigare înapoi și persistența stării', () 
 
     expect(screen.getByText(/Pasul 1 din/)).toBeInTheDocument();
     await user.type(screen.getByLabelText(/Numărul inventarului/), 'DM-TEST');
-    await user.type(screen.getByLabelText('Denumire *'), 'Test Device');
+    await user.type(screen.getByLabelText(/Denumire/), 'Test Device');
     await next(user);
     expect(await screen.findByText(/Pasul 2 din/)).toBeInTheDocument();
     await prev(user);
@@ -91,7 +91,7 @@ describe('DeviceForm — wizard: navigare înapoi și persistența stării', () 
     await screen.findByLabelText(/Numărul inventarului/);
 
     await user.type(screen.getByLabelText(/Numărul inventarului/), 'DM-TEST');
-    await user.type(screen.getByLabelText('Denumire *'), 'Test Device');
+    await user.type(screen.getByLabelText(/Denumire/), 'Test Device');
     await next(user); // pas 1: clasificare
     await user.selectOptions(await screen.findByTestId('select-sectionId'), '2');
     await next(user); // pas 2

@@ -3,6 +3,18 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { MemoryRouter } from 'react-router-dom';
 
+// Mock window.matchMedia for react-day-picker
+if (!window.matchMedia) {
+  window.matchMedia = vi.fn(() => ({
+    matches: false,
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    dispatchEvent: vi.fn(),
+  }));
+}
+
 const mockNavigate = vi.fn();
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');
@@ -194,9 +206,7 @@ describe('MaintenanceCalendarPage Coverage', () => {
     it('displays calendar grid with day numbers', async () => {
       renderPage();
       await waitFor(() => {
-        expect(screen.getByText('Lun')).toBeInTheDocument();
-        expect(screen.getByText('Mar')).toBeInTheDocument();
-        expect(screen.getByText('Mie')).toBeInTheDocument();
+        expect(screen.getByRole('grid')).toBeInTheDocument();
       });
     });
 

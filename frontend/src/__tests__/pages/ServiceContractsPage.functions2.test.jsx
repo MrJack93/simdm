@@ -77,7 +77,7 @@ describe('ServiceContractsPage -- function coverage 2', () => {
     getProviders.mockReturnValue(new Promise(() => {}));
     getContracts.mockReturnValue(new Promise(() => {}));
     renderPage();
-    expect(screen.getByText(/nc/)).toBeInTheDocument();
+    expect(screen.getAllByRole('status').length).toBeGreaterThan(0);
   });
 
   it('displays provider cards', async () => {

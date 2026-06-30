@@ -70,8 +70,8 @@ describe('DeviceForm — function coverage 2', () => {
   it('handleNext with valid step 0 data advances to step 1', async () => {
     const user = userEvent.setup();
     renderForm();
-    await user.type(screen.getByLabelText('Numărul inventarului *'), 'DM-001');
-    await user.type(screen.getByLabelText('Denumire *'), 'Ventilator');
+    await user.type(screen.getByLabelText(/Numărul inventarului/), 'DM-001');
+    await user.type(screen.getByLabelText(/Denumire/), 'Ventilator');
     await user.click(screen.getByText('Înainte →'));
     await waitFor(() => {
       expect(screen.getByText('Clasificare Risc și Status')).toBeInTheDocument();
@@ -81,8 +81,8 @@ describe('DeviceForm — function coverage 2', () => {
   it('handlePrev goes back from step 1 to step 0', async () => {
     const user = userEvent.setup();
     renderForm();
-    await user.type(screen.getByLabelText('Numărul inventarului *'), 'DM-001');
-    await user.type(screen.getByLabelText('Denumire *'), 'Ventilator');
+    await user.type(screen.getByLabelText(/Numărul inventarului/), 'DM-001');
+    await user.type(screen.getByLabelText(/Denumire/), 'Ventilator');
     await user.click(screen.getByText('Înainte →'));
     await waitFor(() => { screen.getByText('Clasificare Risc și Status'); });
     await user.click(screen.getByText('← Înapoi'));
@@ -94,9 +94,9 @@ describe('DeviceForm — function coverage 2', () => {
   it('handleFormKeyDown Enter advances step', async () => {
     const user = userEvent.setup();
     renderForm();
-    await user.type(screen.getByLabelText('Numărul inventarului *'), 'DM-001');
-    await user.type(screen.getByLabelText('Denumire *'), 'Ventilator');
-    await user.type(screen.getByLabelText('Numărul inventarului *'), '{Enter}');
+    await user.type(screen.getByLabelText(/Numărul inventarului/), 'DM-001');
+    await user.type(screen.getByLabelText(/Denumire/), 'Ventilator');
+    await user.type(screen.getByLabelText(/Numărul inventarului/), '{Enter}');
     await waitFor(() => {
       expect(screen.getByText('Clasificare Risc și Status')).toBeInTheDocument();
     });
@@ -105,8 +105,8 @@ describe('DeviceForm — function coverage 2', () => {
   it('showAdvanced toggle shows and hides advanced fields', async () => {
     const user = userEvent.setup();
     renderForm();
-    await user.type(screen.getByLabelText('Numărul inventarului *'), 'DM-001');
-    await user.type(screen.getByLabelText('Denumire *'), 'Ventilator');
+    await user.type(screen.getByLabelText(/Numărul inventarului/), 'DM-001');
+    await user.type(screen.getByLabelText(/Denumire/), 'Ventilator');
     await user.click(screen.getByText('Înainte →'));
     const sectionSelect = screen.getByTestId('select-sectionId');
     fireEvent.change(sectionSelect, { target: { value: '1' } });
@@ -134,8 +134,8 @@ describe('DeviceForm — function coverage 2', () => {
   it('onSubmit in new mode calls createDevice', async () => {
     const user = userEvent.setup();
     renderForm();
-    await user.type(screen.getByLabelText('Numărul inventarului *'), 'DM-001');
-    await user.type(screen.getByLabelText('Denumire *'), 'Ventilator');
+    await user.type(screen.getByLabelText(/Numărul inventarului/), 'DM-001');
+    await user.type(screen.getByLabelText(/Denumire/), 'Ventilator');
     await user.click(screen.getByText('Înainte →'));
     const sectionSelect = screen.getByTestId('select-sectionId');
     fireEvent.change(sectionSelect, { target: { value: '1' } });
@@ -220,8 +220,8 @@ describe('DeviceForm — function coverage 2', () => {
   it('step 2 shows summary values', async () => {
     const user = userEvent.setup();
     renderForm();
-    await user.type(screen.getByLabelText('Numărul inventarului *'), 'DM-001');
-    await user.type(screen.getByLabelText('Denumire *'), 'Ventilator');
+    await user.type(screen.getByLabelText(/Numărul inventarului/), 'DM-001');
+    await user.type(screen.getByLabelText(/Denumire/), 'Ventilator');
     await user.click(screen.getByText('Înainte →'));
     const sectionSelect = screen.getByTestId('select-sectionId');
     fireEvent.change(sectionSelect, { target: { value: '1' } });
@@ -236,8 +236,8 @@ describe('DeviceForm — function coverage 2', () => {
   it('step 1 has date picker fields', async () => {
     const user = userEvent.setup();
     renderForm();
-    await user.type(screen.getByLabelText('Numărul inventarului *'), 'DM-001');
-    await user.type(screen.getByLabelText('Denumire *'), 'Ventilator');
+    await user.type(screen.getByLabelText(/Numărul inventarului/), 'DM-001');
+    await user.type(screen.getByLabelText(/Denumire/), 'Ventilator');
     await user.click(screen.getByText('Înainte →'));
     await waitFor(() => {
       expect(screen.getByText('Data achiziției')).toBeInTheDocument();
@@ -248,8 +248,8 @@ describe('DeviceForm — function coverage 2', () => {
   it('step 2 advanced fields include currency select', async () => {
     const user = userEvent.setup();
     renderForm();
-    await user.type(screen.getByLabelText('Numărul inventarului *'), 'DM-001');
-    await user.type(screen.getByLabelText('Denumire *'), 'Ventilator');
+    await user.type(screen.getByLabelText(/Numărul inventarului/), 'DM-001');
+    await user.type(screen.getByLabelText(/Denumire/), 'Ventilator');
     await user.click(screen.getByText('Înainte →'));
     const sectionSelect = screen.getByTestId('select-sectionId');
     fireEvent.change(sectionSelect, { target: { value: '1' } });
@@ -264,8 +264,8 @@ describe('DeviceForm — function coverage 2', () => {
   it('advanced field changes register in form', async () => {
     const user = userEvent.setup();
     renderForm();
-    await user.type(screen.getByLabelText('Numărul inventarului *'), 'DM-001');
-    await user.type(screen.getByLabelText('Denumire *'), 'Ventilator');
+    await user.type(screen.getByLabelText(/Numărul inventarului/), 'DM-001');
+    await user.type(screen.getByLabelText(/Denumire/), 'Ventilator');
     await user.click(screen.getByText('Înainte →'));
     const sectionSelect = screen.getByTestId('select-sectionId');
     fireEvent.change(sectionSelect, { target: { value: '1' } });
@@ -292,8 +292,8 @@ describe('DeviceForm — function coverage 2', () => {
   it('handleNext does nothing on last step', async () => {
     const user = userEvent.setup();
     renderForm();
-    await user.type(screen.getByLabelText('Numărul inventarului *'), 'DM-001');
-    await user.type(screen.getByLabelText('Denumire *'), 'Ventilator');
+    await user.type(screen.getByLabelText(/Numărul inventarului/), 'DM-001');
+    await user.type(screen.getByLabelText(/Denumire/), 'Ventilator');
     await user.click(screen.getByText('Înainte →'));
     const sectionSelect = screen.getByTestId('select-sectionId');
     fireEvent.change(sectionSelect, { target: { value: '1' } });
@@ -306,7 +306,7 @@ describe('DeviceForm — function coverage 2', () => {
     useDevice.mockReturnValue({ isLoading: true, data: undefined });
     mockParams = { id: '1' };
     renderForm();
-    expect(screen.getByText('Se încarcă dispozitivul…')).toBeInTheDocument();
+    expect(screen.getByRole('status')).toBeInTheDocument();
   });
 
   it('edit mode shows DeviceTimeline', async () => {
@@ -325,8 +325,8 @@ describe('DeviceForm — function coverage 2', () => {
     createDevice.mockResolvedValueOnce({});
     const user = userEvent.setup();
     renderForm();
-    await user.type(screen.getByLabelText('Numărul inventarului *'), 'DM-001');
-    await user.type(screen.getByLabelText('Denumire *'), 'Ventilator');
+    await user.type(screen.getByLabelText(/Numărul inventarului/), 'DM-001');
+    await user.type(screen.getByLabelText(/Denumire/), 'Ventilator');
     await user.click(screen.getByText('Înainte →'));
     const sectionSelect = screen.getByTestId('select-sectionId');
     fireEvent.change(sectionSelect, { target: { value: '1' } });

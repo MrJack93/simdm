@@ -1,0 +1,355 @@
+/* Calendar Sidebar — SIMDM Figma 2026 Design */
+
+.calendar-sidebar {
+  display: flex;
+  flex-direction: column;
+  width: 280px;
+  background-color: var(--color-bg-primary);
+  border-right: 1px solid var(--color-border);
+  padding: var(--space-4);
+  gap: var(--space-4);
+  overflow-y: auto;
+  max-height: calc(100vh - 100px);
+}
+
+/* ===== HEADER ===== */
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.sidebar-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  background-color: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.sidebar-toggle-btn:hover {
+  background-color: var(--color-bg-secondary);
+  border-color: var(--color-accent);
+}
+
+.sidebar-toggle-btn:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* ===== MINI CALENDAR ===== */
+.sidebar-mini-calendar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.sidebar-calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-2);
+}
+
+.sidebar-calendar-month {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  text-align: center;
+  flex: 1;
+}
+
+.sidebar-calendar-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  background-color: transparent;
+  border: none;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: color var(--transition-fast);
+  border-radius: var(--radius-xs);
+}
+
+.sidebar-calendar-nav:hover {
+  background-color: var(--color-bg-secondary);
+  color: var(--color-accent);
+}
+
+.sidebar-calendar-nav:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* DayPicker override */
+.sidebar-day-picker {
+  width: 100%;
+}
+
+.sidebar-months {
+  width: 100%;
+}
+
+.sidebar-month {
+  width: 100%;
+}
+
+.sidebar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  margin-bottom: var(--space-1);
+}
+
+.sidebar-weekday {
+  width: 100%;
+  text-align: center;
+  font-size: 9px;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  padding: 4px 0;
+}
+
+.sidebar-week {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.sidebar-day {
+  width: 100%;
+}
+
+.sidebar-day-button {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  font-size: 11px;
+  font-weight: var(--font-weight-medium);
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-xs);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.sidebar-day-button:hover {
+  background-color: var(--color-bg-secondary);
+}
+
+.sidebar-day-button:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: -2px;
+}
+
+.sidebar-day-selected {
+  background-color: var(--color-accent);
+  color: var(--color-on-primary);
+  border-color: var(--color-accent);
+  font-weight: var(--font-weight-semibold);
+}
+
+.sidebar-day-today {
+  background-color: var(--color-info-bg);
+  color: var(--color-info);
+  font-weight: var(--font-weight-semibold);
+  border-color: var(--color-info);
+}
+
+.sidebar-day-outside {
+  color: var(--color-text-tertiary);
+  opacity: 0.5;
+}
+
+/* ===== DIVIDER ===== */
+.sidebar-divider {
+  height: 1px;
+  background-color: var(--color-border);
+  margin: var(--space-2) 0;
+}
+
+/* ===== CONTENT SECTION ===== */
+.sidebar-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  flex: 1;
+}
+
+/* ===== EVENT SECTION ===== */
+.sidebar-event-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.sidebar-section-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin: 0;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.sidebar-section-icon {
+  display: inline-flex;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.sidebar-events-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding-left: 24px;
+}
+
+.sidebar-event-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sidebar-event-name {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.sidebar-event-time {
+  font-size: 10px;
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-regular);
+}
+
+/* ===== EMPTY STATE ===== */
+.sidebar-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  padding: var(--space-6) var(--space-2);
+  text-align: center;
+}
+
+.sidebar-empty-icon {
+  font-size: 48px;
+  opacity: 0.6;
+  line-height: 1;
+}
+
+.sidebar-empty-text {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-medium);
+}
+
+/* ===== DARK MODE ===== */
+[data-theme="dark"] .calendar-sidebar {
+  background-color: var(--color-bg-primary);
+  border-right-color: var(--color-border);
+}
+
+[data-theme="dark"] .sidebar-toggle-btn {
+  border-color: var(--color-border);
+  color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .sidebar-toggle-btn:hover {
+  background-color: var(--color-bg-secondary);
+  border-color: var(--color-accent);
+}
+
+[data-theme="dark"] .sidebar-day-button {
+  color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .sidebar-day-button:hover {
+  background-color: var(--color-bg-secondary);
+}
+
+/* ===== MOBILE LAYOUT ===== */
+@media (max-width: 767px) {
+  .calendar-sidebar {
+    width: 100%;
+    max-height: 60vh;
+    border-right: none;
+    border-bottom: 1px solid var(--color-border);
+    padding: var(--space-3);
+  }
+
+  .calendar-sidebar.mobile-hidden {
+    display: none;
+  }
+
+  .sidebar-mini-calendar {
+    display: none;
+  }
+
+  .sidebar-divider {
+    display: none;
+  }
+
+  .sidebar-content {
+    flex-direction: row;
+    overflow-x: auto;
+    gap: var(--space-6);
+    padding-bottom: var(--space-2);
+  }
+
+  .sidebar-event-section {
+    flex-shrink: 0;
+    min-width: 180px;
+  }
+
+  .sidebar-section-title {
+    font-size: 12px;
+  }
+
+  .sidebar-event-name {
+    font-size: 11px;
+  }
+
+  .sidebar-event-time {
+    font-size: 9px;
+  }
+}
+
+/* ===== REDUCED MOTION ===== */
+@media (prefers-reduced-motion: reduce) {
+  .sidebar-toggle-btn,
+  .sidebar-calendar-nav,
+  .sidebar-day-button {
+    transition: none;
+  }
+}

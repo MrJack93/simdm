@@ -14,6 +14,8 @@ import { useSections } from '../hooks/useSections';
 import { createDevice, updateDevice, deviceKeys } from '../api/devices';
 import api from '../api/axios';
 import { Field, FieldLabel, FieldError } from '../components/ui/field';
+import { useDocuments } from '../hooks/useDocuments';
+import { FileText, Download } from 'lucide-react';
 
 // Stilurile pentru react-select sunt extrase la nivel de modul.
 // Anterior erau definite inline de 3 ori — câte un obiect nou la fiecare render
@@ -40,6 +42,86 @@ const SELECT_STYLES = {
     color: 'var(--color-text-primary)',
   }),
 };
+
+const CATEGORY_LABELS = {
+  PROCEDURA_MDM: 'Procedură MDM',
+  FORMULAR: 'Formular',
+  LEGISLATIE: 'Legislație',
+  MANUAL_TEHNIC: 'Manual Tehnic',
+  CERTIFICAT: 'Certificat',
+  CONTRACT: 'Contract',
+  RAPORT: 'Raport',
+  ALTUL: 'Altele',
+};
+
+function DeviceDocuments({ deviceId }) {
+  const { data, isLoading } = useDocuments('', { deviceId: String(deviceId) }, 1, 20);
+  const documents = data?.data || [];
+
+  if (isLoading) {
+    return (
+      <div className="mt-4">
+        <Skeleton lines={2} variant="card" />
+      </div>
+    );
+  }
+
+  if (documents.length === 0) return null;
+
+  const handleDownload = async (doc) => {
+    try {
+      const response = await api.get(`/documents/file/${doc.fileUrl.split('/').pop()}`, {
+        responseType: 'blob',
+      });
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', doc.title);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch {
+      toast.error('Eroare la descărcare');
+    }
+  };
+
+  return (
+    <div className="mt-4 p-4 rounded-lg" style={{ backgroundColor: 'var(--color-bg-secondary)' }}>
+      <h3 className="font-semibold mb-3 flex items-center gap-2" style={{ color: 'var(--color-text-primary)' }}>
+        <FileText size={16} style={{ color: 'var(--color-accent)' }} />
+        Documente atașate ({documents.length})
+      </h3>
+      <div className="space-y-2">
+        {documents.map((doc) => (
+          <div
+            key={doc.id}
+            className="flex items-center justify-between p-2 rounded"
+            style={{ backgroundColor: 'var(--color-bg-primary)' }}
+          >
+            <div className="min-w-0 flex-1">
+              <div className="text-sm font-medium truncate" style={{ color: 'var(--color-text-primary)' }}>
+                {doc.title}
+              </div>
+              <div className="text-xs flex items-center gap-2" style={{ color: 'var(--color-text-secondary)' }}>
+                <span>{CATEGORY_LABELS[doc.category] || doc.category}</span>
+                <span>v{doc.version}</span>
+              </div>
+            </div>
+            <button
+              onClick={() => handleDownload(doc)}
+              className="p-1.5 rounded hover:opacity-70 focusable flex-shrink-0"
+              aria-label={`Descarcă ${doc.title}`}
+              style={{ color: 'var(--color-text-secondary)' }}
+            >
+              <Download size={14} />
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 /**
  * Câmpurile validate la fiecare pas al wizard-ului.
@@ -866,6 +948,7 @@ export default function DeviceForm() {
         {isEditMode && id && (
           <div className="max-w-2xl mt-2 pb-8">
             <DeviceTimeline deviceId={id} />
+            <DeviceDocuments deviceId={id} />
           </div>
         )}
       </div>
