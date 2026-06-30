@@ -106,6 +106,7 @@ router.get('/me', authMiddleware, async (req, res) => {
         email: true,
         fullName: true,
         role: true,
+        mustChangePassword: true,
         lastLoginAt: true,
       },
     });
@@ -164,7 +165,7 @@ router.patch('/change-password', authMiddleware, async (req, res) => {
       // Update password
       prisma.users.update({
         where: { id: userId },
-        data: { passwordHash: newPasswordHash },
+        data: { passwordHash: newPasswordHash, mustChangePassword: false },
       }),
       // Revoke all existing refresh tokens (L7 fix: invalidate all sessions)
       prisma.refresh_tokens.updateMany({

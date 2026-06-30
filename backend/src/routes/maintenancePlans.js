@@ -13,6 +13,7 @@ const generatePlanSchema = z.object({
   frequency: z.enum(['LUNAR', 'BIMESTRIAL', 'TRIMESTRIAL', 'SEMESTRIAL', 'ANUAL']),
   responsibleName: z.string().min(1).max(255),
   responsibleAffil: z.string().optional(),
+  preferredTime: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/).optional().default('09:00'),
 });
 
 const rescheduleSchema = z.object({
@@ -33,8 +34,9 @@ function frequencyToMonths(frequency) {
 }
 
 // Helper: Calculate scheduled date for a month
-function getScheduledDate(year, month) {
-  return new Date(year, month - 1, 15); // Day 15 of month
+function getScheduledDate(year, month, preferredTime = '09:00') {
+  const [hours, minutes] = preferredTime.split(':').map(Number);
+  return new Date(Date.UTC(year, month - 1, 15, hours, minutes, 0, 0));
 }
 
 // Helper: Calculate status dynamically
@@ -116,7 +118,7 @@ router.post('/generate', async (req, res) => {
       });
     }
 
-    const { deviceId, year, frequency, responsibleName, responsibleAffil } = parseBody.data;
+    const { deviceId, year, frequency, responsibleName, responsibleAffil, preferredTime } = parseBody.data;
 
     // Verify device exists
     const device = await prisma.devices.findUnique({ where: { id: deviceId } });
@@ -165,7 +167,7 @@ router.post('/generate', async (req, res) => {
         occurrences.push({
           planId: created.id,
           deviceId,
-          scheduledDate: getScheduledDate(year, month),
+          scheduledDate: getScheduledDate(year, month, preferredTime),
           status: 'PROGRAMAT',
         });
       }
@@ -202,10 +204,14 @@ router.get('/calendar', async (req, res) => {
     const { year } = req.query;
     const yearNum = year ? parseInt(year) : new Date().getFullYear();
 
-    // Get all occurrences for the year
+    // Get all occurrences for the year — include ocurențe reprogramate peste pragul de an
+    // (rescheduledTo poate cădea într-un an diferit de planul de origine).
     const occurrences = await prisma.mpp_occurrences.findMany({
       where: {
-        plan: { year: yearNum },
+        OR: [
+          { plan: { year: yearNum }, rescheduledTo: null },
+          { rescheduledTo: { gte: new Date(yearNum, 0, 1), lt: new Date(yearNum + 1, 0, 1) } },
+        ],
       },
       include: {
         plan: {
@@ -329,11 +335,6 @@ router.patch('/occurrence/:id/reschedule', async (req, res) => {
   }
 });
 
-// Helper: Return text as-is since custom TTF fonts support Romanian diacritics natively
-function toSafePdfText(str) {
-  return str || '';
-}
-
 // GET /api/maintenance-plans/:year/formular5-pdf
 router.get('/:year/formular5-pdf', async (req, res) => {
   try {
@@ -377,18 +378,18 @@ router.get('/:year/formular5-pdf', async (req, res) => {
     pdf.pipe(res);
 
     // Title
-    pdf.fontSize(14).font('Times-Bold-Custom').text(toSafePdfText('PLAN DE MENTENANȚĂ PREVENTIVĂ'), { align: 'center' });
-    pdf.fontSize(12).font('Times-Roman-Custom').text(toSafePdfText(`pentru dispozitivele medicale pentru anul ${yearNum}`), { align: 'center' });
-    pdf.fontSize(10).text(toSafePdfText('Formular Nr. 5 – Anexa 16, Procedura MDM Nr. 6'), { align: 'center' });
+    pdf.fontSize(14).font('Times-Bold-Custom').text('PLAN DE MENTENANȚĂ PREVENTIVĂ', { align: 'center' });
+    pdf.fontSize(12).font('Times-Roman-Custom').text(`pentru dispozitivele medicale pentru anul ${yearNum}`, { align: 'center' });
+    pdf.fontSize(10).text('Formular Nr. 5 – Anexa 16, Procedura MDM Nr. 6', { align: 'center' });
     pdf.moveDown(0.5);
 
     // Table header
     const columns = [
       { header: 'Nr', width: 30 },
-      { header: toSafePdfText('Denumirea dispozitivului medical'), width: 130 },
-      { header: toSafePdfText('Cod DM / Nr. de serie'), width: 90 },
-      { header: toSafePdfText('Secția medicală'), width: 90 },
-      { header: toSafePdfText('Persoana responsabilă (Afiliat | Nume)'), width: 120 },
+      { header: 'Denumirea dispozitivului medical', width: 130 },
+      { header: 'Cod DM / Nr. de serie', width: 90 },
+      { header: 'Secția medicală', width: 90 },
+      { header: 'Persoana responsabilă (Afiliat | Nume)', width: 120 },
       ...Array.from({ length: 12 }, (_, i) => ({
         header: ['Ian', 'Feb', 'Mar', 'Apr', 'Mai', 'Iun', 'Iul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][i],
         width: 25,
@@ -416,24 +417,24 @@ router.get('/:year/formular5-pdf', async (req, res) => {
       x += 30;
 
       // Device name
-      pdf.text(toSafePdfText(plan.device.name), x, rowY, { width: 130, align: 'left', valign: 'top' });
+      pdf.text(plan.device.name || '', x, rowY, { width: 130, align: 'left', valign: 'top' });
       x += 130;
 
       // Serial / Code
       const serial = plan.device.serialNumber || '-';
-      pdf.text(toSafePdfText(serial), x, rowY, { width: 90, align: 'left', valign: 'top' });
+      pdf.text(serial || '', x, rowY, { width: 90, align: 'left', valign: 'top' });
       x += 90;
 
       // Section
       const section = plan.device.sections?.name || '-';
-      pdf.text(toSafePdfText(section), x, rowY, { width: 90, align: 'left', valign: 'top' });
+      pdf.text(section || '', x, rowY, { width: 90, align: 'left', valign: 'top' });
       x += 90;
 
       // Responsible (Afiliat | Nume)
       const responsibleText = plan.responsibleAffil
         ? `${plan.responsibleAffil} | ${plan.responsibleName}`
         : plan.responsibleName;
-      pdf.text(toSafePdfText(responsibleText), x, rowY, { width: 120, align: 'left', valign: 'top' });
+      pdf.text(responsibleText || '', x, rowY, { width: 120, align: 'left', valign: 'top' });
       x += 120;
 
       // Months (X markers)
@@ -448,7 +449,7 @@ router.get('/:year/formular5-pdf', async (req, res) => {
 
     // Footer
     pdf.moveDown();
-    pdf.fontSize(9).font('Times-Roman-Custom').text(toSafePdfText(`Data generării: ${new Date().toLocaleDateString('ro-RO')}`), { align: 'right' });
+    pdf.fontSize(9).font('Times-Roman-Custom').text(`Data generării: ${new Date().toLocaleDateString('ro-RO')}`, { align: 'right' });
 
     pdf.end();
   } catch (error) {

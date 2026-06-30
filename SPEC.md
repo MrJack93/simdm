@@ -1,10 +1,9 @@
 # SPEC — Specificație Tehnică SIMDM
 
-**Versiune:** 3.0 (Faza 1-2 auditate & remediate · Faza 3 în lucru)  
-**Actualizat:** 2026-06-08  
+**Versiune:** 8.0 (Faza 1-8 completă — Production Ready)  
+**Actualizat:** 2026-06-29  
 **Audiență:** Developeri, Arhitecți, PM  
-**Status:** ✅ Faza 1-2 complete + audit de securitate trecut (remedieri aplicate) | 🔧 Faza 3 în lucru — vezi [tasks/PLAN-FAZA3-DETALIAT.md](tasks/PLAN-FAZA3-DETALIAT.md)  
-**Notă:** §15 de mai jos e overview-ul Fazei 3; planul executabil pas-cu-pas este în `tasks/PLAN-FAZA3-DETALIAT.md`.
+**Status:** ✅ **Faza 1-8 COMPLETATE** — Toate modulele implementate, Capitolele 2-3 din Ghid acoperite integral
 
 ---
 
@@ -495,16 +494,18 @@ Frontend-ul este **100% accesibil:**
 
 ## 12. Faze de Dezvoltare (8 Total)
 
-| Fază | Modul | Estimare | Status |
-|------|-------|----------|--------|
-| **1** | Fundație (Auth, DB, Login) | ✅ Gata | **COMPLETĂ** |
-| **2** | Inventar DM (CRUD, tabel, export) | 3-4 săptămâni | Planning |
-| **3** | Mentenanță (MP/MC, plan preventiv) | 3-4 săptămâni | Planning |
-| **4** | Documente & Proceduri (DMS, PDF) | 2-3 săptămâni | Planning |
-| **5** | Incidente & Vigilență (raportare) | 2-3 săptămâni | Planning |
-| **6** | Procurement (PIF, planificare) | 2-3 săptămâni | Planning |
-| **7** | Dashboard & Raportare (KPI, export) | 2-3 săptămâni | Planning |
-| **8** | QA & Go-Live (testare, import real) | 1-2 săptămâni | Planning |
+| Fază | Modul | Status |
+|------|-------|--------|
+| **1** | Fundație (Auth, DB, Login) | ✅ COMPLETĂ + auditată |
+| **2** | Inventar DM (CRUD, export, PDF) | ✅ COMPLETĂ + auditată |
+| **QW** | Module quick-win (Mentenanță, Incidente, Audit Logs) | ✅ COMPLETĂ |
+| **3** | Mentenanță completă (Calendar, Semnătură, Formulare Nr. 5-9) | ✅ COMPLETĂ + auditată |
+| **4** | Design System (Cream/Coral theme) | ✅ COMPLETĂ |
+| **5** | Documente & Proceduri (DMS) + seed | ✅ COMPLETĂ |
+| **5.1** | DMS Hardening (Hash, Expirare, Acces log) | ✅ COMPLETĂ |
+| **6** | Casare (Nr. 10) + Raport (Nr. 12) + Jurnal Gardă (Nr. 11) | ✅ COMPLETĂ |
+| **7** | Procurement (Nr. 1-2) + Dare în exploatare (Nr. 3-4) | ✅ COMPLETĂ |
+| **8** | Dashboard KPI + Hardening + QA + E2E | ✅ COMPLETĂ |
 
 **Total estimare:** 16-22 săptămâni (4-5 luni timp dev)
 

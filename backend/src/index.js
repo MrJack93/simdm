@@ -13,7 +13,9 @@ const { cleanupExpiredTokens } = require('./jobs/cleanupTokens');
 const { startCronJobs } = require('./jobs/notifications');
 
 let authRoutes, sectionsRoutes, deviceRoutes, consumableRoutes, annualInventoryRoutes;
-let auditLogsRoutes, maintenanceRoutes, incidentRoutes, maintenancePlansRoutes, mppExecutionsRoutes, repairTicketsRoutes, verificationsRoutes, serviceContractsRoutes;
+let auditLogsRoutes, maintenanceRoutes, incidentRoutes, maintenancePlansRoutes, mppExecutionsRoutes, repairTicketsRoutes, verificationsRoutes, serviceContractsRoutes, documentRoutes;
+let decommissionRoutes, dutyLogRoutes, activityReportRoutes;
+let procurementRoutes, commissioningRoutes, dashboardRoutes;
 try {
   authRoutes = require('./routes/auth');
   console.log('✅ Auth routes loaded');
@@ -41,6 +43,20 @@ try {
   console.log('✅ Verifications routes loaded');
   serviceContractsRoutes = require('./routes/serviceContracts');
   console.log('✅ Service contracts routes loaded');
+  documentRoutes = require('./routes/documents');
+  console.log('✅ Document routes loaded');
+  decommissionRoutes = require('./routes/decommission');
+  console.log('✅ Decommission routes loaded');
+  dutyLogRoutes = require('./routes/dutyLog');
+  console.log('✅ Duty log routes loaded');
+  activityReportRoutes = require('./routes/activityReport');
+  console.log('✅ Activity report routes loaded');
+  procurementRoutes = require('./routes/procurement');
+  console.log('✅ Procurement routes loaded');
+  commissioningRoutes = require('./routes/commissioning');
+  console.log('✅ Commissioning routes loaded');
+  dashboardRoutes = require('./routes/dashboard');
+  console.log('✅ Dashboard routes loaded');
 } catch (e) {
   console.error('❌ Error loading routes:', e.message);
   process.exit(1);
@@ -108,7 +124,13 @@ app.use('/api/mpp-executions', authMiddleware, mppExecutionsRoutes);
 app.use('/api/repair-tickets', authMiddleware, repairTicketsRoutes);
 app.use('/api/verifications', authMiddleware, verificationsRoutes);
 app.use('/api/service-contracts', authMiddleware, serviceContractsRoutes);
-// app.use('/api/documents', authMiddleware, documentRoutes);
+app.use('/api/documents', authMiddleware, documentRoutes);
+app.use('/api/decommission', authMiddleware, decommissionRoutes);
+app.use('/api/duty-log', authMiddleware, dutyLogRoutes);
+app.use('/api/activity-report', authMiddleware, activityReportRoutes);
+app.use('/api/procurement', authMiddleware, procurementRoutes);
+app.use('/api/commissioning', authMiddleware, commissioningRoutes);
+app.use('/api/dashboard', authMiddleware, dashboardRoutes);
 
 app.use((err, req, res, next) => {
   log('ERROR HANDLER: ' + err.message);

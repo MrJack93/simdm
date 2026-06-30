@@ -141,6 +141,10 @@ model devices {
   mpp_executions        mpp_executions[]
   repair_tickets        repair_tickets[]
   verifications         verifications[]
+  documents             documents[]
+  decommission_records  decommission_records[]
+  duty_log_entries      duty_log_entries[]
+  commissioning_records commissioning_records[]
 
   @@index([inventoryNumber])
   @@index([nextMaintenanceAt])
@@ -157,18 +161,33 @@ model documents {
   fileUrl           String
   fileSize          Int?
   mimeType          String?
+  fileHash          String?          // SHA-256 hex — integrity verification
   version           String           @default("1.0")
   isCurrent         Boolean          @default(true)
+  isDeleted         Boolean          @default(false)
   previousVersionId Int?
+  uploadedById      Int?
+  deviceId          Int?
+  issuer            String?          // emitent (CERTIFICAT/CONTRACT)
+  validFrom         DateTime?        // valabil de la
+  validUntil        DateTime?        // expiră la (CERTIFICAT/CONTRACT/LEGISLATIE)
+  reviewAt          DateTime?        // dată de revizuire (PROCEDURA_MDM/FORMULAR)
   description       String?
   tags              String[]
   uploadedAt        DateTime         @default(now())
   updatedAt         DateTime
   documents         documents?       @relation("documentsTodocuments", fields: [previousVersionId], references: [id])
   other_documents   documents[]      @relation("documentsTodocuments")
+  uploadedBy        users?           @relation(fields: [uploadedById], references: [id])
+  device            devices?         @relation(fields: [deviceId], references: [id])
 
   @@index([category])
   @@index([title])
+  @@index([isCurrent])
+  @@index([isDeleted])
+  @@index([deviceId])
+  @@index([validUntil])
+  @@index([fileHash])
 }
 
 model incidents {
@@ -258,6 +277,7 @@ model sections {
   incidents             incidents[]
   users                 users[]
   annual_inventories    annual_inventories[]
+  procurement_plans     procurement_plans[]
 }
 
 model users {
@@ -268,6 +288,7 @@ model users {
   fullName            String?
   role                UserRole              @default(BIOINGINER)
   isActive            Boolean               @default(true)
+  mustChangePassword  Boolean               @default(false)
   lastLoginAt         DateTime?
   failedLoginAttempts Int                   @default(0)
   lockedUntil         DateTime?
@@ -281,6 +302,11 @@ model users {
   mpp_executions      mpp_executions[]
   repair_tickets      repair_tickets[]
   verifications       verifications[]
+  documents           documents[]
+  decommission_records decommission_records[]
+  duty_log_entries     duty_log_entries[]
+  procurement_plans    procurement_plans[]
+  commissioning_records commissioning_records[]
   refresh_tokens      refresh_tokens[]
   sections            sections?             @relation(fields: [sectionId], references: [id])
 
@@ -354,6 +380,7 @@ model repair_tickets {
   priority            String    @default("NORMAL") // SCAZUT|NORMAL|RIDICAT|URGENT
   status              String    @default("DESCHIS") // DESCHIS→IN_LUCRU→REZOLVAT→TESTAT→INCHIS (+ ESCALADAT)
   faultCause          String?
+  faultCategory      String?
   repairReport        String?   // Raport reparație (observații)
   actionsTaken        String?   // Acțiuni concrete executate
   durationHours       Decimal?  // Durata reparației în ore
@@ -437,11 +464,121 @@ model provider_ratings {
   provider   service_providers @relation(fields: [providerId], references: [id], onDelete: Cascade)
 }
 
+model decommission_records {
+  id                Int       @id @default(autoincrement())
+  deviceId          Int
+  type              String    // DEFECTARE | CONSERVARE | CASARE
+  nonUsageDate      DateTime?
+  normativeLifespan String?
+  commissioningDate DateTime?
+  nominalPrice      Decimal?
+  currentValue      Decimal?
+  technicalState    String?
+  cause             String?
+  notes             String?
+  responsibleName   String?
+  sectionChief      String?
+  engineerName      String?
+  sibmChief         String?
+  recyclingInfo     String?
+  createdById       Int?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime
+  device            devices   @relation(fields: [deviceId], references: [id])
+  createdBy         users?    @relation(fields: [createdById], references: [id])
+  @@index([deviceId])
+  @@index([type])
+}
+
+model duty_log_entries {
+  id               Int       @id @default(autoincrement())
+  deviceId         Int?
+  deviceName       String
+  reportedAt       DateTime  @default(now())
+  faultDescription String
+  reportedBy       String
+  resolution       String?
+  resolvedAt       DateTime?
+  engineerName     String?
+  repairTicketId   Int?
+  createdById      Int?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime
+  device           devices?  @relation(fields: [deviceId], references: [id])
+  createdBy        users?    @relation(fields: [createdById], references: [id])
+  @@index([deviceId])
+  @@index([reportedAt])
+}
+
+model procurement_plans {
+  id            Int       @id @default(autoincrement())
+  year          Int
+  sectionId     Int?
+  type          String    // DM | CONSUMABIL
+  status        String    @default("DRAFT")   // DRAFT|COORDONAT|APROBAT
+  elaboratedBy  String?
+  coordSection  String?
+  coordSibm     String?
+  approvedAt    DateTime?
+  totalAmount   Decimal?
+  createdById   Int?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime
+  section       sections? @relation(fields: [sectionId], references: [id])
+  createdBy     users?    @relation(fields: [createdById], references: [id])
+  items         procurement_items[]
+  @@index([year])
+  @@index([type])
+  @@index([status])
+}
+
+model procurement_items {
+  id            Int       @id @default(autoincrement())
+  planId        Int
+  name          String
+  specification String?
+  quantity      Int       @default(1)
+  unit          String?
+  funding       String?
+  unitPrice     Decimal?
+  totalPrice    Decimal?
+  createdAt     DateTime  @default(now())
+  plan          procurement_plans @relation(fields: [planId], references: [id], onDelete: Cascade)
+  @@index([planId])
+}
+
+model commissioning_records {
+  id                Int       @id @default(autoincrement())
+  deviceId          Int
+  installDate       DateTime?
+  warrantyMonths    Int?
+  contractNo        String?
+  contractDate      DateTime?
+  conformityOk      Boolean   @default(false)
+  operationTestOk   Boolean   @default(false)
+  operationManual   Boolean   @default(false)
+  serviceManual     Boolean   @default(false)
+  trainingDone      Boolean   @default(false)
+  trainees          Json?
+  commissionMembers String?
+  commissionDecision String?
+  comments          String?
+  handoverActNo     String?
+  supplier          String?
+  createdById       Int?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime
+  device            devices   @relation(fields: [deviceId], references: [id])
+  createdBy         users?    @relation(fields: [createdById], references: [id])
+  @@index([deviceId])
+}
+
 enum DeviceStatus {
   FUNCTIONAL
   IN_REPARATIE
   DEFECT
   CASAT
+  CONSERVAT
   IMPRUMUTAT
   REZERVA
 }

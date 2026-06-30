@@ -217,6 +217,61 @@ async function checkRepairTickets() {
 }
 
 /**
+ * Check for documents expiring in 60, 30, and 7 days
+ */
+async function checkDocumentExpiry() {
+  try {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const alertThresholds = [
+      { days: 60, label: '60 zile' },
+      { days: 30, label: '30 zile' },
+      { days: 7, label: '7 zile' },
+    ];
+
+    for (const threshold of alertThresholds) {
+      const targetDate = new Date(today);
+      targetDate.setDate(targetDate.getDate() + threshold.days);
+      targetDate.setHours(23, 59, 59, 999);
+
+      const expiringDocs = await prisma.documents.findMany({
+        where: {
+          isDeleted: false,
+          isCurrent: true,
+          validUntil: {
+            gte: new Date(targetDate.getTime() - 24 * 60 * 60 * 1000),
+            lte: targetDate,
+          },
+        },
+        select: { id: true, title: true, category: true, validUntil: true },
+      });
+
+      if (expiringDocs.length > 0) {
+        log(`[Cron] ⚠️  ${expiringDocs.length} documente expiră în ${threshold.label}`);
+        expiringDocs.slice(0, 5).forEach((doc) => {
+          log(`  └─ ${doc.title} (${doc.category}, expiră: ${doc.validUntil.toLocaleDateString('ro-RO')})`);
+        });
+      }
+    }
+
+    const alreadyExpired = await prisma.documents.count({
+      where: {
+        isDeleted: false,
+        isCurrent: true,
+        validUntil: { lt: today },
+      },
+    });
+
+    if (alreadyExpired > 0) {
+      log(`[Cron] 🔴 ${alreadyExpired} documente deja expirate`);
+    }
+  } catch (error) {
+    log(`[Cron] ❌ Error in checkDocumentExpiry: ${error.message}`);
+  }
+}
+
+/**
  * Daily compliance summary
  */
 async function generateComplianceSummary() {
@@ -280,6 +335,7 @@ function startCronJobs() {
         log('[Cron] ⏰ Starting daily system checks...');
         await checkVerificationExpiry();
         await checkContractExpiry();
+        await checkDocumentExpiry();
         await checkMppDue();
         await checkRepairTickets();
         await generateComplianceSummary();
@@ -309,6 +365,7 @@ module.exports = {
   startCronJobs,
   checkVerificationExpiry,
   checkContractExpiry,
+  checkDocumentExpiry,
   checkMppDue,
   checkRepairTickets,
   generateComplianceSummary,

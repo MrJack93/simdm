@@ -1,29 +1,25 @@
-# ✅ FAZA 3 — TESTARE CHECKLIST
+# ✅ TESTARE CHECKLIST — SIMDM (Toate Fazele)
 
-## 📦 Files Created
+## 📦 Test Files
 
-### Backend Tests
-- ✅ `backend/src/__tests__/notifications.test.js` (12 tests)
-  - checkVerificationExpiry() — 3 tests
-  - checkContractExpiry() — 2 tests
-  - checkMaintenanceDue() — 2 tests
-  - checkRepairTickets() — 2 tests
-  - generateComplianceSummary() — 1 test
-  - startCronJobs() & Integration — 4 tests
+### Backend Tests (1033+)
+- ✅ `documents.test.js` — 41 tests (DMS, hash, expirare, acces log, metadate)
+- ✅ `decommission.test.js` — 9 tests (casare/conservare)
+- ✅ `dutyLog.test.js` — 8 tests (jurnal de gardă)
+- ✅ `activityReport.test.js` — 5 tests (raport activitate)
+- ✅ `procurement.test.js` — 10 tests (planificare procurare)
+- ✅ `commissioning.test.js` — 10 tests (dare în exploatare)
+- ✅ `dashboard.test.js` — 6 tests (KPI agregat)
+- ✅ + toate testele Fazelor 1-5 (devices, consumables, maintenance, etc.)
 
-### Frontend Tests
-- ✅ `frontend/src/__tests__/MaintenanceCalendarPage.test.jsx` (10 tests)
-- ✅ `frontend/src/__tests__/RepairTicketsPage.test.jsx` (12 tests)
-- ✅ `frontend/src/__tests__/VerificationsPage.test.jsx` (12 tests)
-- ✅ `frontend/src/__tests__/ServiceContractsPage.test.jsx` (13 tests)
-- ✅ `frontend/src/__tests__/MppExecutionForm.test.jsx` (15 tests)
+### Frontend Tests (127+)
+- ✅ `DocumentsPage.test.jsx` — 24 tests
+- ✅ `ProtectedRoute.test.jsx` — 9 tests
+- ✅ + toate testele Fazelor 1-5
 
 ### E2E Tests (Playwright)
-- ✅ `frontend/src/__tests__/e2e/auth.spec.js` (4 tests)
-- ✅ `frontend/src/__tests__/e2e/maintenance.spec.js` (4 tests)
-- ✅ `frontend/src/__tests__/e2e/repairTickets.spec.js` (7 tests)
-- ✅ `frontend/src/__tests__/e2e/verifications.spec.js` (7 tests)
-- ✅ `frontend/src/__tests__/e2e/serviceContracts.spec.js` (8 tests)
+- ✅ `e2e/lifecycle.spec.js` — Ciclul complet de viață DM (12 pași)
+- ✅ + E2E-urile Fazelor 1-5
 
 ### Configuration
 - ✅ `playwright.config.js` — E2E test configuration

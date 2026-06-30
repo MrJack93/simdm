@@ -129,7 +129,6 @@ services:
       - simdm_network
     volumes:
       - ./frontend:/app/frontend
-      - /app/frontend/node_modules
     # Resource limits
     deploy:
       resources:

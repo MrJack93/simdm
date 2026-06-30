@@ -15,6 +15,7 @@ const prisma = require('../db');
 const {
   checkVerificationExpiry,
   checkContractExpiry,
+  checkDocumentExpiry,
   checkMppDue,
   checkRepairTickets,
   generateComplianceSummary,
@@ -304,6 +305,33 @@ describe('generateComplianceSummary() — Raport Zilnic Conformitate', () => {
     });
 
     expect(device).toBeDefined();
+  });
+});
+
+describe('checkDocumentExpiry() — Alerte Documente (60/30/7 zile)', () => {
+  it('execută fără erori', async () => {
+    await expect(checkDocumentExpiry()).resolves.not.toThrow();
+  });
+
+  it('detectează documente cu validUntil apropiat', async () => {
+    const soon = new Date();
+    soon.setDate(soon.getDate() + 5);
+    const created = await prisma.documents.create({
+      data: {
+        title: `Expiring Doc ${Date.now()}`,
+        category: 'CERTIFICAT',
+        fileUrl: '/api/documents/file/test-expiring.pdf',
+        isCurrent: true,
+        isDeleted: false,
+        validUntil: soon,
+        issuer: 'Test Issuer',
+        updatedAt: new Date(),
+      },
+    });
+
+    await checkDocumentExpiry();
+
+    await prisma.documents.delete({ where: { id: created.id } });
   });
 });
 

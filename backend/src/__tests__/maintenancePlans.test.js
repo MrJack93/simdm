@@ -251,6 +251,54 @@ describe('GET /api/maintenance-plans/:id — Detalii Plan', () => {
       .set('Authorization', `Bearer ${token}`);
     expect(res.status).toBe(404);
   });
+
+  it('generează apariții cu preferredTime setat (14:30 → ora 14)', async () => {
+    const res = await request(app)
+      .post('/api/maintenance-plans/generate')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        deviceId: testDeviceId,
+        year: 2033,
+        frequency: 'LUNAR',
+        responsibleName: 'Ing. Ora Test',
+        preferredTime: '14:30',
+      });
+    expect(res.status).toBe(201);
+
+    const detailsRes = await request(app)
+      .get(`/api/maintenance-plans/${res.body.id}`)
+      .set('Authorization', `Bearer ${token}`);
+    expect(detailsRes.status).toBe(200);
+
+    detailsRes.body.occurrences.forEach((occ) => {
+      const d = new Date(occ.scheduledDate);
+      expect(d.getUTCHours()).toBe(14);
+      expect(d.getUTCMinutes()).toBe(30);
+    });
+  });
+
+  it('folosește ora implicită 09:00 când preferredTime nu e specificat', async () => {
+    const res = await request(app)
+      .post('/api/maintenance-plans/generate')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        deviceId: testDeviceId,
+        year: 2034,
+        frequency: 'LUNAR',
+        responsibleName: 'Ing. Default',
+      });
+    expect(res.status).toBe(201);
+
+    const detailsRes = await request(app)
+      .get(`/api/maintenance-plans/${res.body.id}`)
+      .set('Authorization', `Bearer ${token}`);
+
+    detailsRes.body.occurrences.forEach((occ) => {
+      const d = new Date(occ.scheduledDate);
+      expect(d.getUTCHours()).toBe(9);
+      expect(d.getUTCMinutes()).toBe(0);
+    });
+  });
 });
 
 describe('PATCH /api/maintenance-plans/occurrence/:id/reschedule — Reprogramare', () => {
@@ -285,6 +333,21 @@ describe('PATCH /api/maintenance-plans/occurrence/:id/reschedule — Reprogramar
     expect(res.status).toBe(200);
     expect(res.body.rescheduleReason).toBe('Bioinginerul nu era disponibil');
     expect(new Date(res.body.rescheduledTo).toISOString()).toBe(newDate);
+  });
+
+  it('păstrează ora exactă la reprogramare cu datetime', async () => {
+    const newDateTime = new Date('2026-05-10T15:45:00.000Z');
+    const res = await request(app)
+      .patch(`/api/maintenance-plans/occurrence/${occurrenceId}/reschedule`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        newDate: newDateTime.toISOString(),
+        reason: 'Reprogramare cu oră specifică pentru test',
+      });
+    expect(res.status).toBe(200);
+    const rescheduled = new Date(res.body.rescheduledTo);
+    expect(rescheduled.getUTCHours()).toBe(15);
+    expect(rescheduled.getUTCMinutes()).toBe(45);
   });
 
   it('respinge reprogramare fără motiv', async () => {
@@ -330,6 +393,41 @@ describe('PATCH /api/maintenance-plans/occurrence/:id/reschedule — Reprogramar
     expect(auditLogs.length).toBeGreaterThan(0);
     expect(auditLogs[0].userId).toBe(userId);
     expect(auditLogs[0].userId).not.toBeNull();
+  });
+
+  it('ocurență reprogramată într-un alt an apare în calendarul anului nou, nu în cel vechi', async () => {
+    const planRes = await request(app)
+      .post('/api/maintenance-plans/generate')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        deviceId: testDeviceId,
+        year: 2040,
+        frequency: 'ANUAL',
+        responsibleName: 'Ing. Test',
+      });
+
+    const detailsRes = await request(app)
+      .get(`/api/maintenance-plans/${planRes.body.id}`)
+      .set('Authorization', `Bearer ${token}`);
+    const decOccurrenceId = detailsRes.body.occurrences[0].id;
+
+    await request(app)
+      .patch(`/api/maintenance-plans/occurrence/${decOccurrenceId}/reschedule`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        newDate: new Date('2041-01-10').toISOString(),
+        reason: 'Reprogramat peste pragul de an',
+      });
+
+    const oldYearCalendar = await request(app)
+      .get('/api/maintenance-plans/calendar?year=2040')
+      .set('Authorization', `Bearer ${token}`);
+    expect(oldYearCalendar.body.data.find((o) => o.id === decOccurrenceId)).toBeUndefined();
+
+    const newYearCalendar = await request(app)
+      .get('/api/maintenance-plans/calendar?year=2041')
+      .set('Authorization', `Bearer ${token}`);
+    expect(newYearCalendar.body.data.find((o) => o.id === decOccurrenceId)).toBeDefined();
   });
 });
 

@@ -93,17 +93,36 @@ simdm/
 ├── DESIGN.md                    # SURSA DE ADEVĂR pentru design
 ├── backend/
 │   ├── prisma/schema/           # Schema DB (sursa de adevăr)
-│   ├── src/routes/              # Endpoint-uri API
-│   ├── src/middleware/          # Auth, validation, error handling
-│   └── src/__tests__/          # Teste backend
+│   ├── src/routes/              # 14 module API
+│   │   ├── devices.js           # CRUD DM, export, PDF fișă
+│   │   ├── documents.js         # DMS: upload, versionare, hash, expirare
+│   │   ├── maintenancePlans.js  # Plan MPP + calendar
+│   │   ├── mppExecutions.js     # Execuție MPP + semnătură
+│   │   ├── repairTickets.js     # Ticketing Kanban
+│   │   ├── verifications.js     # Verificări periodice
+│   │   ├── serviceContracts.js  # Contracte externe
+│   │   ├── procurement.js       # Planificare procurare
+│   │   ├── commissioning.js     # Dare în exploatare
+│   │   ├── decommission.js      # Casare/Conservare
+│   │   ├── dutyLog.js           # Jurnal de gardă
+│   │   ├── activityReport.js    # Raport activitate
+│   │   ├── dashboard.js         # KPI agregat
+│   │   └── incidents.js         # Incidente
+│   ├── src/jobs/                # Cron jobs (notificări, verificări, expirare)
+│   ├── scripts/                 # Backup/Restore
+│   └── src/__tests__/          # Teste backend (1033+)
 ├── frontend/
-│   ├── src/pages/              # 16 pagini
-│   ├── src/components/         # 14 componente + 9 Shadcn + 3 modals
-│   ├── src/design-system.css   # Token-uri CSS
-│   ├── src/index.css           # Clase utilitare
-│   └── src/tokens.json         # Token-uri JSON
-├── docs/                       # Documentație
-├── tasks/                      # Planuri fază
+│   ├── src/pages/               # 25+ pagini (toate Fazele 1-8)
+│   ├── src/components/          # Componente reutilizabile
+│   ├── src/hooks/               # Custom hooks (useDocuments, useDevices...)
+│   ├── src/api/                 # API layer (axios + keys)
+│   └── e2e/                     # Playwright E2E tests
+├── docs/                        # Documentație
+│   ├── GO-LIVE-CHECKLIST.md     # Checklist deploy
+│   ├── IMPORT-DATE-REALE.md     # Import inventar
+│   ├── 2-DEVELOPER-GUIDE.md     # Patterns
+│   └── TESTING.md               # Ghid testare
+├── tasks/                       # Planuri fază
 └── docker-compose.yml
 ```
 

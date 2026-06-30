@@ -1,7 +1,7 @@
 # Index Documentație — SIMDM
 
-**Ultima actualizare:** 2026-06-13
-**Status:** Faza 1-4 ✅ COMPLETATE | Faza 5-8 ⬜ PLANNED
+**Ultima actualizare:** 2026-06-29
+**Status:** ✅ **Faza 1-8 COMPLETATE** — SIMDM Production Ready
 
 > SIMDM propriu pentru **medicina privată** — alternativă locală la SIMDM-ul național AMDM, conform Ghidului bioinginerului (Ordin MS 889/2024).
 
@@ -42,11 +42,14 @@
 | Fișier | Conținut | Cine citește |
 |--------|----------|--------------|
 | [`docs/2-DEVELOPER-GUIDE.md`](docs/2-DEVELOPER-GUIDE.md) | Frontend + Backend patterns, testing, Docker | Backend + frontend |
-| [`docs/3-AUDIT-LOG.md`](docs/3-AUDIT-LOG.md) | Documentația funcției de audit-log | Dev, referință |
+| [`docs/TESTING.md`](docs/TESTING.md) | Ghid testare complet (1033+ backend, 127+ frontend) | Dev |
+| [`docs/3-AUDIT-LOG.md`](docs/3-AUDIT-LOG.md) | Snapshot audit accesibilitate Faza 1-2 | Dev, referință |
 | [`docs/CONTRIBUTING.md`](docs/CONTRIBUTING.md) | Reguli contribuții: commit format, workflow, PR | Contributori |
-| [`docs/ANTIVIRUS-SETUP.md`](docs/ANTIVIRUS-SETUP.md) | Validare fișiere: magic bytes + ClamAV | DevOps |
+| [`docs/ANTIVIRUS-SETUP.md`](docs/ANTIVIRUS-SETUP.md) | Validare fișiere: magic bytes + ClamAV (25MB) | DevOps |
 | [`docs/DOCKER-OPTIMIZATION.md`](docs/DOCKER-OPTIMIZATION.md) | Docker: WSL + resource limits | DevOps |
 | [`docs/MOBILE_WORKFLOW_GUIDE.md`](docs/MOBILE_WORKFLOW_GUIDE.md) | Workflow-uri mobile pe teren | Bioinginer (teren) |
+| [`docs/IMPORT-DATE-REALE.md`](docs/IMPORT-DATE-REALE.md) | Import inventar real (format XLSX/CSV) | Bioinginer, dev |
+| [`docs/GO-LIVE-CHECKLIST.md`](docs/GO-LIVE-CHECKLIST.md) | Checklist deploy producție | DevOps, PM |
 | [`frontend/README.md`](frontend/README.md) | Structură frontend, design system, testing | Frontend dev |
 
 ---
