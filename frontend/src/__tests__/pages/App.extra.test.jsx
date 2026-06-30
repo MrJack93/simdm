@@ -91,41 +91,53 @@ describe('App — Extra Coverage', () => {
     });
   });
 
-  describe('mobile menu', () => {
-    it('opens and closes mobile menu', async () => {
+  // ── Sidebar mobil (înlocuiește vechiul MobileMenu) ───────────────────────
+  describe('mobile sidebar', () => {
+    it('opens and closes mobile sidebar via toggle button', async () => {
       const user = userEvent.setup();
       renderApp(AUTHENTICATED);
       await screen.findByText('bioinginer');
 
-      const menuBtn = screen.getByLabelText('Meniu');
-      await user.click(menuBtn);
-      expect(screen.getByLabelText('Meniu mobil')).toBeInTheDocument();
+      const sidebar = screen.getByRole('complementary', { name: 'Meniu principal' });
 
+      // Sidebar ascuns implicit pe mobile
+      expect(sidebar.className).toContain('-translate-x-full');
+
+      // Click deschide
+      const menuBtn = screen.getByLabelText('Deschide meniu lateral');
       await user.click(menuBtn);
+      expect(sidebar.className).not.toContain('-translate-x-full');
+
+      // Backdrop-ul acoperă butonul când e deschis → închidem cu Escape
+      fireEvent.keyDown(document, { key: 'Escape' });
       await waitFor(() => {
-        expect(screen.queryByLabelText('Meniu mobil')).not.toBeInTheDocument();
+        expect(sidebar.className).toContain('-translate-x-full');
       });
     });
   });
 
+  // ── Theme toggle ─────────────────────────────────────────────────────────
   describe('theme toggle', () => {
     it('toggles between light and dark', async () => {
       const user = userEvent.setup();
       renderApp(AUTHENTICATED);
       await screen.findByText('bioinginer');
 
+      // Stare inițială: dark → buton "Comută la modul clar"
       const themeBtn = screen.getByRole('button', { name: /Comută la modul clar/ });
       await user.click(themeBtn);
       expect(localStorage.getItem('simdm_theme')).toBe('light');
 
-      const themeBtn2 = screen.getByRole('button', { name: /Comută la modul închis/ });
+      // Acum light → buton "Comută la modul întunecat"
+      const themeBtn2 = screen.getByRole('button', { name: /Comută la modul întunecat/ });
       await user.click(themeBtn2);
       expect(localStorage.getItem('simdm_theme')).toBe('dark');
     });
   });
 
+  // ── Navigation links ─────────────────────────────────────────────────────
   describe('navigation links', () => {
-    it('renders desktop nav links', async () => {
+    it('renders sidebar nav links', async () => {
       renderApp(AUTHENTICATED);
       await screen.findByText('bioinginer');
       expect(screen.getAllByRole('link', { name: /Inventar/ }).length).toBeGreaterThan(0);
@@ -137,10 +149,12 @@ describe('App — Extra Coverage', () => {
     it('renders settings link', async () => {
       renderApp(AUTHENTICATED);
       await screen.findByText('bioinginer');
-      expect(screen.getByLabelText('Setări')).toBeInTheDocument();
+      // TopBar are aria-label="Setări aplicație" pe link-ul de settings
+      expect(screen.getByLabelText('Setări aplicație')).toBeInTheDocument();
     });
   });
 
+  // ── Logout ────────────────────────────────────────────────────────────────
   describe('logout', () => {
     it('calls logout function', async () => {
       const user = userEvent.setup();
@@ -153,6 +167,7 @@ describe('App — Extra Coverage', () => {
     });
   });
 
+  // ── Error boundary ────────────────────────────────────────────────────────
   describe('error boundary', () => {
     it('renders ErrorBoundary wrapper', async () => {
       renderApp(AUTHENTICATED);

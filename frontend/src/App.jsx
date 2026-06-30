@@ -1,4 +1,4 @@
-import { useState, Suspense, lazy } from 'react';
+import { useState, useEffect, Suspense, lazy } from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
 import { useAuth } from './hooks/useAuth';
 import { useTheme } from './hooks/useTheme';
@@ -213,6 +213,14 @@ function DashboardLayout({ logout, theme, toggleTheme }) {
       return next;
     });
   };
+
+  // Închide sidebar-ul mobil cu Escape
+  useEffect(() => {
+    if (!isMobileSidebarOpen) return;
+    const handler = (e) => { if (e.key === 'Escape') setIsMobileSidebarOpen(false); };
+    document.addEventListener('keydown', handler);
+    return () => document.removeEventListener('keydown', handler);
+  }, [isMobileSidebarOpen]);
 
   // Lățimea curentă a sidebar-ului (pentru offset-ul conținutului pe desktop)
   const sidebarW = isSidebarExpanded ? SIDEBAR_EXPANDED_W : SIDEBAR_RAIL_W;
