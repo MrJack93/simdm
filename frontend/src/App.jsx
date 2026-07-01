@@ -48,7 +48,7 @@ function LoadingFallback() {
 //  TOP BAR — bara orizontală deasupra conținutului
 //  Conține: hamburger (mobile), logo (mobile), theme, setări, logout
 // ─────────────────────────────────────────────
-function TopBar({ user, logout, theme, toggleTheme, onMobileMenuOpen }) {
+function TopBar({ logout, theme, toggleTheme, onMobileMenuOpen }) {
   return (
     <header
       style={{
@@ -198,8 +198,6 @@ function TopBar({ user, logout, theme, toggleTheme, onMobileMenuOpen }) {
 //  Sidebar fix pe stânga + conținut cu margin-left animat
 // ─────────────────────────────────────────────
 function DashboardLayout({ logout, theme, toggleTheme }) {
-  const { user } = useAuth();
-
   // Starea sidebar-ului persiste în localStorage
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(() => {
     try { return localStorage.getItem('simdm-sidebar-expanded') !== 'false'; } catch { return true; }
@@ -209,7 +207,7 @@ function DashboardLayout({ logout, theme, toggleTheme }) {
   const toggleSidebar = () => {
     setIsSidebarExpanded(prev => {
       const next = !prev;
-      try { localStorage.setItem('simdm-sidebar-expanded', String(next)); } catch {}
+      try { localStorage.setItem('simdm-sidebar-expanded', String(next)); } catch { /* localStorage indisponibil */ }
       return next;
     });
   };
@@ -249,7 +247,6 @@ function DashboardLayout({ logout, theme, toggleTheme }) {
         }}
       >
         <TopBar
-          user={user}
           logout={logout}
           theme={theme}
           toggleTheme={toggleTheme}
