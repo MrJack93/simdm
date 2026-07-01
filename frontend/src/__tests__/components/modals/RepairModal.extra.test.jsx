@@ -1,6 +1,5 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { toast } from 'react-toastify';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import api from '../../../api/axios';
 import RepairModal from '../../../components/modals/RepairModal';

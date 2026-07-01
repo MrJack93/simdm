@@ -1,6 +1,5 @@
 import { renderHook, act } from '@testing-library/react';
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import React from 'react';
 import { usePageTitle } from '../../hooks/usePageTitle';
 import { useAccessibility } from '../../hooks/useAccessibility';
 

@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
-import { Wrench, Plus, Edit2, Trash2, ChevronLeft, ChevronRight, X, Calendar, ClipboardList, Settings } from 'lucide-react';
+import { Wrench, Plus, Edit2, Trash2, ChevronLeft, ChevronRight, X, Calendar, ClipboardList } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import api from '../api/axios';
 import { Link } from 'react-router-dom';

@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getConsumables } from '../api/consumables';
 import { executeMpp } from '../api/mppExecutions';

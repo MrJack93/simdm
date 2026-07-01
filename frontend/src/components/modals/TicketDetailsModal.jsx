@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import axios from '../../api/axios';
 import {
   Dialog,
@@ -31,7 +31,6 @@ const STATUS_LABELS = {
 const api = axios.create({ baseURL: '/api' });
 
 export default function TicketDetailsModal({ ticket, onClose, onRefresh }) {
-  const queryClient = useQueryClient();
   const [selectedStatus, setSelectedStatus] = useState('');
   const [error, setError] = useState('');
   const validTransitions = STATUS_FLOW[ticket.status] || [];

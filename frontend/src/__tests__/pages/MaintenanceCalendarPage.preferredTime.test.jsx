@@ -44,7 +44,7 @@ vi.mock('../../api/devices', () => ({
 }));
 
 import MaintenanceCalendarPage from '../../pages/MaintenanceCalendarPage';
-import { createMaintenancePlan, rescheduleOccurrence } from '../../api/maintenancePlans';
+import { createMaintenancePlan } from '../../api/maintenancePlans';
 
 function renderPage() {
   const queryClient = new QueryClient({

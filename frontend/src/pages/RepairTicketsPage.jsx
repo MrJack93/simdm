@@ -11,7 +11,7 @@ import {
   downloadFormular9Pdf,
 } from '../api/repairTickets';
 import { getDevices } from '../api/devices';
-import { Skeleton, SkeletonCard, SkeletonTable } from '../components/ui/skeleton';
+import { Skeleton } from '../components/ui/skeleton';
 import { Button } from '../components/ui/button';
 import {
   Dialog,

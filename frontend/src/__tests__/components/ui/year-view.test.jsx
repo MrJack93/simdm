@@ -3,9 +3,8 @@ import { render, screen } from '@testing-library/react';
 import { CalendarYearView } from '@/components/ui/calendar-year-view';
 
 vi.mock('react-day-picker', () => {
-  const React = require('react');
   return {
-    DayPicker: ({ month, selected, onSelect }) => (
+    DayPicker: ({ month, onSelect }) => (
       <div data-testid="daypicker" data-month={month?.getMonth()}>
         <button onClick={() => onSelect && onSelect(new Date(2025, 0, 15))}>Pick</button>
       </div>

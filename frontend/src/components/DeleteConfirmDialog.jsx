@@ -14,6 +14,9 @@ export function DeleteConfirmDialog({ name, onConfirm, trigger, description }) {
   useEffect(() => {
     if (!open) return;
 
+    // Capturăm nodul trigger acum pentru a-l refocaliza sigur la cleanup
+    const triggerEl = triggerRef.current;
+
     // Move focus into dialog on open
     const first = dialogRef.current?.querySelector('button');
     first?.focus();
@@ -48,7 +51,7 @@ export function DeleteConfirmDialog({ name, onConfirm, trigger, description }) {
     document.addEventListener('keydown', handleKeyDown);
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
-      triggerRef.current?.focus();
+      triggerEl?.focus();
     };
   }, [open]);
 

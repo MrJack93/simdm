@@ -1,4 +1,3 @@
-import { ChevronDown } from 'lucide-react';
 
 /**
  * Select component - styled dropdown with keyboard navigation

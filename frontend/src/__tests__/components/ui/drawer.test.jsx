@@ -1,11 +1,11 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 
 vi.mock('@base-ui/react/dialog', () => {
   const React = require('react');
   return {
     Dialog: {
-      Root: React.forwardRef(({ open, onOpenChange, children, ...rest }, ref) => {
+      Root: React.forwardRef(({ open, onOpenChange: _onOpenChange, children, ...rest }, ref) => {
         return React.createElement('div', { ref, 'data-testid': 'dialog-root', 'data-open': String(open), ...rest }, children);
       }),
       Trigger: React.forwardRef((props, ref) => React.createElement('button', { ref, ...props })),

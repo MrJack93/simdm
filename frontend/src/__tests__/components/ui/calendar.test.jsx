@@ -3,9 +3,8 @@ import { render, screen } from '@testing-library/react';
 import { Calendar } from '@/components/ui/calendar';
 
 vi.mock('react-day-picker', () => {
-  const React = require('react');
   return {
-    DayPicker: ({ children, className, locale, formatters, components, classNames, ...props }) => (
+    DayPicker: ({ children, className, locale, components, ...props }) => (
       <div data-testid="daypicker" className={className} data-mode={props.mode}>
         <span data-testid="locale-code">{locale?.code || 'none'}</span>
         {components?.IconLeft && <components.IconLeft />}
@@ -24,7 +23,7 @@ describe('Calendar', () => {
   });
 
   it('applies custom className', () => {
-    const { container } = render(<Calendar className="my-calendar" />);
+    render(<Calendar className="my-calendar" />);
     expect(screen.getByTestId('daypicker').className).toContain('my-calendar');
   });
 

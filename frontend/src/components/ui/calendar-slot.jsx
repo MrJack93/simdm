@@ -18,8 +18,6 @@ function getStatusIcon(status) {
 export function CalendarEventIndicator({
   status = 'programat',
   deviceName = 'Event',
-  quantity = 1,
-  showExtra = false,
 }) {
   const statusClass = `status-${status.toLowerCase()}`;
   const icon = getStatusIcon(status);

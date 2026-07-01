@@ -4,7 +4,7 @@ import { useAuth } from '../hooks/useAuth';
 import api from '../api/axios';
 import {
   Activity, Wrench, AlertCircle, Package, Calendar,
-  Shield, Clock, FileText, Briefcase, ShoppingCart,
+  FileText, Briefcase, ShoppingCart,
   PackageCheck, Archive, BarChart3, CheckSquare, AlertTriangle, TicketCheck, ClipboardList,
 } from 'lucide-react';
 import { Skeleton } from '../components/ui/skeleton';

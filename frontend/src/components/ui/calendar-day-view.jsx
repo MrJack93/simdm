@@ -19,23 +19,7 @@ export function CalendarDayView({
   occurrences = [],
   onEventClick = () => {},
 }) {
-  if (!selectedDate) {
-    return (
-      <div className="calendar-day-view empty">
-        <div className="empty-state">
-          <p>Selectați o zi pentru a vedea programul</p>
-        </div>
-      </div>
-    );
-  }
-
-  const dateStr = selectedDate.toLocaleDateString('ro-RO', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-
+  // Hook-urile trebuie apelate necondiționat (înainte de orice early return)
   const groupedEvents = useMemo(() => {
     const grouped = {};
     occurrences.forEach((occ) => {
@@ -56,6 +40,23 @@ export function CalendarDayView({
     });
     return grouped;
   }, [occurrences]);
+
+  if (!selectedDate) {
+    return (
+      <div className="calendar-day-view empty">
+        <div className="empty-state">
+          <p>Selectați o zi pentru a vedea programul</p>
+        </div>
+      </div>
+    );
+  }
+
+  const dateStr = selectedDate.toLocaleDateString('ro-RO', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
 
   return (
     <div className="calendar-day-view">

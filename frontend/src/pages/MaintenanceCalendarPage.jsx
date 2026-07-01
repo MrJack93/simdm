@@ -165,7 +165,7 @@ export default function MaintenanceCalendarPage() {
     queryFn: getDevices,
   });
 
-  const plans = calendarData?.data || [];
+  const plans = useMemo(() => calendarData?.data || [], [calendarData]);
   const devices = devicesData?.devices || devicesData?.data || [];
 
   const createMutation = useMutation({
@@ -282,8 +282,11 @@ export default function MaintenanceCalendarPage() {
 
   const todayRef = useRef(new Date());
   const today = todayRef.current;
-  const tomorrow = new Date(today);
-  tomorrow.setDate(tomorrow.getDate() + 1);
+  const tomorrow = useMemo(() => {
+    const t = new Date(today);
+    t.setDate(t.getDate() + 1);
+    return t;
+  }, [today]);
 
   const todayEvents = useMemo(() =>
     (plans || []).flatMap((item) => {

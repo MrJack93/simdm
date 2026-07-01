@@ -7,7 +7,6 @@ import {
   useConsumablesWithFilters,
   useConsumableStats,
 } from '../../hooks/useConsumables';
-import { consumableKeys } from '../../api/consumables';
 
 vi.mock('../../api/axios', () => ({
   default: {

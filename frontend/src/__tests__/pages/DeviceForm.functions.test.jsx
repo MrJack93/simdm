@@ -1,7 +1,6 @@
 import { screen, waitFor, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { toast } from 'react-toastify';
 
 const mockNavigate = vi.fn();
 let mockParams = {};

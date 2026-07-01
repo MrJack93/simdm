@@ -55,7 +55,7 @@ function MiniCalendar({ selectedDate, onDateSelect, currentMonth, onMonthChange 
         onSelect={onDateSelect}
         month={sidebarMonth}
         locale={ro}
-        disabled={(date) => false}
+        disabled={() => false}
         showOutsideDays={true}
         className="sidebar-day-picker"
         classNames={{

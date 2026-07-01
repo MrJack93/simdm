@@ -176,7 +176,7 @@ describe('TicketDetailsModal — Extra Coverage', () => {
     });
 
     it('shows formular8 download button only when actionsTaken present', () => {
-      const { rerender } = renderModal({ ticket: { ...BASE_TICKET, actionsTaken: 'Done' } });
+      renderModal({ ticket: { ...BASE_TICKET, actionsTaken: 'Done' } });
       expect(screen.getByText('Descarcă Formular Nr. 8 (PDF)')).toBeInTheDocument();
     });
 

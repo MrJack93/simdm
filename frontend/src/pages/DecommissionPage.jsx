@@ -1,11 +1,10 @@
 import { useState } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import api from '../api/axios';
-import { Archive, Upload, Download, Trash2, Search, Plus, X } from 'lucide-react';
+import { Archive, Download, Plus, X } from 'lucide-react';
 import { Skeleton } from '../components/ui/skeleton';
-import { DeleteConfirmDialog } from '../components/DeleteConfirmDialog';
-import { Field, FieldLabel, FieldError } from '../components/ui/field';
+import { Field, FieldLabel } from '../components/ui/field';
 import { useQuery } from '@tanstack/react-query';
 import { useDevices } from '../hooks/useDevices';
 
@@ -98,7 +97,6 @@ function DecommissionModal({ onClose, onSave, devices }) {
 export default function DecommissionPage() {
   const queryClient = useQueryClient();
   const [showModal, setShowModal] = useState(false);
-  const [deleteId, setDeleteId] = useState(null);
 
   const { data, isLoading } = useQuery({
     queryKey: ['decommission'],

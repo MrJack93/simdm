@@ -107,7 +107,7 @@ describe('TriageModal', () => {
 
   it('submits triage data successfully', async () => {
     api.patch.mockResolvedValueOnce({ data: {} });
-    const { onRefresh, onClose } = renderModal();
+    renderModal();
 
     fireEvent.change(screen.getByPlaceholderText(/Descrieți cauza/), {
       target: { value: ' uzură normală' },

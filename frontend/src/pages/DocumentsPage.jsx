@@ -4,14 +4,14 @@ import { toast } from 'react-toastify';
 import api from '../api/axios';
 import {
   FileText, Upload, Download, Trash2, Edit3, History,
-  ChevronDown, Search, Filter, Plus, X, Tag, Paperclip,
+  Search, Plus, X, Paperclip,
   Shield, ShieldAlert, Clock, Eye,
 } from 'lucide-react';
 import { Skeleton } from '../components/ui/skeleton';
 import { DeleteConfirmDialog } from '../components/DeleteConfirmDialog';
 import { Field, FieldLabel, FieldError } from '../components/ui/field';
 import { useDocuments, useDocumentCategories } from '../hooks/useDocuments';
-import { documentKeys, createDocument, createDocumentVersion, updateDocument, deleteDocument, verifyDocument, fetchDocumentAccessLog, fetchExpiringDocuments } from '../api/documents';
+import { documentKeys, createDocument, createDocumentVersion, updateDocument, deleteDocument, verifyDocument, fetchDocumentAccessLog } from '../api/documents';
 import { useDevices } from '../hooks/useDevices';
 
 const CATEGORY_LABELS = {
@@ -959,7 +959,7 @@ export default function DocumentsPage() {
   const { data: devicesData } = useDevices();
   const devices = devicesData?.devices || [];
 
-  const { data: categories } = useDocumentCategories();
+  const { data: _categories } = useDocumentCategories();
 
   const invalidateAll = () => {
     queryClient.invalidateQueries({ queryKey: documentKeys.all });

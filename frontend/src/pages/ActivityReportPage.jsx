@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import api from '../api/axios';
-import { BarChart3, Download, Calendar } from 'lucide-react';
+import { BarChart3, Download } from 'lucide-react';
 import { Skeleton } from '../components/ui/skeleton';
 import { Field, FieldLabel } from '../components/ui/field';
 

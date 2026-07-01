@@ -1,6 +1,5 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { toast } from 'react-toastify';
 import api from '../../api/axios';
 import IncidentsPage from '../../pages/IncidentsPage';
 import { renderWithProviders } from '../helpers/renderWithProviders';

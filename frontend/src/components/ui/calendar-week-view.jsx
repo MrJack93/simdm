@@ -45,20 +45,11 @@ export function CalendarWeekView({
   occurrencesByDate = {},
   onEventClick = () => {},
 }) {
-  if (!selectedDate) {
-    return (
-      <div className="calendar-week-view empty">
-        <div className="empty-state">
-          <p>Selectați o săptămână pentru a vedea programul</p>
-        </div>
-      </div>
-    );
-  }
-
-  const weekDates = getDateRange(selectedDate);
-  const weekRange = `${formatDate(weekDates[0])} - ${formatDate(
-    weekDates[6]
-  )}`;
+  // Hook-urile trebuie apelate necondiționat (înainte de orice early return)
+  const weekDates = useMemo(
+    () => (selectedDate ? getDateRange(selectedDate) : []),
+    [selectedDate]
+  );
 
   const groupedEvents = useMemo(() => {
     const grouped = {};
@@ -86,6 +77,20 @@ export function CalendarWeekView({
     });
     return grouped;
   }, [weekDates, occurrencesByDate]);
+
+  if (!selectedDate) {
+    return (
+      <div className="calendar-week-view empty">
+        <div className="empty-state">
+          <p>Selectați o săptămână pentru a vedea programul</p>
+        </div>
+      </div>
+    );
+  }
+
+  const weekRange = `${formatDate(weekDates[0])} - ${formatDate(
+    weekDates[6]
+  )}`;
 
   const isToday = (date) => {
     const today = new Date();

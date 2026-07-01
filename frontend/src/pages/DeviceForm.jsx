@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import DeviceTimeline from '../components/DeviceTimeline';
-import { Skeleton, SkeletonCard } from '../components/ui/skeleton';
+import { Skeleton } from '../components/ui/skeleton';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';

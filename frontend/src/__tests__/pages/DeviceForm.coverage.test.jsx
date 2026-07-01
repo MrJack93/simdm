@@ -1,4 +1,4 @@
-import { screen, waitFor, within } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderWithProviders } from '../helpers/renderWithProviders.jsx';
@@ -386,7 +386,6 @@ describe('DeviceForm Coverage', () => {
 
   describe('document upload', () => {
     it('shows error when uploading without saving device first', async () => {
-      const user = userEvent.setup();
       renderWithProviders(<DeviceForm />, { route: '/devices/7/edit' });
       mockParams = { id: undefined };
       mockApiRouter({});

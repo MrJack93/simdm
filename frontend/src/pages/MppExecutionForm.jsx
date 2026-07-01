@@ -4,7 +4,7 @@ import axios from '../api/axios';
 import SignatureCanvas from 'react-signature-canvas';
 import { useNavigate } from 'react-router-dom';
 import { Field, FieldLabel, FieldDescription, FieldError } from '../components/ui/field';
-import { InputGroup, InputGroupAddon, InputGroupInput, InputGroupTextarea, InputGroupText } from '../components/ui/input-group';
+import { InputGroup, InputGroupAddon, InputGroupInput } from '../components/ui/input-group';
 import { Button } from '../components/ui/button';
 import { User, Clock, Hash } from 'lucide-react';
 
@@ -172,7 +172,6 @@ export default function MppExecutionForm() {
   const submitMutation = useMutation({
     mutationFn: async () => {
       const signatureEngineer = getSignatureBase64(signaturePadEngineerRef);
-      const signatureManager = getSignatureBase64(signaturePadManagerRef);
 
       const payload = {
         deviceId: parseInt(selectedDeviceId),

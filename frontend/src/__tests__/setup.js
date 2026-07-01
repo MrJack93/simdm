@@ -62,7 +62,6 @@ vi.mock('react-datepicker', () => ({
 // pentru ca testele să poată selecta opțiuni fără DOM-ul complex react-select.
 // ---------------------------------------------------------------------------
 vi.mock('react-select', () => {
-  // eslint-disable-next-line global-require
   const React = require('react');
   return {
     default: ({ options = [], value, onChange, placeholder, id, inputId }) => {

@@ -219,7 +219,7 @@ function CardView({ devices, isLoading, onDelete }) {
 }
 
 /** @param {{ devices: Device[], isLoading: boolean, onDelete: (id: number) => void }} props */
-function KanbanView({ devices, isLoading, onDelete }) {
+function KanbanView({ devices, isLoading }) {
   const STATUS_ORDER = ['FUNCTIONAL', 'REZERVA', 'IN_REPARATIE', 'DEFECT', 'IMPRUMUTAT', 'CASAT'];
   const KANBAN_LIMIT = 10;
   const grouped = Object.fromEntries(

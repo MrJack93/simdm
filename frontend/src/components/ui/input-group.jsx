@@ -70,7 +70,7 @@ const InputGroupText = React.forwardRef(({ className, ...props }, ref) => (
 InputGroupText.displayName = "InputGroupText"
 
 const InputGroupButton = React.forwardRef(
-  ({ className, variant = "ghost", size = "icon-sm", ...props }, ref) => (
+  ({ className, variant: _variant = "ghost", size = "icon-sm", ...props }, ref) => (
     <button
       ref={ref}
       data-slot="input-group-button"

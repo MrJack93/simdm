@@ -121,7 +121,7 @@ describe('UI Components', () => {
     });
 
     it('renders full table structure', () => {
-      const { container } = render(
+      render(
         <Table>
           <TableCaption>Test table</TableCaption>
           <TableHeader>
@@ -254,7 +254,8 @@ describe('UI Components', () => {
     });
 
     it('handles conditional classes', () => {
-      const result = cn('base', false && 'hidden', 'extra');
+      const show = false;
+      const result = cn('base', show && 'hidden', 'extra');
       expect(result).toContain('base');
       expect(result).toContain('extra');
       expect(result).not.toContain('hidden');

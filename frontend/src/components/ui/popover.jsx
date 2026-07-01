@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from "react";
-import { X } from "lucide-react";
 
 /**
  * Popover component - floating content trigger with click-outside handling

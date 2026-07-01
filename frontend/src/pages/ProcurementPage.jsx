@@ -1,11 +1,10 @@
 import { useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import api from '../api/axios';
-import { ShoppingCart, Plus, Download, Trash2, X, Edit3, CheckCircle } from 'lucide-react';
+import { ShoppingCart, Plus, Download, Trash2, X } from 'lucide-react';
 import { Skeleton } from '../components/ui/skeleton';
-import { Field, FieldLabel, FieldError } from '../components/ui/field';
-import { useDevices } from '../hooks/useDevices';
+import { Field, FieldLabel } from '../components/ui/field';
 
 const TYPE_LABELS = { DM: 'Dispozitive Medicale', CONSUMABIL: 'Consumabile' };
 const STATUS_LABELS = { DRAFT: 'Ciornă', COORDONAT: 'Coordonat', APROBAT: 'Aprobat' };

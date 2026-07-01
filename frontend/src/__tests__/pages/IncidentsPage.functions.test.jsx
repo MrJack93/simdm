@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { toast } from 'react-toastify';
@@ -209,7 +209,6 @@ describe('IncidentsPage — function coverage', () => {
   });
 
   it('changes severity filter', async () => {
-    const user = userEvent.setup();
     renderWithProviders(<IncidentsPage />);
     await screen.findByText('Incidente');
     fireEvent.change(screen.getByLabelText('Severitate'), { target: { value: 'GRAV' } });
