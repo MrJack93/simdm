@@ -5,6 +5,8 @@ export default defineConfig({
     environment: 'node',
     env: { NODE_ENV: 'development' },
     globals: true,
+    // Multe fișiere partajează același utilizator de test din Postgres — rulare paralelă cauzează race condition
+    fileParallelism: false,
     setupFiles: ['./src/__tests__/setup.js'],
     coverage: {
       provider: 'v8',
