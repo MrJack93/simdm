@@ -360,16 +360,27 @@ describe('GET /api/audit-logs — pagincation și filtrare', () => {
     }
   });
 
-  it.skip('respinge invalid page/limit', async () => {
+  it('sanitizează page/limit invalizi la valori sigure (nu respinge)', async () => {
+    // page non-numeric -> fallback la pagina 1
     const resInvalidPage = await request(app)
       .get('/api/audit-logs?page=abc')
       .set('Authorization', `Bearer ${token}`);
-    expect([200, 400]).toContain(resInvalidPage.status); // Accept both valid response or error
+    expect(resInvalidPage.status).toBe(200);
+    expect(resInvalidPage.body.pagination.page).toBe(1);
 
-    const resInvalidLimit = await request(app)
+    // limit negativ -> clamp la minimum 1
+    const resNegativeLimit = await request(app)
       .get('/api/audit-logs?limit=-5')
       .set('Authorization', `Bearer ${token}`);
-    expect([200, 400]).toContain(resInvalidLimit.status);
+    expect(resNegativeLimit.status).toBe(200);
+    expect(resNegativeLimit.body.pagination.limit).toBeGreaterThanOrEqual(1);
+
+    // limit peste maximum -> clamp la 200
+    const resHugeLimit = await request(app)
+      .get('/api/audit-logs?limit=9999')
+      .set('Authorization', `Bearer ${token}`);
+    expect(resHugeLimit.status).toBe(200);
+    expect(resHugeLimit.body.pagination.limit).toBe(200);
   });
 });
 
