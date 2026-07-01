@@ -1,0 +1,54 @@
+name: npm audit (monitorizare lunară)
+
+# Implementează acțiunea din tasks/AUDIT-SECURITATE-NPM.md:
+#   „Acțiune: monitorizare periodică (npm audit lunar)”
+#   „Notă: la upgrade Vite/esbuild, verifică din nou” → rulare manuală (workflow_dispatch)
+#
+# Vulnerabilitățile curente sunt un RISC ACCEPTAT (vezi documentul): aplicația
+# rulează local, mono-utilizator, fără expunere pe internet. De aceea acest
+# workflow NU blochează nimic — doar publică raportul lunar în „Job summary”
+# ca semnal pentru revizuire (și pentru a detecta vulnerabilități NOI).
+
+on:
+  schedule:
+    - cron: '0 6 1 * *'   # 06:00 UTC, ziua 1 a fiecărei luni
+  workflow_dispatch:       # rulare manuală (ex: după upgrade Vite / esbuild)
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        workspace: [backend, frontend]
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+
+      # npm audit citește direct din package-lock.json — nu e nevoie de npm ci.
+      # `|| true` menține job-ul verde: vulnerabilitățile cunoscute sunt acceptate,
+      # raportul e pentru revizuire manuală, nu pentru a bloca.
+      - name: npm audit — ${{ matrix.workspace }}
+        working-directory: ${{ matrix.workspace }}
+        run: |
+          {
+            echo "## npm audit — ${{ matrix.workspace }}"
+            echo ""
+            echo '```'
+            npm audit 2>&1 || true
+            echo '```'
+            echo ""
+            echo "### Rezumat JSON"
+            echo '```json'
+            npm audit --json 2>/dev/null | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{try{const j=JSON.parse(s);console.log(JSON.stringify(j.metadata?.vulnerabilities||{},null,2));}catch{console.log('{}');}})" || true
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
