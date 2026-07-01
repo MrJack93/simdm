@@ -20,7 +20,7 @@ vi.mock('../../api/tokenStore', () => ({
 }));
 
 import axios from 'axios';
-import { getToken, setToken, clearToken } from '../../api/tokenStore';
+import { getToken } from '../../api/tokenStore';
 
 // We need to import after mocking to get the mocked version
 let requestInterceptor;

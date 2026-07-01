@@ -5,8 +5,8 @@
  * - Navigare luni
  */
 
-import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
-import { render, screen, fireEvent, waitFor, within, act } from '@testing-library/react';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter } from 'react-router-dom';
@@ -195,7 +195,6 @@ describe('MaintenanceCalendarPage — Calendar & Apariții MPP', () => {
   });
 
   it('trimite criere plan cu date valide', async () => {
-    const user = userEvent.setup();
     const { createMaintenancePlan } = await import('../api/maintenancePlans');
 
     renderPage();

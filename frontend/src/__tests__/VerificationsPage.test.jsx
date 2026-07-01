@@ -274,9 +274,6 @@ describe('VerificationsPage — Verificări Periodice & Conformitate', () => {
     renderPage();
 
     await waitFor(() => {
-      // Check if alert is shown for soon-to-expire verifications
-      const expiringDevices = screen.queryByText(/Expiră în \d+ zile/);
-      // May or may not be present depending on test data
       expect(screen.getByText('Echograf')).toBeInTheDocument();
     });
   });
@@ -307,7 +304,6 @@ describe('VerificationsPage — Verificări Periodice & Conformitate', () => {
   });
 
   it('paginare funcționează corect', async () => {
-    const user = userEvent.setup();
     renderPage();
 
     await waitFor(() => {

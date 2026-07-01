@@ -249,7 +249,6 @@ describe('ServiceContractsPage — Contracte Externe & Cost Analysis', () => {
   });
 
   it('permite rating furnizor (1-5 stele + comment)', async () => {
-    const user = userEvent.setup();
     const { rateProvider } = await import('../api/serviceContracts');
 
     renderPage();

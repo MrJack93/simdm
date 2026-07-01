@@ -292,7 +292,6 @@ describe('RepairTicketsPage — Kanban Board cu State Machine', () => {
   });
 
   it('numărul de tichetele pe coloană se actualizează după schimbarea status', async () => {
-    const user = userEvent.setup();
     renderPage();
 
     await waitFor(() => {

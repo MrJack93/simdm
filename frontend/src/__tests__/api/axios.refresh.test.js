@@ -1,7 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-let mockSetToken, mockClearToken, mockGetToken;
-
 vi.mock('../../api/tokenStore', () => ({
   getToken: vi.fn(() => 'existing-token'),
   setToken: vi.fn(),
