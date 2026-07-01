@@ -1,5 +1,6 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { MemoryRouter } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 vi.mock('../../hooks/useTheme', () => ({
@@ -33,7 +34,7 @@ function renderPage(overrides = {}) {
     logout: vi.fn(),
     ...overrides,
   });
-  return render(<SettingsPage />);
+  return render(<MemoryRouter><SettingsPage /></MemoryRouter>);
 }
 
 describe('SettingsPage', () => {
@@ -84,7 +85,7 @@ describe('SettingsPage', () => {
 
   it('shows dark mode label when theme is dark', () => {
     useTheme.mockReturnValue({ theme: 'dark', toggleTheme: vi.fn() });
-    render(<SettingsPage />);
+    render(<MemoryRouter><SettingsPage /></MemoryRouter>);
     expect(screen.getByText('Mod întunecat')).toBeInTheDocument();
   });
 

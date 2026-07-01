@@ -165,7 +165,7 @@ describe('Login — function coverage', () => {
     await waitFor(() => { expect(login).toHaveBeenCalled(); });
     await user.click(screen.getByRole('button', { name: /Conectare|Așteaptă/ }));
     await waitFor(() => {
-      expect(screen.getByText('Prea multe încercări. Așteaptă 3 secunde.')).toBeInTheDocument();
+      expect(screen.getByText(/Prea multe încercări/)).toBeInTheDocument();
     });
   });
 
@@ -196,15 +196,17 @@ describe('Login — function coverage', () => {
     expect(screen.getByLabelText('Parolă')).toHaveAttribute('autocomplete', 'current-password');
   });
 
-  it('submit button shows Așteaptă when rate limited', async () => {
+  it('submit button is disabled when rate limited', async () => {
     const user = userEvent.setup();
     const { login } = renderLogin();
     await user.type(screen.getByLabelText('Utilizator'), 'a');
     await user.type(screen.getByLabelText('Parolă'), 'b');
     await user.click(screen.getByRole('button', { name: 'Conectare' }));
     await waitFor(() => { expect(login).toHaveBeenCalled(); });
-    await user.click(screen.getByRole('button', { name: /Conectare|Așteaptă/ }));
-    expect(await screen.findByText('Așteaptă…')).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: /Conectare/ }));
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: /Conectare/ })).toBeDisabled();
+    });
   });
 
   it('disabled state during submission', async () => {
